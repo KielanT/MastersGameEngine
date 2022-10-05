@@ -1,5 +1,16 @@
+# Binaries
+**/bin/
+bin-int/
+
 # Prerequisites
 *.d
+
+# Visual Studio files and folder
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
 
 # Compiled Object files
 *.slo
@@ -30,3 +41,7 @@
 *.exe
 *.out
 *.app
+
+# Premake
+!premake5.exe
+Engine/external/imgui
