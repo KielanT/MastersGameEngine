@@ -12,8 +12,11 @@ workspace "MastersGameEngine"
     outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
     IncludeDir = {} 
+    IncludeDir["DirectXTK"] = "Engine/external/DirectXTK"
+    IncludeDir["glm"] = "Engine/external/glm"
 
     LibDir = {}
+    LibDir["DirectXTK"] = "Engine/external/DirectXTK/%{cfg.buildcfg}"
 
 project "Engine"
     location "Engine"
@@ -37,16 +40,20 @@ project "Engine"
     includedirs
     {
         "%{prj.name}/source",
+        "%{IncludeDir.DirectXTK}",
+        "%{IncludeDir.glm}",
     }
 
     libdirs
     {
-
+        "%{LibDir.DirectXTK}",
     }
 
     links
     {
-
+        "d3d11.lib",
+		"DirectXTK.lib",
+		"d3dcompiler.lib",
     }
 
     -- Shader Code here
@@ -94,6 +101,7 @@ project "Editor"
     includedirs
     {
         "Engine/source",
+        "%{IncludeDir.glm}",
     }
 
     links

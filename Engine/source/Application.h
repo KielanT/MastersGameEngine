@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Engine/Platform/WindowsWindow.h"
+#include "Engine/Interfaces/IWindow.h"
+#include "Engine/Interfaces/IRenderer.h"
 
 #include <memory>
 
@@ -23,6 +24,7 @@ namespace Engine
 
 	private:
 		std::unique_ptr<IWindow> m_Window;
+		IRenderer* m_Renderer;
 	};
 
 	Application* CreateApplication();
