@@ -5,6 +5,12 @@ namespace Engine
 {
 	Application::Application()
 	{
+		WindowProperties props = WindowProperties();
+		m_Window = std::unique_ptr<IWindow>(IWindow::Create(props));
+		if (m_Window == nullptr)
+		{
+			// Error
+		}
 	}
 	
 	Application::~Application()
@@ -13,6 +19,7 @@ namespace Engine
 	
 	void Application::Run()
 	{
+		m_Window->Update();
 	}
 	
 }

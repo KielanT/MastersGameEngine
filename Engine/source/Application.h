@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Engine/Platform/WindowsWindow.h"
+
+#include <memory>
+
 namespace Engine
 {
 	class Application
@@ -18,7 +22,7 @@ namespace Engine
 		void Run();
 
 	private:
-		
+		std::unique_ptr<IWindow> m_Window;
 	};
 
 	Application* CreateApplication();

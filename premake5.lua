@@ -36,7 +36,7 @@ project "Engine"
 
     includedirs
     {
-
+        "%{prj.name}/source",
     }
 
     libdirs
