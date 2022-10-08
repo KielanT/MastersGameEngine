@@ -98,7 +98,7 @@ project "Engine"
         optimize "On"
 
     filter "configurations:Distribution"
-        defines "I_DISTRIBUTION"
+        defines "E_DISTRIBUTION"
         runtime "Release"
         optimize "On"
 
