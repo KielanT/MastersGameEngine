@@ -1,6 +1,8 @@
 #include "epch.h"
 #include "Application.h"
 
+
+
 namespace Engine
 {
 	Application::Application()
@@ -11,7 +13,7 @@ namespace Engine
 		m_Renderer = NewRenderer(props.RendererType);
 		if (m_Renderer == nullptr)
 		{
-			//ENGINE_ERROR("Failed to create renderer");
+			LOG_ERROR("Failed to Create Renderer");
 		}
 		else
 		{
@@ -19,19 +21,18 @@ namespace Engine
 
 			if (m_Window == nullptr)
 			{
-				// Error
+				LOG_ERROR("Failed Creating Window");
 			}
 			
 			if (!m_Renderer->InitRenderer(props)) // Initializes the renderer
 			{
-				//LOG_ERROR("Error Initializing the renderer");
-				int i = 0;
+				LOG_ERROR("Error Initializing Renderer");
 			}
 
 			m_SceneManager = NewSceneManager(m_Renderer); // Creates the scene manager
 			if (m_SceneManager == nullptr)
 			{
-				//LOG_ERROR("Error Creating the scene manager");
+				LOG_ERROR("Error Creating The Scene Manager");
 			}
 		}
 	}

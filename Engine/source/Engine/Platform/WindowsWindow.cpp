@@ -176,7 +176,7 @@ namespace Engine
 		 // Initialise scene
 		if (!m_SceneManager->LoadFirstScene())
 		{
-			//LOG_ERROR("Error Loading first scene");
+			LOG_ERROR("Error Loading First Scene");
 			return 0;
 		}
 

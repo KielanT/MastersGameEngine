@@ -55,6 +55,7 @@ namespace Engine
 		}
 		else
 		{
+			LOG_ERROR("Error Loading Scene");
 			return false;
 		}
 	}

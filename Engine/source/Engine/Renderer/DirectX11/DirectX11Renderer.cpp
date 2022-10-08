@@ -36,7 +36,7 @@ namespace Engine
             &swapDesc, &m_SwapChain, &m_D3DDevice, nullptr, &m_D3DContext);
         if (FAILED(hr))
         {
-            //LOG_ERROR("Error creating Direct3D device");
+            LOG_ERROR("Error creating Direct3D device");
             return false;
         }
 
@@ -46,14 +46,14 @@ namespace Engine
         hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
         if (FAILED(hr))
         {
-            //LOG_ERROR("Error creating swap chain");
+            LOG_ERROR("Error creating swap chain");
             return false;
         }
         hr = m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
         //backBuffer->Release();
         if (FAILED(hr))
         {
-            //LOG_ERROR("Error creating render target view");
+            LOG_ERROR("Error creating render target view");
             return false;
         }
 
@@ -76,7 +76,7 @@ namespace Engine
         hr = m_D3DDevice->CreateTexture2D(&dbDesc, nullptr, &m_DepthStencilTexture);
         if (FAILED(hr))
         {
-            //LOG_ERROR("Error creating depth buffer texture");
+            LOG_ERROR("Error creating depth buffer texture");
             return false;
         }
 
@@ -90,7 +90,7 @@ namespace Engine
             &m_DepthStencil);
         if (FAILED(hr))
         {
-            //LOG_ERROR("Error creating depth buffer view");
+            LOG_ERROR("Error creating depth buffer view");
             return false;
         }
 
@@ -101,7 +101,7 @@ namespace Engine
         PerModelConstantBuffer = CreateConstantBuffer(sizeof(PerModelConstants));
         if (PerFrameConstantBuffer == nullptr || PerModelConstantBuffer == nullptr)
         {
-            //LOG_ERROR("Error creating constant buffers");
+            LOG_ERROR("Error creating constant buffers");
             return false;
         }
 
@@ -113,7 +113,7 @@ namespace Engine
     {
         if (m_D3DContext)
         {
-            m_D3DContext->ClearState();  // m_D3DContext->Release();
+            m_D3DContext->ClearState();  
         }
    
         if (PerFrameConstantBuffer)   PerFrameConstantBuffer->Release();
@@ -131,6 +131,7 @@ namespace Engine
         HRESULT hr = m_D3DDevice->CreateBuffer(&cbDesc, nullptr, &constantBuffer);
         if (FAILED(hr))
         {
+            LOG_ERROR("Error Creating Constant Buffer");
             return nullptr;
         }
 

@@ -40,7 +40,7 @@ namespace Engine
 			if (m_PixelLightingVertexShader == nullptr || m_PixelLightingPixelShader == nullptr ||
 				m_BasicTransformVertexShader == nullptr || m_SkinningVertexShader == nullptr || m_LightModelPixelShader == nullptr)
 			{
-				//LOG_ERROR("Error Initializing shaders");
+				LOG_ERROR("Error Initializing Shaders");
 				return false;
 			}
 
@@ -91,7 +91,9 @@ namespace Engine
 		std::ifstream shaderFile(shaderName + ".cso", std::ios::in | std::ios::binary | std::ios::ate);
 		if (!shaderFile.is_open())
 		{
+			LOG_ERROR("Error Opening Shader File");
 			return nullptr;
+			
 		}
 
 		// Read file into vector of chars
@@ -101,6 +103,7 @@ namespace Engine
 		shaderFile.read(&byteCode[0], fileSize);
 		if (shaderFile.fail())
 		{
+			LOG_ERROR("Error Reading Shader File");
 			return nullptr;
 		}
 
@@ -114,6 +117,7 @@ namespace Engine
 			HRESULT hr = dx11Renderer->GetDevice()->CreateVertexShader(byteCode.data(), byteCode.size(), nullptr, &shader);
 			if (FAILED(hr))
 			{
+				LOG_ERROR("Error Creating Vertex Shader");
 				return nullptr;
 			}
 
@@ -128,6 +132,7 @@ namespace Engine
 		std::ifstream shaderFile(shaderName + ".cso", std::ios::in | std::ios::binary | std::ios::ate);
 		if (!shaderFile.is_open())
 		{
+			LOG_ERROR("Error Opening Shader File");
 			return nullptr;
 		}
 
@@ -138,6 +143,7 @@ namespace Engine
 		shaderFile.read(&byteCode[0], fileSize);
 		if (shaderFile.fail())
 		{
+			LOG_ERROR("Error Reading Shader File");
 			return nullptr;
 		}
 
@@ -151,6 +157,7 @@ namespace Engine
 			HRESULT hr = dx11Renderer->GetDevice()->CreatePixelShader(byteCode.data(), byteCode.size(), nullptr, &shader);
 			if (FAILED(hr))
 			{
+				LOG_ERROR("Error Creating Pixel Shader");
 				return nullptr;
 			}
 		}

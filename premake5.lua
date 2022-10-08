@@ -14,6 +14,7 @@ workspace "MastersGameEngine"
     IncludeDir = {} 
     IncludeDir["DirectXTK"] = "Engine/external/DirectXTK"
     IncludeDir["glm"] = "Engine/external/glm"
+    IncludeDir["spdlog"] = "Engine/external/spdlog/include"
 
     LibDir = {}
     LibDir["DirectXTK"] = "Engine/external/DirectXTK/%{cfg.buildcfg}"
@@ -42,6 +43,7 @@ project "Engine"
         "%{prj.name}/source",
         "%{IncludeDir.DirectXTK}",
         "%{IncludeDir.glm}",
+        "%{IncludeDir.spdlog}",
     }
 
     libdirs
@@ -120,6 +122,7 @@ project "Editor"
     {
         "Engine/source",
         "%{IncludeDir.glm}",
+        "%{IncludeDir.spdlog}",
     }
 
     links

@@ -33,7 +33,7 @@ namespace Engine
             // Then create a DirectX object for your description that can be used by a shader
             if (FAILED(dx11Renderer->GetDevice()->CreateSamplerState(&samplerDesc, &m_PointSampler)))
             {
-                //LOG_ERROR("Error creating point sampler");
+                LOG_ERROR("Error creating point sampler");
                 return false;
             }
 
@@ -51,7 +51,7 @@ namespace Engine
             // Then create a DirectX object for your description that can be used by a shader
             if (FAILED(dx11Renderer->GetDevice()->CreateSamplerState(&samplerDesc, &m_TrilinearSampler)))
             {
-                //LOG_ERROR("Error creating Trilinear sampler");
+                LOG_ERROR("Error creating Trilinear sampler");
                 return false;
             }
 
@@ -69,7 +69,7 @@ namespace Engine
             // Then create a DirectX object for your description that can be used by a shader
             if (FAILED(dx11Renderer->GetDevice()->CreateSamplerState(&samplerDesc, &m_Anisotropic4xSampler)))
             {
-                //LOG_ERROR("Error creating anisotropic 4x sampler");
+                LOG_ERROR("Error creating anisotropic 4x sampler");
                 return false;
             }
 
@@ -91,7 +91,7 @@ namespace Engine
             // Create a DirectX object for the description above that can be used by a shader
             if (FAILED(dx11Renderer->GetDevice()->CreateRasterizerState(&rasterizerDesc, &m_CullBackState)))
             {
-                //LOG_ERROR("Error creating cull-back state");
+                LOG_ERROR("Error creating cull-back state");
                 return false;
             }
 
@@ -105,7 +105,7 @@ namespace Engine
             // Create a DirectX object for the description above that can be used by a shader
             if (FAILED(dx11Renderer->GetDevice()->CreateRasterizerState(&rasterizerDesc, &m_CullFrontState)))
             {
-                //LOG_ERROR("Error creating cull-front state");
+                LOG_ERROR("Error creating cull-front state");
                 return false;
             }
 
@@ -119,7 +119,7 @@ namespace Engine
             // Create a DirectX object for the description above that can be used by a shader
             if (FAILED(dx11Renderer->GetDevice()->CreateRasterizerState(&rasterizerDesc, &m_CullNoneState)))
             {
-                //LOG_ERROR("Error creating cull-none state");
+                LOG_ERROR("Error creating cull-none state");
                 return false;
             }
 
@@ -168,7 +168,7 @@ namespace Engine
             // Then create a DirectX object for the description that can be used by a shader
             if (FAILED(dx11Renderer->GetDevice()->CreateBlendState(&blendDesc, &m_AdditiveBlendingState)))
             {
-                //LOG_ERROR("Error creating additive blending state");
+                LOG_ERROR("Error creating additive blending state");
                 return false;
             }
 
@@ -190,7 +190,7 @@ namespace Engine
             // Create a DirectX object for the description above that can be used by a shader
             if (FAILED(dx11Renderer->GetDevice()->CreateDepthStencilState(&depthStencilDesc, &m_UseDepthBufferState)))
             {
-                //LOG_ERROR("Error creating use-depth-buffer state");
+                LOG_ERROR("Error creating use-depth-buffer state");
                 return false;
             }
 
@@ -205,7 +205,7 @@ namespace Engine
             // Create a DirectX object for the description above that can be used by a shader
             if (FAILED(dx11Renderer->GetDevice()->CreateDepthStencilState(&depthStencilDesc, &m_DepthReadOnlyState)))
             {
-                //LOG_ERROR("Error creating depth-read-only state");
+                LOG_ERROR("Error creating depth-read-only state");
                 return false;
             }
 
@@ -219,7 +219,7 @@ namespace Engine
             // Create a DirectX object for the description above that can be used by a shader
             if (FAILED(dx11Renderer->GetDevice()->CreateDepthStencilState(&depthStencilDesc, &m_NoDepthBufferState)))
             {
-                //LOG_ERROR("Error creating no-depth-buffer state");
+                LOG_ERROR("Error creating no-depth-buffer state");
                 return false;
             }
 
