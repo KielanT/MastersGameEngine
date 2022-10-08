@@ -6,7 +6,6 @@
 #include "Engine/SceneSystem/DirectX11/DirectX11SceneManager.h"
 
 
-
 namespace Engine
 {
 
@@ -29,7 +28,7 @@ namespace Engine
 
 		virtual int GetSceneIndex() override { return m_SceneIndex; }
 
-		//virtual Camera* GetCamera() override { return m_SceneCamera; }
+		virtual Camera* GetCamera() override { return m_SceneCamera; }
 
 		// Scene Settings
 		virtual void SetAmbientColour(glm::vec3 ambientColour) override { m_AmbientColour = ambientColour; }
@@ -37,16 +36,16 @@ namespace Engine
 		virtual void SetBackgroundColour(glm::vec4 backgroundColour) override { m_backgroundColour = backgroundColour; }
 		virtual void SetVSync(bool VSync) override { m_VsyncOn = VSync; }
 
-		//virtual glm::vec3 GetAmbientColour() override { return m_AmbientColour; }
+		virtual glm::vec3 GetAmbientColour() override { return m_AmbientColour; }
 		virtual float GetSpecularPower() override { return m_SpecularPower; }
-		//virtual glm::vec4 GetBackgroundColour() override { return m_backgroundColour; }
+		virtual glm::vec4 GetBackgroundColour() override { return m_backgroundColour; }
 		virtual bool GetVSync() override { return m_VsyncOn; }
 
 	private:
 		IRenderer* m_Renderer;
 		int m_SceneIndex;
 
-		//Camera* m_SceneCamera = nullptr;;
+		Camera* m_SceneCamera = nullptr;;
 
 
 		glm::vec3 m_AmbientColour;

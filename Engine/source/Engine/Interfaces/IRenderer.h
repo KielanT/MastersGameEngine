@@ -2,17 +2,20 @@
 
 namespace Engine
 {
-	class IRenderer
+	class  IRenderer
 	{
 	public:
-		virtual bool Init(WindowProperties& props) = 0;
-		
-		virtual void Shutdown() = 0;
-		
-		virtual const ERendererType GetRendererType() = 0;
-		
-		virtual WindowProperties GetWindowProperties() = 0;
+		// Initialize the renderer
+		virtual bool InitRenderer(WindowProperties& props) = 0;
 
+		// Shutdown the renderer
+		virtual void ShutdownRenderer() = 0;
+
+		// Get the renderer type
+		virtual const ERendererType GetRendererType() = 0;
+
+		// Get the Window Properties
+		virtual WindowProperties GetWindowProperties() = 0;
 	};
 
 	IRenderer* NewRenderer(const ERendererType type);

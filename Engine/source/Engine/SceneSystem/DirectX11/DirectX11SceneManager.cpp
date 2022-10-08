@@ -90,9 +90,9 @@ namespace Engine
 			DirectX11Renderer* d11Renderer = static_cast<DirectX11Renderer*>(m_Renderer); // Casts the renderer to the correct renderer
 
 			// Sets the correct scene settings
-			//d11Renderer->PerFrameConstants.ambientColour = m_Scenes[m_SceneIndex]->GetAmbientColour();
+			d11Renderer->PerFrameConstants.ambientColour = m_Scenes[m_SceneIndex]->GetAmbientColour();
 			d11Renderer->PerFrameConstants.specularPower = m_Scenes[m_SceneIndex]->GetSpecularPower();
-			//d11Renderer->PerFrameConstants.cameraPosition = m_Scenes[m_SceneIndex]->GetCamera()->Position();
+			d11Renderer->PerFrameConstants.cameraPosition = m_Scenes[m_SceneIndex]->GetCamera()->Position();
 
 			//// Main scene rendering ////
 
@@ -102,8 +102,8 @@ namespace Engine
 			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer, d11Renderer->GetDepthStencil());
 
 			// Clear the back buffer to a fixed colour and the depth buffer to the far distance
-			//glm::vec4 backgroundColour = m_Scenes[m_SceneIndex]->GetBackgroundColour();
-			//d11Renderer->GetDeviceContext()->ClearRenderTargetView(d11Renderer->GetBackBuffer(), &backgroundColour.r);
+			glm::vec4 backgroundColour = m_Scenes[m_SceneIndex]->GetBackgroundColour();
+			d11Renderer->GetDeviceContext()->ClearRenderTargetView(d11Renderer->GetBackBuffer(), &backgroundColour.r);
 			d11Renderer->GetDeviceContext()->ClearDepthStencilView(d11Renderer->GetDepthStencil(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 			// Setup the viewport to the size of the main window
@@ -137,10 +137,10 @@ namespace Engine
 		{
 			DirectX11Renderer* d11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
 			// Set camera matrices in the constant buffer and send over to GPU
-			//d11Renderer->PerFrameConstants.viewMatrix = m_Scenes[m_SceneIndex]->GetCamera()->ViewMatrix();
-			//d11Renderer->PerFrameConstants.EngineionMatrix = m_Scenes[m_SceneIndex]->GetCamera()->EngineionMatrix();
-			//d11Renderer->PerFrameConstants.viewEngineionMatrix = m_Scenes[m_SceneIndex]->GetCamera()->ViewEngineionMatrix();
-			//UpdateConstantBuffer(d11Renderer->GetDeviceContext(), d11Renderer->PerFrameConstantBuffer, d11Renderer->PerFrameConstants);
+			d11Renderer->PerFrameConstants.viewMatrix = m_Scenes[m_SceneIndex]->GetCamera()->ViewMatrix();
+			d11Renderer->PerFrameConstants.EngineionMatrix = m_Scenes[m_SceneIndex]->GetCamera()->EngineionMatrix();
+			d11Renderer->PerFrameConstants.viewEngineionMatrix = m_Scenes[m_SceneIndex]->GetCamera()->ViewEngineionMatrix();
+			UpdateConstantBuffer(d11Renderer->GetDeviceContext(), d11Renderer->PerFrameConstantBuffer, d11Renderer->PerFrameConstants);
 
 			// Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)
 			d11Renderer->GetDeviceContext()->VSSetConstantBuffers(0, 1, &d11Renderer->PerFrameConstantBuffer); // First parameter must match constant buffer number in the shader 

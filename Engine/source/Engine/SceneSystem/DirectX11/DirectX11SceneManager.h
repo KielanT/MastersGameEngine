@@ -4,50 +4,6 @@
 
 namespace Engine
 {
-	//class DirectX11SceneManager : public ISceneManager
-	//{
-	//public:
-	//	DirectX11SceneManager(IRenderer* renderer, WindowProperties& props);
-	//	virtual ~DirectX11SceneManager();
-
-	//	
-	//	
-	//	
-	//	
-
-	//public:
-	//	virtual bool LoadFirstScene();
-
-	//	virtual bool LoadScene(int index);
-
-	//	virtual void RemoveCurrentScene();
-
-	//	virtual void RemoveSceneAtIndex(int index);
-
-	//	virtual void UpdateScene(float frameTime);
-
-	//	virtual const int GetCurrentSceneIndex() { return m_SceneIndex; }
-
-	//	virtual IRenderer* GetRenderer() { return m_Renderer; }
-
-	//	virtual void Release();
-
-	//private:
-	//	virtual void CreateScenesFromFile();
-
-	//	virtual void CreateScenesFromObject(); // TESTING ONLY
-
-	//	virtual void RenderScene();
-
-	//	virtual void RenderSceneFromCamera();
-
-	//private:
-	//	IRenderer* m_Renderer; // Memeber variable for the renderer in use
-	//	WindowProperties m_Props; // Member variable for the window properties
-	//	std::vector<IScene*> m_Scenes; // Member variable for the scene array
-
-	//	int m_SceneIndex = 0; // Memeber variable for the tracking the current scene index
-	//};
 
 	class DirectX11SceneManager : public ISceneManager
 	{
@@ -93,4 +49,12 @@ namespace Engine
 		int m_SceneIndex; // Memeber variable for the tracking the current scene index
 	};
 
+	template <class T>
+	void UpdateConstantBuffer(ID3D11DeviceContext* deviceContext, ID3D11Buffer* buffer, const T& bufferData)
+	{
+		D3D11_MAPPED_SUBRESOURCE cb;
+		deviceContext->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &cb);
+		memcpy(cb.pData, &bufferData, sizeof(T));
+		deviceContext->Unmap(buffer, 0);
+	}
 }

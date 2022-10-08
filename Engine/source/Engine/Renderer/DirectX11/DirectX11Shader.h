@@ -32,27 +32,27 @@ namespace Engine
 		virtual void ReleaseShaders() override;
 
 		// Returns the selected vertex shader
-		CComPtr<ID3D11VertexShader> GetVertexShader(EVertexShader vertexShader);
+		ID3D11VertexShader* GetVertexShader(EVertexShader vertexShader);
 
 		// Returns the selected pixel shader
-		CComPtr<ID3D11PixelShader> GetPixelShader(EPixelShader pixelShader);
+		ID3D11PixelShader* GetPixelShader(EPixelShader pixelShader);
 
 	private:
 
-		CComPtr<ID3D11VertexShader> LoadVertexShader(std::string shaderName); // Loads the vertex shader
-		CComPtr<ID3D11PixelShader> LoadPixelShader(std::string shaderName); // Loads the pixel shader
+		ID3D11VertexShader* LoadVertexShader(std::string shaderName); // Loads the vertex shader
+		ID3D11PixelShader* LoadPixelShader(std::string shaderName); // Loads the pixel shader
 
- 	private:
+	private:
 		IRenderer* m_Renderer; // Used for getting the renderer in use
 
 		// Vertex shader member variables
-		CComPtr<ID3D11VertexShader> m_PixelLightingVertexShader;
-		CComPtr<ID3D11VertexShader> m_BasicTransformVertexShader;
-		CComPtr<ID3D11VertexShader> m_SkinningVertexShader;
+		ID3D11VertexShader* m_PixelLightingVertexShader;
+		ID3D11VertexShader* m_BasicTransformVertexShader;
+		ID3D11VertexShader* m_SkinningVertexShader;
 
 		// Pixel shader member variables
-		CComPtr<ID3D11PixelShader> m_LightModelPixelShader;
-		CComPtr<ID3D11PixelShader> m_PixelLightingPixelShader;
+		ID3D11PixelShader* m_LightModelPixelShader;
+		ID3D11PixelShader* m_PixelLightingPixelShader;
 
 	};
 }

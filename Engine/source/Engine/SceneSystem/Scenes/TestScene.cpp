@@ -32,16 +32,16 @@ namespace Engine
         std::string path = "media/";
 		
         std::filesystem::path MainPath = std::filesystem::current_path();
-
+        
         std::filesystem::path meshPath = std::filesystem::current_path().parent_path().append("Engine\\");
-
+        
         std::filesystem::current_path(meshPath); // Sets the current path to the mesh path
 
         DirectX11Renderer* renderer = static_cast<DirectX11Renderer*>(m_Renderer);
         //Mesh* mesh = new Mesh(renderer, path + "Cube.x");
         //model = new Model(mesh);
         //
-        //m_SceneCamera = new Camera();
+        m_SceneCamera = new Camera();
         return true;
     }
 
@@ -49,8 +49,8 @@ namespace Engine
     {
         //model->SetPosition({ 0.0f, 0.0f, 0.0f });
         //
-        //m_SceneCamera->SetPosition({ 0, 0, -50 });
-        //m_SceneCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
+        m_SceneCamera->SetPosition({ 0, 0, -50 });
+        m_SceneCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
         return true;
     }
@@ -90,7 +90,7 @@ namespace Engine
     {
 
 
-        //m_SceneCamera->Control(frameTime);
+        m_SceneCamera->Control(frameTime);
 
 
 

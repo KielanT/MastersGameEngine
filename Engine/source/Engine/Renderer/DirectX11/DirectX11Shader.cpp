@@ -51,9 +51,16 @@ namespace Engine
 
 	void DirectX11Shader::ReleaseShaders()
 	{
+		// Releases the shaders
+		if (m_PixelLightingVertexShader) { m_PixelLightingVertexShader->Release(); }
+		if (m_BasicTransformVertexShader) { m_BasicTransformVertexShader->Release(); }
+		if (m_SkinningVertexShader) { m_SkinningVertexShader->Release(); }
+
+		if (m_LightModelPixelShader) { m_LightModelPixelShader->Release(); }
+		if (m_PixelLightingPixelShader) { m_PixelLightingPixelShader->Release(); }
 	}
 
-	CComPtr<ID3D11VertexShader> DirectX11Shader::GetVertexShader(EVertexShader vertexShader)
+	ID3D11VertexShader* DirectX11Shader::GetVertexShader(EVertexShader vertexShader)
 	{
 		// Returns the selected vertex shader
 		switch (vertexShader)
@@ -70,7 +77,7 @@ namespace Engine
 		}
 	}
 
-	CComPtr<ID3D11PixelShader> DirectX11Shader::GetPixelShader(EPixelShader pixelShader)
+	ID3D11PixelShader* DirectX11Shader::GetPixelShader(EPixelShader pixelShader)
 	{
 		// Returns the selected pixel shader
 		switch (pixelShader)
@@ -84,7 +91,7 @@ namespace Engine
 		}
 	}
 
-	CComPtr<ID3D11VertexShader> DirectX11Shader::LoadVertexShader(std::string shaderName)
+	ID3D11VertexShader* DirectX11Shader::LoadVertexShader(std::string shaderName)
 	{
 		// Open compiled shader object file
 		std::ifstream shaderFile(shaderName + ".cso", std::ios::in | std::ios::binary | std::ios::ate);
@@ -104,7 +111,7 @@ namespace Engine
 		}
 
 		// Create shader object from loaded file (we will use the object later when rendering)
-		CComPtr<ID3D11VertexShader> shader;
+		ID3D11VertexShader* shader;
 
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11)
 		{
@@ -121,7 +128,7 @@ namespace Engine
 
 	}
 
-	CComPtr<ID3D11PixelShader> DirectX11Shader::LoadPixelShader(std::string shaderName)
+	ID3D11PixelShader* DirectX11Shader::LoadPixelShader(std::string shaderName)
 	{
 		// Open compiled shader object file
 		std::ifstream shaderFile(shaderName + ".cso", std::ios::in | std::ios::binary | std::ios::ate);
@@ -141,7 +148,7 @@ namespace Engine
 		}
 
 		// Create shader object from loaded file (we will use the object later when rendering)
-		CComPtr<ID3D11PixelShader> shader;
+		ID3D11PixelShader* shader;
 
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11)
 		{

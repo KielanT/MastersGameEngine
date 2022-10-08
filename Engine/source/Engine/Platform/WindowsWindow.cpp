@@ -22,16 +22,16 @@ namespace Engine
 	{
 		m_Window = S_OK;
 		m_Props = props;
-		m_Window = CreateDesktopWindow();
+		m_Window = CreateDesktopWindow(props);
 		
 		return TRUE;
 	}
 
-	void WindowsWindow::Update()
+	void WindowsWindow::Update(ISceneManager* m_SceneManager)
 	{
 		if (SUCCEEDED(m_Window))
 		{
-			m_Window = Run();
+			m_Window = Run(m_SceneManager);
 		}
 	}
 
@@ -116,7 +116,7 @@ namespace Engine
 
 	
 
-	HRESULT WindowsWindow::CreateDesktopWindow()
+	HRESULT WindowsWindow::CreateDesktopWindow(WindowProperties& props)
 	{
 		SHSTOCKICONINFO stockIcon;
 		stockIcon.cbSize = sizeof(stockIcon);
@@ -159,24 +159,29 @@ namespace Engine
 			return E_FAIL;
 		}
 
-		m_Props.Hwnd = m_hWnd;
-
+		props.Hwnd = m_hWnd;
+		m_Props = props;
+		
 		ShowWindow(m_hWnd, 1);
 		UpdateWindow(m_hWnd);
 
 		return TRUE;
 	}
 
-	HRESULT WindowsWindow::Run()
+	HRESULT WindowsWindow::Run(ISceneManager* m_SceneManager)
 	{
 		HRESULT hr = S_OK;
 
 		// Initlisie input
-		if (hr != S_OK)
+		 // Initialise scene
+		if (!m_SceneManager->LoadFirstScene())
 		{
+			//LOG_ERROR("Error Loading first scene");
 			return 0;
 		}
 
+
+		m_Timer.Start();
 
 		MSG msg = {};
 		while (msg.message != WM_QUIT) // As long as window is open
@@ -191,8 +196,8 @@ namespace Engine
 			else // When no windows messages left to process then render & update our scene
 			{
 				// Update the scene by the amount of time since the last frame
-				//float frameTime = m_Timer.DeltaTime();
-				//m_SceneManager->SceneLoop(frameTime);
+				float frameTime = m_Timer.DeltaTime();
+				m_SceneManager->SceneLoop(frameTime);
 			}
 		}
 

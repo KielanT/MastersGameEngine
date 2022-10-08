@@ -22,9 +22,10 @@ namespace Engine
 				// Error
 			}
 			
-			if (!m_Renderer->Init(props)) // Initializes the renderer
+			if (!m_Renderer->InitRenderer(props)) // Initializes the renderer
 			{
 				//LOG_ERROR("Error Initializing the renderer");
+				int i = 0;
 			}
 
 			m_SceneManager = NewSceneManager(m_Renderer); // Creates the scene manager
@@ -40,13 +41,13 @@ namespace Engine
 		m_SceneManager->Release();
 		delete m_SceneManager; // Deletes the scene manager
 
-		m_Renderer->Shutdown(); // Shutdown the renderer
+		m_Renderer->ShutdownRenderer(); // Shutdown the renderer
 		delete m_Renderer; // Deletes the renderer
 	}
 	
 	void Application::Run()
 	{
-		m_Window->Update();
+		m_Window->Update(m_SceneManager);
 	}
 	
 }

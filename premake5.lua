@@ -56,7 +56,25 @@ project "Engine"
 		"d3dcompiler.lib",
     }
 
-    -- Shader Code here
+    files("Engine/source/Engine/Renderer/Shaders/HLSL/*.hlsl")
+	files("Engine/source/Engine/Renderer/Shaders/HLSL/*.hlsli")
+	shadermodel("5.0")
+	
+	local shader_dir = "../Editor/Shaders/"
+
+	filter("files:**.hlsl")
+      flags("ExcludeFromBuild")
+      shaderobjectfileoutput(shader_dir.."%{file.basename}"..".cso")
+
+   filter("files:**_ps.hlsl")
+      removeflags("ExcludeFromBuild")
+      shadertype("Pixel")
+
+   filter("files:**_vs.hlsl")
+      removeflags("ExcludeFromBuild")
+      shadertype("Vertex")
+
+	 shaderoptions({"/WX"})
 
     filter "system:windows"
         cppdialect "C++20"

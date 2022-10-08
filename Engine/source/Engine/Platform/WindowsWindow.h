@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Interfaces/IWindow.h"
+#include "Engine/Utility/ITimer.h"
 
 namespace Engine
 {
@@ -16,7 +17,7 @@ namespace Engine
 		WindowsWindow& operator=(WindowsWindow&&) = delete;
 
 	public:
-		virtual void Update() override;
+		virtual void Update(ISceneManager* m_SceneManager) override;
 		virtual void Shutdown() override;
 
 		virtual WindowProperties GetWindowProperties() const override { return m_Props; };
@@ -35,9 +36,9 @@ namespace Engine
 
 		BOOL Init(WindowProperties& props);
 
-		HRESULT CreateDesktopWindow();
+		HRESULT CreateDesktopWindow(WindowProperties& props);
 		
-		HRESULT Run();
+		HRESULT Run(ISceneManager* m_SceneManager);
 		
 		
 	private:
@@ -45,7 +46,7 @@ namespace Engine
 
 		HWND m_hWnd;
 		HRESULT m_Window;
-
+		ITimer m_Timer;
 		
 	};
 	static HINSTANCE m_hInstance;
