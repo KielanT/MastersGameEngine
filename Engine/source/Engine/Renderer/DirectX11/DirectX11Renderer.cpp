@@ -42,7 +42,7 @@ namespace Engine
 
 
         // Get a "render target view" of back-buffer - standard behaviour
-        ID3D11Texture2D* backBuffer;
+        CComPtr<ID3D11Texture2D> backBuffer;
         hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
         if (FAILED(hr))
         {
@@ -50,7 +50,7 @@ namespace Engine
             return false;
         }
         hr = m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
-        backBuffer->Release();
+        //backBuffer->Release();
         if (FAILED(hr))
         {
             //LOG_ERROR("Error creating render target view");
@@ -111,23 +111,15 @@ namespace Engine
 
     void DirectX11Renderer::ShutdownRenderer()
     {
-        // Release each Direct3D object to return resources to the system. Leaving these out will cause memory
-        // leaks. Check documentation to see which objects need to be released when adding new features in your
-        // own Engines.
         if (m_D3DContext)
         {
-            m_D3DContext->ClearState(); // This line is also needed to reset the GPU before shutting down DirectX
-            m_D3DContext->Release();
+            m_D3DContext->ClearState();  // m_D3DContext->Release();
         }
-        if (m_DepthStencil)           m_DepthStencil->Release();
-        if (m_DepthStencilTexture)    m_DepthStencilTexture->Release();
-        if (m_BackBufferRenderTarget) m_BackBufferRenderTarget->Release();
-        if (m_SwapChain)              m_SwapChain->Release();
-        if (m_D3DDevice)              m_D3DDevice->Release();
+   
         if (PerFrameConstantBuffer)   PerFrameConstantBuffer->Release();
-        if (PerModelConstantBuffer)   PerModelConstantBuffer->Release();
     }
-    ID3D11Buffer* DirectX11Renderer::CreateConstantBuffer(int size)
+
+    CComPtr<ID3D11Buffer> DirectX11Renderer::CreateConstantBuffer(int size)
     {
         D3D11_BUFFER_DESC cbDesc;
         cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -135,7 +127,7 @@ namespace Engine
         cbDesc.Usage = D3D11_USAGE_DYNAMIC;             // Indicates that the buffer is frequently updated
         cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // CPU is only going to write to the constants (not read them)
         cbDesc.MiscFlags = 0;
-        ID3D11Buffer* constantBuffer;
+        CComPtr<ID3D11Buffer> constantBuffer;
         HRESULT hr = m_D3DDevice->CreateBuffer(&cbDesc, nullptr, &constantBuffer);
         if (FAILED(hr))
         {

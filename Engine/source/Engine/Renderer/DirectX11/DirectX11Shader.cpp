@@ -51,16 +51,10 @@ namespace Engine
 
 	void DirectX11Shader::ReleaseShaders()
 	{
-		// Releases the shaders
-		if (m_PixelLightingVertexShader) { m_PixelLightingVertexShader->Release(); }
-		if (m_BasicTransformVertexShader) { m_BasicTransformVertexShader->Release(); }
-		if (m_SkinningVertexShader) { m_SkinningVertexShader->Release(); }
-
-		if (m_LightModelPixelShader) { m_LightModelPixelShader->Release(); }
-		if (m_PixelLightingPixelShader) { m_PixelLightingPixelShader->Release(); }
+		
 	}
 
-	ID3D11VertexShader* DirectX11Shader::GetVertexShader(EVertexShader vertexShader)
+	CComPtr<ID3D11VertexShader> DirectX11Shader::GetVertexShader(EVertexShader vertexShader)
 	{
 		// Returns the selected vertex shader
 		switch (vertexShader)
@@ -77,7 +71,7 @@ namespace Engine
 		}
 	}
 
-	ID3D11PixelShader* DirectX11Shader::GetPixelShader(EPixelShader pixelShader)
+	CComPtr<ID3D11PixelShader> DirectX11Shader::GetPixelShader(EPixelShader pixelShader)
 	{
 		// Returns the selected pixel shader
 		switch (pixelShader)
@@ -91,7 +85,7 @@ namespace Engine
 		}
 	}
 
-	ID3D11VertexShader* DirectX11Shader::LoadVertexShader(std::string shaderName)
+	CComPtr<ID3D11VertexShader> DirectX11Shader::LoadVertexShader(std::string shaderName)
 	{
 		// Open compiled shader object file
 		std::ifstream shaderFile(shaderName + ".cso", std::ios::in | std::ios::binary | std::ios::ate);
@@ -128,7 +122,7 @@ namespace Engine
 
 	}
 
-	ID3D11PixelShader* DirectX11Shader::LoadPixelShader(std::string shaderName)
+	CComPtr<ID3D11PixelShader> DirectX11Shader::LoadPixelShader(std::string shaderName)
 	{
 		// Open compiled shader object file
 		std::ifstream shaderFile(shaderName + ".cso", std::ios::in | std::ios::binary | std::ios::ate);
