@@ -2,6 +2,7 @@
 
 #include "Engine/Interfaces/IWindow.h"
 #include "Engine/Interfaces/IRenderer.h"
+#include "Engine/Interfaces/ISceneManager.h"
 
 #include <memory>
 
@@ -25,6 +26,8 @@ namespace Engine
 	private:
 		std::unique_ptr<IWindow> m_Window;
 		IRenderer* m_Renderer;
+
+		ISceneManager* m_SceneManager;
 	};
 
 	Application* CreateApplication();

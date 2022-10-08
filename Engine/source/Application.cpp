@@ -26,11 +26,20 @@ namespace Engine
 			{
 				//LOG_ERROR("Error Initializing the renderer");
 			}
+
+			m_SceneManager = NewSceneManager(m_Renderer); // Creates the scene manager
+			if (m_SceneManager == nullptr)
+			{
+				//LOG_ERROR("Error Creating the scene manager");
+			}
 		}
 	}
 	
 	Application::~Application()
 	{
+		m_SceneManager->Release();
+		delete m_SceneManager; // Deletes the scene manager
+
 		m_Renderer->Shutdown(); // Shutdown the renderer
 		delete m_Renderer; // Deletes the renderer
 	}
