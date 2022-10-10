@@ -15,9 +15,11 @@ workspace "MastersGameEngine"
     IncludeDir["DirectXTK"] = "Engine/external/DirectXTK"
     IncludeDir["glm"] = "Engine/external/glm"
     IncludeDir["spdlog"] = "Engine/external/spdlog/include"
+    IncludeDir["assimp"] = "Engine/external/assimp/include"
 
     LibDir = {}
     LibDir["DirectXTK"] = "Engine/external/DirectXTK/%{cfg.buildcfg}"
+    LibDir["assimp"] = "Engine/external/assimp/lib/%{cfg.buildcfg}"
 
 project "Engine"
     location "Engine"
@@ -44,11 +46,13 @@ project "Engine"
         "%{IncludeDir.DirectXTK}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.spdlog}",
+        "%{IncludeDir.assimp}",
     }
 
     libdirs
     {
         "%{LibDir.DirectXTK}",
+        "%{LibDir.assimp}",
     }
 
     links
@@ -56,6 +60,7 @@ project "Engine"
         "d3d11.lib",
 		"DirectXTK.lib",
 		"d3dcompiler.lib",
+        "assimp-vc143-mt.lib",
     }
 
     files("Engine/source/Engine/Renderer/Shaders/HLSL/*.hlsl")

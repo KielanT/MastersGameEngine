@@ -61,7 +61,7 @@ namespace temp
 					   0,     0,   0,  1 };
 	}
 
-	static glm::mat4 MatrixMultiplication(glm::mat4& m1, glm::mat4 m2)
+	static glm::mat4 MatrixMultiplication(glm::mat4 m1, glm::mat4 m2)
 	{
 		glm::mat4 mOut;
 

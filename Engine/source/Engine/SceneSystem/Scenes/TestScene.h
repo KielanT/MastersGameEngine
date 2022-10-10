@@ -4,6 +4,7 @@
 #include "Engine/Interfaces/IShader.h"
 #include "Engine/Interfaces/IState.h"
 #include "Engine/SceneSystem/DirectX11/DirectX11SceneManager.h"
+#include "Engine/Lab/Model.h"
 
 
 namespace Engine
@@ -57,6 +58,6 @@ namespace Engine
 
 		IShader* m_Shader;
 		IState* m_State;
-		//Model* model;
+		Model* model;
 	};
 }

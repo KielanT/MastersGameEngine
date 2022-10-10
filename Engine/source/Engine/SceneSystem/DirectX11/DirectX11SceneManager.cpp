@@ -2,6 +2,7 @@
 #include "DirectX11SceneManager.h"
 #include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
 #include "Engine/SceneSystem/Scenes/TestScene.h"
+#include "Engine/Lab/GraphicsHelpers.h"
 
 namespace Engine
 {

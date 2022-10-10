@@ -49,12 +49,5 @@ namespace Engine
 		int m_SceneIndex; // Memeber variable for the tracking the current scene index
 	};
 
-	template <class T>
-	void UpdateConstantBuffer(ID3D11DeviceContext* deviceContext, ID3D11Buffer* buffer, const T& bufferData)
-	{
-		D3D11_MAPPED_SUBRESOURCE cb;
-		deviceContext->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &cb);
-		memcpy(cb.pData, &bufferData, sizeof(T));
-		deviceContext->Unmap(buffer, 0);
-	}
+
 }

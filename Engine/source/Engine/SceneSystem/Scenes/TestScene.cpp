@@ -3,6 +3,7 @@
 #include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
 #include "Engine/Renderer/DirectX11/DirectX11Shader.h"
 #include "Engine/Renderer/DirectX11/DirectX11States.h"
+#include "Engine/Lab/GraphicsHelpers.h"
 
 namespace Engine
 {
@@ -38,17 +39,17 @@ namespace Engine
         std::filesystem::current_path(meshPath); // Sets the current path to the mesh path
 
         DirectX11Renderer* renderer = static_cast<DirectX11Renderer*>(m_Renderer);
-        //Mesh* mesh = new Mesh(renderer, path + "Cube.x");
-        //model = new Model(mesh);
-        //
+        Mesh* mesh = new Mesh(renderer, path + "Cube.x");
+        model = new Model(mesh);
+        
         m_SceneCamera = new Camera();
         return true;
     }
 
     bool TestScene::InitScene()
     {
-        //model->SetPosition({ 0.0f, 0.0f, 0.0f });
-        //
+        model->SetPosition({ 0.0f, 0.0f, 0.0f });
+        
         m_SceneCamera->SetPosition({ 0, 0, -50 });
         m_SceneCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
@@ -68,22 +69,22 @@ namespace Engine
         dx11Renderer->GetDeviceContext()->PSSetShader(shader->GetPixelShader(EPixelShader::PixelLightingPixelShader), nullptr, 0);
 
         // Select the approriate textures and sampler to use in the pixel shader
-        //ID3D11Resource* resource;
-        //ID3D11ShaderResourceView* resourceView;
-        //
-        //if (!LoadTexture(dx11Renderer, "media/CargoA.dds", &resource, &resourceView))
-        //{
-        //    LOG_ERROR("Cannot load texture");
-        //}
-        //ID3D11SamplerState* sampler = state->GetSamplerState(ESamplerState::Anisotropic4xSampler);
-        //dx11Renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &resourceView); // First parameter must match texture slot number in the shader
-        //dx11Renderer->GetDeviceContext()->PSSetSamplers(0, 1, &sampler);
-        //
-        //// States - no blending, normal depth buffer and culling
-        //dx11Renderer->GetDeviceContext()->OMSetBlendState(state->GetBlendState(EBlendState::NoBlendingState), nullptr, 0xffffff);
-        //dx11Renderer->GetDeviceContext()->OMSetDepthStencilState(state->GetDepthStencilState(EDepthStencilState::UseDepthBufferState), 0);
-        //dx11Renderer->GetDeviceContext()->RSSetState(state->GetRasterizerState(ERasterizerState::CullNoneState));
-        //model->Render();
+        ID3D11Resource* resource;
+        ID3D11ShaderResourceView* resourceView;
+        
+        if (!LoadTexture(dx11Renderer, "media/CargoA.dds", &resource, &resourceView))
+        {
+            LOG_ERROR("Cannot load texture");
+        }
+        ID3D11SamplerState* sampler = state->GetSamplerState(ESamplerState::Anisotropic4xSampler);
+        dx11Renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &resourceView); // First parameter must match texture slot number in the shader
+        dx11Renderer->GetDeviceContext()->PSSetSamplers(0, 1, &sampler);
+        
+        // States - no blending, normal depth buffer and culling
+        dx11Renderer->GetDeviceContext()->OMSetBlendState(state->GetBlendState(EBlendState::NoBlendingState), nullptr, 0xffffff);
+        dx11Renderer->GetDeviceContext()->OMSetDepthStencilState(state->GetDepthStencilState(EDepthStencilState::UseDepthBufferState), 0);
+        dx11Renderer->GetDeviceContext()->RSSetState(state->GetRasterizerState(ERasterizerState::CullNoneState));
+        model->Render();
     }
 
     void TestScene::UpdateScene(float frameTime)
