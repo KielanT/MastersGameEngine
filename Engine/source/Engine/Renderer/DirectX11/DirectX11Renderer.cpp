@@ -109,14 +109,11 @@ namespace Engine
 
     void DirectX11Renderer::ShutdownRenderer()
     {
-
         if (m_D3DContext)
         {
             m_D3DContext->ClearState();
         }
 
-        if (PerFrameConstantBuffer)   PerFrameConstantBuffer->Release();
-        if (PerModelConstantBuffer)   PerModelConstantBuffer->Release();
     }
     CComPtr<ID3D11Buffer> DirectX11Renderer::CreateConstantBuffer(int size)
     {
@@ -126,10 +123,11 @@ namespace Engine
         cbDesc.Usage = D3D11_USAGE_DYNAMIC;             // Indicates that the buffer is frequently updated
         cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // CPU is only going to write to the constants (not read them)
         cbDesc.MiscFlags = 0;
-        ID3D11Buffer* constantBuffer;
+        CComPtr<ID3D11Buffer> constantBuffer;
         HRESULT hr = m_D3DDevice->CreateBuffer(&cbDesc, nullptr, &constantBuffer);
         if (FAILED(hr))
         {
+            LOG_ERROR("Error Creating Constant Buffers");
             return nullptr;
         }
 

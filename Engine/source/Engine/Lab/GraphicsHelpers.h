@@ -16,7 +16,7 @@
 // you want to update it with. The structure will be copied in full over to the GPU constant buffer, where it will
 // be available to shaders. This is used to update model and camera positions, lighting data etc.
 template <class T>
-void UpdateConstantBuffer(ID3D11DeviceContext* deviceContext, ID3D11Buffer* buffer, const T& bufferData)
+void UpdateConstantBuffer(CComPtr<ID3D11DeviceContext> deviceContext, CComPtr<ID3D11Buffer> buffer, const T& bufferData)
 {
     D3D11_MAPPED_SUBRESOURCE cb;
     deviceContext->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &cb);

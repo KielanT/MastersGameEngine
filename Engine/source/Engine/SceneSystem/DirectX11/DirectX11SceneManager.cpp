@@ -145,8 +145,8 @@ namespace Engine
 			UpdateConstantBuffer(d11Renderer->GetDeviceContext(), d11Renderer->PerFrameConstantBuffer, d11Renderer->PerFrameConstants);
 
 			// Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)
-			d11Renderer->GetDeviceContext()->VSSetConstantBuffers(0, 1, &d11Renderer->PerFrameConstantBuffer); // First parameter must match constant buffer number in the shader 
-			d11Renderer->GetDeviceContext()->PSSetConstantBuffers(0, 1, &d11Renderer->PerFrameConstantBuffer);
+			d11Renderer->GetDeviceContext()->VSSetConstantBuffers(0, 1, &d11Renderer->PerFrameConstantBuffer.p); // First parameter must match constant buffer number in the shader 
+			d11Renderer->GetDeviceContext()->PSSetConstantBuffers(0, 1, &d11Renderer->PerFrameConstantBuffer.p);
 
 			m_Scenes[m_SceneIndex]->RenderScene();
 		}

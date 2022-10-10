@@ -474,8 +474,8 @@ namespace Engine
                 UpdateConstantBuffer(m_Renderer->GetDeviceContext(), m_Renderer->PerModelConstantBuffer, m_Renderer->PerModelConstants); // Send to GPU
 
                 // Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)
-                m_Renderer->GetDeviceContext()->VSSetConstantBuffers(1, 1, &m_Renderer->PerModelConstantBuffer); // First parameter must match constant buffer number in the shader
-                m_Renderer->GetDeviceContext()->PSSetConstantBuffers(1, 1, &m_Renderer->PerModelConstantBuffer);
+                m_Renderer->GetDeviceContext()->VSSetConstantBuffers(1, 1, &m_Renderer->PerModelConstantBuffer.p); // First parameter must match constant buffer number in the shader
+                m_Renderer->GetDeviceContext()->PSSetConstantBuffers(1, 1, &m_Renderer->PerModelConstantBuffer.p);
 
                 // Render the sub-meshes attached to this node (no bones - rigid movement)
                 for (auto& subMeshIndex : mNodes[nodeIndex].subMeshes)

@@ -78,10 +78,10 @@ namespace Engine
 
 	public:
 		PerFrameConstants PerFrameConstants; // Used for setting per frame constant variables and sending them to the GPU
-		ID3D11Buffer* PerFrameConstantBuffer;
+		CComPtr<ID3D11Buffer> PerFrameConstantBuffer;
 
 		PerModelConstants PerModelConstants;  // Used for setting per model constant variables and sending them to the GPU
-		ID3D11Buffer* PerModelConstantBuffer;
+		CComPtr<ID3D11Buffer> PerModelConstantBuffer;
 
 
 	private:
