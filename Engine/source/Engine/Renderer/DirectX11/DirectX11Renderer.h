@@ -68,13 +68,13 @@ namespace Engine
 		virtual WindowProperties GetWindowProperties() override { return m_Props; }
 
 	public:
-		ID3D11Device* GetDevice() { return m_D3DDevice; } // Returns the DirectX11 device
-		ID3D11DeviceContext* GetDeviceContext() { return m_D3DContext; } // Returns the DirectX11 device context
-		IDXGISwapChain* GetSwapChain() { return m_SwapChain; } // Returns the DirectX11 Swapchain
-		ID3D11RenderTargetView* GetBackBuffer() { return m_BackBufferRenderTarget; } // Returns the DirectX11 BackBuffer
-		ID3D11DepthStencilView* GetDepthStencil() { return m_DepthStencil; } // Returns the DirectX11 Depth Stencil
+		CComPtr<ID3D11Device> GetDevice() { return m_D3DDevice; } // Returns the DirectX11 device
+		CComPtr<ID3D11DeviceContext> GetDeviceContext() { return m_D3DContext; } // Returns the DirectX11 device context
+		CComPtr<IDXGISwapChain> GetSwapChain() { return m_SwapChain; } // Returns the DirectX11 Swapchain
+		CComPtr<ID3D11RenderTargetView> GetBackBuffer() { return m_BackBufferRenderTarget; } // Returns the DirectX11 BackBuffer
+		CComPtr<ID3D11DepthStencilView> GetDepthStencil() { return m_DepthStencil; } // Returns the DirectX11 Depth Stencil
 
-		ID3D11Buffer* CreateConstantBuffer(int size); // Function used for creating a constant buffer
+		CComPtr<ID3D11Buffer> CreateConstantBuffer(int size); // Function used for creating a constant buffer
 
 	public:
 		PerFrameConstants PerFrameConstants; // Used for setting per frame constant variables and sending them to the GPU
@@ -86,16 +86,16 @@ namespace Engine
 
 	private:
 		// The main Direct3D (D3D) variables
-		ID3D11Device* m_D3DDevice = nullptr; // D3D device for overall features
-		ID3D11DeviceContext* m_D3DContext = nullptr; // D3D context for specific rendering tasks
+		CComPtr<ID3D11Device> m_D3DDevice = nullptr; // D3D device for overall features
+		CComPtr<ID3D11DeviceContext> m_D3DContext = nullptr; // D3D context for specific rendering tasks
 
 		// Swap chain and back buffer
-		IDXGISwapChain* m_SwapChain = nullptr;
-		ID3D11RenderTargetView* m_BackBufferRenderTarget = nullptr;
+		CComPtr<IDXGISwapChain> m_SwapChain = nullptr;
+		CComPtr<ID3D11RenderTargetView> m_BackBufferRenderTarget = nullptr;
 
 		// Depth buffer (can also contain "stencil" values, which we will see later)
-		ID3D11Texture2D* m_DepthStencilTexture = nullptr; // The texture holding the depth values
-		ID3D11DepthStencilView* m_DepthStencil = nullptr; // The depth buffer referencing above texture
+		CComPtr<ID3D11Texture2D> m_DepthStencilTexture = nullptr; // The texture holding the depth values
+		CComPtr<ID3D11DepthStencilView> m_DepthStencil = nullptr; // The depth buffer referencing above texture
 
 		WindowProperties m_Props; // Used for getting the window properties
 

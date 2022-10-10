@@ -13,7 +13,7 @@ namespace Engine
 
 		// Constructor - initialise all settings, sensible defaults provided for everything.
 		Camera(glm::vec3 position = { 0,0,0 }, glm::vec3 rotation = { 0,0,0 },
-			float fov = glm::pi<float>() / 3, float aspectRatio = 4.0f / 3.0f, float nearClip = 0.1f, float farClip = 10000.0f)
+			float fov = glm::pi<float>() / 3, float aspectRatio = 16.0f / 9.0f, float nearClip = 0.1f, float farClip = 10000.0f)
 			: mPosition(position), mRotation(rotation), mFOVx(fov), mAspectRatio(aspectRatio), mNearClip(nearClip), mFarClip(farClip)
 		{
 		}

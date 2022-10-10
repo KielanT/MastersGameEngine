@@ -10,8 +10,6 @@ namespace Engine
 
     bool DirectX11Renderer::InitRenderer(WindowProperties& props)
     {
-        // Many DirectX functions return a "HRESULT" variable to indicate success or failure. Microsoft code often uses
-        // the FAILED macro to test this variable, you'll see it throughout the code - it's fairly self explanatory.
         HRESULT hr = S_OK;
 
         m_Props = props;
@@ -111,23 +109,16 @@ namespace Engine
 
     void DirectX11Renderer::ShutdownRenderer()
     {
-        // Release each Direct3D object to return resources to the system. Leaving these out will cause memory
-        // leaks. Check documentation to see which objects need to be released when adding new features in your
-        // own Engines.
+
         if (m_D3DContext)
         {
-            m_D3DContext->ClearState(); // This line is also needed to reset the GPU before shutting down DirectX
-            m_D3DContext->Release();
+            m_D3DContext->ClearState();
         }
-        if (m_DepthStencil)           m_DepthStencil->Release();
-        if (m_DepthStencilTexture)    m_DepthStencilTexture->Release();
-        if (m_BackBufferRenderTarget) m_BackBufferRenderTarget->Release();
-        if (m_SwapChain)              m_SwapChain->Release();
-        if (m_D3DDevice)              m_D3DDevice->Release();
+
         if (PerFrameConstantBuffer)   PerFrameConstantBuffer->Release();
         if (PerModelConstantBuffer)   PerModelConstantBuffer->Release();
     }
-    ID3D11Buffer* DirectX11Renderer::CreateConstantBuffer(int size)
+    CComPtr<ID3D11Buffer> DirectX11Renderer::CreateConstantBuffer(int size)
     {
         D3D11_BUFFER_DESC cbDesc;
         cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
