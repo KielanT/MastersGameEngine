@@ -60,18 +60,18 @@ namespace Engine
 			// The WM_KEYXXXX messages report keyboard input to our window.
 			// This application has added some simple functions (not DirectX) to process these messages (all in Input.cpp/h)
 			// so you don't need to change this code. Instead simply use KeyHit, KeyHeld etc.
-		/*case WM_KEYDOWN:
+		case WM_KEYDOWN:
 			KeyDownEvent(static_cast<KeyCode>(wParam));
 			break;
 
 		case WM_KEYUP:
 			KeyUpEvent(static_cast<KeyCode>(wParam));
 			break;
-*/
+
 
 			// The following WM_XXXX messages report mouse movement and button presses
 			// Use KeyHit to get mouse buttons, GetMouseX, GetMouseY for its position
-		/*case WM_MOUSEMOVE:
+		case WM_MOUSEMOVE:
 		{
 			MouseMoveEvent(LOWORD(lParam), HIWORD(lParam));
 			break;
@@ -105,7 +105,7 @@ namespace Engine
 		{
 			KeyUpEvent(Mouse_MButton);
 			break;
-		}*/
+		}
 
 
 		// Any messages we don't handle are passed back to Windows default handling
@@ -172,7 +172,8 @@ namespace Engine
 	{
 		HRESULT hr = S_OK;
 
-		// Initlisie input
+		InitInput();
+		
 		 // Initialise scene
 		if (!m_SceneManager->LoadFirstScene())
 		{

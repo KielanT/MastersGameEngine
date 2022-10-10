@@ -89,17 +89,18 @@ namespace Engine
 
     void TestScene::UpdateScene(float frameTime)
     {
-
+        float roty = model->Rotation().y;
+        roty -= 0.5f * frameTime;
+		model->SetRotation({ 0.0f, roty, 0.0f });
 
         m_SceneCamera->Control(frameTime);
-
-
+		
 
     }
 
     void TestScene::ReleaseResources()
     {
-        //if (m_SceneCamera != nullptr) delete m_SceneCamera;
+        if (m_SceneCamera != nullptr) delete m_SceneCamera;
 
     }
 }
