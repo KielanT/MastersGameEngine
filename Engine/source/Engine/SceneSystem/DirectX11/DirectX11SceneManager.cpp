@@ -4,6 +4,10 @@
 #include "Engine/SceneSystem/Scenes/TestScene.h"
 #include "Engine/Lab/GraphicsHelpers.h"
 
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+
 namespace Engine
 {
 	DirectX11SceneManager::DirectX11SceneManager(IRenderer* renderer, WindowProperties& props)
@@ -86,6 +90,10 @@ namespace Engine
 
 	void DirectX11SceneManager::RenderScene()
 	{
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
 		//// Common settings ////
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11) // Checks the correct renderer
 		{
@@ -121,10 +129,10 @@ namespace Engine
 			// Render the scene from the main camera
 			RenderSceneFromCamera();
 
-
+			ImGui::Render();
 			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer, nullptr);
 			//// Scene completion ////
-
+			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 			// When drawing to the off-screen back buffer is complete, we "present" the image to the front buffer (the screen)
 			// Set first parameter to 1 to lock to vsync (typically 60fps)
 			d11Renderer->GetSwapChain()->Present(m_Scenes[m_SceneIndex]->GetVSync() ? 1 : 0, 0);

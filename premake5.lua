@@ -16,10 +16,14 @@ workspace "MastersGameEngine"
     IncludeDir["glm"] = "Engine/external/glm"
     IncludeDir["spdlog"] = "Engine/external/spdlog/include"
     IncludeDir["assimp"] = "Engine/external/assimp/include"
+    IncludeDir["ImGui"] = "Engine/external/imgui"
+    IncludeDir["ImGuiBackends"] = "Engine/external/imgui/backends"
 
     LibDir = {}
     LibDir["DirectXTK"] = "Engine/external/DirectXTK/%{cfg.buildcfg}"
     LibDir["assimp"] = "Engine/external/assimp/lib/%{cfg.buildcfg}"
+
+    include "Engine/external/imgui"
 
 project "Engine"
     location "Engine"
@@ -38,6 +42,10 @@ project "Engine"
     {
         "%{prj.name}/source/**.h",
 		"%{prj.name}/source/**.cpp",
+        "%{prj.name}/external/imgui/backends/imgui_impl_win32.h",
+		"%{prj.name}/external/imgui/backends/imgui_impl_win32.cpp",
+		"%{prj.name}/external/imgui/backends/imgui_impl_dx11.h",
+		"%{prj.name}/external/imgui/backends/imgui_impl_dx11.cpp",
     }
 
     includedirs
@@ -47,6 +55,8 @@ project "Engine"
         "%{IncludeDir.glm}",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.assimp}",
+        "%{IncludeDir.ImGui}",
+		"%{IncludeDir.ImGuiBackends}",
     }
 
     libdirs
@@ -61,6 +71,7 @@ project "Engine"
 		"DirectXTK.lib",
 		"d3dcompiler.lib",
         "assimp-vc143-mt.lib",
+        "ImGui",
     }
 
     files("Engine/source/Engine/Renderer/Shaders/HLSL/*.hlsl")
@@ -128,11 +139,14 @@ project "Editor"
         "Engine/source",
         "%{IncludeDir.glm}",
         "%{IncludeDir.spdlog}",
+        "%{IncludeDir.ImGui}",
+		"%{IncludeDir.ImGuiBackends}",
     }
 
     links
     {
-        "Engine"
+        "Engine",
+        "ImGui",
     }
 
     filter "system:windows"

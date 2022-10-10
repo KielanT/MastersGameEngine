@@ -1,6 +1,12 @@
 #include "epch.h"
 #include "WindowsWindow.h"
 
+#include "imgui.h"
+#include "backends/imgui_impl_win32.h"
+#include "backends/imgui_impl_dx11.h"
+#include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace Engine
 {
 	IWindow* IWindow::Create(WindowProperties& props)
@@ -42,6 +48,9 @@ namespace Engine
 
 	LRESULT WindowsWindow::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
+		if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam)) // IMGUI this line passes user input to ImGUI
+			return true;
+
 		switch (msg)
 		{
 		case WM_PAINT: // A necessary message to ensure the window content is displayed
@@ -174,6 +183,21 @@ namespace Engine
 
 		InitInput();
 		
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+
+		// Setup Dear ImGui style
+		ImGui::StyleColorsDark();
+		// ImGui::StyleColorsClassic();
+
+		// Setup Platform/Renderer bindings
+		ImGui_ImplWin32_Init(m_Props.Hwnd);
+
+		DirectX11Renderer* renderer = static_cast<DirectX11Renderer*>(m_SceneManager->GetRenderer());
+		ImGui_ImplDX11_Init(renderer->GetDevice(), renderer->GetDeviceContext());
+
 		 // Initialise scene
 		if (!m_SceneManager->LoadFirstScene())
 		{
@@ -202,7 +226,9 @@ namespace Engine
 			}
 		}
 
-		
+		ImGui_ImplDX11_Shutdown();
+		ImGui_ImplWin32_Shutdown();
+		ImGui::DestroyContext();
 	}
 
 	
