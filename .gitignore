@@ -44,4 +44,4 @@ bin-int/
 
 # Premake
 !premake5.exe
-Engine/external/imgui
+#Engine/external/imgui

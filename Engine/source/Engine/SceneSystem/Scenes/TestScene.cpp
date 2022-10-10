@@ -94,8 +94,6 @@ namespace Engine
 		model->SetRotation({ 0.0f, roty, 0.0f });
 
         m_SceneCamera->Control(frameTime);
-		
-
     }
 
     void TestScene::ReleaseResources()
