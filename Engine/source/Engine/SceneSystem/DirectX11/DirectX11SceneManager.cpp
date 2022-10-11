@@ -14,7 +14,7 @@ namespace Engine
 	{
 		m_Renderer = renderer; // Sets the renderer
 		m_Props = props; // Sets the properties
-
+		
 		m_SceneIndex = 0; // Sets the scene index 
 
 		// Creates the scene
@@ -93,6 +93,7 @@ namespace Engine
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
+
 
 		//// Common settings ////
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11) // Checks the correct renderer

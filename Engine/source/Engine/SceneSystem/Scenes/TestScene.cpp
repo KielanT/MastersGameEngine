@@ -5,9 +5,6 @@
 #include "Engine/Renderer/DirectX11/DirectX11States.h"
 #include "Engine/Lab/GraphicsHelpers.h"
 
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
 
 
 namespace Engine
@@ -63,7 +60,7 @@ namespace Engine
 
     void TestScene::RenderScene()
     {
-        ImGui::ShowDemoWindow();
+        
 
 
         DirectX11Renderer* dx11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
