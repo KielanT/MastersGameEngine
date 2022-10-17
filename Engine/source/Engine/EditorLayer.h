@@ -1,19 +1,23 @@
 #pragma once
 
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
-
 namespace Engine
 {
-
 	class EditorLayer
 	{
 	public:
+		EditorLayer() = default;
+		~EditorLayer();
 
-		virtual void Init() = 0;
-
-		virtual void Render() = 0;
-
+		EditorLayer(const EditorLayer&) = delete;
+		EditorLayer(EditorLayer&&) = delete;
+		EditorLayer& operator=(const EditorLayer&) = delete;
+		EditorLayer& operator=(EditorLayer&&) = delete;
+	
+	public:
+		void RenderGUI();
+		
+	private:
+		void MainWindow();
 	};
 }
+

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Interfaces/IRenderer.h"
-#include "Engine/EditorLayer.h"
 #include <memory>
 
 // File may change depending on the other graphic APIs

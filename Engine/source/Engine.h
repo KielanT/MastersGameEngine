@@ -5,5 +5,3 @@
 #include "Application.h"
 
 #include "EntryPoint.h"
-
-#include "Engine/EditorLayer.h"

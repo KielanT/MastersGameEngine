@@ -3,10 +3,13 @@
 #include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
 #include "Engine/SceneSystem/Scenes/TestScene.h"
 #include "Engine/Lab/GraphicsHelpers.h"
+#include "Engine/EditorLayer.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
+
+
 
 namespace Engine
 {
@@ -94,6 +97,8 @@ namespace Engine
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
+		std::unique_ptr<EditorLayer> layer;
+		layer->RenderGUI();
 
 		//// Common settings ////
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11) // Checks the correct renderer
