@@ -58,6 +58,8 @@ namespace Engine
 		// Initialize the renderer
 		virtual bool InitRenderer(WindowProperties& props) override;
 
+		void InitiliseSceneTexture();
+		
 		// Shutdown the renderer
 		virtual void ShutdownRenderer() override;
 
@@ -76,6 +78,9 @@ namespace Engine
 
 		CComPtr<ID3D11Buffer> CreateConstantBuffer(int size); // Function used for creating a constant buffer
 
+		CComPtr<ID3D11ShaderResourceView> GetSceneTexture() { return m_SceneTextureSRV; }
+		CComPtr<ID3D11RenderTargetView> GetSceneRenderTarget() { return m_SceneRenderTarget; }
+		
 	public:
 		PerFrameConstants PerFrameConstants; // Used for setting per frame constant variables and sending them to the GPU
 		CComPtr<ID3D11Buffer> PerFrameConstantBuffer;
@@ -97,6 +102,10 @@ namespace Engine
 		CComPtr<ID3D11Texture2D> m_DepthStencilTexture = nullptr; // The texture holding the depth values
 		CComPtr<ID3D11DepthStencilView> m_DepthStencil = nullptr; // The depth buffer referencing above texture
 
+		CComPtr<ID3D11Texture2D> m_SceneTexture = nullptr;
+		CComPtr<ID3D11RenderTargetView> m_SceneRenderTarget = nullptr;
+		CComPtr<ID3D11ShaderResourceView> m_SceneTextureSRV = nullptr;
+		
 		WindowProperties m_Props; // Used for getting the window properties
 
 	};

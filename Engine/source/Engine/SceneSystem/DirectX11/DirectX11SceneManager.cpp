@@ -93,14 +93,15 @@ namespace Engine
 
 	void DirectX11SceneManager::RenderScene()
 	{
-		std::unique_ptr<EditorLayer> layer = std::make_unique<EditorLayer>();
+		DirectX11Renderer* d11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
+		std::unique_ptr<EditorLayer> layer = std::make_unique<EditorLayer>(d11Renderer->GetSceneTexture());
 		
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
 		
-		layer->RenderGUI();
+		
 
 		//// Common settings ////
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11) // Checks the correct renderer
@@ -119,9 +120,14 @@ namespace Engine
 			ID3D11RenderTargetView* backBuffer = d11Renderer->GetBackBuffer();
 			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer, d11Renderer->GetDepthStencil());
 
+			ID3D11RenderTargetView* texture = d11Renderer->GetSceneRenderTarget();
+			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &texture, d11Renderer->GetDepthStencil());
+		
+
 			// Clear the back buffer to a fixed colour and the depth buffer to the far distance
 			glm::vec4 backgroundColour = m_Scenes[m_SceneIndex]->GetBackgroundColour();
 			d11Renderer->GetDeviceContext()->ClearRenderTargetView(d11Renderer->GetBackBuffer(), &backgroundColour.r);
+			d11Renderer->GetDeviceContext()->ClearRenderTargetView(d11Renderer->GetSceneRenderTarget(), &backgroundColour.r);
 			d11Renderer->GetDeviceContext()->ClearDepthStencilView(d11Renderer->GetDepthStencil(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 			// Setup the viewport to the size of the main window
@@ -136,9 +142,11 @@ namespace Engine
 
 			// Render the scene from the main camera
 			RenderSceneFromCamera();
-
+			layer->RenderGUI();
+			
 			ImGui::Render();
 			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer, nullptr);
+
 			//// Scene completion ////
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -147,7 +155,7 @@ namespace Engine
 			// When drawing to the off-screen back buffer is complete, we "present" the image to the front buffer (the screen)
 			// Set first parameter to 1 to lock to vsync (typically 60fps)
 			d11Renderer->GetSwapChain()->Present(m_Scenes[m_SceneIndex]->GetVSync() ? 1 : 0, 0);
-
+			
 		}
 
 	}
@@ -168,6 +176,7 @@ namespace Engine
 			d11Renderer->GetDeviceContext()->PSSetConstantBuffers(0, 1, &d11Renderer->PerFrameConstantBuffer.p);
 
 			m_Scenes[m_SceneIndex]->RenderScene();
+
 		}
 	}
 }

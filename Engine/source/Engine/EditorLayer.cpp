@@ -7,9 +7,9 @@
 
 namespace Engine
 {
-	EditorLayer::EditorLayer()
+	EditorLayer::EditorLayer(CComPtr<ID3D11ShaderResourceView> sceneTexture)
 	{
-
+		m_SceneTexture = sceneTexture;
 	}
 
 	EditorLayer::~EditorLayer()
@@ -30,20 +30,58 @@ namespace Engine
 	void EditorLayer::RenderGUI()
 	{
 		DockSpace();
+		//MainWindow();
 		GameWindow();
-		ImGui::ShowDemoWindow();
+		EntitiesWindow();
+		Details();
+		Assets();
+		//ImGui::ShowDemoWindow();
+	}
+	
+	void EditorLayer::DockSpace()
+	{
+		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+	}
+
+	void EditorLayer::MainWindow()
+	{
+		ImGui::Begin("Main");
+
+		ImGui::End();
 	}
 	
 	void EditorLayer::GameWindow()
 	{
 		ImGui::Begin("Game");
+		//ImVec2 size = ImGui::GetWindowSize();
+		ImGui::Image(m_SceneTexture, ImVec2(1280 / 2, 720 / 2));
 
 		ImGui::End();
 	}
 
-	void EditorLayer::DockSpace()
+	void EditorLayer::EntitiesWindow()
 	{
-		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+		ImGui::Begin("Entities");
+
+		ImGui::End();
 	}
+
+	void EditorLayer::Details()
+	{
+		ImGui::Begin("Details");
+
+		ImGui::End();
+	}
+
+	void EditorLayer::Assets()
+	{
+		ImGui::Begin("Assets");
+
+		ImGui::End();
+	}
+
+	
+
+	
 
 }

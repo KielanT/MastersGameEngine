@@ -5,7 +5,7 @@ namespace Engine
 	class EditorLayer
 	{
 	public:
-		EditorLayer();
+		EditorLayer(CComPtr<ID3D11ShaderResourceView> sceneTexture);
 		~EditorLayer();
 
 		EditorLayer(const EditorLayer&) = delete;
@@ -21,7 +21,15 @@ namespace Engine
 	private:
 		
 		void DockSpace();
+		void MainWindow();
 		void GameWindow();
+		void EntitiesWindow();
+		void Details();
+		void Assets();
+
+	private:
+		CComPtr<ID3D11ShaderResourceView> m_SceneTexture;
+
 	};
 }
 

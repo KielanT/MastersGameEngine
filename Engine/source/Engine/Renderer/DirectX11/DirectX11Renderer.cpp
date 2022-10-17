@@ -103,8 +103,48 @@ namespace Engine
             return false;
         }
 
+        InitiliseSceneTexture();
 
         return true;
+    }
+
+    void DirectX11Renderer::InitiliseSceneTexture()
+    {
+		D3D11_TEXTURE2D_DESC sceneTextureDesc = {};
+		
+        sceneTextureDesc.Width = m_Props.Width;  // Full-screen post-processing - use full screen size for texture
+        sceneTextureDesc.Height = m_Props.Height;
+        sceneTextureDesc.MipLevels = 1; // No mip-maps when rendering to textures (or we would have to render every level)
+        sceneTextureDesc.ArraySize = 1;
+        sceneTextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // RGBA texture (8-bits each)
+        sceneTextureDesc.SampleDesc.Count = 1;
+        sceneTextureDesc.SampleDesc.Quality = 0;
+        sceneTextureDesc.Usage = D3D11_USAGE_DEFAULT;
+        sceneTextureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE; // IMPORTANT: Indicate we will use texture as render target, and pass it to shaders
+        sceneTextureDesc.CPUAccessFlags = 0;
+        sceneTextureDesc.MiscFlags = 0;
+        if (FAILED(m_D3DDevice->CreateTexture2D(&sceneTextureDesc, NULL, &m_SceneTexture)))
+        {
+            LOG_ERROR("Error Creating Scene Texture");
+            //return false;
+        }
+
+        if (FAILED(m_D3DDevice->CreateRenderTargetView(m_SceneTexture, NULL, &m_SceneRenderTarget)))
+        {
+            LOG_ERROR("Error Creating Scene Render Target View");
+            //return false;
+        }
+
+        D3D11_SHADER_RESOURCE_VIEW_DESC srDesc = {};
+        srDesc.Format = sceneTextureDesc.Format;
+        srDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srDesc.Texture2D.MostDetailedMip = 0;
+        srDesc.Texture2D.MipLevels = 1;
+        if (FAILED(m_D3DDevice->CreateShaderResourceView(m_SceneTexture, &srDesc, &m_SceneTextureSRV)))
+        {
+            LOG_ERROR("Error Creating Scene Shader Resource View");
+            //return false;
+        }
     }
 
     void DirectX11Renderer::ShutdownRenderer()
