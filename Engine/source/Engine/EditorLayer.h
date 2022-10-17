@@ -5,7 +5,7 @@ namespace Engine
 	class EditorLayer
 	{
 	public:
-		EditorLayer() = default;
+		EditorLayer();
 		~EditorLayer();
 
 		EditorLayer(const EditorLayer&) = delete;
@@ -14,10 +14,14 @@ namespace Engine
 		EditorLayer& operator=(EditorLayer&&) = delete;
 	
 	public:
+		void Update();
 		void RenderGUI();
 		
+		
 	private:
-		void MainWindow();
+		
+		void DockSpace();
+		void GameWindow();
 	};
 }
 

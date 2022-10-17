@@ -7,19 +7,43 @@
 
 namespace Engine
 {
+	EditorLayer::EditorLayer()
+	{
+
+	}
+
 	EditorLayer::~EditorLayer()
 	{
 	}
+	
+	void EditorLayer::Update()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+		}
+	}
+	
 	void EditorLayer::RenderGUI()
 	{
+		DockSpace();
+		GameWindow();
 		ImGui::ShowDemoWindow();
-		MainWindow();
 	}
-	void EditorLayer::MainWindow()
+	
+	void EditorLayer::GameWindow()
 	{
-		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		ImGui::Begin("Test");
+		ImGui::Begin("Game");
 
 		ImGui::End();
 	}
+
+	void EditorLayer::DockSpace()
+	{
+		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+	}
+
 }

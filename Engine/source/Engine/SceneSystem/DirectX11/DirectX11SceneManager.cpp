@@ -93,12 +93,13 @@ namespace Engine
 
 	void DirectX11SceneManager::RenderScene()
 	{
-		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+		std::unique_ptr<EditorLayer> layer = std::make_unique<EditorLayer>();
+		
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		std::unique_ptr<EditorLayer> layer;
+		
 		layer->RenderGUI();
 
 		//// Common settings ////
@@ -140,6 +141,9 @@ namespace Engine
 			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer, nullptr);
 			//// Scene completion ////
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+			layer->Update();
+			
 			// When drawing to the off-screen back buffer is complete, we "present" the image to the front buffer (the screen)
 			// Set first parameter to 1 to lock to vsync (typically 60fps)
 			d11Renderer->GetSwapChain()->Present(m_Scenes[m_SceneIndex]->GetVSync() ? 1 : 0, 0);
