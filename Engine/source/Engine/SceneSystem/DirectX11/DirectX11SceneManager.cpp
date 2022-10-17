@@ -93,6 +93,7 @@ namespace Engine
 
 	void DirectX11SceneManager::RenderScene()
 	{
+		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
