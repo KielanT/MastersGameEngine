@@ -6,8 +6,9 @@
 #include "Engine/EditorLayer.h"
 
 #include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
+//#include "imgui_impl_win32.h"
+#include "backends/imgui_impl_dx11.h"
+#include "backends/imgui_impl_sdl.h"
 
 
 
@@ -97,7 +98,8 @@ namespace Engine
 		std::unique_ptr<EditorLayer> layer = std::make_unique<EditorLayer>(d11Renderer->GetSceneTexture());
 		
 		ImGui_ImplDX11_NewFrame();
-		ImGui_ImplWin32_NewFrame();
+		//ImGui_ImplWin32_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
 
 		

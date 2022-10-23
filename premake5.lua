@@ -46,6 +46,8 @@ project "Engine"
 		"%{prj.name}/source/**.cpp",
         "%{prj.name}/external/imgui/backends/imgui_impl_win32.h",
 		"%{prj.name}/external/imgui/backends/imgui_impl_win32.cpp",
+        "%{prj.name}/external/imgui/backends/imgui_impl_sdl.h",
+		"%{prj.name}/external/imgui/backends/imgui_impl_sdl.cpp",
 		"%{prj.name}/external/imgui/backends/imgui_impl_dx11.h",
 		"%{prj.name}/external/imgui/backends/imgui_impl_dx11.cpp",
     }
@@ -76,6 +78,8 @@ project "Engine"
 		"d3dcompiler.lib",
         "assimp-vc143-mt.lib",
         "ImGui",
+
+        "SDL2.lib"
     }
 
     files("Engine/source/Engine/Renderer/Shaders/HLSL/*.hlsl")
@@ -152,6 +156,8 @@ project "Editor"
     {
         "Engine",
         "ImGui",
+
+
     }
 
     filter "system:windows"
