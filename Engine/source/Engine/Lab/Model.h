@@ -73,7 +73,7 @@ namespace Engine
             glm::mat4 SZ = temp::MatrixMultiplication(temp::MatScaling(Scale(node)), temp::MatRotZ(rotation.z));
             glm::mat4 XY = temp::MatrixMultiplication(temp::MatRotX(rotation.x), temp::MatRotY(rotation.y));
             glm::mat4 SZXY = temp::MatrixMultiplication(SZ, XY);
-            mWorldMatrices[node] = temp::MatrixMultiplication(SZXY, temp::MatTranslation(Position(node)));
+            mWorldMatrices[node] = temp::MatrixMultiplication(SZXY, temp::MatTranslation(Position(node))); 
         }
 
         // Two ways to set scale: x,y,z separately, or all to the same value

@@ -61,6 +61,15 @@ namespace Engine
 		}
 		break;
 
+		case WM_SIZE:
+			if (wParam == SIZE_MINIMIZED)
+			{
+				int i = 0;
+			}
+
+			break;
+			
+
 		case WM_DESTROY: // Another necessary message to deal with the window being closed
 			PostQuitMessage(0);
 			break;

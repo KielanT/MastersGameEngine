@@ -60,9 +60,6 @@ namespace Engine
 
     void TestScene::RenderScene()
     {
-        
-
-
         DirectX11Renderer* dx11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
         DirectX11Shader* shader = static_cast<DirectX11Shader*>(m_Shader);
         DirectX11States* state = static_cast<DirectX11States*>(m_State);
@@ -91,9 +88,9 @@ namespace Engine
 
     void TestScene::UpdateScene(float frameTime)
     {
-        float roty = model->Rotation().y;
+        float roty = model->Rotation().x;
         roty -= 0.5f * frameTime;
-		model->SetRotation({ 0.0f, roty, 0.0f });
+		model->SetRotation({ roty, 0.0f, 0.0f });
 
         m_SceneCamera->Control(frameTime);
     }
