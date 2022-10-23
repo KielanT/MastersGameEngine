@@ -1,7 +1,7 @@
 #include "epch.h"
 #include "Application.h"
 
-
+#include <SDL.h>
 
 namespace Engine
 {
@@ -9,7 +9,6 @@ namespace Engine
 	{
 		WindowProperties props = WindowProperties();
 		
-
 		m_Renderer = NewRenderer(props.RendererType);
 		if (m_Renderer == nullptr)
 		{

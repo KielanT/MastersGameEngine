@@ -1,3 +1,6 @@
 [submodule "Engine/external/imgui"]
 	path = Engine/external/imgui
 	url = https://github.com/KielanT/imgui.git
+[submodule "Engine/external/SDL"]
+	path = Engine/external/SDL
+	url = https://github.com/KielanT/SDL
