@@ -91,10 +91,13 @@ namespace Engine
     void TestScene::UpdateScene(float frameTime)
     {
         float roty = model->Rotation().x;
-        roty -= 0.5f * frameTime;
-		model->SetRotation({ roty, 0.0f, 0.0f });
+        roty += 0.5f * frameTime;
+		model->SetRotation({ roty, 0.0f,  0.0f});
+
+        float a;
 
         m_SceneCamera->Control(frameTime);
+       
     }
 
     void TestScene::ReleaseResources()

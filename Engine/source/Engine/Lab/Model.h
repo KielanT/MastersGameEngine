@@ -47,7 +47,9 @@ namespace Engine
         glm::vec3 Rotation(int node = 0) 
         { 
             glm::vec3 out;
-            glm::extractEulerAngleXYZ(mWorldMatrices[node], out.x , out.y, out.z);
+            glm::vec3 broke;
+            glm::extractEulerAngleXYZ(mWorldMatrices[node], out.x , broke.y, out.z);
+            glm::extractEulerAngleYXZ(mWorldMatrices[node], out.y , broke.x, broke.z);
             return out;
         }  // Getting angles from a matrix is complex - see .cpp file
         glm::vec3 Scale(int node = 0)
