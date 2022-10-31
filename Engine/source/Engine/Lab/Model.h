@@ -43,7 +43,9 @@ namespace Engine
         glm::vec3 Position(int node = 0) 
         { 
 			return glm::column(mWorldMatrices[node], 3);
-        }         // Position is on bottom row of matrix
+        } 
+		
+        // Position is on bottom row of matrix
         glm::vec3 Rotation(int node = 0) 
         { 
             glm::vec3 out;
@@ -52,6 +54,7 @@ namespace Engine
             glm::extractEulerAngleYXZ(mWorldMatrices[node], out.y , broke.x, broke.z);
             return out;
         }  // Getting angles from a matrix is complex - see .cpp file
+		
         glm::vec3 Scale(int node = 0)
         {
             return{ glm::length(glm::column(mWorldMatrices[node], 0)),
