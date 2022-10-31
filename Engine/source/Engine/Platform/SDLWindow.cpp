@@ -9,6 +9,8 @@
 
 #include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
 
+
+
 namespace Engine
 {
 	IWindow* IWindow::Create(WindowProperties& props)
@@ -23,11 +25,13 @@ namespace Engine
 	
 	SDLWindow::~SDLWindow()
 	{
+		Shutdown();
 	}
 	
 	void SDLWindow::Update(ISceneManager* m_SceneManager)
 	{
-		InitInput();
+		//InitInput();
+		SDLInput::InitInput();
 
 		int close = 0;
 
@@ -67,15 +71,14 @@ namespace Engine
 			// Events management
 			while (SDL_PollEvent(&event))
 			{
-				switch (event.type)
+				if (event.type == SDL_QUIT)
 				{
-
-				case SDL_QUIT:
-					// handling of close button
 					close = 1;
-					break;
 				}
-
+				else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
+				{
+					SDLInput::KeyEvent(event.key);
+				}
 			}
 
 			float frameTime = m_Timer.DeltaTime();
@@ -85,13 +88,11 @@ namespace Engine
 	
 	void SDLWindow::Shutdown()
 	{
-		
 		ImGui_ImplDX11_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
 
 		SDL_DestroyWindow(m_Window);
-
 		SDL_Quit();
 	}
 	
@@ -99,14 +100,14 @@ namespace Engine
 	{
 		m_Props = props;
 
-		if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+		if (SDL_Init(SDL_INIT_EVENTS) != 0)
 		{
 			LOG_ERROR("Error Initializing SDL");
 		}
 	
 		
 		m_Window = SDL_CreateWindow(m_Props.Title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-			m_Props.Width, m_Props.Height, 0);
+			m_Props.Width, m_Props.Height, SDL_WINDOW_RESIZABLE);
 		
 		SDL_SysWMinfo wmInfo;
 		SDL_VERSION(&wmInfo.version);

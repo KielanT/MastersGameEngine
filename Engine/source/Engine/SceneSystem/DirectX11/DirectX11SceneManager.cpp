@@ -95,7 +95,7 @@ namespace Engine
 	void DirectX11SceneManager::RenderScene()
 	{
 		DirectX11Renderer* d11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
-		std::unique_ptr<EditorLayer> layer = std::make_unique<EditorLayer>(d11Renderer->GetSceneTexture());
+		std::unique_ptr<EditorLayer> layer = std::make_unique<EditorLayer>(d11Renderer->GetSceneTexture(), m_Renderer);
 		
 		ImGui_ImplDX11_NewFrame();
 		//ImGui_ImplWin32_NewFrame();
@@ -132,15 +132,6 @@ namespace Engine
 			d11Renderer->GetDeviceContext()->ClearRenderTargetView(d11Renderer->GetSceneRenderTarget(), &backgroundColour.r);
 			d11Renderer->GetDeviceContext()->ClearDepthStencilView(d11Renderer->GetDepthStencil(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-			// Setup the viewport to the size of the main window
-			D3D11_VIEWPORT vp;
-			vp.Width = static_cast<FLOAT>(m_Props.Width);
-			vp.Height = static_cast<FLOAT>(m_Props.Height);
-			vp.MinDepth = 0.0f;
-			vp.MaxDepth = 1.0f;
-			vp.TopLeftX = 0;
-			vp.TopLeftY = 0;
-			d11Renderer->GetDeviceContext()->RSSetViewports(1, &vp);
 
 			// Render the scene from the main camera
 			RenderSceneFromCamera();

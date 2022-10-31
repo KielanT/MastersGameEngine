@@ -1,11 +1,13 @@
 #pragma once
+#include "Interfaces/IRenderer.h"
+
 
 namespace Engine
 {
 	class EditorLayer
 	{
 	public:
-		EditorLayer(CComPtr<ID3D11ShaderResourceView> sceneTexture);
+		EditorLayer(CComPtr<ID3D11ShaderResourceView> sceneTexture, IRenderer* renderer);
 		~EditorLayer();
 
 		EditorLayer(const EditorLayer&) = delete;
@@ -29,7 +31,7 @@ namespace Engine
 
 	private:
 		CComPtr<ID3D11ShaderResourceView> m_SceneTexture;
-
+		IRenderer* m_Renderer;
 	};
 }
 

@@ -103,6 +103,15 @@ namespace Engine
             return false;
         }
 
+        D3D11_VIEWPORT vp;
+        vp.Width = static_cast<FLOAT>(m_Props.Width);
+        vp.Height = static_cast<FLOAT>(m_Props.Height);
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        m_D3DContext->RSSetViewports(1, &vp);
+
         InitiliseSceneTexture();
 
         return true;
@@ -155,6 +164,76 @@ namespace Engine
         }
 
     }
+	
+    void DirectX11Renderer::Resize(eint32 height, eint32 width)
+    {
+        ID3D11RenderTargetView* rtv = nullptr;
+        m_D3DContext->OMSetRenderTargets(1, &rtv, nullptr);
+
+        m_Props.Width = width;
+        m_Props.Height = height;
+
+        m_SwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+		
+        m_SceneTexture = nullptr;
+        m_SceneRenderTarget = nullptr;
+        m_SceneTextureSRV = nullptr;
+
+        m_BackBufferRenderTarget = nullptr;
+
+        ID3D11Texture2D* backBuffer;
+        m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
+        m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
+        backBuffer->Release();
+        
+
+
+        D3D11_TEXTURE2D_DESC sceneTextureDesc = {};
+        sceneTextureDesc.Width = m_Props.Width;  // Full-screen post-processing - use full screen size for texture
+        sceneTextureDesc.Height = m_Props.Height;
+        sceneTextureDesc.MipLevels = 1; // No mip-maps when rendering to textures (or we would have to render every level)
+        sceneTextureDesc.ArraySize = 1;
+        sceneTextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // RGBA texture (8-bits each)
+        sceneTextureDesc.SampleDesc.Count = 1;
+        sceneTextureDesc.SampleDesc.Quality = 0;
+        sceneTextureDesc.Usage = D3D11_USAGE_DEFAULT;
+        sceneTextureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE; // IMPORTANT: Indicate we will use texture as render target, and pass it to shaders
+        sceneTextureDesc.CPUAccessFlags = 0;
+        sceneTextureDesc.MiscFlags = 0;
+        if (FAILED(m_D3DDevice->CreateTexture2D(&sceneTextureDesc, NULL, &m_SceneTexture)))
+        {
+            LOG_ERROR("Error Creating Scene Texture");
+            //return false;
+        }
+
+        if (FAILED(m_D3DDevice->CreateRenderTargetView(m_SceneTexture, NULL, &m_SceneRenderTarget)))
+        {
+            LOG_ERROR("Error Creating Scene Render Target View");
+            //return false;
+        }
+
+        D3D11_SHADER_RESOURCE_VIEW_DESC srDesc = {};
+        srDesc.Format = sceneTextureDesc.Format;
+        srDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srDesc.Texture2D.MostDetailedMip = 0;
+        srDesc.Texture2D.MipLevels = 1;
+        if (FAILED(m_D3DDevice->CreateShaderResourceView(m_SceneTexture, &srDesc, &m_SceneTextureSRV)))
+        {
+            LOG_ERROR("Error Creating Scene Shader Resource View");
+            //return false;
+        }
+
+        D3D11_VIEWPORT vp;
+        vp.Width = static_cast<FLOAT>(m_Props.Width);
+        vp.Height = static_cast<FLOAT>(m_Props.Height);
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        m_D3DContext->RSSetViewports(1, &vp);
+		
+    }
+	
     CComPtr<ID3D11Buffer> DirectX11Renderer::CreateConstantBuffer(int size)
     {
         D3D11_BUFFER_DESC cbDesc;

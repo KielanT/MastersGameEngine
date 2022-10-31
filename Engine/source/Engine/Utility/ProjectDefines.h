@@ -24,7 +24,7 @@ namespace Engine
 		HWND Hwnd = NULL;
 
 		WindowProperties(const std::string& title = "Game Engine",
-			unsigned int width = 1600, unsigned int height = 900,
+			eint32 width = 1600, eint32 height = 900,
 			ERendererType rendererType = ERendererType::DirectX11) : Title(title), Width(width), Height(height), RendererType(rendererType)
 		{
 		}

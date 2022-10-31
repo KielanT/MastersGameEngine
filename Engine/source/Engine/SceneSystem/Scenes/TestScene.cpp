@@ -45,6 +45,7 @@ namespace Engine
         model = new Model(mesh);
         
         m_SceneCamera = new Camera();
+        
         return true;
     }
 
@@ -54,6 +55,7 @@ namespace Engine
         
         m_SceneCamera->SetPosition({ 0, 0, -50 });
         m_SceneCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
+
 
         return true;
     }

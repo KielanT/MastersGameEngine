@@ -5,51 +5,53 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Engine/Utility/SDLInput.h"
+
 namespace Engine
 {
 	
 	void Camera::Control(float frameTime)
 	{
 		//**** ROTATION ****
-		if (KeyHeld(Key_Down))
+		if (SDLInput::KeyHeld(SDLK_DOWN)/*KeyHeld(Key_Down)*/)
 		{
 			mRotation.x += ROTATION_SPEED * frameTime; // Use of frameTime to ensure same speed on different machines
 		}
-		if (KeyHeld(Key_Up))
+		if (SDLInput::KeyHeld(SDLK_UP)/*KeyHeld(Key_Up)*/)
 		{
 			mRotation.x -= ROTATION_SPEED * frameTime;
 		}
-		if (KeyHeld(Key_Right))
+		if (SDLInput::KeyHeld(SDLK_RIGHT)/*KeyHeld(Key_Right)*/)
 		{
 			mRotation.y += ROTATION_SPEED * frameTime;
 		}
-		if (KeyHeld(Key_Left))
+		if (SDLInput::KeyHeld(SDLK_LEFT)/*KeyHeld(Key_Left)*/)
 		{
 			mRotation.y -= ROTATION_SPEED * frameTime;
 		}
 		
 		//**** LOCAL MOVEMENT ****
-		if (KeyHeld(Key_D))
+		if (SDLInput::KeyHeld(SDLK_d)/*KeyHeld(Key_D)*/)
 		{
 			mPosition.x += MOVEMENT_SPEED * frameTime * mWorldMatrix[0][0];
 			mPosition.y += MOVEMENT_SPEED * frameTime * mWorldMatrix[0][1];
 			mPosition.z += MOVEMENT_SPEED * frameTime * mWorldMatrix[0][2];
 		
 		}
-		if (KeyHeld(Key_A))
+		if (SDLInput::KeyHeld(SDLK_a)/*KeyHeld(Key_A)*/)
 		{
 		
 			mPosition.x -= MOVEMENT_SPEED * frameTime * mWorldMatrix[0][0];
 			mPosition.y -= MOVEMENT_SPEED * frameTime * mWorldMatrix[0][1];
 			mPosition.z -= MOVEMENT_SPEED * frameTime * mWorldMatrix[0][2];
 		}
-		if (KeyHeld(Key_W))
+		if (SDLInput::KeyHeld(SDLK_w)/*KeyHeld(Key_W)*/)
 		{
 			mPosition.x += MOVEMENT_SPEED * frameTime * mWorldMatrix[2][0];
 			mPosition.y += MOVEMENT_SPEED * frameTime * mWorldMatrix[2][1];
 			mPosition.z += MOVEMENT_SPEED * frameTime * mWorldMatrix[2][2];
 		}
-		if (KeyHeld(Key_S))
+		if (SDLInput::KeyHeld(SDLK_s)/*KeyHeld(Key_S)*/)
 		{
 			mPosition.x -= MOVEMENT_SPEED * frameTime * mWorldMatrix[2][0];
 			mPosition.y -= MOVEMENT_SPEED * frameTime * mWorldMatrix[2][1];

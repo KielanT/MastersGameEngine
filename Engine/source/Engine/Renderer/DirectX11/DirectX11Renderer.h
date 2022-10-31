@@ -69,6 +69,8 @@ namespace Engine
 		// Get the Window Properties
 		virtual WindowProperties GetWindowProperties() override { return m_Props; }
 
+		virtual void Resize(eint32 height, eint32 width) override;
+
 	public:
 		CComPtr<ID3D11Device> GetDevice() { return m_D3DDevice; } // Returns the DirectX11 device
 		CComPtr<ID3D11DeviceContext> GetDeviceContext() { return m_D3DContext; } // Returns the DirectX11 device context

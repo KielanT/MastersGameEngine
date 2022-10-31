@@ -16,6 +16,8 @@ namespace Engine
 
 		// Get the Window Properties
 		virtual WindowProperties GetWindowProperties() = 0;
+
+		virtual void Resize(eint32 height, eint32 width) = 0;
 	};
 
 	IRenderer* NewRenderer(const ERendererType type);

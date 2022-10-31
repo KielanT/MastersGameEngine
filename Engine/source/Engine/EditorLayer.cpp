@@ -1,4 +1,4 @@
-#include "epch.h"
+ #include "epch.h"
 #include "EditorLayer.h"
 
 #include "imgui.h"
@@ -7,9 +7,10 @@
 
 namespace Engine
 {
-	EditorLayer::EditorLayer(CComPtr<ID3D11ShaderResourceView> sceneTexture)
+	EditorLayer::EditorLayer(CComPtr<ID3D11ShaderResourceView> sceneTexture, IRenderer* renderer)
 	{
 		m_SceneTexture = sceneTexture;
+		m_Renderer = renderer;
 	}
 
 	EditorLayer::~EditorLayer()
@@ -54,7 +55,7 @@ namespace Engine
 	{
 		ImGui::Begin("Game");
 		//ImVec2 size = ImGui::GetWindowSize();
-		ImGui::Image(m_SceneTexture, ImVec2(1280 / 2, 720 / 2));
+		ImGui::Image(m_SceneTexture, ImVec2(1600 / 2, 900 / 2));
 
 		ImGui::End();
 	}
