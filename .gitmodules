@@ -3,4 +3,4 @@
 	url = https://github.com/KielanT/imgui.git
 [submodule "Engine/external/SDL"]
 	path = Engine/external/SDL
-	url = https://github.com/KielanT/SDL
+	url = https://github.com/KielanT/SDL.git
