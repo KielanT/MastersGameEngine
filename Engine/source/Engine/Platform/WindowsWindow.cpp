@@ -9,10 +9,10 @@
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 namespace Engine
 {
-	IWindow* IWindow::Create(WindowProperties& props)
-	{
-		return new WindowsWindow(props);
-	}
+	// IWindow* IWindow::Create(WindowProperties& props)
+	// {
+	// 	return new WindowsWindow(props);
+	// }
 	
 	WindowsWindow::WindowsWindow(WindowProperties& props)
 	{
@@ -60,6 +60,15 @@ namespace Engine
 			EndPaint(hWnd, &ps);
 		}
 		break;
+
+		case WM_SIZE:
+			if (wParam == SIZE_MINIMIZED)
+			{
+				int i = 0;
+			}
+
+			break;
+			
 
 		case WM_DESTROY: // Another necessary message to deal with the window being closed
 			PostQuitMessage(0);
@@ -168,8 +177,7 @@ namespace Engine
 			return E_FAIL;
 		}
 
-		props.Hwnd = m_hWnd;
-		m_Props = props;
+		
 		
 		ShowWindow(m_hWnd, 1);
 		UpdateWindow(m_hWnd);

@@ -43,13 +43,18 @@ namespace Engine
         glm::vec3 Position(int node = 0) 
         { 
 			return glm::column(mWorldMatrices[node], 3);
-        }         // Position is on bottom row of matrix
+        } 
+		
+        // Position is on bottom row of matrix
         glm::vec3 Rotation(int node = 0) 
         { 
             glm::vec3 out;
-            glm::extractEulerAngleXYZ(mWorldMatrices[node], out.x , out.y, out.z);
+            glm::vec3 broke;
+            glm::extractEulerAngleXYZ(mWorldMatrices[node], out.x , broke.y, out.z);
+            glm::extractEulerAngleYXZ(mWorldMatrices[node], out.y , broke.x, broke.z);
             return out;
         }  // Getting angles from a matrix is complex - see .cpp file
+		
         glm::vec3 Scale(int node = 0)
         {
             return{ glm::length(glm::column(mWorldMatrices[node], 0)),
@@ -73,7 +78,7 @@ namespace Engine
             glm::mat4 SZ = temp::MatrixMultiplication(temp::MatScaling(Scale(node)), temp::MatRotZ(rotation.z));
             glm::mat4 XY = temp::MatrixMultiplication(temp::MatRotX(rotation.x), temp::MatRotY(rotation.y));
             glm::mat4 SZXY = temp::MatrixMultiplication(SZ, XY);
-            mWorldMatrices[node] = temp::MatrixMultiplication(SZXY, temp::MatTranslation(Position(node)));
+            mWorldMatrices[node] = temp::MatrixMultiplication(SZXY, temp::MatTranslation(Position(node))); 
         }
 
         // Two ways to set scale: x,y,z separately, or all to the same value

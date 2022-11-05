@@ -17,6 +17,7 @@ bin-int/
 *.lo
 *.o
 *.obj
+*.cso
 
 # Precompiled Headers
 *.gch
@@ -47,3 +48,8 @@ bin-int/
 
 
 imgui.ini
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> Dev-SDL

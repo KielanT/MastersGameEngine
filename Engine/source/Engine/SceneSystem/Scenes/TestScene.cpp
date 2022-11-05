@@ -45,6 +45,7 @@ namespace Engine
         model = new Model(mesh);
         
         m_SceneCamera = new Camera();
+        
         return true;
     }
 
@@ -55,14 +56,12 @@ namespace Engine
         m_SceneCamera->SetPosition({ 0, 0, -50 });
         m_SceneCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
+
         return true;
     }
 
     void TestScene::RenderScene()
     {
-        
-
-
         DirectX11Renderer* dx11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
         DirectX11Shader* shader = static_cast<DirectX11Shader*>(m_Shader);
         DirectX11States* state = static_cast<DirectX11States*>(m_State);
@@ -91,11 +90,14 @@ namespace Engine
 
     void TestScene::UpdateScene(float frameTime)
     {
-        float roty = model->Rotation().y;
-        roty -= 0.5f * frameTime;
-		model->SetRotation({ 0.0f, roty, 0.0f });
+        float roty = model->Rotation().x;
+        roty += 0.5f * frameTime;
+		model->SetRotation({ roty, 0.0f,  0.0f});
+
+        float a;
 
         m_SceneCamera->Control(frameTime);
+       
     }
 
     void TestScene::ReleaseResources()
