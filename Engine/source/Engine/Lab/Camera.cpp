@@ -7,9 +7,10 @@
 
 #include "Engine/Utility/SDLInput.h"
 
+#include "entt/entt.hpp"
+
 namespace Engine
 {
-	
 	void Camera::Control(float frameTime)
 	{
 		//**** ROTATION ****

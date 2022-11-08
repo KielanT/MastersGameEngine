@@ -23,13 +23,6 @@ namespace Engine
 			Held,
 		};
 
-		//struct SKeyState
-		//{
-		//	EKeyPressedState PressedState;
-		//	uint32_t         WindowID;
-		//	SDL_Keymod       ModKeys;
-		//};
-
 	//private:
 		static EKeyPressedState m_Keys[SDL_NUM_SCANCODES];
 		
