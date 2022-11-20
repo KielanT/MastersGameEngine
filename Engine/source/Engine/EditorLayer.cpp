@@ -5,17 +5,10 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
+#include "SceneSystem/Scenes/TestScene.h"
+
 namespace Engine
 {
-	EditorLayer::EditorLayer(CComPtr<ID3D11ShaderResourceView> sceneTexture, IRenderer* renderer)
-	{
-		m_SceneTexture = sceneTexture;
-		m_Renderer = renderer;
-	}
-
-	EditorLayer::~EditorLayer()
-	{
-	}
 	
 	void EditorLayer::Update()
 	{
@@ -36,7 +29,9 @@ namespace Engine
 		EntitiesWindow();
 		Details();
 		Assets();
-		//ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow();
+
+		
 	}
 	
 	void EditorLayer::DockSpace()
@@ -55,14 +50,38 @@ namespace Engine
 	{
 		ImGui::Begin("Game");
 		//ImVec2 size = ImGui::GetWindowSize();
-		ImGui::Image(m_SceneTexture, ImVec2(1600 / 2, 900 / 2));
+		
+		if(m_SceneTexture)
+			ImGui::Image(m_SceneTexture, ImVec2(1600 / 2, 900 / 2));
 
 		ImGui::End();
 	}
 
+
 	void EditorLayer::EntitiesWindow()
 	{
 		ImGui::Begin("Entities");
+		
+		bool btn = ImGui::Button("Add");
+		if (btn)
+		{
+			TestScene* scene = static_cast<TestScene*>(m_Scene);
+			scene->CreateEntity("Empty Entity");
+			
+		}
+
+		if (m_Scene != nullptr)
+		{
+			m_Scene->GetEntityRegistry().each([&](auto entityID)
+				{
+					Entity entity{ entityID, m_Scene };
+					EntityNode(entity);
+				});
+
+		}
+
+
+
 
 		ImGui::End();
 	}
@@ -70,6 +89,19 @@ namespace Engine
 	void EditorLayer::Details()
 	{
 		ImGui::Begin("Details");
+
+
+
+		if (m_Scene != nullptr)
+		{
+			if (m_SelectedEntity)
+			{
+				auto& tag = m_SelectedEntity.GetComponent<IDComponent>().Tag;
+				ImGui::Text(tag.c_str());
+			}
+		
+			
+		}
 
 		ImGui::End();
 	}
@@ -81,8 +113,37 @@ namespace Engine
 		ImGui::End();
 	}
 
-	
+	void EditorLayer::EntityNode(Entity entity)
+	{
+		auto& id = entity.GetComponent<IDComponent>().ID;
+		auto& tag = entity.GetComponent<IDComponent>().Tag;
 
+
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
+		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
+
+		if (m_SelectedEntity == entity)
+		{
+			flags |= ImGuiTreeNodeFlags_Selected;
+		}
+
+		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
+		
+		if (ImGui::IsItemClicked())
+		{
+			m_SelectedEntity = entity;
+		}
+
+		
+
+		if (opened)
+		{
+			ImGui::TreePop();
+		}
+	}
+
+
+	
 	
 
 }

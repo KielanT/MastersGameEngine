@@ -7,6 +7,7 @@
 namespace Engine
 {
 	typedef unsigned int eint32;
+	typedef unsigned long long eint64;
 
 	enum class ERendererType
 	{

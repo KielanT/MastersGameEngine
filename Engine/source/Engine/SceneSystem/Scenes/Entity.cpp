@@ -1,0 +1,10 @@
+#include "epch.h"
+#include "Entity.h"
+
+namespace Engine
+{
+    Entity::Entity(entt::entity handle, IScene* scene) :
+        m_EntityHandle(handle), m_Scene(scene)
+    {
+    }
+}

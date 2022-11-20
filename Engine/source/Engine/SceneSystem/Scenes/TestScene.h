@@ -1,11 +1,12 @@
 #pragma once
+#include "Engine/SceneSystem/DirectX11/DirectX11SceneManager.h"
 #include "Engine/Interfaces/IScene.h"
 #include "Engine/Interfaces/IRenderer.h"
 #include "Engine/Interfaces/IShader.h"
 #include "Engine/Interfaces/IState.h"
-#include "Engine/SceneSystem/DirectX11/DirectX11SceneManager.h"
-#include "Engine/Lab/Model.h"
 
+#include "Engine/Lab/Model.h"
+#include "Entity.h"
 
 namespace Engine
 {
@@ -42,6 +43,10 @@ namespace Engine
 		virtual glm::vec4 GetBackgroundColour() override { return m_backgroundColour; }
 		virtual bool GetVSync() override { return m_VsyncOn; }
 
+		virtual entt::registry& GetEntityRegistry() override { return m_Registry; }
+	
+		/*virtual*/ Entity CreateEntity(const std::string& tag) /*override*/;
+
 	private:
 		IRenderer* m_Renderer;
 		int m_SceneIndex;
@@ -59,5 +64,7 @@ namespace Engine
 		IShader* m_Shader;
 		IState* m_State;
 		Model* model;
+
+		entt::registry m_Registry;
 	};
 }

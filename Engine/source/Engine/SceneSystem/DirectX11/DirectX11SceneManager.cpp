@@ -3,7 +3,6 @@
 #include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
 #include "Engine/SceneSystem/Scenes/TestScene.h"
 #include "Engine/Lab/GraphicsHelpers.h"
-#include "Engine/EditorLayer.h"
 
 #include "imgui.h"
 //#include "imgui_impl_win32.h"
@@ -60,6 +59,7 @@ namespace Engine
 	{
 		if (m_Scenes[m_SceneIndex]->InitGeometry() && m_Scenes[m_SceneIndex]->InitScene()) // Loads the first scenes 
 		{
+			Layer.SetScene(m_Scenes[m_SceneIndex]);
 			return true;
 		}
 		else
@@ -67,6 +67,9 @@ namespace Engine
 			LOG_ERROR("Error Loading Scene");
 			return false;
 		}
+
+		
+
 	}
 
 	void DirectX11SceneManager::LoadScene(int index)
@@ -74,6 +77,7 @@ namespace Engine
 		m_SceneIndex = index; // Sets the scene index then Initializes the correct scene
 		m_Scenes[m_SceneIndex]->InitGeometry();
 		m_Scenes[m_SceneIndex]->InitScene();
+
 	}
 
 	void DirectX11SceneManager::RemoveCurrentScene()
@@ -94,9 +98,6 @@ namespace Engine
 
 	void DirectX11SceneManager::RenderScene()
 	{
-		DirectX11Renderer* d11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
-		std::unique_ptr<EditorLayer> layer = std::make_unique<EditorLayer>(d11Renderer->GetSceneTexture(), m_Renderer);
-		
 		ImGui_ImplDX11_NewFrame();
 		//ImGui_ImplWin32_NewFrame();
 		ImGui_ImplSDL2_NewFrame();
@@ -109,6 +110,8 @@ namespace Engine
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11) // Checks the correct renderer
 		{
 			DirectX11Renderer* d11Renderer = static_cast<DirectX11Renderer*>(m_Renderer); // Casts the renderer to the correct renderer
+
+			Layer.SetSceneTexture(d11Renderer->GetSceneTexture());
 
 			// Sets the correct scene settings
 			d11Renderer->PerFrameConstants.ambientColour = m_Scenes[m_SceneIndex]->GetAmbientColour();
@@ -135,7 +138,8 @@ namespace Engine
 
 			// Render the scene from the main camera
 			RenderSceneFromCamera();
-			layer->RenderGUI();
+
+			Layer.RenderGUI();
 			
 			ImGui::Render();
 			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer, nullptr);
@@ -143,7 +147,7 @@ namespace Engine
 			//// Scene completion ////
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-			layer->Update();
+			Layer.Update();
 			
 			// When drawing to the off-screen back buffer is complete, we "present" the image to the front buffer (the screen)
 			// Set first parameter to 1 to lock to vsync (typically 60fps)

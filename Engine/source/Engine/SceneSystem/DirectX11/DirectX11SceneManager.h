@@ -1,7 +1,8 @@
 #pragma once
+
 #include "Engine/Interfaces/ISceneManager.h"
 #include "Engine/Interfaces/IScene.h"
-
+#include "Engine/EditorLayer.h"
 
 namespace Engine
 {
@@ -48,8 +49,8 @@ namespace Engine
 		std::vector<IScene*> m_Scenes; // Member variable for the scene array
 
 		int m_SceneIndex; // Memeber variable for the tracking the current scene index
-		
-		
+
+		EditorLayer Layer;
 	};
 
 

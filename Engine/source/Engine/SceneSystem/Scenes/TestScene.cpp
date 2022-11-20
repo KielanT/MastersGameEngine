@@ -45,7 +45,7 @@ namespace Engine
         model = new Model(mesh);
         
         m_SceneCamera = new Camera();
-        
+
         return true;
     }
 
@@ -56,6 +56,9 @@ namespace Engine
         m_SceneCamera->SetPosition({ 0, 0, -50 });
         m_SceneCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
+        CreateEntity("c");
+        CreateEntity("b");
+        CreateEntity("a");
 
         return true;
     }
@@ -104,5 +107,15 @@ namespace Engine
     {
         if (m_SceneCamera != nullptr) delete m_SceneCamera;
 
+    }
+
+    Entity TestScene::CreateEntity(const std::string& tag)
+    {
+        Entity entity = { m_Registry.create(), this };
+        auto& ID = entity.AddComponent<IDComponent>();
+        ID.ID = UUID();
+        ID.Tag = tag;
+        entity.AddComponent<TransformComponent>();
+        return entity;
     }
 }

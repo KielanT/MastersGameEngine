@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Lab/Camera.h"
+#include "entt/entt.hpp"
 
 namespace Engine
 {
@@ -41,5 +42,7 @@ namespace Engine
 		virtual float GetSpecularPower() = 0;
 		virtual glm::vec4 GetBackgroundColour() = 0;
 		virtual bool GetVSync() = 0;
+
+		virtual entt::registry& GetEntityRegistry() = 0;
 	};
 }
