@@ -19,6 +19,7 @@ namespace Engine
 		if (m_Keys[scancode] != Pressed) return false;
 		m_Keys[scancode] = Pressed;
 		return true;
+
 	}
 	
 	bool SDLInput::KeyHeld(SDL_KeyCode key)

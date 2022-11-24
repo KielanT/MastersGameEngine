@@ -9,8 +9,6 @@
 
 #include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
 
-
-
 namespace Engine
 {
 	IWindow* IWindow::Create(WindowProperties& props)
@@ -38,7 +36,7 @@ namespace Engine
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;    
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 

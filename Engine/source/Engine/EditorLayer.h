@@ -34,6 +34,10 @@ namespace Engine
 		void Assets();
 
 		void EntityNode(Entity entity);
+		void DrawComponents();
+
+		void DrawIDComponent(IDComponent& comp);
+		void DrawTransformComponent(TransformComponent& comp);
 
 	private:
 		CComPtr<ID3D11ShaderResourceView> m_SceneTexture;

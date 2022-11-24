@@ -96,11 +96,8 @@ namespace Engine
 		{
 			if (m_SelectedEntity)
 			{
-				auto& tag = m_SelectedEntity.GetComponent<IDComponent>().Tag;
-				ImGui::Text(tag.c_str());
+				DrawComponents();
 			}
-		
-			
 		}
 
 		ImGui::End();
@@ -119,13 +116,8 @@ namespace Engine
 		auto& tag = entity.GetComponent<IDComponent>().Tag;
 
 
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
+		ImGuiTreeNodeFlags flags = ((m_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
-
-		if (m_SelectedEntity == entity)
-		{
-			flags |= ImGuiTreeNodeFlags_Selected;
-		}
 
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 		
@@ -140,6 +132,47 @@ namespace Engine
 		{
 			ImGui::TreePop();
 		}
+	}
+
+	void EditorLayer::DrawComponents()
+	{
+		if (m_SelectedEntity)
+		{
+			if (m_SelectedEntity.HasComponent<IDComponent>())
+			{
+				DrawIDComponent(m_SelectedEntity.GetComponent<IDComponent>());
+			}
+			if (m_SelectedEntity.HasComponent<TransformComponent>())
+			{
+				DrawTransformComponent(m_SelectedEntity.GetComponent<TransformComponent>());
+			}
+		}
+	}
+
+	void EditorLayer::DrawIDComponent(IDComponent& comp)
+	{
+		char buffer[256];
+		memset(buffer, 0, sizeof(buffer));
+		std::strncpy(buffer, comp.Tag.c_str(), sizeof(buffer));
+		if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
+		{
+			comp.Tag = std::string(buffer);
+		}
+	}
+
+	void EditorLayer::DrawTransformComponent(TransformComponent& comp)
+	{
+		ImGui::Text("Transform");
+
+		float posX = comp.Position.x;
+		float posY = comp.Position.y;
+		float posZ = comp.Position.z;
+		std::string a = "X: " + std::to_string(posX);
+		ImGui::Text(a.c_str());
+		std::string b = "Y: " + std::to_string(posY);
+		ImGui::Text(b.c_str());
+		std::string c = "Z: " + std::to_string(posZ);
+		ImGui::Text(c.c_str());
 	}
 
 

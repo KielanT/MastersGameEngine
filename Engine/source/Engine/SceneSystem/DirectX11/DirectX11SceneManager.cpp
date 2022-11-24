@@ -104,8 +104,6 @@ namespace Engine
 		ImGui::NewFrame();
 
 		
-		
-
 		//// Common settings ////
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11) // Checks the correct renderer
 		{
