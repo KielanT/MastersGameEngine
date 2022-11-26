@@ -66,7 +66,8 @@ namespace Engine
 		if (btn)
 		{
 			TestScene* scene = static_cast<TestScene*>(m_Scene);
-			scene->CreateEntity("Empty Entity");
+			m_SelectedEntity = scene->CreateEntity("Empty Entity"); 
+
 			
 		}
 
@@ -154,7 +155,7 @@ namespace Engine
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
 		std::strncpy(buffer, comp.Tag.c_str(), sizeof(buffer));
-		if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
+		if (IMGUI_LEFT_LABEL(ImGui::InputText, "Name: ", buffer, sizeof(buffer)))
 		{
 			comp.Tag = std::string(buffer);
 		}
@@ -162,17 +163,37 @@ namespace Engine
 
 	void EditorLayer::DrawTransformComponent(TransformComponent& comp)
 	{
-		ImGui::Text("Transform");
+		float width = 50.0f;
 
-		float posX = comp.Position.x;
-		float posY = comp.Position.y;
-		float posZ = comp.Position.z;
-		std::string a = "X: " + std::to_string(posX);
-		ImGui::Text(a.c_str());
-		std::string b = "Y: " + std::to_string(posY);
-		ImGui::Text(b.c_str());
-		std::string c = "Z: " + std::to_string(posZ);
-		ImGui::Text(c.c_str());
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+		if (ImGui::TreeNodeEx("Transform", flags))
+		{
+			ImGui::Text("Position: "); ImGui::SameLine();
+			ImGui::PushItemWidth(width);
+			IMGUI_LEFT_LABEL(ImGui::InputFloat, "X:", &comp.Position.x);  ImGui::SameLine();
+			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Y:", &comp.Position.y);  ImGui::SameLine();
+			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Z:", &comp.Position.z); 
+			ImGui::PopItemWidth();
+
+
+			ImGui::Text("Rotation: "); ImGui::SameLine();
+			ImGui::PushItemWidth(width);
+			IMGUI_LEFT_LABEL(ImGui::InputFloat, "X:", &comp.Rotation.x);  ImGui::SameLine();
+			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Y:", &comp.Rotation.y);  ImGui::SameLine();
+			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Z:", &comp.Rotation.z);
+			ImGui::PopItemWidth();
+
+
+			ImGui::Text("   Scale: "); ImGui::SameLine();
+			ImGui::PushItemWidth(width);
+			IMGUI_LEFT_LABEL(ImGui::InputFloat, "X:", &comp.Scale.x);  ImGui::SameLine();
+			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Y:", &comp.Scale.y);  ImGui::SameLine();
+			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Z:", &comp.Scale.z);
+			ImGui::PopItemWidth();
+
+			ImGui::TreePop();
+		}
+			
 	}
 
 
