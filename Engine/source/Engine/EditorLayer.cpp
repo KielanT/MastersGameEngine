@@ -29,7 +29,7 @@ namespace Engine
 		EntitiesWindow();
 		Details();
 		Assets();
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 
 		
 	}
@@ -63,12 +63,21 @@ namespace Engine
 		ImGui::Begin("Entities");
 		
 		bool btn = ImGui::Button("Add");
-		if (btn)
+		if (btn || (ImGui::IsMouseDown(1) && ImGui::IsWindowHovered()))
+		{
+			ImGui::OpenPopup("EntityPopup");
+		}
+
+
+		if (ImGui::BeginPopup("EntityPopup"))
 		{
 			TestScene* scene = static_cast<TestScene*>(m_Scene);
-			m_SelectedEntity = scene->CreateEntity("Empty Entity"); 
+			if (ImGui::MenuItem("Create Empty Entity"))
+				m_SelectedEntity = scene->CreateEntity("Empty Entity");
+			if (ImGui::MenuItem("Create Mesh Entity"))
+				m_SelectedEntity = scene->CreateMeshEntity("Mesh Entity");
 
-			
+			ImGui::EndPopup();
 		}
 
 		if (m_Scene != nullptr)
@@ -147,6 +156,10 @@ namespace Engine
 			{
 				DrawTransformComponent(m_SelectedEntity.GetComponent<TransformComponent>());
 			}
+			if (m_SelectedEntity.HasComponent<MeshRendererComponent>())
+			{
+				DrawMeshRendererComponent(m_SelectedEntity.GetComponent<MeshRendererComponent>());
+			}
 		}
 	}
 
@@ -194,6 +207,11 @@ namespace Engine
 			ImGui::TreePop();
 		}
 			
+	}
+
+	void EditorLayer::DrawMeshRendererComponent(MeshRendererComponent& comp)
+	{
+		ImGui::Text("MeshRenderer");
 	}
 
 

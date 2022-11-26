@@ -114,4 +114,15 @@ namespace Engine
         entity.AddComponent<TransformComponent>();
         return entity;
     }
+
+    Entity TestScene::CreateMeshEntity(const std::string& tag)
+    {
+        Entity entity = { m_Registry.create(), this };
+        auto& ID = entity.AddComponent<IDComponent>();
+        ID.ID = UUID();
+        ID.Tag = tag;
+        entity.AddComponent<TransformComponent>();
+        entity.AddComponent<MeshRendererComponent>();
+        return entity;
+    }
 }

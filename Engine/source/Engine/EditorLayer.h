@@ -40,6 +40,7 @@ namespace Engine
 
 		void DrawIDComponent(IDComponent& comp);
 		void DrawTransformComponent(TransformComponent& comp);
+		void DrawMeshRendererComponent(MeshRendererComponent& comp);
 
 	private:
 		CComPtr<ID3D11ShaderResourceView> m_SceneTexture;

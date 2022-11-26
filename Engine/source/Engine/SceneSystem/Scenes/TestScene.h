@@ -46,6 +46,7 @@ namespace Engine
 		virtual entt::registry& GetEntityRegistry() override { return m_Registry; }
 	
 		/*virtual*/ Entity CreateEntity(const std::string& tag) /*override*/;
+		/*virtual*/ Entity CreateMeshEntity(const std::string& tag) /*override*/;
 
 	private:
 		IRenderer* m_Renderer;
