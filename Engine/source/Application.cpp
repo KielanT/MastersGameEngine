@@ -16,7 +16,7 @@ namespace Engine
 		}
 		else
 		{
-			m_Window = std::unique_ptr<IWindow>(IWindow::Create(props));
+			m_Window = IWindow::Create(props);
 
 			if (m_Window == nullptr)
 			{
@@ -39,10 +39,8 @@ namespace Engine
 	Application::~Application()
 	{
 		m_SceneManager->Release();
-		delete m_SceneManager; // Deletes the scene manager
 
 		m_Renderer->ShutdownRenderer(); // Shutdown the renderer
-		delete m_Renderer; // Deletes the renderer
 	}
 	
 	void Application::Run()

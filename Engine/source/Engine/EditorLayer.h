@@ -24,7 +24,7 @@ namespace Engine
 		void RenderGUI();
 		
 		void SetSceneTexture(CComPtr<ID3D11ShaderResourceView> sceneTexture) { m_SceneTexture = sceneTexture; }
-		void SetScene(IScene* scene) { m_Scene = scene; }
+		void SetScene(std::shared_ptr<IScene> scene) { m_Scene = scene; }
 		
 	private:
 		
@@ -41,10 +41,11 @@ namespace Engine
 		void DrawIDComponent(IDComponent& comp);
 		void DrawTransformComponent(TransformComponent& comp);
 		void DrawMeshRendererComponent(MeshRendererComponent& comp);
+		void DrawTextureComponent(TextureComponent& comp);
 
 	private:
 		CComPtr<ID3D11ShaderResourceView> m_SceneTexture;
-		IScene* m_Scene = nullptr;
+		std::shared_ptr<IScene> m_Scene = nullptr;
 
 		Entity m_SelectedEntity;
 

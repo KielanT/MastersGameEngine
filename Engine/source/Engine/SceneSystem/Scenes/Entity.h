@@ -10,7 +10,7 @@ namespace Engine
 	{
 	public:
 		Entity() = default;
-		Entity(entt::entity handle, IScene* scene);
+		Entity(entt::entity handle, std::shared_ptr<IScene> scene);
 		Entity(const Entity& other) = default;
 		
 		template<typename T, typename... Args>
@@ -42,6 +42,7 @@ namespace Engine
 		{
 			return m_EntityHandle == other.m_EntityHandle/* && m_Scene == other.m_Scene*/;
 		}
+
 		bool operator!=(const Entity& other) const
 		{
 			return !(*this == other);
@@ -53,6 +54,6 @@ namespace Engine
 
 	private:
 		entt::entity m_EntityHandle{ entt::null };
-		IScene* m_Scene = nullptr;
+		std::shared_ptr<IScene> m_Scene = nullptr;
 	};
 }

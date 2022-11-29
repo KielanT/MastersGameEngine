@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace Engine
 {
 	class  IRenderer
@@ -20,5 +22,5 @@ namespace Engine
 		virtual void Resize(eint32 height, eint32 width) = 0;
 	};
 
-	IRenderer* NewRenderer(const ERendererType type);
+	std::shared_ptr<IRenderer> NewRenderer(const ERendererType type);
 }

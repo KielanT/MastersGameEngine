@@ -10,7 +10,7 @@ namespace Engine
 	class DirectX11SceneManager : public ISceneManager
 	{
 	public:
-		DirectX11SceneManager(IRenderer* renderer, WindowProperties& props);
+		DirectX11SceneManager(std::shared_ptr<IRenderer> renderer, WindowProperties& props);
 		~DirectX11SceneManager();
 
 		// Loads the first scene in the array (typically index 0)
@@ -30,7 +30,7 @@ namespace Engine
 		// Gets the the current scene index
 		virtual const int GetCurrentSceneIndex() override { return m_SceneIndex; }
 
-		virtual IRenderer* GetRenderer() override { return m_Renderer; }
+		virtual std::shared_ptr<IRenderer> GetRenderer() override { return m_Renderer; }
 
 		virtual void Release() override;
 
@@ -44,9 +44,9 @@ namespace Engine
 		virtual void RenderSceneFromCamera() override;
 
 	private:
-		IRenderer* m_Renderer; // Memeber variable for the renderer in use
+		std::shared_ptr<IRenderer> m_Renderer; // Memeber variable for the renderer in use
 		WindowProperties m_Props; // Member variable for the window properties
-		std::vector<IScene*> m_Scenes; // Member variable for the scene array
+		std::vector<std::shared_ptr<IScene>> m_Scenes; // Member variable for the scene array
 
 		int m_SceneIndex; // Memeber variable for the tracking the current scene index
 

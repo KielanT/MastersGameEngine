@@ -4,12 +4,12 @@
 
 namespace Engine
 {
-	IRenderer* NewRenderer(const ERendererType type)
+	std::shared_ptr<IRenderer> NewRenderer(const ERendererType type)
 	{
 		switch (type)
 		{
 		case ERendererType::DirectX11:
-			return new DirectX11Renderer();
+			return std::make_shared<DirectX11Renderer>();
 			break;
 		default:
 			return nullptr;

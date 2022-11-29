@@ -40,7 +40,7 @@ namespace Engine
 
 
         // Get a "render target view" of back-buffer - standard behaviour
-        ID3D11Texture2D* backBuffer;
+        CComPtr<ID3D11Texture2D> backBuffer;
         hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
         if (FAILED(hr))
         {
@@ -48,7 +48,7 @@ namespace Engine
             return false;
         }
         hr = m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
-        backBuffer->Release();
+        //backBuffer->Release();
         if (FAILED(hr))
         {
             LOG_ERROR("Error creating render target view");
@@ -167,7 +167,7 @@ namespace Engine
 	
     void DirectX11Renderer::Resize(eint32 height, eint32 width)
     {
-        ID3D11RenderTargetView* rtv = nullptr;
+        CComPtr<ID3D11RenderTargetView> rtv = nullptr;
         m_D3DContext->OMSetRenderTargets(1, &rtv, nullptr);
 
         m_Props.Width = width;
@@ -181,10 +181,10 @@ namespace Engine
 
         m_BackBufferRenderTarget = nullptr;
 
-        ID3D11Texture2D* backBuffer;
+        CComPtr<ID3D11Texture2D> backBuffer;
         m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
         m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
-        backBuffer->Release();
+        //backBuffer->Release();
         
 
 

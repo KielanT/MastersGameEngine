@@ -13,7 +13,7 @@
 
 namespace Engine
 {
-	DirectX11SceneManager::DirectX11SceneManager(IRenderer* renderer, WindowProperties& props)
+	DirectX11SceneManager::DirectX11SceneManager(std::shared_ptr<IRenderer> renderer, WindowProperties& props)
 	{
 		m_Renderer = renderer; // Sets the renderer
 		m_Props = props; // Sets the properties
@@ -28,10 +28,7 @@ namespace Engine
 
 	DirectX11SceneManager::~DirectX11SceneManager()
 	{
-		delete m_Renderer; // Deletes the renderer
-
-		for (int i = 0; i < m_Scenes.size(); ++i)
-			delete m_Scenes[i]; // Deletes each scene in the renderer
+		
 	}
 
 	void DirectX11SceneManager::Release()
@@ -49,10 +46,10 @@ namespace Engine
 
 	void DirectX11SceneManager::CreateSceneFromObject()
 	{
-
-		IScene* scene = new TestScene(this, m_Renderer, 0); // Creates a new temp scene
+		std::shared_ptr<TestScene> scene = std::make_shared<TestScene>(this, m_Renderer, 0); // Creates a new temp scene
 		auto pos = m_Scenes.begin() + scene->GetSceneIndex(); // Used to add the scene at the correct position
 		m_Scenes.insert(pos, scene); // Adds scene to the array
+
 	}
 
 	bool DirectX11SceneManager::LoadFirstScene()
@@ -107,8 +104,8 @@ namespace Engine
 		//// Common settings ////
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11) // Checks the correct renderer
 		{
-			DirectX11Renderer* d11Renderer = static_cast<DirectX11Renderer*>(m_Renderer); // Casts the renderer to the correct renderer
 
+			std::shared_ptr<DirectX11Renderer> d11Renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);// Casts the renderer to the correct renderer
 			Layer.SetSceneTexture(d11Renderer->GetSceneTexture());
 
 			// Sets the correct scene settings
@@ -120,11 +117,11 @@ namespace Engine
 
 			// Set the back buffer as the target for rendering and select the main depth buffer.
 			// When finished the back buffer is sent to the "front buffer" - which is the monitor.
-			ID3D11RenderTargetView* backBuffer = d11Renderer->GetBackBuffer();
-			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer, d11Renderer->GetDepthStencil());
+			CComPtr<ID3D11RenderTargetView> backBuffer = d11Renderer->GetBackBuffer();
+			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer.p, d11Renderer->GetDepthStencil());
 
-			ID3D11RenderTargetView* texture = d11Renderer->GetSceneRenderTarget();
-			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &texture, d11Renderer->GetDepthStencil());
+			CComPtr<ID3D11RenderTargetView> texture = d11Renderer->GetSceneRenderTarget();
+			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &texture.p, d11Renderer->GetDepthStencil());
 		
 
 			// Clear the back buffer to a fixed colour and the depth buffer to the far distance
@@ -140,7 +137,7 @@ namespace Engine
 			Layer.RenderGUI();
 			
 			ImGui::Render();
-			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer, nullptr);
+			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer.p, nullptr);
 
 			//// Scene completion ////
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -159,7 +156,7 @@ namespace Engine
 	{
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11)
 		{
-			DirectX11Renderer* d11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
+			std::shared_ptr<DirectX11Renderer> d11Renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);
 			// Set camera matrices in the constant buffer and send over to GPU
 			d11Renderer->PerFrameConstants.viewMatrix = m_Scenes[m_SceneIndex]->GetCamera()->ViewMatrix();
 			d11Renderer->PerFrameConstants.EngineionMatrix = m_Scenes[m_SceneIndex]->GetCamera()->EngineionMatrix();

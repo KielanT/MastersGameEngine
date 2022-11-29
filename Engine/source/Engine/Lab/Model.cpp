@@ -12,7 +12,7 @@
 
 namespace Engine
 {
-	Model::Model(Mesh* mesh, glm::vec3 position /*= { 0,0,0 }*/, glm::vec3 rotation /*= { 0,0,0 }*/, float scale /*= 1*/)
+	Model::Model(std::shared_ptr<Mesh> mesh, glm::vec3 position /*= { 0,0,0 }*/, glm::vec3 rotation /*= { 0,0,0 }*/, float scale /*= 1*/)
 		: mMesh(mesh)
 	{
 		// Set default matrices from mesh

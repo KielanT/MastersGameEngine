@@ -4,11 +4,11 @@
 
 namespace Engine
 {
-	IShader* SetShader(ERendererType renderertype)
+	std::shared_ptr<IShader> SetShader(ERendererType renderertype)
 	{
 		if (renderertype == ERendererType::DirectX11) // Returns the DirectX 11 shaders
 		{
-			return new DirectX11Shader();
+			return std::make_shared<DirectX11Shader>();
 		}
 		else
 		{

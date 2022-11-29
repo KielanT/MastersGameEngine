@@ -11,10 +11,10 @@
 namespace Engine
 {
 
-	class TestScene : public IScene
+	class TestScene : public IScene, public std::enable_shared_from_this<TestScene>
 	{
 	public:
-		TestScene(DirectX11SceneManager* sceneManager, IRenderer* renderer, int sceneIndex, glm::vec3 ambientColour = glm::vec3(0.2f, 0.2f, 0.3f),
+		TestScene(DirectX11SceneManager* sceneManager, std::shared_ptr<IRenderer> renderer, int sceneIndex, glm::vec3 ambientColour = glm::vec3(0.2f, 0.2f, 0.3f),
 			float specularPower = 256.0f, glm::vec4 backgroundColour = glm::vec4(0.2f, 0.2f, 0.3f, 1.0f),
 			bool vsyncOn = true);
 
@@ -30,7 +30,7 @@ namespace Engine
 
 		virtual int GetSceneIndex() override { return m_SceneIndex; }
 
-		virtual Camera* GetCamera() override { return m_SceneCamera; }
+		virtual std::shared_ptr<Camera> GetCamera() override { return m_SceneCamera; }
 
 		// Scene Settings
 		virtual void SetAmbientColour(glm::vec3 ambientColour) override { m_AmbientColour = ambientColour; }
@@ -49,10 +49,10 @@ namespace Engine
 		/*virtual*/ Entity CreateMeshEntity(const std::string& tag) /*override*/;
 
 	private:
-		IRenderer* m_Renderer;
+		std::shared_ptr<IRenderer> m_Renderer;
 		int m_SceneIndex;
 
-		Camera* m_SceneCamera = nullptr;;
+		std::shared_ptr<Camera> m_SceneCamera = nullptr;;
 
 
 		glm::vec3 m_AmbientColour;
@@ -62,9 +62,13 @@ namespace Engine
 
 		DirectX11SceneManager* m_sceneManager = nullptr;
 
-		IShader* m_Shader;
-		IState* m_State;
-		Model* model;
+		std::shared_ptr<IShader> m_Shader;
+		std::shared_ptr<IState> m_State;
+		std::shared_ptr<Mesh> mesh;
+		std::shared_ptr<Model> model;
+
+		CComPtr<ID3D11Resource> resource;
+		CComPtr<ID3D11ShaderResourceView> resourceView;
 
 		entt::registry m_Registry;
 	};

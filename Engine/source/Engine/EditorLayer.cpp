@@ -29,7 +29,7 @@ namespace Engine
 		EntitiesWindow();
 		Details();
 		Assets();
-		//ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow();
 
 		
 	}
@@ -71,7 +71,7 @@ namespace Engine
 
 		if (ImGui::BeginPopup("EntityPopup"))
 		{
-			TestScene* scene = static_cast<TestScene*>(m_Scene);
+			std::shared_ptr<TestScene> scene = std::static_pointer_cast<TestScene>(m_Scene);
 			if (ImGui::MenuItem("Create Empty Entity"))
 				m_SelectedEntity = scene->CreateEntity("Empty Entity");
 			if (ImGui::MenuItem("Create Mesh Entity"))
@@ -160,6 +160,10 @@ namespace Engine
 			{
 				DrawMeshRendererComponent(m_SelectedEntity.GetComponent<MeshRendererComponent>());
 			}
+			if (m_SelectedEntity.HasComponent<MeshRendererComponent>())
+			{
+				DrawTextureComponent(m_SelectedEntity.GetComponent<TextureComponent>());
+			}
 		}
 	}
 
@@ -211,11 +215,31 @@ namespace Engine
 
 	void EditorLayer::DrawMeshRendererComponent(MeshRendererComponent& comp)
 	{
-		ImGui::Text("MeshRenderer");
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+		if (ImGui::TreeNodeEx("Mesh Renderer", flags))
+		{
+			char buffer[256];
+			memset(buffer, 0, sizeof(buffer));
+			std::strncpy(buffer, comp.Path.c_str(), sizeof(buffer));
+			if (IMGUI_LEFT_LABEL(ImGui::InputText, "File Path: ", buffer, sizeof(buffer)))
+			{
+				comp.Path = std::string(buffer);
+			}
+
+			//comp.PixelShader;
+			//comp.VertexShader;
+			//comp.BlendState;
+			//comp.DepthStencil;
+			//comp.RasterizerState;
+			//comp.SamplerState;
+
+			ImGui::TreePop();
+		}
 	}
 
-
-	
-	
+	void EditorLayer::DrawTextureComponent(TextureComponent& comp)
+	{
+		ImGui::Text("Texture");
+	}
 
 }

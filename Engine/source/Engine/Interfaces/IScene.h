@@ -30,7 +30,7 @@ namespace Engine
 		virtual int GetSceneIndex() = 0;
 
 		// Returns the camera
-		virtual Camera* GetCamera() = 0;
+		virtual std::shared_ptr<Camera> GetCamera() = 0;
 
 		// Scene Settings
 		virtual void SetAmbientColour(glm::vec3 ambientColour) = 0;

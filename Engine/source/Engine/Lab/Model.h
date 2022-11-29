@@ -22,7 +22,7 @@ namespace Engine
         // Construction / Usage
         //-------------------------------------
 
-        Model(Mesh* mesh, glm::vec3 position = { 0,0,0 }, glm::vec3 rotation = { 0,0,0 }, float scale = 1);
+        Model(std::shared_ptr<Mesh> mesh, glm::vec3 position = { 0,0,0 }, glm::vec3 rotation = { 0,0,0 }, float scale = 1);
 
 
         // The render function simply passes this model's matrices over to Mesh:Render.
@@ -100,7 +100,7 @@ namespace Engine
         // Private data / members
         //-------------------------------------
     private:
-        Mesh* mMesh;
+        std::shared_ptr<Mesh> mMesh;
 
         // World matrices for the model
         // Now that meshes have multiple parts, we need multiple matrices. The root matrix (the first one) is the world matrix

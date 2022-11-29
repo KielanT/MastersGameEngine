@@ -42,7 +42,7 @@ namespace Engine
 		~DirectX11States();
 
 		// Initialize the states 
-		virtual bool InitStates(IRenderer* renderer) override;
+		virtual bool InitStates(std::shared_ptr<IRenderer> renderer) override;
 
 		// Release the states
 		virtual void ReleaseStates() override;

@@ -17,7 +17,7 @@ namespace Engine
 		WindowsWindow& operator=(WindowsWindow&&) = delete;
 
 	public:
-		virtual void Update(ISceneManager* m_SceneManager) override;
+		virtual void Update(std::shared_ptr<ISceneManager> m_SceneManager) override;
 		virtual void Shutdown() override;
 
 		virtual WindowProperties GetWindowProperties() const override { return m_Props; };
@@ -38,7 +38,7 @@ namespace Engine
 
 		HRESULT CreateDesktopWindow(WindowProperties& props);
 		
-		HRESULT Run(ISceneManager* m_SceneManager);
+		HRESULT Run(std::shared_ptr<ISceneManager> m_SceneManager);
 		
 		
 	private:

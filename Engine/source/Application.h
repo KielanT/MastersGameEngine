@@ -26,13 +26,13 @@ namespace Engine
 
 		
 	private:
-		std::unique_ptr<IWindow> m_Window;
-		IRenderer* m_Renderer;
+		std::shared_ptr<IWindow> m_Window;
+		std::shared_ptr<IRenderer> m_Renderer;
 
-		ISceneManager* m_SceneManager;
+		std::shared_ptr<ISceneManager> m_SceneManager;
 
 	};
 
-	Application* CreateApplication();
+	std::shared_ptr<Application> CreateApplication();
 }
 

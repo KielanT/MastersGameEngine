@@ -26,7 +26,7 @@ namespace Engine
 		~DirectX11Shader();
 
 		// Initialize the shaders 
-		virtual bool InitShaders(IRenderer* renderer) override;
+		virtual bool InitShaders(std::shared_ptr<IRenderer> renderer) override;
 
 		// Release the shaders
 		virtual void ReleaseShaders() override;
@@ -43,7 +43,7 @@ namespace Engine
 		CComPtr<ID3D11PixelShader> LoadPixelShader(std::string shaderName); // Loads the pixel shader
 
 	private:
-		IRenderer* m_Renderer; // Used for getting the renderer in use
+		std::shared_ptr<IRenderer> m_Renderer; // Used for getting the renderer in use
 
 		// Vertex shader member variables
 		CComPtr<ID3D11VertexShader> m_PixelLightingVertexShader;

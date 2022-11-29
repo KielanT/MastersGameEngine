@@ -29,7 +29,7 @@ namespace Engine
 		// Gets the the current scene index
 		virtual const int GetCurrentSceneIndex() = 0;
 
-		virtual IRenderer* GetRenderer() = 0;
+		virtual std::shared_ptr<IRenderer> GetRenderer() = 0;
 
 		virtual void Release() = 0;
 
@@ -44,6 +44,6 @@ namespace Engine
 	};
 
 	// Used for creating the scene manager depending on the renderer 
-	ISceneManager* NewSceneManager(IRenderer* renderer);
+	std::shared_ptr<ISceneManager> NewSceneManager(std::shared_ptr<IRenderer> renderer);
 }
 

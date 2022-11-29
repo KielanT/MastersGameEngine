@@ -11,9 +11,9 @@
 
 namespace Engine
 {
-	IWindow* IWindow::Create(WindowProperties& props)
+	std::shared_ptr<IWindow> IWindow::Create(WindowProperties& props)
 	{
-		return new SDLWindow(props);
+		return std::make_shared<SDLWindow>(props);
 	}
 
 	SDLWindow::SDLWindow(WindowProperties& props)
@@ -26,7 +26,7 @@ namespace Engine
 		Shutdown();
 	}
 	
-	void SDLWindow::Update(ISceneManager* m_SceneManager)
+	void SDLWindow::Update(std::shared_ptr<ISceneManager> m_SceneManager)
 	{
 		//InitInput();
 		SDLInput::InitInput();
@@ -51,7 +51,7 @@ namespace Engine
 
 		ImGui_ImplSDL2_InitForD3D(m_Window);
 
-		DirectX11Renderer* renderer = static_cast<DirectX11Renderer*>(m_SceneManager->GetRenderer());
+		std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_SceneManager->GetRenderer());
 		ImGui_ImplDX11_Init(renderer->GetDevice(), renderer->GetDeviceContext());
 
 		// Initialise scene

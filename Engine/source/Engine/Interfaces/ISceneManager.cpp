@@ -5,12 +5,12 @@
 namespace Engine
 {
 
-	ISceneManager* NewSceneManager(IRenderer* renderer)
+	std::shared_ptr<ISceneManager> NewSceneManager(std::shared_ptr<IRenderer> renderer)
 	{
         if (renderer->GetRendererType() == ERendererType::DirectX11) // Returns the DirectX 11 scene manager
         {
 			WindowProperties props = renderer->GetWindowProperties();
-			return new DirectX11SceneManager(renderer, props);
+			return std::make_shared<DirectX11SceneManager>(renderer, props);
            //return new DirectX11SceneManager(renderer, renderer->GetWindowProperties());
            // return new DirectX11SceneManager(renderer, WindowProperties());
         }

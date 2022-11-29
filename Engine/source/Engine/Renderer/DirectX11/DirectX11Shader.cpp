@@ -7,12 +7,11 @@ namespace Engine
 {
 	DirectX11Shader::~DirectX11Shader()
 	{
-		delete m_Renderer;
 
 		ReleaseShaders(); // Release the shaders
 	}
 
-	bool DirectX11Shader::InitShaders(IRenderer* renderer)
+	bool DirectX11Shader::InitShaders(std::shared_ptr<IRenderer> renderer)
 	{
 		m_Renderer = renderer;
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11) // Checks the renderer is the correct type
@@ -108,11 +107,11 @@ namespace Engine
 		}
 
 		// Create shader object from loaded file (we will use the object later when rendering)
-		ID3D11VertexShader* shader;
+		CComPtr<ID3D11VertexShader> shader;
 
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11)
 		{
-			DirectX11Renderer* dx11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
+			std::shared_ptr<DirectX11Renderer> dx11Renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);
 
 			HRESULT hr = dx11Renderer->GetDevice()->CreateVertexShader(byteCode.data(), byteCode.size(), nullptr, &shader);
 			if (FAILED(hr))
@@ -148,11 +147,11 @@ namespace Engine
 		}
 
 		// Create shader object from loaded file (we will use the object later when rendering)
-		ID3D11PixelShader* shader;
+		CComPtr<ID3D11PixelShader> shader;
 
 		if (m_Renderer->GetRendererType() == ERendererType::DirectX11)
 		{
-			DirectX11Renderer* dx11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
+			std::shared_ptr<DirectX11Renderer> dx11Renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);
 
 			HRESULT hr = dx11Renderer->GetDevice()->CreatePixelShader(byteCode.data(), byteCode.size(), nullptr, &shader);
 			if (FAILED(hr))

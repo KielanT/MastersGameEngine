@@ -22,6 +22,11 @@ namespace Engine
 		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
 	};
 
+	struct TextureComponent
+	{
+		std::string Path = "";
+	};
+
 	struct MeshRendererComponent
 	{
 		std::string Path = ""; // Mesh Path

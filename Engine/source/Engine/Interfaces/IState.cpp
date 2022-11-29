@@ -5,11 +5,11 @@
 
 namespace Engine
 {
-    IState* SetStates(ERendererType type)
+    std::shared_ptr<IState> SetStates(ERendererType type)
     {
         if (type == ERendererType::DirectX11) // Returns the DirectX 11 States
         {
-            return new DirectX11States();
+            return std::make_shared<DirectX11States>();
         }
         else
         {

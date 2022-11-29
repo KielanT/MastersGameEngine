@@ -9,7 +9,7 @@
 
 namespace Engine
 {
-    TestScene::TestScene(DirectX11SceneManager* sceneManager, IRenderer* renderer, int sceneIndex, glm::vec3 ambientColour, float specularPower, glm::vec4 backgroundColour, bool vsyncOn)
+    TestScene::TestScene(DirectX11SceneManager* sceneManager, std::shared_ptr<IRenderer> renderer, int sceneIndex, glm::vec3 ambientColour, float specularPower, glm::vec4 backgroundColour, bool vsyncOn)
     {
         m_Renderer = renderer;
         m_SceneIndex = sceneIndex;
@@ -40,11 +40,16 @@ namespace Engine
         
         std::filesystem::current_path(meshPath); // Sets the current path to the mesh path
 
-        DirectX11Renderer* renderer = static_cast<DirectX11Renderer*>(m_Renderer);
-        Mesh* mesh = new Mesh(renderer, path + "Cube.x");
-        model = new Model(mesh);
+        std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);
+        mesh = std::make_shared<Mesh>(renderer, path + "Cube.x");
+        model = std::make_shared<Model>(mesh);
         
-        m_SceneCamera = new Camera();
+        m_SceneCamera = std::make_unique<Camera>();
+
+        if (!LoadTexture(renderer, "media/CargoA.dds", &resource, &resourceView))
+        {
+            LOG_ERROR("Cannot load texture");
+        }
 
         return true;
     }
@@ -56,29 +61,27 @@ namespace Engine
         m_SceneCamera->SetPosition({ 0, 0, -50 });
         m_SceneCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
+
+
         return true;
     }
 
     void TestScene::RenderScene()
     {
-        DirectX11Renderer* dx11Renderer = static_cast<DirectX11Renderer*>(m_Renderer);
-        DirectX11Shader* shader = static_cast<DirectX11Shader*>(m_Shader);
-        DirectX11States* state = static_cast<DirectX11States*>(m_State);
+        std::shared_ptr<DirectX11Renderer> dx11Renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);
+        std::shared_ptr<DirectX11Shader> shader = std::static_pointer_cast<DirectX11Shader>(m_Shader);
+        std::shared_ptr<DirectX11States> state = std::static_pointer_cast<DirectX11States>(m_State);
 
         dx11Renderer->GetDeviceContext()->VSSetShader(shader->GetVertexShader(EVertexShader::PixelLightingVertexShader), nullptr, 0);
         dx11Renderer->GetDeviceContext()->PSSetShader(shader->GetPixelShader(EPixelShader::PixelLightingPixelShader), nullptr, 0);
 
         // Select the approriate textures and sampler to use in the pixel shader
-        ID3D11Resource* resource;
-        ID3D11ShaderResourceView* resourceView;
         
-        if (!LoadTexture(dx11Renderer, "media/CargoA.dds", &resource, &resourceView))
-        {
-            LOG_ERROR("Cannot load texture");
-        }
-        ID3D11SamplerState* sampler = state->GetSamplerState(ESamplerState::Anisotropic4xSampler);
-        dx11Renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &resourceView); // First parameter must match texture slot number in the shader
-        dx11Renderer->GetDeviceContext()->PSSetSamplers(0, 1, &sampler);
+        
+       
+        CComPtr<ID3D11SamplerState> sampler = state->GetSamplerState(ESamplerState::Anisotropic4xSampler);
+        dx11Renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &resourceView.p); // First parameter must match texture slot number in the shader
+        dx11Renderer->GetDeviceContext()->PSSetSamplers(0, 1, &sampler.p);
         
         // States - no blending, normal depth buffer and culling
         dx11Renderer->GetDeviceContext()->OMSetBlendState(state->GetBlendState(EBlendState::NoBlendingState), nullptr, 0xffffff);
@@ -93,21 +96,18 @@ namespace Engine
         roty += 0.5f * frameTime;
 		model->SetRotation({ roty, 0.0f,  0.0f});
 
-        float a;
-
         m_SceneCamera->Control(frameTime);
        
     }
 
     void TestScene::ReleaseResources()
     {
-        if (m_SceneCamera != nullptr) delete m_SceneCamera;
 
     }
 
     Entity TestScene::CreateEntity(const std::string& tag)
     {
-        Entity entity = { m_Registry.create(), this };
+        Entity entity = { m_Registry.create(), shared_from_this()};
         auto& ID = entity.AddComponent<IDComponent>();
         ID.ID = UUID();
         ID.Tag = tag;
@@ -117,12 +117,13 @@ namespace Engine
 
     Entity TestScene::CreateMeshEntity(const std::string& tag)
     {
-        Entity entity = { m_Registry.create(), this };
+        Entity entity = { m_Registry.create(), shared_from_this()};
         auto& ID = entity.AddComponent<IDComponent>();
         ID.ID = UUID();
         ID.Tag = tag;
         entity.AddComponent<TransformComponent>();
         entity.AddComponent<MeshRendererComponent>();
+        entity.AddComponent<TextureComponent>();
         return entity;
     }
 }

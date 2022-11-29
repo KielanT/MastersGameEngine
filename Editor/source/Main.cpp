@@ -1,6 +1,5 @@
 #include <Engine.h>
 
-
 class Main : public Engine::Application
 {
 public:
@@ -13,7 +12,7 @@ public:
 	}
 };
 
-Engine::Application* Engine::CreateApplication()
+std::shared_ptr<Engine::Application> Engine::CreateApplication()
 {
-	return new Main();
+	return std::make_shared<Main>();
 }

@@ -9,7 +9,7 @@ namespace Engine
         ReleaseStates();
     }
 
-    bool DirectX11States::InitStates(IRenderer* renderer)
+    bool DirectX11States::InitStates(std::shared_ptr<IRenderer> renderer)
     {
         //--------------------------------------------------------------------------------------
         // Texture Samplers
@@ -17,7 +17,8 @@ namespace Engine
          // Each block of code creates a filtering mode. Copy a block and adjust values to add another mode. See texturing lab for details
         if (renderer->GetRendererType() == ERendererType::DirectX11)
         {
-            DirectX11Renderer* dx11Renderer = static_cast<DirectX11Renderer*>(renderer);
+
+            std::shared_ptr<DirectX11Renderer> dx11Renderer = std::static_pointer_cast<DirectX11Renderer>(renderer);
             D3D11_SAMPLER_DESC samplerDesc = {};
 
             ////-------- Point Sampling (pixelated textures) --------////
