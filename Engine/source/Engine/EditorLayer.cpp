@@ -187,25 +187,25 @@ namespace Engine
 		{
 			ImGui::Text("Position: "); ImGui::SameLine();
 			ImGui::PushItemWidth(width);
-			IMGUI_LEFT_LABEL(ImGui::InputFloat, "X:", &comp.Position.x);  ImGui::SameLine();
-			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Y:", &comp.Position.y);  ImGui::SameLine();
-			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Z:", &comp.Position.z); 
+			ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##px", &comp.Position.x); ImGui::SameLine();
+			ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##pz", &comp.Position.y); ImGui::SameLine();
+			ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##py", &comp.Position.z); 
 			ImGui::PopItemWidth();
 
 
 			ImGui::Text("Rotation: "); ImGui::SameLine();
 			ImGui::PushItemWidth(width);
-			IMGUI_LEFT_LABEL(ImGui::InputFloat, "X:", &comp.Rotation.x);  ImGui::SameLine();
-			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Y:", &comp.Rotation.y);  ImGui::SameLine();
-			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Z:", &comp.Rotation.z);
+			ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##rx", &comp.Rotation.x); ImGui::SameLine();
+			ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##rz", &comp.Rotation.y); ImGui::SameLine();
+			ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##ry", &comp.Rotation.z);
 			ImGui::PopItemWidth();
 
 
 			ImGui::Text("   Scale: "); ImGui::SameLine();
 			ImGui::PushItemWidth(width);
-			IMGUI_LEFT_LABEL(ImGui::InputFloat, "X:", &comp.Scale.x);  ImGui::SameLine();
-			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Y:", &comp.Scale.y);  ImGui::SameLine();
-			IMGUI_LEFT_LABEL(ImGui::InputFloat, "Z:", &comp.Scale.z);
+			ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##sx", &comp.Scale.x); ImGui::SameLine();
+			ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##sz", &comp.Scale.y); ImGui::SameLine();
+			ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##sy", &comp.Scale.z);
 			ImGui::PopItemWidth();
 
 			ImGui::TreePop();
@@ -226,12 +226,47 @@ namespace Engine
 				comp.Path = std::string(buffer);
 			}
 
-			//comp.PixelShader;
-			//comp.VertexShader;
-			//comp.BlendState;
-			//comp.DepthStencil;
-			//comp.RasterizerState;
-			//comp.SamplerState;
+			static int ps = 0;
+			const char* pixelItems[static_cast<int>(EPixelShader::EPixelShaderSize)];
+			pixelItems[0] = "PixelLightingPixelShader";
+			pixelItems[1] = "LightModelPixelShader";
+			comp.PixelShader = static_cast<EPixelShader>(RendererComboBox("Pixel Shader: ", pixelItems, static_cast<int>(EPixelShader::EPixelShaderSize), ps));
+			
+			static int vs = 0;
+			const char* vertexItems[static_cast<int>(EVertexShader::EVertexShaderSize)];
+			vertexItems[0] = "PixelLightingVertexShader";
+			vertexItems[1] = "BasicTransformVertexShader";
+			vertexItems[2] = "SkinningVertexShader";
+			comp.VertexShader = static_cast<EVertexShader>(RendererComboBox("Vertex Shader: ", vertexItems, static_cast<int>(EVertexShader::EVertexShaderSize), vs));
+
+			static int bs = 0;
+			const char* blendItems[static_cast<int>(EBlendState::EBlendStateSize)];
+			blendItems[0] = "NoBlendingState";
+			blendItems[1] = "AdditiveBlending";
+			comp.BlendState = static_cast<EBlendState>(RendererComboBox("Blend State: ", blendItems, static_cast<int>(EBlendState::EBlendStateSize), bs));
+
+			
+			static int dss = 0;
+			const char* dssItems[static_cast<int>(EDepthStencilState::EDepthStencilStateSize)];
+			dssItems[0] = "UseDepthBufferState";
+			dssItems[1] = "DepthReadOnlyState";
+			dssItems[2] = "NoDepthBufferState";
+			comp.DepthStencil = static_cast<EDepthStencilState>(RendererComboBox("Depth Stencil State: ", dssItems, static_cast<int>(EDepthStencilState::EDepthStencilStateSize), dss));
+
+			static int rs = 0;
+			const char* rasterizerItems[static_cast<int>(ERasterizerState::ERasterizerStateSize)];
+			rasterizerItems[0] = "CullBackState";
+			rasterizerItems[1] = "CullFrontState";
+			rasterizerItems[2] = "CullNoneState";
+			comp.RasterizerState = static_cast<ERasterizerState>(RendererComboBox("Rasterizer State: ", rasterizerItems, static_cast<int>(ERasterizerState::ERasterizerStateSize), rs));
+
+			static int ss = 0;
+			const char* samplerItems[static_cast<int>(ESamplerState::ESamplerStateSize)];
+			samplerItems[0] = "Anisotropic4xSampler";
+			samplerItems[1] = "TrilinearSampler";
+			samplerItems[2] = "PointSampler";
+			comp.SamplerState = static_cast<ESamplerState>(RendererComboBox("Sampler State: ", samplerItems, static_cast<int>(ESamplerState::ESamplerStateSize), ss));
+
 
 			ImGui::TreePop();
 		}
@@ -241,5 +276,35 @@ namespace Engine
 	{
 		ImGui::Text("Texture");
 	}
+
+	int EditorLayer::RendererComboBox(const std::string& label, const char* items[], int size, int& selected)
+	{
+		const char* combo_preview_value = items[selected];
+		ImGui::PushItemWidth(310);
+
+		ImGui::Text(label.c_str()); ImGui::SameLine();
+
+		std::string l = "##" + label;
+		if (ImGui::BeginCombo(l.c_str(), combo_preview_value))
+		{
+			for (int n = 0; n < size; n++)
+			{
+				const bool is_selected = (selected == n);
+				if (ImGui::Selectable(items[n], is_selected))
+					selected = n;
+
+				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+		ImGui::PopItemWidth();
+
+		return selected;
+		
+	}
+
 
 }

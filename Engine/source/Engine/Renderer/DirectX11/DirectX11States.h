@@ -7,9 +7,11 @@ namespace Engine
 	// Enum class for setting the Sampler states
 	enum class ESamplerState
 	{
-		PointSampler = 0,
+		Anisotropic4xSampler = 0,
 		TrilinearSampler,
-		Anisotropic4xSampler
+		PointSampler,
+
+		ESamplerStateSize
 	};
 
 	// Enum class for setting the Blend states
@@ -17,6 +19,8 @@ namespace Engine
 	{
 		NoBlendingState = 0,
 		AdditiveBlendingState,
+
+		EBlendStateSize
 	};
 
 	// Enum class for setting the Rasterizer states
@@ -25,6 +29,8 @@ namespace Engine
 		CullBackState = 0,
 		CullFrontState,
 		CullNoneState,
+
+		ERasterizerStateSize
 	};
 
 	// Enum class for setting the Depth Stencil states
@@ -33,6 +39,8 @@ namespace Engine
 		UseDepthBufferState = 0,
 		DepthReadOnlyState,
 		NoDepthBufferState,
+
+		EDepthStencilStateSize
 	};
 
 

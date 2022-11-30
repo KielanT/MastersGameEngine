@@ -24,6 +24,7 @@ namespace Engine
 		template<typename T>
 		bool HasComponent()
 		{
+			if (m_EntityHandle == entt::null) return false;
 			return m_Scene->GetEntityRegistry().any_of<T>(m_EntityHandle);
 		}
 

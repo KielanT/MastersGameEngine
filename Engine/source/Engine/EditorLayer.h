@@ -43,6 +43,8 @@ namespace Engine
 		void DrawMeshRendererComponent(MeshRendererComponent& comp);
 		void DrawTextureComponent(TextureComponent& comp);
 
+		int RendererComboBox(const std::string& label, const char* items[], int size, int& selected);
+
 	private:
 		CComPtr<ID3D11ShaderResourceView> m_SceneTexture;
 		std::shared_ptr<IScene> m_Scene = nullptr;

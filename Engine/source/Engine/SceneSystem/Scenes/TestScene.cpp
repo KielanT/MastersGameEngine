@@ -61,7 +61,7 @@ namespace Engine
         m_SceneCamera->SetPosition({ 0, 0, -50 });
         m_SceneCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-
+        TempEntity = CreateMeshEntity("TempEntity");
 
         return true;
     }
@@ -72,21 +72,42 @@ namespace Engine
         std::shared_ptr<DirectX11Shader> shader = std::static_pointer_cast<DirectX11Shader>(m_Shader);
         std::shared_ptr<DirectX11States> state = std::static_pointer_cast<DirectX11States>(m_State);
 
-        dx11Renderer->GetDeviceContext()->VSSetShader(shader->GetVertexShader(EVertexShader::PixelLightingVertexShader), nullptr, 0);
-        dx11Renderer->GetDeviceContext()->PSSetShader(shader->GetPixelShader(EPixelShader::PixelLightingPixelShader), nullptr, 0);
+       
+        
+        EVertexShader vs = EVertexShader::PixelLightingVertexShader;
+        EPixelShader ps = EPixelShader::PixelLightingPixelShader;
+        EBlendState bs = EBlendState::NoBlendingState;
+        EDepthStencilState dss = EDepthStencilState::UseDepthBufferState;
+        ERasterizerState rs = ERasterizerState::CullNoneState;
+        ESamplerState ss = ESamplerState::Anisotropic4xSampler;
+
+        // TODO: Remove TempEntity
+        if (TempEntity.HasComponent<MeshRendererComponent>())
+        {
+            vs  = TempEntity.GetComponent<MeshRendererComponent>().VertexShader;
+            ps  = TempEntity.GetComponent<MeshRendererComponent>().PixelShader;
+            bs  = TempEntity.GetComponent<MeshRendererComponent>().BlendState;
+            dss = TempEntity.GetComponent<MeshRendererComponent>().DepthStencil;
+            rs = TempEntity.GetComponent<MeshRendererComponent>().RasterizerState;
+            ss = TempEntity.GetComponent<MeshRendererComponent>().SamplerState;
+        }
+
+        dx11Renderer->GetDeviceContext()->VSSetShader(shader->GetVertexShader(vs), nullptr, 0);
+
+        dx11Renderer->GetDeviceContext()->PSSetShader(shader->GetPixelShader(ps), nullptr, 0);
 
         // Select the approriate textures and sampler to use in the pixel shader
         
         
        
-        CComPtr<ID3D11SamplerState> sampler = state->GetSamplerState(ESamplerState::Anisotropic4xSampler);
+        CComPtr<ID3D11SamplerState> sampler = state->GetSamplerState(ss);
         dx11Renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &resourceView.p); // First parameter must match texture slot number in the shader
         dx11Renderer->GetDeviceContext()->PSSetSamplers(0, 1, &sampler.p);
         
         // States - no blending, normal depth buffer and culling
-        dx11Renderer->GetDeviceContext()->OMSetBlendState(state->GetBlendState(EBlendState::NoBlendingState), nullptr, 0xffffff);
-        dx11Renderer->GetDeviceContext()->OMSetDepthStencilState(state->GetDepthStencilState(EDepthStencilState::UseDepthBufferState), 0);
-        dx11Renderer->GetDeviceContext()->RSSetState(state->GetRasterizerState(ERasterizerState::CullNoneState));
+        dx11Renderer->GetDeviceContext()->OMSetBlendState(state->GetBlendState(bs), nullptr, 0xffffff);
+        dx11Renderer->GetDeviceContext()->OMSetDepthStencilState(state->GetDepthStencilState(dss), 0);
+        dx11Renderer->GetDeviceContext()->RSSetState(state->GetRasterizerState(rs));
         model->Render();
     }
 

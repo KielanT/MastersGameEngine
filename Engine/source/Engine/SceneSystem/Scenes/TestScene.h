@@ -71,5 +71,7 @@ namespace Engine
 		CComPtr<ID3D11ShaderResourceView> resourceView;
 
 		entt::registry m_Registry;
+
+		Entity TempEntity;
 	};
 }

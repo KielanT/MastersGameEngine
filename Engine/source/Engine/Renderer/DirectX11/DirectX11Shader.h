@@ -10,14 +10,18 @@ namespace Engine
 	{
 		PixelLightingVertexShader = 0,
 		BasicTransformVertexShader,
-		SkinningVertexShader
+		SkinningVertexShader,
+
+		EVertexShaderSize
 	};
 
 	// Enum class for selecting the pixel shader
 	enum class EPixelShader
 	{
 		PixelLightingPixelShader = 0,
-		LightModelPixelShader
+		LightModelPixelShader,
+
+		EPixelShaderSize
 	};
 
 	class  DirectX11Shader : public IShader
