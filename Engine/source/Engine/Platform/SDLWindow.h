@@ -3,7 +3,8 @@
 #include "Engine/Interfaces/IWindow.h"
 #include "SDL.h"
 #include "Engine/Utility/ITimer.h"
-#include "Engine/Utility/SDLInput.h"
+#include "SDLInput.h"
+
 
 namespace Engine
 {

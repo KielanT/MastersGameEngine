@@ -5,7 +5,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Engine/Utility/SDLInput.h"
+#include "Engine/Platform/SDLInput.h"
 
 #include "entt/entt.hpp"
 

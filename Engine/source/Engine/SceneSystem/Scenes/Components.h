@@ -25,6 +25,7 @@ namespace Engine
 	struct TextureComponent
 	{
 		std::string Path = "";
+		CComPtr<ID3D11ShaderResourceView> ResourceView;
 	};
 
 	struct MeshRendererComponent

@@ -6,6 +6,8 @@
 #include "imgui_impl_dx11.h"
 
 #include "SceneSystem/Scenes/TestScene.h"
+#include "Engine/Lab/GraphicsHelpers.h"
+#include "Engine/Platform/SDLWinUtils.h"
 
 namespace Engine
 {
@@ -160,7 +162,7 @@ namespace Engine
 			{
 				DrawMeshRendererComponent(m_SelectedEntity.GetComponent<MeshRendererComponent>());
 			}
-			if (m_SelectedEntity.HasComponent<MeshRendererComponent>())
+			if (m_SelectedEntity.HasComponent<TextureComponent>())
 			{
 				DrawTextureComponent(m_SelectedEntity.GetComponent<TextureComponent>());
 			}
@@ -275,6 +277,49 @@ namespace Engine
 	void EditorLayer::DrawTextureComponent(TextureComponent& comp)
 	{
 		ImGui::Text("Texture");
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+		if (ImGui::TreeNodeEx("Texture", flags))
+		{
+
+			char buffer[256];
+			memset(buffer, 0, sizeof(buffer));
+			std::strncpy(buffer, comp.Path.c_str(), sizeof(buffer));
+			if (IMGUI_LEFT_LABEL(ImGui::InputText, "File Path: ", buffer, sizeof(buffer)))
+			{
+				comp.Path = std::string(buffer);
+			}
+			
+			ImGui::SameLine();
+				
+			if (ImGui::Button("Add##Texture"))
+			{
+				const char* filter = "Select Type\0*.*\0PNG\0*.PNG\0JPG\0*.JPG\0JPEG\0*.JPEG\0DDS\0*.DDS\0";
+				std::string file = OpenFile(m_Scene->GetRenderer()->GetWindowProperties().Hwnd, filter);
+
+				if (!file.empty())
+				{
+					std::string last = comp.Path;
+					comp.Path = file;
+					CComPtr<ID3D11Resource> Resource;
+					CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+					std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_Scene->GetRenderer());
+					if (LoadTexture(renderer, comp.Path, &Resource, &ResourceView))
+					{
+						comp.ResourceView = ResourceView;
+					}
+					else
+					{
+						comp.Path = last;
+						// Error Pop up
+					}
+				}
+			}
+
+
+			ImGui::TreePop();
+		}
+
 	}
 
 	int EditorLayer::RendererComboBox(const std::string& label, const char* items[], int size, int& selected)

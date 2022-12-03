@@ -2,6 +2,7 @@
 
 #include "Engine/Lab/Camera.h"
 #include "entt/entt.hpp"
+#include "Engine/Interfaces/IRenderer.h"
 
 namespace Engine
 {
@@ -31,6 +32,8 @@ namespace Engine
 
 		// Returns the camera
 		virtual std::shared_ptr<Camera> GetCamera() = 0;
+
+		virtual std::shared_ptr<IRenderer> GetRenderer() = 0;
 
 		// Scene Settings
 		virtual void SetAmbientColour(glm::vec3 ambientColour) = 0;

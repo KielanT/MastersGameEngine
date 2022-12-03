@@ -32,6 +32,8 @@ namespace Engine
 
 		virtual std::shared_ptr<Camera> GetCamera() override { return m_SceneCamera; }
 
+		virtual std::shared_ptr<IRenderer> GetRenderer() override { return m_Renderer; }
+
 		// Scene Settings
 		virtual void SetAmbientColour(glm::vec3 ambientColour) override { m_AmbientColour = ambientColour; }
 		virtual void SetSpecularPower(float specularPower) override { m_SpecularPower = specularPower; }

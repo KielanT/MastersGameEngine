@@ -113,6 +113,7 @@ namespace Engine
 		SDL_GetWindowWMInfo(m_Window, &wmInfo);
 		m_Props.Hwnd = wmInfo.info.win.window;
 
+
 		props = m_Props;
 		return TRUE;
 	}
