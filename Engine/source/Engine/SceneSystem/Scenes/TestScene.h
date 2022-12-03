@@ -50,6 +50,9 @@ namespace Engine
 		/*virtual*/ Entity CreateEntity(const std::string& tag) /*override*/;
 		/*virtual*/ Entity CreateMeshEntity(const std::string& tag) /*override*/;
 
+		// TEMP FUNCTION
+		void Renderer(Entity entity);
+
 	private:
 		std::shared_ptr<IRenderer> m_Renderer;
 		int m_SceneIndex;
@@ -74,6 +77,5 @@ namespace Engine
 
 		entt::registry m_Registry;
 
-		Entity TempEntity;
 	};
 }

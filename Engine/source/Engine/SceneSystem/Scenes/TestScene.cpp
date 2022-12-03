@@ -61,64 +61,19 @@ namespace Engine
         m_SceneCamera->SetPosition({ 0, 0, -50 });
         m_SceneCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-        TempEntity = CreateMeshEntity("TempEntity");
-
         return true;
     }
 
     void TestScene::RenderScene()
     {
-        std::shared_ptr<DirectX11Renderer> dx11Renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);
-        std::shared_ptr<DirectX11Shader> shader = std::static_pointer_cast<DirectX11Shader>(m_Shader);
-        std::shared_ptr<DirectX11States> state = std::static_pointer_cast<DirectX11States>(m_State);
-
-
-
-        EVertexShader vs = EVertexShader::PixelLightingVertexShader;
-        EPixelShader ps = EPixelShader::PixelLightingPixelShader;
-        EBlendState bs = EBlendState::NoBlendingState;
-        EDepthStencilState dss = EDepthStencilState::UseDepthBufferState;
-        ERasterizerState rs = ERasterizerState::CullNoneState;
-        ESamplerState ss = ESamplerState::Anisotropic4xSampler;
-
-        // TODO: Remove TempEntity
-        if (TempEntity.HasComponent<MeshRendererComponent>())
-        {
-            vs = TempEntity.GetComponent<MeshRendererComponent>().VertexShader;
-            ps = TempEntity.GetComponent<MeshRendererComponent>().PixelShader;
-            bs = TempEntity.GetComponent<MeshRendererComponent>().BlendState;
-            dss = TempEntity.GetComponent<MeshRendererComponent>().DepthStencil;
-            rs = TempEntity.GetComponent<MeshRendererComponent>().RasterizerState;
-            ss = TempEntity.GetComponent<MeshRendererComponent>().SamplerState;
-        }
-      
-
-        dx11Renderer->GetDeviceContext()->VSSetShader(shader->GetVertexShader(vs), nullptr, 0);
-        dx11Renderer->GetDeviceContext()->PSSetShader(shader->GetPixelShader(ps), nullptr, 0);
-
-        CComPtr<ID3D11SamplerState> sampler = state->GetSamplerState(ss);
-
-        if (TempEntity.HasComponent<TextureComponent>() && TempEntity.GetComponent<TextureComponent>().ResourceView != nullptr)
-            dx11Renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &TempEntity.GetComponent<TextureComponent>().ResourceView.p);
-        else
-            dx11Renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &resourceView.p); // First parameter must match texture slot number in the shader
-        
-        dx11Renderer->GetDeviceContext()->PSSetSamplers(0, 1, &sampler.p);
-        
-        // States - no blending, normal depth buffer and culling
-        dx11Renderer->GetDeviceContext()->OMSetBlendState(state->GetBlendState(bs), nullptr, 0xffffff);
-        dx11Renderer->GetDeviceContext()->OMSetDepthStencilState(state->GetDepthStencilState(dss), 0);
-        dx11Renderer->GetDeviceContext()->RSSetState(state->GetRasterizerState(rs));
-        
-        if (TempEntity.HasComponent<MeshRendererComponent>() && TempEntity.GetComponent<MeshRendererComponent>().Model != nullptr)
-        {
-            TempEntity.GetComponent<MeshRendererComponent>().Model->Render();
-        }
-        else
-        {
-            model->Render();
-        }
-      
+        m_Registry.each([&](auto entityID)
+            {
+                Entity entity{ entityID, shared_from_this()};
+                if (entity.HasComponent<MeshRendererComponent>())
+                {
+                    Renderer(entity);
+                }
+            });
     }
 
     void TestScene::UpdateScene(float frameTime)
@@ -156,5 +111,41 @@ namespace Engine
         entity.AddComponent<MeshRendererComponent>();
         entity.AddComponent<TextureComponent>();
         return entity;
+    }
+
+    void TestScene::Renderer(Entity entity)
+    {
+        if (entity.HasComponent<MeshRendererComponent>() && entity.HasComponent<TextureComponent>())
+        {
+            auto transfrom = entity.GetComponent<TransformComponent>();
+            auto mesh = entity.GetComponent<MeshRendererComponent>();
+            auto texture = entity.GetComponent<TextureComponent>();
+
+            if (mesh.Model != nullptr)
+            {
+                mesh.Model->SetPosition(transfrom.Position);
+                mesh.Model->SetRotation(transfrom.Rotation);
+                mesh.Model->SetScale(transfrom.Scale);
+
+
+                std::shared_ptr<DirectX11Renderer> dx11Renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);
+                std::shared_ptr<DirectX11Shader> shader = std::static_pointer_cast<DirectX11Shader>(m_Shader);
+                std::shared_ptr<DirectX11States> state = std::static_pointer_cast<DirectX11States>(m_State);
+
+                dx11Renderer->GetDeviceContext()->VSSetShader(shader->GetVertexShader(mesh.VertexShader), nullptr, 0);
+                dx11Renderer->GetDeviceContext()->PSSetShader(shader->GetPixelShader(mesh.PixelShader), nullptr, 0);
+
+                dx11Renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &texture.ResourceView.p);
+
+                CComPtr<ID3D11SamplerState> sampler = state->GetSamplerState(mesh.SamplerState);
+                dx11Renderer->GetDeviceContext()->PSSetSamplers(0, 1, &sampler.p);
+
+                dx11Renderer->GetDeviceContext()->OMSetBlendState(state->GetBlendState(mesh.BlendState), nullptr, 0xffffff);
+                dx11Renderer->GetDeviceContext()->OMSetDepthStencilState(state->GetDepthStencilState(mesh.DepthStencil), 0);
+                dx11Renderer->GetDeviceContext()->RSSetState(state->GetRasterizerState(mesh.RasterizerState));
+
+                entity.GetComponent<MeshRendererComponent>().Model->Render();
+            }
+        }
     }
 }
