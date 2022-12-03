@@ -6,6 +6,7 @@
 
 #include "Engine/Renderer/DirectX11/DirectX11Shader.h"
 #include "Engine/Renderer/DirectX11/DirectX11States.h"
+#include "Engine/Lab/Model.h"
 
 namespace Engine
 {
@@ -31,6 +32,7 @@ namespace Engine
 	struct MeshRendererComponent
 	{
 		std::string Path = ""; // Mesh Path
+		std::shared_ptr<Model> Model;
 		EPixelShader PixelShader = EPixelShader::PixelLightingPixelShader; // PixelShader
 		EVertexShader VertexShader = EVertexShader::PixelLightingVertexShader; // VertexShader
 		EBlendState BlendState = EBlendState::NoBlendingState; // BlendState

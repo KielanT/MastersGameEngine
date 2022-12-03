@@ -109,7 +109,16 @@ namespace Engine
         dx11Renderer->GetDeviceContext()->OMSetBlendState(state->GetBlendState(bs), nullptr, 0xffffff);
         dx11Renderer->GetDeviceContext()->OMSetDepthStencilState(state->GetDepthStencilState(dss), 0);
         dx11Renderer->GetDeviceContext()->RSSetState(state->GetRasterizerState(rs));
-        model->Render();
+        
+        if (TempEntity.HasComponent<MeshRendererComponent>() && TempEntity.GetComponent<MeshRendererComponent>().Model != nullptr)
+        {
+            TempEntity.GetComponent<MeshRendererComponent>().Model->Render();
+        }
+        else
+        {
+            model->Render();
+        }
+      
     }
 
     void TestScene::UpdateScene(float frameTime)

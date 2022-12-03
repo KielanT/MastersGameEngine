@@ -31,7 +31,7 @@ namespace Engine
 		EntitiesWindow();
 		Details();
 		Assets();
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 
 		
 	}
@@ -223,9 +223,25 @@ namespace Engine
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			std::strncpy(buffer, comp.Path.c_str(), sizeof(buffer));
-			if (IMGUI_LEFT_LABEL(ImGui::InputText, "File Path: ", buffer, sizeof(buffer)))
+			ImGuiInputTextFlags flags = ImGuiInputTextFlags_ReadOnly;
+			IMGUI_LEFT_LABEL(ImGui::InputText, "File Path: ", buffer, sizeof(buffer), flags);
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Add##Model"))
 			{
-				comp.Path = std::string(buffer);
+				const char* filter = "Select Type\0*.*\0PNG\0*.PNG\0JPG\0*.JPG\0JPEG\0*.JPEG\0DDS\0*.DDS\0";
+				std::string file = OpenFile(m_Scene->GetRenderer()->GetWindowProperties().Hwnd, filter);
+
+				if (!file.empty())
+				{
+					std::string last = comp.Path;
+					comp.Path = file;
+
+					std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_Scene->GetRenderer());
+					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(renderer, comp.Path);
+					comp.Model = std::make_shared<Model>(mesh);
+				}
 			}
 
 			static int ps = 0;
@@ -276,18 +292,14 @@ namespace Engine
 
 	void EditorLayer::DrawTextureComponent(TextureComponent& comp)
 	{
-		ImGui::Text("Texture");
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 		if (ImGui::TreeNodeEx("Texture", flags))
 		{
-
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			std::strncpy(buffer, comp.Path.c_str(), sizeof(buffer));
-			if (IMGUI_LEFT_LABEL(ImGui::InputText, "File Path: ", buffer, sizeof(buffer)))
-			{
-				comp.Path = std::string(buffer);
-			}
+			ImGuiInputTextFlags flags = ImGuiInputTextFlags_ReadOnly;
+			IMGUI_LEFT_LABEL(ImGui::InputText, "File Path: ", buffer, sizeof(buffer), flags);
 			
 			ImGui::SameLine();
 				
