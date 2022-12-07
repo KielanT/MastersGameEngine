@@ -134,8 +134,15 @@ namespace Engine
 
                 dx11Renderer->GetDeviceContext()->VSSetShader(shader->GetVertexShader(mesh.VertexShader), nullptr, 0);
                 dx11Renderer->GetDeviceContext()->PSSetShader(shader->GetPixelShader(mesh.PixelShader), nullptr, 0);
+               
+               
+           
 
                 dx11Renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &texture.ResourceView.p);
+                dx11Renderer->GetDeviceContext()->PSSetShaderResources(1, 1, &texture.RoughView.p);
+                dx11Renderer->GetDeviceContext()->PSSetShaderResources(2, 1, &texture.NormalView.p);
+                dx11Renderer->GetDeviceContext()->PSSetShaderResources(3, 1, &texture.HeightView.p);
+                dx11Renderer->GetDeviceContext()->PSSetShaderResources(4, 1, &texture.MetalnessView.p);
 
                 CComPtr<ID3D11SamplerState> sampler = state->GetSamplerState(mesh.SamplerState);
                 dx11Renderer->GetDeviceContext()->PSSetSamplers(0, 1, &sampler.p);

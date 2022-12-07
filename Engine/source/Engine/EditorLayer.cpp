@@ -248,13 +248,16 @@ namespace Engine
 			const char* pixelItems[static_cast<int>(EPixelShader::EPixelShaderSize)];
 			pixelItems[0] = "PixelLightingPixelShader";
 			pixelItems[1] = "LightModelPixelShader";
+			pixelItems[2] = "PBRPixelShader";
 			comp.PixelShader = static_cast<EPixelShader>(RendererComboBox("Pixel Shader: ", pixelItems, static_cast<int>(EPixelShader::EPixelShaderSize), ps));
-			
+
+
 			static int vs = 0;
 			const char* vertexItems[static_cast<int>(EVertexShader::EVertexShaderSize)];
 			vertexItems[0] = "PixelLightingVertexShader";
 			vertexItems[1] = "BasicTransformVertexShader";
 			vertexItems[2] = "SkinningVertexShader";
+			vertexItems[3] = "PBRVertexShader";
 			comp.VertexShader = static_cast<EVertexShader>(RendererComboBox("Vertex Shader: ", vertexItems, static_cast<int>(EVertexShader::EVertexShaderSize), vs));
 
 			static int bs = 0;
@@ -288,47 +291,29 @@ namespace Engine
 
 			ImGui::TreePop();
 		}
+
+		if (comp.PixelShader == EPixelShader::PBRPixelShader || comp.VertexShader == EVertexShader::PBRVertexShader)
+			IsPBR = true;
+		else
+			IsPBR = false;
 	}
 
 	void EditorLayer::DrawTextureComponent(TextureComponent& comp)
 	{
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+		
 		if (ImGui::TreeNodeEx("Texture", flags))
 		{
-			char buffer[256];
-			memset(buffer, 0, sizeof(buffer));
-			std::strncpy(buffer, comp.Path.c_str(), sizeof(buffer));
-			ImGuiInputTextFlags flags = ImGuiInputTextFlags_ReadOnly;
-			IMGUI_LEFT_LABEL(ImGui::InputText, "File Path: ", buffer, sizeof(buffer), flags);
-			
-			ImGui::SameLine();
-				
-			if (ImGui::Button("Add##Texture"))
+			//if(!IsPBR)
+			//	TextureBoxes("Texture", comp.Path, comp.ResourceView);
+			//else
 			{
-				const char* filter = "Select Type\0*.*\0PNG\0*.PNG\0JPG\0*.JPG\0JPEG\0*.JPEG\0DDS\0*.DDS\0";
-				std::string file = OpenFile(m_Scene->GetRenderer()->GetWindowProperties().Hwnd, filter);
-
-				if (!file.empty())
-				{
-					std::string last = comp.Path;
-					comp.Path = file;
-					CComPtr<ID3D11Resource> Resource;
-					CComPtr<ID3D11ShaderResourceView> ResourceView;
-
-					std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_Scene->GetRenderer());
-					if (LoadTexture(renderer, comp.Path, &Resource, &ResourceView))
-					{
-						comp.ResourceView = ResourceView;
-					}
-					else
-					{
-						comp.Path = last;
-						// Error Pop up
-					}
-				}
+				TextureBoxes("Albedo", comp.Path, comp.ResourceView);
+				TextureBoxes("Roughness", comp.RoughPath, comp.RoughView);
+				TextureBoxes("Normal", comp.NormalPath, comp.NormalView);
+				TextureBoxes("Height", comp.HeightPath, comp.HeightView);
+				TextureBoxes("Metalness", comp.MetalnessPath, comp.MetalnessView);
 			}
-
-
 			ImGui::TreePop();
 		}
 
@@ -361,6 +346,46 @@ namespace Engine
 
 		return selected;
 		
+	}
+
+	void EditorLayer::TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView)
+	{
+		std::string label = Label;
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+		char buffer[256];
+		memset(buffer, 0, sizeof(buffer));
+		std::strncpy(buffer, path.c_str(), sizeof(buffer));
+
+		std::string textLabel = "##" + Label + "text";
+		ImGui::Text(Label.c_str()); ImGui::SameLine();
+		ImGui::InputText(textLabel.c_str(), buffer, sizeof(buffer), flags);
+
+		ImGui::SameLine();
+		std::string btnLabel = "Add##" + Label + "texture";
+		if (ImGui::Button(btnLabel.c_str()))
+		{
+			const char* filter = "Select Type\0*.*\0PNG\0*.PNG\0JPG\0*.JPG\0JPEG\0*.JPEG\0DDS\0*.DDS\0";
+			std::string file = OpenFile(m_Scene->GetRenderer()->GetWindowProperties().Hwnd, filter);
+
+			if (!file.empty())
+			{
+				std::string last = path;
+				path = file;
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_Scene->GetRenderer());
+				if (LoadTexture(renderer, path, &Resource, &ResourceView))
+				{
+					resourseView = ResourceView;
+				}
+				else
+				{
+					path = last;
+					// Error Pop up
+				}
+			}
+		}
 	}
 
 

@@ -44,12 +44,16 @@ namespace Engine
 		void DrawTextureComponent(TextureComponent& comp);
 
 		int RendererComboBox(const std::string& label, const char* items[], int size, int& selected);
+		void TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView);
 
 	private:
 		CComPtr<ID3D11ShaderResourceView> m_SceneTexture;
 		std::shared_ptr<IScene> m_Scene = nullptr;
 
 		Entity m_SelectedEntity;
+
+	private:
+		bool IsPBR = false;
 
 	};
 }

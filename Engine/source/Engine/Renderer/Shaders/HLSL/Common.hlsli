@@ -13,6 +13,7 @@ struct BasicVertex
 {
     float3 position : position;
     float3 normal   : normal;
+    float3 tangent : tangent;
     float2 uv       : uv;
 };
 
@@ -60,6 +61,15 @@ struct SimplePixelShaderInput
     float2 uv : uv;
 };
 
+
+struct PBRInput
+{
+    float4 ProjectionPosition : SV_Position;
+    float3 WorldPosition : postition;
+    float3 ModelNormal : normal;
+    float3 ModelTangent : tangent;
+    float2 UV : uv;
+};
 
 //--------------------------------------------------------------------------------------
 // Constant Buffers

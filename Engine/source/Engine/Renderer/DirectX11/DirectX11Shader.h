@@ -11,6 +11,7 @@ namespace Engine
 		PixelLightingVertexShader = 0,
 		BasicTransformVertexShader,
 		SkinningVertexShader,
+		PBRVertexShader,
 
 		EVertexShaderSize
 	};
@@ -20,6 +21,7 @@ namespace Engine
 	{
 		PixelLightingPixelShader = 0,
 		LightModelPixelShader,
+		PBRPixelShader,
 
 		EPixelShaderSize
 	};
@@ -53,10 +55,12 @@ namespace Engine
 		CComPtr<ID3D11VertexShader> m_PixelLightingVertexShader;
 		CComPtr<ID3D11VertexShader> m_BasicTransformVertexShader;
 		CComPtr<ID3D11VertexShader> m_SkinningVertexShader;
+		CComPtr<ID3D11VertexShader> m_PBRVertexShader;
 
 		// Pixel shader member variables
 		CComPtr<ID3D11PixelShader> m_LightModelPixelShader;
 		CComPtr<ID3D11PixelShader> m_PixelLightingPixelShader;
+		CComPtr<ID3D11PixelShader> m_PBRPixelShader;
 
 	};
 }

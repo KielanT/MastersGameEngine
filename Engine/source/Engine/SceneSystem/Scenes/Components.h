@@ -27,6 +27,18 @@ namespace Engine
 	{
 		std::string Path = "";
 		CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+		std::string RoughPath = "";
+		CComPtr<ID3D11ShaderResourceView> RoughView;
+
+		std::string NormalPath = "";
+		CComPtr<ID3D11ShaderResourceView> NormalView;
+
+		std::string HeightPath = "";
+		CComPtr<ID3D11ShaderResourceView> HeightView;
+
+		std::string MetalnessPath = "";
+		CComPtr<ID3D11ShaderResourceView> MetalnessView;
 	};
 
 	struct MeshRendererComponent

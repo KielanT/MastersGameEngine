@@ -28,16 +28,19 @@ namespace Engine
 			m_PixelLightingVertexShader = LoadVertexShader("PixelLighting_vs");
 			m_BasicTransformVertexShader = LoadVertexShader("BasicTransform_vs");
 			m_SkinningVertexShader = LoadVertexShader("Skinning_vs");
+			m_PBRVertexShader = LoadVertexShader("PBR_vs");
 
 			// Loads the pixel shaders
 			m_LightModelPixelShader = LoadPixelShader("LightModel_ps");
 			m_PixelLightingPixelShader = LoadPixelShader("PixelLighting_ps");
+			m_PBRPixelShader = LoadPixelShader("PBR_ps");
 
 			std::filesystem::current_path(currentPath); // Resets path to the main directory
 
 			// CHecks that the shaders are not nullptr
 			if (m_PixelLightingVertexShader == nullptr || m_PixelLightingPixelShader == nullptr ||
-				m_BasicTransformVertexShader == nullptr || m_SkinningVertexShader == nullptr || m_LightModelPixelShader == nullptr)
+				m_BasicTransformVertexShader == nullptr || m_SkinningVertexShader == nullptr ||
+				m_PBRVertexShader == nullptr || m_LightModelPixelShader == nullptr || m_PBRPixelShader == nullptr)
 			{
 				LOG_ERROR("Error Initializing Shaders");
 				return false;
@@ -66,6 +69,8 @@ namespace Engine
 			break;
 		case EVertexShader::SkinningVertexShader:
 			return m_SkinningVertexShader;
+		case EVertexShader::PBRVertexShader:
+			return m_PBRVertexShader;
 			break;
 		}
 	}
@@ -80,6 +85,8 @@ namespace Engine
 			break;
 		case EPixelShader::LightModelPixelShader:
 			return m_LightModelPixelShader;
+		case EPixelShader::PBRPixelShader:
+			return m_PBRPixelShader;
 			break;
 		}
 	}

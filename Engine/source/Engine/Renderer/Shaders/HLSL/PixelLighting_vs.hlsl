@@ -34,9 +34,9 @@ LightingPixelShaderInput main(BasicVertex modelVertex)
     output.worldNormal = mul(gWorldMatrix, modelNormal).xyz; // Only needed the 4th element to do this multiplication by 4x4 matrix...
                                                              //... it is not needed for lighting so discard afterwards with the .xyz
     output.worldPosition = worldPosition.xyz; // Also pass world position to pixel shader for lighting
-
+    
     // Pass texture coordinates (UVs) on to the pixel shader, the vertex shader doesn't need them
     output.uv = modelVertex.uv;
-
+    
     return output; // Ouput data sent down the pipeline (to the pixel shader)
 }
