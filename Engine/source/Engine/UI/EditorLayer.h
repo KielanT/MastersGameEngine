@@ -1,8 +1,8 @@
 #pragma once
-#include "Interfaces/IRenderer.h"
-#include "Interfaces/IScene.h"
+#include "Engine/Interfaces/IRenderer.h"
+#include "Engine/Interfaces/IScene.h"
 
-#include "SceneSystem/Scenes/Entity.h"
+#include "Engine/SceneSystem/Scenes/Entity.h"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 

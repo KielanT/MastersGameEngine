@@ -1,13 +1,15 @@
  #include "epch.h"
-#include "EditorLayer.h"
+#include <filesystem>
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
-#include "SceneSystem/Scenes/TestScene.h"
+#include "Engine/UI/EditorLayer.h"
+#include "Engine/SceneSystem/Scenes/TestScene.h"
 #include "Engine/Lab/GraphicsHelpers.h"
 #include "Engine/Platform/SDLWinUtils.h"
+
 
 namespace Engine
 {
@@ -118,6 +120,16 @@ namespace Engine
 	void EditorLayer::Assets()
 	{
 		ImGui::Begin("Assets");
+		std::filesystem::path currentPath = std::filesystem::current_path();
+		static bool test = true;
+
+		if (test) {
+			for (auto const& dir : std::filesystem::directory_iterator{ currentPath })
+			{
+				LOG_DEBUG(dir);
+			}
+			test = false;
+		}
 
 		ImGui::End();
 	}
@@ -173,7 +185,7 @@ namespace Engine
 	{
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
-		std::strncpy(buffer, comp.Tag.c_str(), sizeof(buffer));
+		strncpy_s(buffer, comp.Tag.c_str(), sizeof(buffer));
 		if (IMGUI_LEFT_LABEL(ImGui::InputText, "Name: ", buffer, sizeof(buffer)))
 		{
 			comp.Tag = std::string(buffer);
@@ -222,7 +234,7 @@ namespace Engine
 		{
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
-			std::strncpy(buffer, comp.Path.c_str(), sizeof(buffer));
+			strncpy_s(buffer, comp.Path.c_str(), sizeof(buffer));
 			ImGuiInputTextFlags flags = ImGuiInputTextFlags_ReadOnly;
 			IMGUI_LEFT_LABEL(ImGui::InputText, "File Path: ", buffer, sizeof(buffer), flags);
 
@@ -304,9 +316,9 @@ namespace Engine
 		
 		if (ImGui::TreeNodeEx("Texture", flags))
 		{
-			//if(!IsPBR)
-			//	TextureBoxes("Texture", comp.Path, comp.ResourceView);
-			//else
+			if(!IsPBR)
+				TextureBoxes("Texture", comp.Path, comp.ResourceView);
+			else
 			{
 				TextureBoxes("Albedo", comp.Path, comp.ResourceView);
 				TextureBoxes("Roughness", comp.RoughPath, comp.RoughView);
@@ -354,7 +366,7 @@ namespace Engine
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
-		std::strncpy(buffer, path.c_str(), sizeof(buffer));
+		strncpy_s(buffer, path.c_str(), sizeof(buffer));
 
 		std::string textLabel = "##" + Label + "text";
 		ImGui::Text(Label.c_str()); ImGui::SameLine();
@@ -382,7 +394,7 @@ namespace Engine
 				else
 				{
 					path = last;
-					// Error Pop up
+					//TODO: Error Pop up
 				}
 			}
 		}

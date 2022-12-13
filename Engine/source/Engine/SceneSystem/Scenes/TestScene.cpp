@@ -114,16 +114,12 @@ namespace Engine
                 mesh.Model->SetRotation(transfrom.Rotation);
                 mesh.Model->SetScale(transfrom.Scale);
 
-
                 std::shared_ptr<DirectX11Renderer> dx11Renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);
                 std::shared_ptr<DirectX11Shader> shader = std::static_pointer_cast<DirectX11Shader>(m_Shader);
                 std::shared_ptr<DirectX11States> state = std::static_pointer_cast<DirectX11States>(m_State);
 
                 dx11Renderer->GetDeviceContext()->VSSetShader(shader->GetVertexShader(mesh.VertexShader), nullptr, 0);
                 dx11Renderer->GetDeviceContext()->PSSetShader(shader->GetPixelShader(mesh.PixelShader), nullptr, 0);
-               
-               
-           
 
                 dx11Renderer->GetDeviceContext()->PSSetShaderResources(0, 1, &texture.ResourceView.p);
                 dx11Renderer->GetDeviceContext()->PSSetShaderResources(1, 1, &texture.RoughView.p);

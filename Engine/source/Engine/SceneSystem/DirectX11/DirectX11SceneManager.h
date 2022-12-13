@@ -2,7 +2,7 @@
 
 #include "Engine/Interfaces/ISceneManager.h"
 #include "Engine/Interfaces/IScene.h"
-#include "Engine/EditorLayer.h"
+#include "Engine/UI/EditorLayer.h"
 
 namespace Engine
 {
