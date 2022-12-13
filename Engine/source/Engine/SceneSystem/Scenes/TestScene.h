@@ -69,11 +69,6 @@ namespace Engine
 
 		std::shared_ptr<IShader> m_Shader;
 		std::shared_ptr<IState> m_State;
-		std::shared_ptr<Mesh> mesh;
-		std::shared_ptr<Model> model;
-
-		CComPtr<ID3D11Resource> resource;
-		CComPtr<ID3D11ShaderResourceView> resourceView;
 
 		entt::registry m_Registry;
 

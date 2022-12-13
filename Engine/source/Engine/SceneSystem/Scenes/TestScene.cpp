@@ -39,24 +39,14 @@ namespace Engine
         std::filesystem::path meshPath = std::filesystem::current_path().parent_path().append("Engine\\");
         
         std::filesystem::current_path(meshPath); // Sets the current path to the mesh path
-
-        std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);
-        mesh = std::make_shared<Mesh>(renderer, path + "Cube.x");
-        model = std::make_shared<Model>(mesh);
         
         m_SceneCamera = std::make_unique<Camera>();
-
-        if (!LoadTexture(renderer, "media/CargoA.dds", &resource, &resourceView))
-        {
-            LOG_ERROR("Cannot load texture");
-        }
 
         return true;
     }
 
     bool TestScene::InitScene()
     {
-        model->SetPosition({ 0.0f, 0.0f, 0.0f });
         
         m_SceneCamera->SetPosition({ 0, 0, -50 });
         m_SceneCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
@@ -78,9 +68,6 @@ namespace Engine
 
     void TestScene::UpdateScene(float frameTime)
     {
-        float roty = model->Rotation().x;
-        roty += 0.5f * frameTime;
-		model->SetRotation({ roty, 0.0f,  0.0f});
 
         m_SceneCamera->Control(frameTime);
        
