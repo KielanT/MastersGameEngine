@@ -148,8 +148,17 @@ namespace Engine
 		{
 			ImGui::PushID(dir.path().filename().string().c_str());
 			std::shared_ptr<Texture2D> icon = dir.is_directory() ? m_FolderIcon : m_FileIcon;
+			
 			ImGui::ImageButton(icon->GetTexture(), { thumbnailSize , thumbnailSize });
 			
+			if (!dir.is_directory() && ImGui::BeginDragDropSource())
+			{
+				//auto relativePath = std::filesystem::relative(dir.path(), currentPath);
+				const wchar_t* itemPath = dir.path().c_str();
+				ImGui::SetDragDropPayload("AssetPayload", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+				ImGui::EndDragDropSource();
+			}
+
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
 				if (dir.is_directory())
@@ -269,6 +278,24 @@ namespace Engine
 			strncpy_s(buffer, comp.Path.c_str(), sizeof(buffer));
 			ImGuiInputTextFlags flags = ImGuiInputTextFlags_ReadOnly;
 			IMGUI_LEFT_LABEL(ImGui::InputText, "File Path: ", buffer, sizeof(buffer), flags);
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetPayload"))
+				{
+					const wchar_t* pathp = (const wchar_t*)payload->Data;
+					std::filesystem::path texturePath = pathp;
+
+					std::string last = comp.Path;
+					comp.Path = texturePath.generic_string();
+
+					std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_Scene->GetRenderer());
+					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(renderer, comp.Path);
+					comp.Model = std::make_shared<Model>(mesh);
+				
+				}
+				ImGui::EndDragDropTarget();
+			}
 
 			ImGui::SameLine();
 
@@ -394,6 +421,7 @@ namespace Engine
 
 	void EditorLayer::TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView)
 	{
+		
 		std::string label = Label;
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 		char buffer[256];
@@ -402,7 +430,35 @@ namespace Engine
 
 		std::string textLabel = "##" + Label + "text";
 		ImGui::Text(Label.c_str()); ImGui::SameLine();
+
 		ImGui::InputText(textLabel.c_str(), buffer, sizeof(buffer), flags);
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetPayload"))
+			{
+				const wchar_t* pathp = (const wchar_t*)payload->Data;
+				std::filesystem::path texturePath = pathp;
+
+				std::string last = path;
+				path = texturePath.generic_string();
+
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_Scene->GetRenderer());
+				if (LoadTexture(renderer, path, &Resource, &ResourceView))
+				{
+					resourseView = ResourceView;
+				}
+				else
+				{
+					path = last;
+					//TODO: Error Pop up
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+
 
 		ImGui::SameLine();
 		std::string btnLabel = "Add##" + Label + "texture";
@@ -430,6 +486,7 @@ namespace Engine
 				}
 			}
 		}
+		
 	}
 
 
