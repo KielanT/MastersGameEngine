@@ -82,6 +82,8 @@ namespace Engine
 
 		CComPtr<ID3D11ShaderResourceView> GetSceneTexture() { return m_SceneTextureSRV; }
 		CComPtr<ID3D11RenderTargetView> GetSceneRenderTarget() { return m_SceneRenderTarget; }
+
+		bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, eint32* out_width, eint32* out_height);
 		
 	public:
 		PerFrameConstants PerFrameConstants; // Used for setting per frame constant variables and sending them to the GPU

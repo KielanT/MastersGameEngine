@@ -3,6 +3,7 @@
 #include "Engine/Interfaces/IScene.h"
 
 #include "Engine/SceneSystem/Scenes/Entity.h"
+#include "Engine/Interfaces/ITexture.h"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -19,7 +20,7 @@ namespace Engine
 		EditorLayer& operator=(const EditorLayer&) = delete;
 		EditorLayer& operator=(EditorLayer&&) = delete;*/
 	
-	public:
+
 		void Update();
 		void RenderGUI();
 		
@@ -54,6 +55,12 @@ namespace Engine
 
 	private:
 		bool IsPBR = false;
+
+		std::shared_ptr<Texture2D> m_FileIcon;
+		std::shared_ptr<Texture2D> m_FolderIcon;
+
+	private:
+		std::vector<std::string> m_CurrentResources; // Create a struct/object that stores the resources
 
 	};
 }

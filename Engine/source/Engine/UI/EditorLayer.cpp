@@ -13,7 +13,7 @@
 
 namespace Engine
 {
-	
+
 	void EditorLayer::Update()
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -104,8 +104,6 @@ namespace Engine
 	{
 		ImGui::Begin("Details");
 
-
-
 		if (m_Scene != nullptr)
 		{
 			if (m_SelectedEntity)
@@ -120,15 +118,49 @@ namespace Engine
 	void EditorLayer::Assets()
 	{
 		ImGui::Begin("Assets");
-		std::filesystem::path currentPath = std::filesystem::current_path();
-		static bool test = true;
+		static std::filesystem::path currentPath = std::filesystem::current_path();
 
-		if (test) {
-			for (auto const& dir : std::filesystem::directory_iterator{ currentPath })
-			{
-				LOG_DEBUG(dir);
-			}
+		if (ImGui::Button("Back"))
+		{
+			currentPath = currentPath.parent_path();
+		}
+
+		static bool test = true;
+		if (test)
+		{
+			m_FileIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-file-150.png", m_Scene->GetRenderer());
+			m_FolderIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-folder-150.png", m_Scene->GetRenderer());
 			test = false;
+		}
+
+		static float padding = 16.0f;
+		static float thumbnailSize = 100.0f;
+		float cellSize = thumbnailSize + padding;
+
+		float panelWidth = ImGui::GetContentRegionAvail().x;
+		int columnCount = (int)(panelWidth / cellSize);
+		if (columnCount < 1)
+			columnCount = 1;
+
+		ImGui::Columns(columnCount, 0, false);
+
+		for (auto const& dir : std::filesystem::directory_iterator{ currentPath })
+		{
+			ImGui::PushID(dir.path().filename().string().c_str());
+			std::shared_ptr<Texture2D> icon = dir.is_directory() ? m_FolderIcon : m_FileIcon;
+			ImGui::ImageButton(icon->GetTexture(), { thumbnailSize , thumbnailSize });
+			
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+			{
+				if (dir.is_directory())
+					currentPath /= dir.path().filename();
+
+			}
+
+			ImGui::TextWrapped(dir.path().filename().string().c_str());
+
+			ImGui::NextColumn();
+			ImGui::PopID();
 		}
 
 		ImGui::End();

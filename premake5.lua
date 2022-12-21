@@ -20,6 +20,7 @@ workspace "MastersGameEngine"
     IncludeDir["ImGuiBackends"] = "Engine/external/imgui/backends"
     IncludeDir["SDL"] = "Engine/external/SDL/include"
     IncludeDir["entt"] = "Engine/external/entt/include"
+    IncludeDir["stbImage"] = "Engine/external/stb_image"
 
     LibDir = {}
     LibDir["DirectXTK"] = "Engine/external/DirectXTK/%{cfg.buildcfg}"
@@ -64,6 +65,7 @@ project "Engine"
 		"%{IncludeDir.ImGuiBackends}",
         "%{IncludeDir.SDL}",
         "%{IncludeDir.entt}",
+        "%{IncludeDir.stbImage}",
     }
 
     libdirs
