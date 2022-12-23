@@ -34,6 +34,12 @@ namespace Engine
 			return m_Scene->GetEntityRegistry().get<T>(m_EntityHandle);
 		}
 
+		template<typename T>
+		void RemoveComponent()
+		{
+			m_Scene->GetEntityRegistry().remove<T>(m_EntityHandle);
+		}
+
 		entt::entity GetEntityHandle()
 		{
 			return m_EntityHandle;

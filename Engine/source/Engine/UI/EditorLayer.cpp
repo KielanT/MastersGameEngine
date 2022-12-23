@@ -33,6 +33,7 @@ namespace Engine
 		EntitiesWindow();
 		Details();
 		Assets();
+		
 		//ImGui::ShowDemoWindow();
 
 		
@@ -72,7 +73,6 @@ namespace Engine
 			ImGui::OpenPopup("EntityPopup");
 		}
 
-
 		if (ImGui::BeginPopup("EntityPopup"))
 		{
 			std::shared_ptr<TestScene> scene = std::static_pointer_cast<TestScene>(m_Scene);
@@ -109,7 +109,37 @@ namespace Engine
 			if (m_SelectedEntity)
 			{
 				DrawComponents();
+
+
+				ImGui::Separator();
+
+				if (ImGui::Button("Add Component"))
+				{
+					ImGui::OpenPopup("AddComp");
+				}
+
+				if (ImGui::BeginPopup("AddComp"))
+				{
+					if (ImGui::MenuItem("MeshRenderer"))
+						m_SelectedEntity.AddComponent<MeshRendererComponent>();
+					if (ImGui::MenuItem("TextureComponent"))
+						m_SelectedEntity.AddComponent<TextureComponent>();
+					if (ImGui::MenuItem("CameraComponent"))
+						m_SelectedEntity.AddComponent<CameraComponent>();
+					if (ImGui::MenuItem("PhysicsComponent"))
+						m_SelectedEntity.AddComponent<PhysicsComponents>();
+					if (ImGui::MenuItem("CollisionComponent"))
+						m_SelectedEntity.AddComponent<CollisionComponents>();
+					if (ImGui::MenuItem("ScriptComponent"))
+						m_SelectedEntity.AddComponent<ScriptComponent>();
+
+					ImGui::EndPopup();
+				}
+
+				/*if (ImGui::MenuItem("CameraComponent"))
+					m_SelectedEntity.AddComponent<CameraComponent>();*/
 			}
+
 		}
 
 		ImGui::End();
@@ -185,13 +215,22 @@ namespace Engine
 		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
-		
+
 		if (ImGui::IsItemClicked())
 		{
 			m_SelectedEntity = entity;
 		}
 
-		
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::MenuItem("Delete Entity"))
+			{
+				std::shared_ptr<TestScene> scene = std::static_pointer_cast<TestScene>(m_Scene);
+				scene->DeleteEntity(entity);
+				m_SelectedEntity = {}; // Clears Selected entity
+			}
+			ImGui::EndPopup();
+		}
 
 		if (opened)
 		{
@@ -204,20 +243,44 @@ namespace Engine
 		if (m_SelectedEntity)
 		{
 			if (m_SelectedEntity.HasComponent<IDComponent>())
-			{
-				DrawIDComponent(m_SelectedEntity.GetComponent<IDComponent>());
-			}
+				DrawIDComponent(m_SelectedEntity.GetComponent<IDComponent>()); 	ImGui::Separator();
+
+
+
 			if (m_SelectedEntity.HasComponent<TransformComponent>())
 			{
 				DrawTransformComponent(m_SelectedEntity.GetComponent<TransformComponent>());
+				ImGui::Separator();
 			}
 			if (m_SelectedEntity.HasComponent<MeshRendererComponent>())
 			{
 				DrawMeshRendererComponent(m_SelectedEntity.GetComponent<MeshRendererComponent>());
+				ImGui::Separator();
 			}
 			if (m_SelectedEntity.HasComponent<TextureComponent>())
 			{
 				DrawTextureComponent(m_SelectedEntity.GetComponent<TextureComponent>());
+				ImGui::Separator();
+			}
+			if (m_SelectedEntity.HasComponent<CameraComponent>())
+			{
+				DrawCameraComponent(m_SelectedEntity.GetComponent<CameraComponent>());
+				ImGui::Separator();
+			}
+			if (m_SelectedEntity.HasComponent<PhysicsComponents>())
+			{
+				DrawPhysicsComponent(m_SelectedEntity.GetComponent<PhysicsComponents>());
+				ImGui::Separator();
+			}
+			if (m_SelectedEntity.HasComponent<CollisionComponents>())
+			{
+				DrawCollisionComponent(m_SelectedEntity.GetComponent<CollisionComponents>());
+				ImGui::Separator();
+			}
+			if (m_SelectedEntity.HasComponent<ScriptComponent>())
+			{
+				DrawScriptComponent(m_SelectedEntity.GetComponent<ScriptComponent>()); 	
+				ImGui::Separator();
 			}
 		}
 	}
@@ -390,6 +453,26 @@ namespace Engine
 
 	}
 
+	void EditorLayer::DrawCameraComponent(CameraComponent& comp)
+	{
+		ImGui::Text("Camera Component : NOT IMPLEMENTED");
+	}
+
+	void EditorLayer::DrawPhysicsComponent(PhysicsComponents& comp)
+	{
+		ImGui::Text("Physics Component : NOT IMPLEMENTED");
+	}
+
+	void EditorLayer::DrawCollisionComponent(CollisionComponents& comp)
+	{
+		ImGui::Text("Collision Component : NOT IMPLEMENTED");
+	}
+
+	void EditorLayer::DrawScriptComponent(ScriptComponent& comp)
+	{
+		ImGui::Text("Script Component : NOT IMPLEMENTED");
+	}
+
 	int EditorLayer::RendererComboBox(const std::string& label, const char* items[], int size, int& selected)
 	{
 		const char* combo_preview_value = items[selected];
@@ -421,16 +504,15 @@ namespace Engine
 
 	void EditorLayer::TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView)
 	{
-		
 		std::string label = Label;
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+	
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
 		strncpy_s(buffer, path.c_str(), sizeof(buffer));
 
 		std::string textLabel = "##" + Label + "text";
 		ImGui::Text(Label.c_str()); ImGui::SameLine();
-
+		ImGuiInputTextFlags flags = ImGuiInputTextFlags_ReadOnly;
 		ImGui::InputText(textLabel.c_str(), buffer, sizeof(buffer), flags);
 		if (ImGui::BeginDragDropTarget())
 		{

@@ -47,8 +47,10 @@ namespace Engine
 
 		virtual entt::registry& GetEntityRegistry() override { return m_Registry; }
 	
-		/*virtual*/ Entity CreateEntity(const std::string& tag) /*override*/;
-		/*virtual*/ Entity CreateMeshEntity(const std::string& tag) /*override*/;
+		Entity CreateEntity(const std::string& tag);
+		Entity CreateMeshEntity(const std::string& tag);
+		
+		void DeleteEntity(Entity entity) { m_Registry.destroy(entity); }
 
 		// TEMP FUNCTION
 		void Renderer(Entity entity);

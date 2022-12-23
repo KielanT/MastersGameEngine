@@ -53,5 +53,29 @@ namespace Engine
 		ESamplerState SamplerState = ESamplerState::Anisotropic4xSampler; // Sampler State
 	};
 
-	
+	struct CameraComponent
+	{
+		// Create Camera;
+		std::string temp = ""; // Requires at least one var
+	};
+
+	// Physics Components will need to be split up in different components
+	struct PhysicsComponents
+	{
+		// CreatePhysicsComponents  // Requires physic Library
+		std::string temp = "";
+	};
+
+	// Need different colliison components
+	struct CollisionComponents
+	{
+		// Create collisions // Requires physic Library
+		std::string temp = "";
+	};
+
+	struct ScriptComponent
+	{
+		// Create Scripts // Require scripting library
+		std::string temp = "";
+	};
 }

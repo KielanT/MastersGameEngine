@@ -43,6 +43,10 @@ namespace Engine
 		void DrawTransformComponent(TransformComponent& comp);
 		void DrawMeshRendererComponent(MeshRendererComponent& comp);
 		void DrawTextureComponent(TextureComponent& comp);
+		void DrawCameraComponent(CameraComponent& comp);
+		void DrawPhysicsComponent(PhysicsComponents& comp);
+		void DrawCollisionComponent(CollisionComponents& comp);
+		void DrawScriptComponent(ScriptComponent& comp);
 
 		int RendererComboBox(const std::string& label, const char* items[], int size, int& selected);
 		void TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView);
@@ -55,6 +59,7 @@ namespace Engine
 
 	private:
 		bool IsPBR = false;
+
 
 		std::shared_ptr<Texture2D> m_FileIcon;
 		std::shared_ptr<Texture2D> m_FolderIcon;
