@@ -56,14 +56,14 @@ namespace Engine
 
     void TestScene::RenderScene()
     {
-        m_Registry.each([&](auto entityID)
+       /* m_Registry.each([&](auto entityID)
             {
                 Entity entity{ entityID, shared_from_this()};
                 if (entity.HasComponent<MeshRendererComponent>())
                 {
                     Renderer(entity);
                 }
-            });
+            });*/
     }
 
     void TestScene::UpdateScene(float frameTime)
@@ -80,24 +80,26 @@ namespace Engine
 
     Entity TestScene::CreateEntity(const std::string& tag)
     {
-        Entity entity = { m_Registry.create(), shared_from_this()};
+       /* Entity entity = { m_Registry.create(), shared_from_this()};
         auto& ID = entity.AddComponent<IDComponent>();
         ID.ID = UUID();
         ID.Tag = tag;
         entity.AddComponent<TransformComponent>();
-        return entity;
+        return entity;*/
+        return Entity();
     }
 
     Entity TestScene::CreateMeshEntity(const std::string& tag)
     {
-        Entity entity = { m_Registry.create(), shared_from_this()};
+        /*Entity entity = { m_Registry.create(), shared_from_this()};
         auto& ID = entity.AddComponent<IDComponent>();
         ID.ID = UUID();
         ID.Tag = tag;
         entity.AddComponent<TransformComponent>();
         entity.AddComponent<MeshRendererComponent>();
         entity.AddComponent<TextureComponent>();
-        return entity;
+        return entity;*/
+        return Entity();
     }
 
     void TestScene::Renderer(Entity entity)

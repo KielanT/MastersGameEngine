@@ -3,7 +3,9 @@
 #include "Engine/Interfaces/IScene.h"
 
 #include "Engine/SceneSystem/Scenes/Entity.h"
+#include "Engine/SceneSystem/Scenes/Scene.h"
 #include "Engine/Interfaces/ITexture.h"
+
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -25,7 +27,8 @@ namespace Engine
 		void RenderGUI();
 		
 		void SetSceneTexture(CComPtr<ID3D11ShaderResourceView> sceneTexture) { m_SceneTexture = sceneTexture; }
-		void SetScene(std::shared_ptr<IScene> scene) { m_Scene = scene; }
+		//void SetScene(std::shared_ptr<IScene> scene) { m_Scene = scene; }
+		void SetScene(std::shared_ptr<Scene> scene) { m_TScene = scene; }
 		
 	private:
 		
@@ -53,7 +56,9 @@ namespace Engine
 
 	private:
 		CComPtr<ID3D11ShaderResourceView> m_SceneTexture;
-		std::shared_ptr<IScene> m_Scene = nullptr;
+		//std::shared_ptr<IScene> m_Scene = nullptr;
+		std::shared_ptr<Scene> m_TScene = nullptr;
+
 
 		Entity m_SelectedEntity;
 

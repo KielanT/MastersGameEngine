@@ -1,7 +1,8 @@
 #pragma once
 
-//#include "entt/entt.hpp"
-#include "Engine/Interfaces/IScene.h"
+#include "entt/entt.hpp"
+#include "Engine/SceneSystem/Scenes/Scene.h"
+//#include "Engine/Interfaces/IScene.h"
 #include "Components.h"
 
 namespace Engine
@@ -10,7 +11,7 @@ namespace Engine
 	{
 	public:
 		Entity() = default;
-		Entity(entt::entity handle, std::shared_ptr<IScene> scene);
+		Entity(entt::entity handle, std::shared_ptr<Scene> scene);
 		Entity(const Entity& other) = default;
 		
 		template<typename T, typename... Args>
@@ -61,6 +62,6 @@ namespace Engine
 
 	private:
 		entt::entity m_EntityHandle{ entt::null };
-		std::shared_ptr<IScene> m_Scene = nullptr;
+		std::shared_ptr<Scene> m_Scene = nullptr;
 	};
 }

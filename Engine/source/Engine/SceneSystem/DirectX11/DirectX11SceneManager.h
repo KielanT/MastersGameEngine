@@ -4,6 +4,8 @@
 #include "Engine/Interfaces/IScene.h"
 #include "Engine/UI/EditorLayer.h"
 
+#include "Engine/SceneSystem/Scenes/Scene.h"
+
 namespace Engine
 {
 
@@ -46,7 +48,9 @@ namespace Engine
 	private:
 		std::shared_ptr<IRenderer> m_Renderer; // Memeber variable for the renderer in use
 		WindowProperties m_Props; // Member variable for the window properties
-		std::vector<std::shared_ptr<IScene>> m_Scenes; // Member variable for the scene array
+		//std::vector<std::shared_ptr<IScene>> m_Scenes; // Member variable for the scene array
+
+		std::shared_ptr<Scene> m_Scene;
 
 		int m_SceneIndex; // Memeber variable for the tracking the current scene index
 
