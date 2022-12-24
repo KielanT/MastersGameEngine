@@ -68,7 +68,7 @@ namespace Engine
 		//}
 
 		m_Scene->InitScene();
-		Layer.SetScene(m_Scene);
+		//Layer.SetScene(m_Scene);
 		
 		return true;
 	}
@@ -116,7 +116,7 @@ namespace Engine
 		{
 
 			std::shared_ptr<DirectX11Renderer> d11Renderer = std::static_pointer_cast<DirectX11Renderer>(m_Renderer);// Casts the renderer to the correct renderer
-			Layer.SetSceneTexture(d11Renderer->GetSceneTexture());
+			//Layer.SetSceneTexture(d11Renderer->GetSceneTexture());
 
 			// Sets the correct scene settings
 			/*d11Renderer->PerFrameConstants.ambientColour = m_Scenes[m_SceneIndex]->GetAmbientColour();
@@ -149,7 +149,7 @@ namespace Engine
 			// Render the scene from the main camera
 			RenderSceneFromCamera();
 
-			Layer.RenderGUI();
+			//Layer.RenderGUI();
 			
 			ImGui::Render();
 			d11Renderer->GetDeviceContext()->OMSetRenderTargets(1, &backBuffer.p, nullptr);
@@ -157,7 +157,7 @@ namespace Engine
 			//// Scene completion ////
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-			Layer.Update();
+			//Layer.Update();
 			
 			// When drawing to the off-screen back buffer is complete, we "present" the image to the front buffer (the screen)
 			// Set first parameter to 1 to lock to vsync (typically 60fps)
@@ -166,6 +166,13 @@ namespace Engine
 			
 		}
 
+		ImGuiIO& io = ImGui::GetIO();
+
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+		}
 	}
 
 	void DirectX11SceneManager::RenderSceneFromCamera()

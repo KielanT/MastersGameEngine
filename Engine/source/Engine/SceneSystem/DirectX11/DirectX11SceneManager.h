@@ -54,7 +54,7 @@ namespace Engine
 
 		int m_SceneIndex; // Memeber variable for the tracking the current scene index
 
-		EditorLayer Layer;
+		//EditorLayer Layer;
 	};
 
 

@@ -2,13 +2,16 @@
 #include "Application.h"
 
 #include <SDL.h>
+#include "Engine/Renderer/Renderer.h"
 
 namespace Engine
 {
 	Application::Application()
 	{
 		WindowProperties props = WindowProperties();
+
 		
+
 		m_Renderer = NewRenderer(props.RendererType);
 		if (m_Renderer == nullptr)
 		{
@@ -28,6 +31,8 @@ namespace Engine
 				LOG_ERROR("Error Initializing Renderer");
 			}
 
+			Renderer::Init(props);
+
 			m_SceneManager = NewSceneManager(m_Renderer); // Creates the scene manager
 			if (m_SceneManager == nullptr)
 			{
@@ -38,6 +43,7 @@ namespace Engine
 	
 	Application::~Application()
 	{
+		Renderer::ShutdownRenderer();
 		m_SceneManager->Release();
 
 		m_Renderer->ShutdownRenderer(); // Shutdown the renderer
