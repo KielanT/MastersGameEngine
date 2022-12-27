@@ -1,6 +1,7 @@
 #include "epch.h"
 #include "DX11Shader.h"
-#include "Renderer.h"
+
+#include "Engine/Renderer/Renderer.h"
 #include "DX11Renderer.h"
 
 namespace Engine
@@ -45,34 +46,34 @@ namespace Engine
 		return true;
 	}
 
-	CComPtr<ID3D11VertexShader> DX11Shader::GetVertexShader(EDX11VertexShader vertexShader)
+	CComPtr<ID3D11VertexShader> DX11Shader::GetVertexShader(EVertexShader vertexShader)
 	{
 		switch (vertexShader)
 		{
-		case EDX11VertexShader::PixelLightingVertexShader:
+		case EVertexShader::PixelLightingVertexShader:
 			return m_PixelLightingVertexShader;
 			break;
-		case EDX11VertexShader::BasicTransformVertexShader:
+		case EVertexShader::BasicTransformVertexShader:
 			return m_BasicTransformVertexShader;
 			break;
-		case EDX11VertexShader::SkinningVertexShader:
+		case EVertexShader::SkinningVertexShader:
 			return m_SkinningVertexShader;
-		case EDX11VertexShader::PBRVertexShader:
+		case EVertexShader::PBRVertexShader:
 			return m_PBRVertexShader;
 			break;
 		}
 	}
 
-	CComPtr<ID3D11PixelShader> DX11Shader::GetPixelShader(EDX11PixelShader pixelShader)
+	CComPtr<ID3D11PixelShader> DX11Shader::GetPixelShader(EPixelShader pixelShader)
 	{
 		switch (pixelShader)
 		{
-		case EDX11PixelShader::PixelLightingPixelShader:
+		case EPixelShader::PixelLightingPixelShader:
 			return m_PixelLightingPixelShader;
 			break;
-		case EDX11PixelShader::LightModelPixelShader:
+		case EPixelShader::LightModelPixelShader:
 			return m_LightModelPixelShader;
-		case EDX11PixelShader::PBRPixelShader:
+		case EPixelShader::PBRPixelShader:
 			return m_PBRPixelShader;
 			break;
 		}

@@ -159,10 +159,8 @@ namespace Engine
                 mesh.Model->SetRotation(transfrom.Rotation);
                 mesh.Model->SetScale(transfrom.Scale);
                 
-                //m_D3DContext->VSSetShader(m_Shader->GetVertexShader(mesh.VertexShader), nullptr, 0);
-                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(EDX11VertexShader::PixelLightingVertexShader), nullptr, 0);
-                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(EDX11PixelShader::PixelLightingPixelShader), nullptr, 0);
-                //dx11Renderer->GetDeviceContext()->PSSetShader(shader->GetPixelShader(mesh.PixelShader), nullptr, 0);
+                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(mesh.VertexShader), nullptr, 0);
+                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(mesh.PixelShader), nullptr, 0);
                 
                 m_D3DContext->PSSetShaderResources(0, 1, &texture.ResourceView.p);
                 m_D3DContext->PSSetShaderResources(1, 1, &texture.RoughView.p);
@@ -170,19 +168,13 @@ namespace Engine
                 m_D3DContext->PSSetShaderResources(3, 1, &texture.HeightView.p);
                 m_D3DContext->PSSetShaderResources(4, 1, &texture.MetalnessView.p);
                 
-                //CComPtr<ID3D11SamplerState> sampler = m_States->GetSamplerState(mesh.SamplerState);
-                CComPtr<ID3D11SamplerState> sampler = m_States->GetSamplerState(EDX11SamplerState::TrilinearSampler);
-                //dx11Renderer->GetDeviceContext()->PSSetSamplers(0, 1, &sampler.p);
+                CComPtr<ID3D11SamplerState> sampler = m_States->GetSamplerState(mesh.SamplerState);
                 m_D3DContext->PSSetSamplers(0, 1, &sampler.p);
                 
-                //dx11Renderer->GetDeviceContext()->OMSetBlendState(state->GetBlendState(mesh.BlendState), nullptr, 0xffffff);
-                //dx11Renderer->GetDeviceContext()->OMSetDepthStencilState(state->GetDepthStencilState(mesh.DepthStencil), 0);
-                //dx11Renderer->GetDeviceContext()->RSSetState(state->GetRasterizerState(mesh.RasterizerState));
-                // 
-                m_D3DContext->OMSetBlendState(m_States->GetBlendState(EDX11BlendState::NoBlendingState), nullptr, 0xffffff);
-                m_D3DContext->OMSetDepthStencilState(m_States->GetDepthStencilState(EDX11DepthStencilState::UseDepthBufferState), 0);
-                m_D3DContext->RSSetState(m_States->GetRasterizerState(EDX11RasterizerState::CullNoneState));
-                
+                m_D3DContext->OMSetBlendState(m_States->GetBlendState(mesh.BlendState), nullptr, 0xffffff);
+                m_D3DContext->OMSetDepthStencilState(m_States->GetDepthStencilState(mesh.DepthStencil), 0);
+                m_D3DContext->RSSetState(m_States->GetRasterizerState(mesh.RasterizerState));
+  
                 entity.GetComponent<MeshRendererComponent>().Model->Render();
             }
         }

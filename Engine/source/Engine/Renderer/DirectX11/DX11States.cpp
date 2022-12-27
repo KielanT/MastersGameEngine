@@ -1,6 +1,6 @@
 #include "epch.h"
 #include "DX11States.h"
-#include "Renderer.h"
+#include "Engine/Renderer/Renderer.h"
 #include "DX11Renderer.h"
 
 namespace Engine
@@ -215,61 +215,67 @@ namespace Engine
 
         return true;
 	}
-    CComPtr<ID3D11SamplerState> DX11States::GetSamplerState(EDX11SamplerState ss)
+    CComPtr<ID3D11SamplerState> DX11States::GetSamplerState(ESamplerState ss)
     {
         switch (ss)
         {
-        case EDX11SamplerState::Anisotropic4xSampler:
+        case ESamplerState::Anisotropic4xSampler:
             return m_Anisotropic4xSampler;
             break;
-        case EDX11SamplerState::PointSampler:
+        case ESamplerState::PointSampler:
             return m_PointSampler;
             break;
-        case EDX11SamplerState::TrilinearSampler:
+        case ESamplerState::TrilinearSampler:
             return m_TrilinearSampler;
             break;
         }
+
+        return m_Anisotropic4xSampler;
     }
-    CComPtr<ID3D11BlendState> DX11States::GetBlendState(EDX11BlendState bs)
+    CComPtr<ID3D11BlendState> DX11States::GetBlendState(EBlendState bs)
     {
         switch (bs)
         {
-        case EDX11BlendState::NoBlendingState:
+        case EBlendState::NoBlendingState:
             return m_NoBlendingState;
             break;
-        case EDX11BlendState::AdditiveBlendingState:
+        case EBlendState::AdditiveBlendingState:
             return m_AdditiveBlendingState;
             break;
         }
+        return m_NoBlendingState;
     }
-    CComPtr<ID3D11RasterizerState> DX11States::GetRasterizerState(EDX11RasterizerState rs)
+    CComPtr<ID3D11RasterizerState> DX11States::GetRasterizerState(ERasterizerState rs)
     {
         switch (rs)
         {
-        case EDX11RasterizerState::CullBackState:
+        case ERasterizerState::CullBackState:
             return m_CullBackState;
             break;
-        case EDX11RasterizerState::CullFrontState:
+        case ERasterizerState::CullFrontState:
             return m_CullFrontState;
             break;
-        case EDX11RasterizerState::CullNoneState:
+        case ERasterizerState::CullNoneState:
             return m_CullNoneState;
             break;
         }
+        return m_CullNoneState;
+
     }
-    CComPtr<ID3D11DepthStencilState> DX11States::GetDepthStencilState(EDX11DepthStencilState dss)
+    CComPtr<ID3D11DepthStencilState> DX11States::GetDepthStencilState(EDepthStencilState dss)
     {
         switch (dss)
         {
-        case EDX11DepthStencilState::UseDepthBufferState:
+        case EDepthStencilState::UseDepthBufferState:
             return m_UseDepthBufferState;
             break;
-        case EDX11DepthStencilState::DepthReadOnlyState:
+        case EDepthStencilState::DepthReadOnlyState:
             return m_DepthReadOnlyState;
             break;
-        case EDX11DepthStencilState::NoDepthBufferState:
+        case EDepthStencilState::NoDepthBufferState:
             return m_NoDepthBufferState;
             break;
         }
+        return m_UseDepthBufferState;
     }
 }

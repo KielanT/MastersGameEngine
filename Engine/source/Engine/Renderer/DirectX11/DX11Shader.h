@@ -1,34 +1,18 @@
 #pragma once
 
+#include "Engine/SceneSystem/Scenes/Components.h"
+
 namespace Engine
 {
-	enum class EDX11VertexShader
-	{
-		PixelLightingVertexShader = 0,
-		BasicTransformVertexShader,
-		SkinningVertexShader,
-		PBRVertexShader,
-
-		EVertexShaderSize
-	};
-
-	enum class EDX11PixelShader
-	{
-		PixelLightingPixelShader = 0,
-		LightModelPixelShader,
-		PBRPixelShader,
-
-		EPixelShaderSize
-	};
 
 	class DX11Shader
 	{
 	public:
 		bool InitShaders();
 
-		CComPtr<ID3D11VertexShader> GetVertexShader(EDX11VertexShader vertexShader);
+		CComPtr<ID3D11VertexShader> GetVertexShader(EVertexShader vertexShader);
 
-		CComPtr<ID3D11PixelShader> GetPixelShader(EDX11PixelShader pixelShader);
+		CComPtr<ID3D11PixelShader> GetPixelShader(EPixelShader pixelShader);
 
 	private:
 		CComPtr<ID3D11VertexShader> LoadVertexShader(std::string shaderName); // Loads the vertex shader

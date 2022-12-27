@@ -1,55 +1,19 @@
 #pragma once
 
+#include "Engine/SceneSystem/Scenes/Components.h"
 namespace Engine
 {
 
-	enum class EDX11SamplerState
-	{
-		Anisotropic4xSampler = 0,
-		TrilinearSampler,
-		PointSampler,
-
-		ESamplerStateSize
-	};
-
-	// Enum class for setting the Blend states
-	enum class EDX11BlendState
-	{
-		NoBlendingState = 0,
-		AdditiveBlendingState,
-
-		EBlendStateSize
-	};
-
-	// Enum class for setting the Rasterizer states
-	enum class EDX11RasterizerState
-	{
-		CullBackState = 0,
-		CullFrontState,
-		CullNoneState,
-
-		ERasterizerStateSize
-	};
-
-	// Enum class for setting the Depth Stencil states
-	enum class EDX11DepthStencilState
-	{
-		UseDepthBufferState = 0,
-		DepthReadOnlyState,
-		NoDepthBufferState,
-
-		EDepthStencilStateSize
-	};
-
+	
 	class DX11States
 	{
 	public:
 		bool InitStates();
 
-		CComPtr<ID3D11SamplerState> GetSamplerState(EDX11SamplerState ss); // Returns the Sampler state 
-		CComPtr<ID3D11BlendState> GetBlendState(EDX11BlendState bs); // Returns the Blend state 
-		CComPtr<ID3D11RasterizerState> GetRasterizerState(EDX11RasterizerState rs); // Returns the Rasterizer state 
-		CComPtr<ID3D11DepthStencilState> GetDepthStencilState(EDX11DepthStencilState dss); // Returns the Depth Stencil state 
+		CComPtr<ID3D11SamplerState> GetSamplerState(ESamplerState ss); // Returns the Sampler state 
+		CComPtr<ID3D11BlendState> GetBlendState(EBlendState bs); // Returns the Blend state 
+		CComPtr<ID3D11RasterizerState> GetRasterizerState(ERasterizerState rs); // Returns the Rasterizer state 
+		CComPtr<ID3D11DepthStencilState> GetDepthStencilState(EDepthStencilState dss); // Returns the Depth Stencil state 
 
 	private:
 		// Member variables

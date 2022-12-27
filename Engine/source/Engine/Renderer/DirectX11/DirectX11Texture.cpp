@@ -1,7 +1,7 @@
 #include "epch.h"
 #include "DirectX11Texture.h"
 #include "Engine/Renderer/Renderer.h"
-#include "Engine/Renderer/DX11Renderer.h"
+#include "Engine/Renderer/DirectX11/DX11Renderer.h"
 
 
 namespace Engine
