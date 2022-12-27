@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Engine/Lab/Camera.h"
-#include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
-
 
 #include "entt/entt.hpp"
 
@@ -21,7 +19,6 @@ namespace Engine
 	class Scene : public std::enable_shared_from_this<Scene>
 	{
 	public:
-		Scene(std::shared_ptr<IRenderer> renderer);
 		Scene() {};
 		~Scene();
 

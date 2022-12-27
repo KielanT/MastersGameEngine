@@ -4,12 +4,67 @@
 
 #include <glm/glm.hpp>
 
-#include "Engine/Renderer/DirectX11/DirectX11Shader.h"
-#include "Engine/Renderer/DirectX11/DirectX11States.h"
 #include "Engine/Lab/Model.h"
 
 namespace Engine
 {
+	enum class EVertexShader
+	{
+		PixelLightingVertexShader = 0,
+		BasicTransformVertexShader,
+		SkinningVertexShader,
+		PBRVertexShader,
+
+		EVertexShaderSize
+	};
+
+	enum class EPixelShader
+	{
+		PixelLightingPixelShader = 0,
+		LightModelPixelShader,
+		PBRPixelShader,
+
+		EPixelShaderSize
+	};
+
+	enum class ESamplerState
+	{
+		Anisotropic4xSampler = 0,
+		TrilinearSampler,
+		PointSampler,
+
+		ESamplerStateSize
+	};
+
+	// Enum class for setting the Blend states
+	enum class EBlendState
+	{
+		NoBlendingState = 0,
+		AdditiveBlendingState,
+
+		EBlendStateSize
+	};
+
+	// Enum class for setting the Rasterizer states
+	enum class ERasterizerState
+	{
+		CullBackState = 0,
+		CullFrontState,
+		CullNoneState,
+
+		ERasterizerStateSize
+	};
+
+	// Enum class for setting the Depth Stencil states
+	enum class EDepthStencilState
+	{
+		UseDepthBufferState = 0,
+		DepthReadOnlyState,
+		NoDepthBufferState,
+
+		EDepthStencilStateSize
+	};
+
 	struct IDComponent
 	{
 		UUID ID;

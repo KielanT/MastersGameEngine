@@ -7,10 +7,6 @@
 #pragma once
 #include <assimp/scene.h>
 
-#include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
-
-
-
 namespace Engine
 {
     class  Mesh

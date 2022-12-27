@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Utility/ProjectDefines.h"
-#include "Engine/Interfaces/ISceneManager.h"
+#include <memory>
 
 namespace Engine
 {
@@ -10,7 +10,6 @@ namespace Engine
 	public:
 		virtual ~IWindow() = default;
 
-		//virtual void Update(std::shared_ptr<ISceneManager> m_SceneManager) = 0;
 		virtual void Update() = 0;
 		virtual void Shutdown() = 0;
 		

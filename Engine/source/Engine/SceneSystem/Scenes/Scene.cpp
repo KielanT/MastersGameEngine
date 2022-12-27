@@ -5,9 +5,6 @@
 
 namespace Engine
 {
-	Scene::Scene(std::shared_ptr<IRenderer> renderer)
-	{
-	}
 
 	Scene::~Scene()
 	{

@@ -6,8 +6,6 @@
 #pragma once
 
 
-#include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
-
 //--------------------------------------------------------------------------------------
 // Constant buffers
 //--------------------------------------------------------------------------------------
@@ -23,17 +21,6 @@ void UpdateConstantBuffer(CComPtr<ID3D11DeviceContext> deviceContext, CComPtr<ID
     memcpy(cb.pData, &bufferData, sizeof(T));
     deviceContext->Unmap(buffer, 0);
 }
-
-
-//--------------------------------------------------------------------------------------
-// Texture Loading
-//--------------------------------------------------------------------------------------
-
-// Using Microsoft's open source DirectX Tool Kit (DirectXTK) to simplify file loading
-// This function requires you to pass a ID3D11Resource* (e.g. &gTilesDiffuseMap), which manages the GPU memory for the
-// texture and also a ID3D11ShaderResourceView* (e.g. &gTilesDiffuseMapSRV), which allows us to use the texture in shaders
-// The function will fill in these pointers with usable data. Returns false on failure
-bool LoadTexture(std::shared_ptr<Engine::DirectX11Renderer> renderer, std::string filename, ID3D11Resource** texture, ID3D11ShaderResourceView** textureSRV);
 
 
 //--------------------------------------------------------------------------------------

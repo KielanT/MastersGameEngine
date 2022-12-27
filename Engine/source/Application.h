@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Engine/Interfaces/IWindow.h"
-#include "Engine/Interfaces/IRenderer.h"
-#include "Engine/Interfaces/ISceneManager.h"
+
 
 
 #include <memory>
@@ -27,9 +26,6 @@ namespace Engine
 		
 	private:
 		std::shared_ptr<IWindow> m_Window;
-		std::shared_ptr<IRenderer> m_Renderer;
-
-		std::shared_ptr<ISceneManager> m_SceneManager;
 
 	};
 

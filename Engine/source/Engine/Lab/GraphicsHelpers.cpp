@@ -5,28 +5,6 @@
 #include "GraphicsHelpers.h"
 
 
-//--------------------------------------------------------------------------------------
-// Texture Loading
-//--------------------------------------------------------------------------------------
-
-// Using Microsoft's open source DirectX Tool Kit (DirectXTK) to simplify texture loading
-// This function requires you to pass a ID3D11Resource* (e.g. &gTilesDiffuseMap), which manages the GPU memory for the
-// texture and also a ID3D11ShaderResourceView* (e.g. &gTilesDiffuseMapSRV), which allows us to use the texture in shaders
-// The function will fill in these pointers with usable data. Returns false on failure
-bool LoadTexture(std::shared_ptr<Engine::DirectX11Renderer> renderer, std::string filename, ID3D11Resource** texture, ID3D11ShaderResourceView** textureSRV)
-{
-    // DDS files need a different function from other files
-    std::string dds = ".dds"; // So check the filename extension (case insensitive)
-    if (filename.size() >= 4 &&
-        std::equal(dds.rbegin(), dds.rend(), filename.rbegin(), [](unsigned char a, unsigned char b) { return std::tolower(a) == std::tolower(b); }))
-    {
-        return SUCCEEDED(DirectX::CreateDDSTextureFromFile(renderer->GetDevice(), CA2CT(filename.c_str()), texture, textureSRV));
-    }
-    else
-    {
-        return SUCCEEDED(DirectX::CreateWICTextureFromFile(renderer->GetDevice(), renderer->GetDeviceContext(), CA2CT(filename.c_str()), texture, textureSRV));
-    }
-}
 
 
 //--------------------------------------------------------------------------------------
