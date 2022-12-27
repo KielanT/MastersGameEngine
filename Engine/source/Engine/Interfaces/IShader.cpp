@@ -8,7 +8,7 @@ namespace Engine
 	{
 		if (renderertype == ERendererType::DirectX11) // Returns the DirectX 11 shaders
 		{
-			return std::make_shared<DirectX11Shader>();
+			return nullptr;// std::make_shared<DirectX11Shader>();
 		}
 		else
 		{

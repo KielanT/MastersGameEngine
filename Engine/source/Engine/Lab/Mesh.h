@@ -23,7 +23,7 @@ namespace Engine
         // Pass the name of the mesh file to load. Uses assimp (http://www.assimp.org/) to support many file types
         // Optionally request tangents to be calculated (for normal and parallax mapping - see later lab)
         // Will throw a std::runtime_error exception on failure (since constructors can't return errors).
-        Mesh(std::shared_ptr<DirectX11Renderer> renderer, const std::string& fileName, bool requireTangents = true);
+        Mesh(const std::string& fileName, bool requireTangents = true);
         ~Mesh();
 
 
@@ -107,8 +107,6 @@ namespace Engine
         std::vector<Node>    mNodes;     // The mesh hierarchy. First entry is root. remainder aree stored in depth-first order
 
         bool mHasBones; // If any submesh has bones, then all submeshes are given bones - makes rendering easier (one shader for the whole mesh)
-
-        std::shared_ptr<DirectX11Renderer> m_Renderer;
     };
 
 

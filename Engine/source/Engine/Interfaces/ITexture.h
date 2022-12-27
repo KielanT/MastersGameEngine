@@ -18,6 +18,6 @@ namespace Engine
 	class Texture2D : public Texture
 	{
 	public:
-		static std::shared_ptr<Texture2D> Create(const std::string& path, std::shared_ptr<IRenderer> renderer = nullptr);
+		static std::shared_ptr<Texture2D> Create(const std::string& path);
 	};
 }

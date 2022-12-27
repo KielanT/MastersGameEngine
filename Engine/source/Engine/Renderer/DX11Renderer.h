@@ -1,5 +1,9 @@
 #pragma once
 #include "RendererAPI.h"
+#include "Engine/UI/EditorLayer.h"
+
+#include "DX11Shader.h"
+#include "DX11States.h"
 
 namespace Engine
 {
@@ -47,18 +51,43 @@ namespace Engine
 	public:
 		virtual bool Init(WindowProperties& props) override;
 
-		virtual void RenderLoop(std::shared_ptr<Scene> scene) override;
+		virtual void SetScene(std::shared_ptr<Scene> scene) override { m_Scene = scene; Layer.SetScene(m_Scene); }
+
+		virtual void RenderLoop() override;
+		virtual void Renderer(Entity entity) override;
+
+		virtual void Present() override;
+
+		virtual void GUINewFrame() override;
+		virtual void GUIRenderDrawData() override;
+
+		virtual WindowProperties GetWindowProperties() override { return m_Props; }
 
 		virtual void ShutdownRenderer() override;
 
+		virtual void InitGUI() override;
+
 		void InitiliseSceneTexture(WindowProperties& props);
 
+		bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, eint32* out_width, eint32* out_height);
+		bool LoadTexture(std::string filename, ID3D11Resource** texture, ID3D11ShaderResourceView** textureSRV);
+
+		CComPtr<ID3D11Device> GetDevice() { return m_D3DDevice; }
+		CComPtr<ID3D11DeviceContext> GetDeviceContext() { return m_D3DContext; }
+
+		PerFrameConstants PerFrameConstants; // Used for setting per frame constant variables and sending them to the GPU
+		CComPtr<ID3D11Buffer> PerFrameConstantBuffer;
+
+		PerModelConstants PerModelConstants;  // Used for setting per model constant variables and sending them to the GPU
+		CComPtr<ID3D11Buffer> PerModelConstantBuffer;
+
 	private:
+
 		CComPtr<ID3D11Buffer> CreateConstantBuffer(int size);
 
 		// Find better names for the functions below
-		void RenderScene(std::shared_ptr<Scene> scene);
-		void RenderSceneFromCamera(std::shared_ptr<Scene> scene);
+		void RenderScene();
+		void RenderSceneFromCamera();
 
 	private:
 		CComPtr<ID3D11Device> m_D3DDevice = nullptr; // D3D device for overall features
@@ -76,12 +105,13 @@ namespace Engine
 		CComPtr<ID3D11RenderTargetView> m_SceneRenderTarget = nullptr;
 		CComPtr<ID3D11ShaderResourceView> m_SceneTextureSRV = nullptr;
 
+		std::shared_ptr<DX11Shader> m_Shader;
+		std::shared_ptr<DX11States> m_States;
 
-		PerFrameConstants PerFrameConstants; // Used for setting per frame constant variables and sending them to the GPU
-		CComPtr<ID3D11Buffer> PerFrameConstantBuffer;
+		std::shared_ptr<Scene> m_Scene = nullptr;
+		EditorLayer Layer;
 
-		PerModelConstants PerModelConstants;  // Used for setting per model constant variables and sending them to the GPU
-		CComPtr<ID3D11Buffer> PerModelConstantBuffer;
+		WindowProperties m_Props;
 	};
 }
 

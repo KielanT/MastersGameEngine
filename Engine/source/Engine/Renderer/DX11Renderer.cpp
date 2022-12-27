@@ -3,8 +3,11 @@
 #include "Engine/Lab/GraphicsHelpers.h"
 
 #include "imgui.h"
+#include "backends/imgui_impl_SDL.h"
 #include "backends/imgui_impl_dx11.h"
-#include "backends/imgui_impl_sdl.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 namespace Engine
 {
@@ -112,23 +115,112 @@ namespace Engine
         m_D3DContext->RSSetViewports(1, &vp);
 
         InitiliseSceneTexture(props);
+        Layer.SetSceneTexture(m_SceneTextureSRV);
+
+        InitGUI();
+        
+        m_Props = props;
+
+        m_Shader = std::make_shared<DX11Shader>();
+        if (!m_Shader->InitShaders())
+        {
+            LOG_ERROR("Failed to inilisied shaders");
+            return false;
+        }
+
+        m_States = std::make_shared<DX11States>();
+        if (!m_States->InitStates())
+        {
+            LOG_ERROR("Failed to inilisied states");
+            return false;
+        }
 
         return true;
 	}
 
-    void DX11Renderer::RenderLoop(std::shared_ptr<Scene> scene)
+    void DX11Renderer::RenderLoop()
     {
-        RenderScene(scene);
-        RenderSceneFromCamera(scene);
+        RenderScene();
+        RenderSceneFromCamera();
+        Layer.RenderGUI();
     }
 
-	void DX11Renderer::ShutdownRenderer()
+    void DX11Renderer::Renderer(Entity entity)
+    {
+        if (entity.HasComponent<MeshRendererComponent>() && entity.HasComponent<TextureComponent>())
+        {
+            auto transfrom = entity.GetComponent<TransformComponent>();
+            auto mesh = entity.GetComponent<MeshRendererComponent>();
+            auto texture = entity.GetComponent<TextureComponent>();
+
+            if (mesh.Model != nullptr)
+            {
+                mesh.Model->SetPosition(transfrom.Position);
+                mesh.Model->SetRotation(transfrom.Rotation);
+                mesh.Model->SetScale(transfrom.Scale);
+                
+                //m_D3DContext->VSSetShader(m_Shader->GetVertexShader(mesh.VertexShader), nullptr, 0);
+                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(EDX11VertexShader::PixelLightingVertexShader), nullptr, 0);
+                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(EDX11PixelShader::PixelLightingPixelShader), nullptr, 0);
+                //dx11Renderer->GetDeviceContext()->PSSetShader(shader->GetPixelShader(mesh.PixelShader), nullptr, 0);
+                
+                m_D3DContext->PSSetShaderResources(0, 1, &texture.ResourceView.p);
+                m_D3DContext->PSSetShaderResources(1, 1, &texture.RoughView.p);
+                m_D3DContext->PSSetShaderResources(2, 1, &texture.NormalView.p);
+                m_D3DContext->PSSetShaderResources(3, 1, &texture.HeightView.p);
+                m_D3DContext->PSSetShaderResources(4, 1, &texture.MetalnessView.p);
+                
+                //CComPtr<ID3D11SamplerState> sampler = m_States->GetSamplerState(mesh.SamplerState);
+                CComPtr<ID3D11SamplerState> sampler = m_States->GetSamplerState(EDX11SamplerState::TrilinearSampler);
+                //dx11Renderer->GetDeviceContext()->PSSetSamplers(0, 1, &sampler.p);
+                m_D3DContext->PSSetSamplers(0, 1, &sampler.p);
+                
+                //dx11Renderer->GetDeviceContext()->OMSetBlendState(state->GetBlendState(mesh.BlendState), nullptr, 0xffffff);
+                //dx11Renderer->GetDeviceContext()->OMSetDepthStencilState(state->GetDepthStencilState(mesh.DepthStencil), 0);
+                //dx11Renderer->GetDeviceContext()->RSSetState(state->GetRasterizerState(mesh.RasterizerState));
+                // 
+                m_D3DContext->OMSetBlendState(m_States->GetBlendState(EDX11BlendState::NoBlendingState), nullptr, 0xffffff);
+                m_D3DContext->OMSetDepthStencilState(m_States->GetDepthStencilState(EDX11DepthStencilState::UseDepthBufferState), 0);
+                m_D3DContext->RSSetState(m_States->GetRasterizerState(EDX11RasterizerState::CullNoneState));
+                
+                entity.GetComponent<MeshRendererComponent>().Model->Render();
+            }
+        }
+    }
+
+    void DX11Renderer::Present()
+    {
+        m_SwapChain->Present(m_Scene->GetSceneSettings().vsyncOn ? 1 : 0, 0);
+    }
+
+    void DX11Renderer::GUINewFrame()
+    {
+        if (ImGui::GetCurrentContext() != nullptr)
+            ImGui_ImplDX11_NewFrame();
+    }
+
+    void DX11Renderer::GUIRenderDrawData()
+    {
+        if (ImGui::GetCurrentContext() != nullptr)
+            ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    }
+
+    void DX11Renderer::ShutdownRenderer()
 	{
         if (m_D3DContext)
         {
             m_D3DContext->ClearState();
         }
+
+        if (ImGui::GetCurrentContext() != nullptr)
+            ImGui_ImplDX11_Shutdown();
 	}
+
+    void DX11Renderer::InitGUI()
+    {
+        if (ImGui::GetCurrentContext() != nullptr)
+            ImGui_ImplDX11_Init(m_D3DDevice, m_D3DContext);
+    }
 
     void DX11Renderer::InitiliseSceneTexture(WindowProperties& props)
     {
@@ -169,6 +261,69 @@ namespace Engine
         }
     }
 
+    bool DX11Renderer::LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, eint32* out_width, eint32* out_height)
+    {
+        // Code From https://github.com/ocornut/imgui/wiki/Image-Loading-and-Displaying-Examples
+        int image_width = 0;
+        int image_height = 0;
+        unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+        if (image_data == NULL)
+        {
+            return false;
+            LOG_ERROR("Image Data is Null");
+        }
+        // Create texture
+        D3D11_TEXTURE2D_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.Width = image_width;
+        desc.Height = image_height;
+        desc.MipLevels = 1;
+        desc.ArraySize = 1;
+        desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        desc.SampleDesc.Count = 1;
+        desc.Usage = D3D11_USAGE_DEFAULT;
+        desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+        desc.CPUAccessFlags = 0;
+
+        ID3D11Texture2D* pTexture = NULL;
+        D3D11_SUBRESOURCE_DATA subResource;
+        subResource.pSysMem = image_data;
+        subResource.SysMemPitch = desc.Width * 4;
+        subResource.SysMemSlicePitch = 0;
+        m_D3DDevice->CreateTexture2D(&desc, &subResource, &pTexture);
+
+        // Create texture view
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+        ZeroMemory(&srvDesc, sizeof(srvDesc));
+        srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MipLevels = desc.MipLevels;
+        srvDesc.Texture2D.MostDetailedMip = 0;
+        m_D3DDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
+        pTexture->Release();
+
+
+        *out_width = image_width;
+        *out_height = image_height;
+        stbi_image_free(image_data);
+
+        return true;
+    }
+
+    bool DX11Renderer::LoadTexture(std::string filename, ID3D11Resource** texture, ID3D11ShaderResourceView** textureSRV)
+    {
+        std::string dds = ".dds"; // So check the filename extension (case insensitive)
+        if (filename.size() >= 4 &&
+            std::equal(dds.rbegin(), dds.rend(), filename.rbegin(), [](unsigned char a, unsigned char b) { return std::tolower(a) == std::tolower(b); }))
+        {
+            return SUCCEEDED(DirectX::CreateDDSTextureFromFile(m_D3DDevice, CA2CT(filename.c_str()), texture, textureSRV));
+        }
+        else
+        {
+            return SUCCEEDED(DirectX::CreateWICTextureFromFile(m_D3DDevice, m_D3DContext, CA2CT(filename.c_str()), texture, textureSRV));
+        }
+    }
+
     CComPtr<ID3D11Buffer> DX11Renderer::CreateConstantBuffer(int size)
     {
         D3D11_BUFFER_DESC cbDesc;
@@ -188,64 +343,44 @@ namespace Engine
         return constantBuffer;
     }
 
-    void DX11Renderer::RenderScene(std::shared_ptr<Scene> scene)
+    void DX11Renderer::RenderScene()
     {
-        ImGui_ImplDX11_NewFrame();
-        //ImGui_ImplWin32_NewFrame();
-        ImGui_ImplSDL2_NewFrame();
-        ImGui::NewFrame();
-        
-        PerFrameConstants.ambientColour = scene->GetSceneSettings().ambientColour;
-        PerFrameConstants.specularPower = scene->GetSceneSettings().specularPower;
-        PerFrameConstants.cameraPosition = scene->GetCamera()->Position();
+        PerFrameConstants.ambientColour = m_Scene->GetSceneSettings().ambientColour;
+        PerFrameConstants.specularPower = m_Scene->GetSceneSettings().specularPower;
+        PerFrameConstants.cameraPosition = m_Scene->GetCamera()->Position();
         
         m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, m_DepthStencil);
         
         m_D3DContext->OMSetRenderTargets(1, &m_SceneRenderTarget.p, m_DepthStencil);
         
-        
         // Clear the back buffer to a fixed colour and the depth buffer to the far distance
         //glm::vec4 backgroundColour = m_Scenes[m_SceneIndex]->GetBackgroundColour();
-        glm::vec4 backgroundColour = scene->GetSceneSettings().backgroundColour;
+        glm::vec4 backgroundColour = m_Scene->GetSceneSettings().backgroundColour;
         m_D3DContext->ClearRenderTargetView(m_BackBufferRenderTarget, &backgroundColour.r);
         m_D3DContext->ClearRenderTargetView(m_SceneRenderTarget, &backgroundColour.r);
         m_D3DContext->ClearDepthStencilView(m_DepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
         
-        
         // Render the scene from the main camera
-        RenderSceneFromCamera(scene);
-        
+        RenderSceneFromCamera();
+       
         //Layer.RenderGUI();
+   
         
-        ImGui::Render();
+ 
         m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, nullptr);
         
-        //// Scene completion ////
-        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+       
+       
         
         //Layer.Update();
-        
-        // When drawing to the off-screen back buffer is complete, we "present" the image to the front buffer (the screen)
-        // Set first parameter to 1 to lock to vsync (typically 60fps)
-        //d11Renderer->GetSwapChain()->Present(m_Scenes[m_SceneIndex]->GetVSync() ? 1 : 0, 0);
-        m_SwapChain->Present(scene->GetSceneSettings().vsyncOn ? 1 : 0, 0);
 
-        
-
-        ImGuiIO& io = ImGui::GetIO();
-
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-        }
     }
 
-    void DX11Renderer::RenderSceneFromCamera(std::shared_ptr<Scene> scene)
+    void DX11Renderer::RenderSceneFromCamera()
     {
-        PerFrameConstants.viewMatrix = scene->GetCamera()->ViewMatrix();
-        PerFrameConstants.EngineionMatrix = scene->GetCamera()->EngineionMatrix();
-        PerFrameConstants.viewEngineionMatrix = scene->GetCamera()->ViewEngineionMatrix();
+        PerFrameConstants.viewMatrix = m_Scene->GetCamera()->ViewMatrix();
+        PerFrameConstants.EngineionMatrix = m_Scene->GetCamera()->EngineionMatrix();
+        PerFrameConstants.viewEngineionMatrix = m_Scene->GetCamera()->ViewEngineionMatrix();
 
         UpdateConstantBuffer(m_D3DContext, PerFrameConstantBuffer, PerFrameConstants);
 
@@ -253,7 +388,7 @@ namespace Engine
         m_D3DContext->VSSetConstantBuffers(0, 1, &PerFrameConstantBuffer.p); // First parameter must match constant buffer number in the shader 
         m_D3DContext->PSSetConstantBuffers(0, 1, &PerFrameConstantBuffer.p);
 
-        
+        m_Scene->RenderScene();
     }
 
 }

@@ -1,10 +1,8 @@
 #pragma once
 
-
 namespace Engine
 {
-	// Enum class for selecting the vertex shader
-	enum class EVertexShader
+	enum class EDX11VertexShader
 	{
 		PixelLightingVertexShader = 0,
 		BasicTransformVertexShader,
@@ -14,8 +12,7 @@ namespace Engine
 		EVertexShaderSize
 	};
 
-	// Enum class for selecting the pixel shader
-	enum class EPixelShader
+	enum class EDX11PixelShader
 	{
 		PixelLightingPixelShader = 0,
 		LightModelPixelShader,
@@ -24,30 +21,20 @@ namespace Engine
 		EPixelShaderSize
 	};
 
-	class  DirectX11Shader
+	class DX11Shader
 	{
 	public:
-		~DirectX11Shader();
-
-		// Initialize the shaders 
 		bool InitShaders();
 
-		// Release the shaders
-		void ReleaseShaders();
+		CComPtr<ID3D11VertexShader> GetVertexShader(EDX11VertexShader vertexShader);
 
-		// Returns the selected vertex shader
-		CComPtr<ID3D11VertexShader> GetVertexShader(EVertexShader vertexShader);
-
-		// Returns the selected pixel shader
-		CComPtr<ID3D11PixelShader> GetPixelShader(EPixelShader pixelShader);
+		CComPtr<ID3D11PixelShader> GetPixelShader(EDX11PixelShader pixelShader);
 
 	private:
-
 		CComPtr<ID3D11VertexShader> LoadVertexShader(std::string shaderName); // Loads the vertex shader
 		CComPtr<ID3D11PixelShader> LoadPixelShader(std::string shaderName); // Loads the pixel shader
 
 	private:
-
 		// Vertex shader member variables
 		CComPtr<ID3D11VertexShader> m_PixelLightingVertexShader;
 		CComPtr<ID3D11VertexShader> m_BasicTransformVertexShader;

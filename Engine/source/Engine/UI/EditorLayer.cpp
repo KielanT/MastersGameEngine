@@ -6,25 +6,15 @@
 #include "imgui_impl_dx11.h"
 
 #include "Engine/UI/EditorLayer.h"
-#include "Engine/SceneSystem/Scenes/TestScene.h"
 #include "Engine/Lab/GraphicsHelpers.h"
 #include "Engine/Platform/SDLWinUtils.h"
+
+#include "Engine/Renderer/Renderer.h"
+#include "Engine/Renderer/DX11Renderer.h"
 
 
 namespace Engine
 {
-
-	void EditorLayer::Update()
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-		}
-	}
-	
 	void EditorLayer::RenderGUI()
 	{
 		DockSpace();
@@ -77,18 +67,18 @@ namespace Engine
 		{
 			//std::shared_ptr<TestScene> scene = std::static_pointer_cast<TestScene>(m_Scene);
 			if (ImGui::MenuItem("Create Empty Entity"))
-				m_SelectedEntity = m_TScene->CreateEntity("Empty Entity");
+				m_SelectedEntity = m_Scene->CreateEntity("Empty Entity");
 			if (ImGui::MenuItem("Create Mesh Entity"))
-				m_SelectedEntity = m_TScene->CreateMeshEntity("Mesh Entity");
+				m_SelectedEntity = m_Scene->CreateMeshEntity("Mesh Entity");
 
 			ImGui::EndPopup();
 		}
 
-		if (m_TScene != nullptr)
+		if (m_Scene != nullptr)
 		{
-			m_TScene->GetEntityRegistry().each([&](auto entityID)
+			m_Scene->GetEntityRegistry().each([&](auto entityID)
 				{
-					Entity entity{ entityID, m_TScene };
+					Entity entity{ entityID, m_Scene };
 					EntityNode(entity);
 				});
 
@@ -104,7 +94,7 @@ namespace Engine
 	{
 		ImGui::Begin("Details");
 
-		if (m_TScene != nullptr)
+		if (m_Scene != nullptr)
 		{
 			if (m_SelectedEntity)
 			{
@@ -158,8 +148,8 @@ namespace Engine
 		static bool test = true;
 		if (test)
 		{
-			m_FileIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-file-150.png", m_TScene->GetRenderer());
-			m_FolderIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-folder-150.png", m_TScene->GetRenderer());
+			m_FileIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-file-150.png");
+			m_FolderIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-folder-150.png");
 			test = false;
 		}
 
@@ -225,7 +215,7 @@ namespace Engine
 		{
 			if (ImGui::MenuItem("Delete Entity"))
 			{
-				m_TScene->DeleteEntity(entity);
+				m_Scene->DeleteEntity(entity);
 				m_SelectedEntity = {}; // Clears Selected entity
 			}
 			ImGui::EndPopup();
@@ -335,6 +325,8 @@ namespace Engine
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 		if (ImGui::TreeNodeEx("Mesh Renderer", flags))
 		{
+			std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
+
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strncpy_s(buffer, comp.Path.c_str(), sizeof(buffer));
@@ -351,8 +343,7 @@ namespace Engine
 					std::string last = comp.Path;
 					comp.Path = texturePath.generic_string();
 
-					std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_TScene->GetRenderer());
-					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(renderer, comp.Path);
+					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
 					comp.Model = std::make_shared<Model>(mesh);
 				
 				}
@@ -364,15 +355,15 @@ namespace Engine
 			if (ImGui::Button("Add##Model"))
 			{
 				const char* filter = "Select Type\0*.*\0PNG\0*.PNG\0JPG\0*.JPG\0JPEG\0*.JPEG\0DDS\0*.DDS\0";
-				std::string file = OpenFile(m_TScene->GetRenderer()->GetWindowProperties().Hwnd, filter);
+				std::string file = OpenFile(Renderer::GetWindowProperties().Hwnd, filter);
 
 				if (!file.empty())
 				{
 					std::string last = comp.Path;
 					comp.Path = file;
 
-					std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_TScene->GetRenderer());
-					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(renderer, comp.Path);
+					
+					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
 					comp.Model = std::make_shared<Model>(mesh);
 				}
 			}
@@ -503,8 +494,10 @@ namespace Engine
 
 	void EditorLayer::TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView)
 	{
+		std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
+
 		std::string label = Label;
-	
+		
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
 		strncpy_s(buffer, path.c_str(), sizeof(buffer));
@@ -526,8 +519,7 @@ namespace Engine
 				CComPtr<ID3D11Resource> Resource;
 				CComPtr<ID3D11ShaderResourceView> ResourceView;
 
-				std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_TScene->GetRenderer());
-				if (LoadTexture(renderer, path, &Resource, &ResourceView))
+				if (dx11Render->LoadTexture(path, &Resource, &ResourceView))
 				{
 					resourseView = ResourceView;
 				}
@@ -546,7 +538,7 @@ namespace Engine
 		if (ImGui::Button(btnLabel.c_str()))
 		{
 			const char* filter = "Select Type\0*.*\0PNG\0*.PNG\0JPG\0*.JPG\0JPEG\0*.JPEG\0DDS\0*.DDS\0";
-			std::string file = OpenFile(m_TScene->GetRenderer()->GetWindowProperties().Hwnd, filter);
+			std::string file = OpenFile(dx11Render->GetWindowProperties().Hwnd, filter);
 
 			if (!file.empty())
 			{
@@ -555,8 +547,7 @@ namespace Engine
 				CComPtr<ID3D11Resource> Resource;
 				CComPtr<ID3D11ShaderResourceView> ResourceView;
 
-				std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_TScene->GetRenderer());
-				if (LoadTexture(renderer, path, &Resource, &ResourceView))
+				if (dx11Render->LoadTexture(path, &Resource, &ResourceView))
 				{
 					resourseView = ResourceView;
 				}

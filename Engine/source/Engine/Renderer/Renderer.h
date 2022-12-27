@@ -9,10 +9,17 @@ namespace Engine
 	public:
 		static void Init(WindowProperties& props);
 
-		static void RenderLoop(std::shared_ptr<Scene> scene);
+		static void SetScene(std::shared_ptr<Scene> scene);
+
+		static void RenderLoop();
+
+		static void RendererEntity(Entity entity);
+
+		static WindowProperties GetWindowProperties();
 
 		static void ShutdownRenderer();
 
+		static std::shared_ptr<RendererAPI> GetRendererAPI();
 		
 	};
 }

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "IRenderer.h"
-
 
 namespace Engine
 {
@@ -12,7 +10,7 @@ namespace Engine
 		virtual ~IShader(){}
 
 		// Initialize the shaders 
-		virtual bool InitShaders(std::shared_ptr<IRenderer> renderer) = 0;
+		virtual bool InitShaders() = 0;
 
 		// Release the shaders
 		virtual void ReleaseShaders() = 0;

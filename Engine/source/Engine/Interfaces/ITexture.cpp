@@ -5,8 +5,8 @@
 
 namespace Engine
 {
-	std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path, std::shared_ptr<IRenderer> renderer)
+	std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path)
 	{
-		return std::make_shared<DirectX11Texture>(path, renderer);
+		return std::make_shared<DirectX11Texture>(path);
 	}
 }

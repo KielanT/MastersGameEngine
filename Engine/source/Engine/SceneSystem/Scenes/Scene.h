@@ -2,8 +2,7 @@
 
 #include "Engine/Lab/Camera.h"
 #include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
-#include "Engine/Interfaces/IShader.h"
-#include "Engine/Interfaces/IState.h"
+
 
 #include "entt/entt.hpp"
 
@@ -23,6 +22,7 @@ namespace Engine
 	{
 	public:
 		Scene(std::shared_ptr<IRenderer> renderer);
+		Scene() {};
 		~Scene();
 
 		void InitScene();
@@ -43,15 +43,6 @@ namespace Engine
 		std::shared_ptr<Camera> m_MainCamera = nullptr;
 		entt::registry m_Registry;
 
-	public: // TODO: Remove all renderer specific code
-		std::shared_ptr<IRenderer> GetRenderer() { return m_Renderer; }
-
-	private: // TODO: Remove all renderer specific code
-		void Renderer(Entity entity);
-		std::shared_ptr<IRenderer> m_Renderer;
-
-		std::shared_ptr<IShader> m_Shader;
-		std::shared_ptr<IState> m_State;
 	};
 
 }

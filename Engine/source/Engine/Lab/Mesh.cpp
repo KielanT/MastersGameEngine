@@ -13,6 +13,9 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
+#include "Engine/Renderer/Renderer.h"
+#include "Engine/Renderer/DX11Renderer.h"
+
 
 
 
@@ -21,9 +24,8 @@ namespace Engine
     // Pass the name of the mesh file to load. Uses assimp (http://www.assimp.org/) to support many file types
     // Optionally request tangents to be calculated (for normal and parallax mapping - see later lab)
     // Will throw a std::runtime_error exception on failure (since constructors can't return errors).
-    Mesh::Mesh(std::shared_ptr<DirectX11Renderer> renderer, const std::string& fileName, bool requireTangents /*= false*/)
+    Mesh::Mesh(const std::string& fileName, bool requireTangents /*= false*/)
     {
-        m_Renderer = renderer;
 
         Assimp::Importer importer;
 
@@ -161,7 +163,8 @@ namespace Engine
 
             // Create a "vertex layout" to describe to DirectX what is data in each vertex of this mesh
             auto shaderSignature = CreateSignatureForVertexLayout(vertexElements.data(), static_cast<int>(vertexElements.size()));
-            HRESULT hr = m_Renderer->GetDevice()->CreateInputLayout(vertexElements.data(), static_cast<UINT>(vertexElements.size()),
+            std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
+            HRESULT hr = dx11Render->GetDevice()->CreateInputLayout(vertexElements.data(), static_cast<UINT>(vertexElements.size()),
                 shaderSignature->GetBufferPointer(), shaderSignature->GetBufferSize(),
                 &subMesh.vertexLayout);
             if (shaderSignature)  shaderSignature->Release();
@@ -346,7 +349,7 @@ namespace Engine
             bufferDesc.MiscFlags = 0;
             initData.pSysMem = vertices.get(); // Fill the new vertex buffer with data loaded by assimp
 
-            hr = m_Renderer->GetDevice()->CreateBuffer(&bufferDesc, &initData, &subMesh.vertexBuffer);
+            hr = dx11Render->GetDevice()->CreateBuffer(&bufferDesc, &initData, &subMesh.vertexBuffer);
             if (FAILED(hr))  throw std::runtime_error("Failure creating vertex buffer for " + fileName);
 
 
@@ -358,7 +361,7 @@ namespace Engine
             bufferDesc.MiscFlags = 0;
             initData.pSysMem = indices.get(); // Fill the new index buffer with data loaded by assimp
 
-            hr = m_Renderer->GetDevice()->CreateBuffer(&bufferDesc, &initData, &subMesh.indexBuffer);
+            hr = dx11Render->GetDevice()->CreateBuffer(&bufferDesc, &initData, &subMesh.indexBuffer);
             if (FAILED(hr))  throw std::runtime_error("Failure creating index buffer for " + fileName);
         }
     }
@@ -383,19 +386,21 @@ namespace Engine
         // Set vertex buffer as next data source for GPU
         UINT stride = subMesh.vertexSize;
         UINT offset = 0;
-        m_Renderer->GetDeviceContext()->IASetVertexBuffers(0, 1, &subMesh.vertexBuffer, &stride, &offset);
+        std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
+
+        dx11Render->GetDeviceContext()->IASetVertexBuffers(0, 1, &subMesh.vertexBuffer, &stride, &offset);
 
         // Indicate the layout of vertex buffer
-        m_Renderer->GetDeviceContext()->IASetInputLayout(subMesh.vertexLayout);
+        dx11Render->GetDeviceContext()->IASetInputLayout(subMesh.vertexLayout);
 
         // Set index buffer as next data source for GPU, indicate it uses 32-bit integers
-        m_Renderer->GetDeviceContext()->IASetIndexBuffer(subMesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+        dx11Render->GetDeviceContext()->IASetIndexBuffer(subMesh.indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
         // Using triangle lists only in this class
-        m_Renderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+        dx11Render->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
         // Render mesh
-        m_Renderer->GetDeviceContext()->DrawIndexed(subMesh.numIndices, 0, 0);
+        dx11Render->GetDeviceContext()->DrawIndexed(subMesh.numIndices, 0, 0);
     }
 
     void Mesh::ConvertMatrices(glm::mat4& gM, aiMatrix4x4& aM)
@@ -415,6 +420,8 @@ namespace Engine
     // LIMITATION: The mesh must use a single texture throughout
     void Mesh::Render(std::vector<glm::mat4>& modelMatrices)
     {
+        std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
+
         // Skinning needs all matrices available in the shader at the same time, so first calculate all the absolute
         // matrices before rendering anything
         std::vector<glm::mat4> absoluteMatrices(modelMatrices.size());
@@ -444,16 +451,18 @@ namespace Engine
             // MISSING - code to fill the m_Renderer->PerModelConstants.boneMatrices array with the contents of the absoluteMatrices vector
             //-->
 
+           
+
             for (int i = 0; i < absoluteMatrices.size(); i++)
             {
-                m_Renderer->PerModelConstants.boneMatrices[i] = absoluteMatrices[i];
+                dx11Render->PerModelConstants.boneMatrices[i] = absoluteMatrices[i];
             }
 
-            UpdateConstantBuffer(m_Renderer->GetDeviceContext(), m_Renderer->PerModelConstantBuffer, m_Renderer->PerModelConstants); // Send to GPU
+            UpdateConstantBuffer(dx11Render->GetDeviceContext(), dx11Render->PerModelConstantBuffer, dx11Render->PerModelConstants); // Send to GPU
 
             // Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)
-            m_Renderer->GetDeviceContext()->VSSetConstantBuffers(1, 1, &m_Renderer->PerModelConstantBuffer); // First parameter must match constant buffer number in the shader
-            m_Renderer->GetDeviceContext()->PSSetConstantBuffers(1, 1, &m_Renderer->PerModelConstantBuffer);
+            dx11Render->GetDeviceContext()->VSSetConstantBuffers(1, 1, &dx11Render->PerModelConstantBuffer); // First parameter must match constant buffer number in the shader
+            dx11Render->GetDeviceContext()->PSSetConstantBuffers(1, 1, &dx11Render->PerModelConstantBuffer);
 
             // Already sent over all the absolute matrices for the entire mesh so we can render sub-meshes directly
             // rather than iterating through the nodes. 
@@ -470,12 +479,12 @@ namespace Engine
             for (unsigned int nodeIndex = 0; nodeIndex < mNodes.size(); ++nodeIndex)
             {
                 // Send this node's matrix to the GPU via a constant buffer
-                m_Renderer->PerModelConstants.worldMatrix = absoluteMatrices[nodeIndex];
-                UpdateConstantBuffer(m_Renderer->GetDeviceContext(), m_Renderer->PerModelConstantBuffer, m_Renderer->PerModelConstants); // Send to GPU
+                dx11Render->PerModelConstants.worldMatrix = absoluteMatrices[nodeIndex];
+                UpdateConstantBuffer(dx11Render->GetDeviceContext(), dx11Render->PerModelConstantBuffer, dx11Render->PerModelConstants); // Send to GPU
 
                 // Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)
-                m_Renderer->GetDeviceContext()->VSSetConstantBuffers(1, 1, &m_Renderer->PerModelConstantBuffer.p); // First parameter must match constant buffer number in the shader
-                m_Renderer->GetDeviceContext()->PSSetConstantBuffers(1, 1, &m_Renderer->PerModelConstantBuffer.p);
+                dx11Render->GetDeviceContext()->VSSetConstantBuffers(1, 1, &dx11Render->PerModelConstantBuffer.p); // First parameter must match constant buffer number in the shader
+                dx11Render->GetDeviceContext()->PSSetConstantBuffers(1, 1, &dx11Render->PerModelConstantBuffer.p);
 
                 // Render the sub-meshes attached to this node (no bones - rigid movement)
                 for (auto& subMeshIndex : mNodes[nodeIndex].subMeshes)

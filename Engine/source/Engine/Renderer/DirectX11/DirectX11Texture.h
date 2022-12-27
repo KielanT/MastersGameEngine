@@ -7,7 +7,7 @@ namespace Engine
 	class DirectX11Texture : public Texture2D
 	{
 	public:
-		DirectX11Texture(const std::string& path, std::shared_ptr<IRenderer> renderer);
+		DirectX11Texture(const std::string& path);
 		virtual ~DirectX11Texture();
 
 		virtual eint32 GetWidth() const override { return m_Width; }
@@ -19,8 +19,6 @@ namespace Engine
 		eint32 m_Width, m_Height;
 		eint32 m_ID;
 		std::string m_Path;
-
-		std::shared_ptr<IRenderer> m_Renderer;
 
 		CComPtr<ID3D11ShaderResourceView> m_SRV;
 	};

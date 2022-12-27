@@ -7,7 +7,8 @@
 #include "backends/imgui_impl_SDL.h"
 #include "backends/imgui_impl_dx11.h"
 
-#include "Engine/Renderer/DirectX11/DirectX11Renderer.h"
+#include "Engine/Renderer/Renderer.h"
+
 
 namespace Engine
 {
@@ -26,39 +27,29 @@ namespace Engine
 		Shutdown();
 	}
 	
-	void SDLWindow::Update(std::shared_ptr<ISceneManager> m_SceneManager)
+	//void SDLWindow::Update(std::shared_ptr<ISceneManager> m_SceneManager)
+	void SDLWindow::Update()
 	{
 		//InitInput();
 		SDLInput::InitInput();
 
 		int close = 0;
 
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;    
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+		if(ImGui::GetCurrentContext() != nullptr)
+			ImGui_ImplSDL2_InitForD3D(m_Window);
 
-		ImGui::StyleColorsDark();
 
-		ImGuiStyle& style = ImGui::GetStyle();
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}
-
-		ImGui_ImplSDL2_InitForD3D(m_Window);
-
-		std::shared_ptr<DirectX11Renderer> renderer = std::static_pointer_cast<DirectX11Renderer>(m_SceneManager->GetRenderer());
-		ImGui_ImplDX11_Init(renderer->GetDevice(), renderer->GetDeviceContext());
 
 		// Initialise scene
-		if (!m_SceneManager->LoadFirstScene())
+		/*if (!m_SceneManager->LoadFirstScene())
 		{
 			LOG_ERROR("Error Loading First Scene");
-		}
+		}*/
+
+		Renderer::SetScene(m_Scene);
+
+		m_Scene->InitScene();
+
 		m_Timer.Start();
 
 		while (!close)
@@ -69,7 +60,9 @@ namespace Engine
 			// Events management
 			while (SDL_PollEvent(&event))
 			{
-				ImGui_ImplSDL2_ProcessEvent(&event);
+				if (ImGui::GetCurrentContext() != nullptr)
+					ImGui_ImplSDL2_ProcessEvent(&event);
+
 				if (event.type == SDL_QUIT)
 				{
 					close = 1;
@@ -79,17 +72,25 @@ namespace Engine
 					SDLInput::KeyEvent(event.key);
 				}
 			}
-
+			
+			
 			float frameTime = m_Timer.DeltaTime();
-			m_SceneManager->SceneLoop(frameTime);
+			Renderer::RenderLoop();
+			m_Scene->UpdateScene(frameTime);
+			
+
 		}
 	}
 	
 	void SDLWindow::Shutdown()
 	{
-		ImGui_ImplDX11_Shutdown();
-		ImGui_ImplSDL2_Shutdown();
-		ImGui::DestroyContext();
+	
+		if (ImGui::GetCurrentContext() != nullptr)
+		{
+			
+			ImGui_ImplSDL2_Shutdown();
+			ImGui::DestroyContext();
+		}
 
 		SDL_DestroyWindow(m_Window);
 		SDL_Quit();
@@ -115,6 +116,10 @@ namespace Engine
 
 
 		props = m_Props;
+
+		m_Scene = std::make_shared<Scene>();
+		
+
 		return TRUE;
 	}
 }

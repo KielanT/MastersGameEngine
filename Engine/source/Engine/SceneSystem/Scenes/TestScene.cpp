@@ -26,11 +26,11 @@ namespace Engine
     bool TestScene::InitGeometry()
     {
 		
-        m_Shader = SetShader(m_Renderer->GetRendererType());
+       /* m_Shader = SetShader(m_Renderer->GetRendererType());
         m_Shader->InitShaders(m_Renderer);
 
         m_State = SetStates(m_Renderer->GetRendererType());
-        m_State->InitStates(m_Renderer);
+        m_State->InitStates(m_Renderer);*/
 		
         std::string path = "media/";
 		
@@ -104,7 +104,7 @@ namespace Engine
 
     void TestScene::Renderer(Entity entity)
     {
-        if (entity.HasComponent<MeshRendererComponent>() && entity.HasComponent<TextureComponent>())
+        /*if (entity.HasComponent<MeshRendererComponent>() && entity.HasComponent<TextureComponent>())
         {
             auto transfrom = entity.GetComponent<TransformComponent>();
             auto mesh = entity.GetComponent<MeshRendererComponent>();
@@ -138,6 +138,6 @@ namespace Engine
 
                 entity.GetComponent<MeshRendererComponent>().Model->Render();
             }
-        }
+        }*/
     }
 }
