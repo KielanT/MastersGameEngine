@@ -10,7 +10,7 @@ namespace Engine
 	{
 	public:
 		static void SerializeScene(std::string& path, std::shared_ptr<Scene> scene);
-		static void DeerializeScene(std::string& path, std::shared_ptr<Scene> scene);
+		static void DeserializeScene(std::string& path, std::shared_ptr<Scene> scene);
 	};
 }
 

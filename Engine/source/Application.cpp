@@ -3,7 +3,6 @@
 
 #include <SDL.h>
 #include "Engine/Renderer/Renderer.h"
-#include "Engine/SceneSystem/Scenes/SceneWriter.h"
 
 namespace Engine
 {
@@ -17,8 +16,6 @@ namespace Engine
 		{
 			LOG_ERROR("Failed Creating Window");
 		}
-		SceneWriter writer;
-		writer.Write();
 
 		Renderer::Init(props);
 	}

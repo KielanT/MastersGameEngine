@@ -56,6 +56,16 @@ namespace Engine
 		return entity;
 	}
 
+	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& tag)
+	{
+		Entity entity = { m_Registry.create(), shared_from_this() };
+		auto& ID = entity.AddComponent<IDComponent>();
+		ID.ID = uuid;
+		ID.Tag = tag;
+		entity.AddComponent<TransformComponent>();
+		return entity;
+	}
+
 	Entity Scene::CreateMeshEntity(const std::string& tag)
 	{
 		Entity entity = { m_Registry.create(), shared_from_this() };

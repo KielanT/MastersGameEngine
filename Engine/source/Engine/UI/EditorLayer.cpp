@@ -11,7 +11,7 @@
 
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
-
+#include "Engine/SceneSystem/Scenes/SceneSerializer.h"
 
 namespace Engine
 {
@@ -85,7 +85,16 @@ namespace Engine
 		}
 
 
-
+		if (ImGui::Button("Save"))
+		{
+			std::string testPath = "W:/Uni/Masters/CO4305/MastersGameEngine/test.txt";
+			SceneSerializer::SerializeScene(testPath, m_Scene);
+		}
+		if (ImGui::Button("Load"))
+		{
+			std::string testPath = "W:/Uni/Masters/CO4305/MastersGameEngine/test.txt";
+			SceneSerializer::DeserializeScene(testPath, m_Scene);
+		}
 
 		ImGui::End();
 	}
