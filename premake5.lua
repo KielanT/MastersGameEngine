@@ -21,11 +21,13 @@ workspace "MastersGameEngine"
     IncludeDir["SDL"] = "Engine/external/SDL/include"
     IncludeDir["entt"] = "Engine/external/entt/include"
     IncludeDir["stbImage"] = "Engine/external/stb_image"
+    IncludeDir["yaml_cpp"] = "Engine/external/yaml-cpp/include"
 
     LibDir = {}
     LibDir["DirectXTK"] = "Engine/external/DirectXTK/%{cfg.buildcfg}"
     LibDir["assimp"] = "Engine/external/assimp/lib/%{cfg.buildcfg}"
     LibDir["SDL"] = "Engine/external/SDL/VisualC/x64/%{cfg.buildcfg}"
+    LibDir["yaml_cpp"] = "Engine/external/yaml-cpp/lib/%{cfg.buildcfg}"
 
     include "Engine/external/imgui"
 
@@ -66,6 +68,8 @@ project "Engine"
         "%{IncludeDir.SDL}",
         "%{IncludeDir.entt}",
         "%{IncludeDir.stbImage}",
+        "%{IncludeDir.yaml_cpp}",
+        
     }
 
     libdirs
@@ -73,6 +77,7 @@ project "Engine"
         "%{LibDir.DirectXTK}",
         "%{LibDir.assimp}",
         "%{LibDir.SDL}",
+        "%{LibDir.yaml_cpp}",
     }
 
     links
@@ -82,7 +87,7 @@ project "Engine"
 		"d3dcompiler.lib",
         "assimp-vc143-mt.lib",
         "ImGui",
-
+        "yaml-cpp.lib",
         "SDL2.lib"
     }
 
