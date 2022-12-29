@@ -8,7 +8,7 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
-      ID: 14055388724590852653
+      ID: 4796552817276346230
       Tag: Mesh Entity
     TransformComponent:
       Position: [0, 0, 0]

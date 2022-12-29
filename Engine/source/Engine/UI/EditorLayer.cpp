@@ -81,7 +81,6 @@ namespace Engine
 					Entity entity{ entityID, m_Scene };
 					EntityNode(entity);
 				});
-
 		}
 
 
@@ -94,6 +93,16 @@ namespace Engine
 		{
 			std::string testPath = "W:/Uni/Masters/CO4305/MastersGameEngine/test.txt";
 			SceneSerializer::DeserializeScene(testPath, m_Scene);
+
+			if (m_Scene != nullptr)
+			{
+				m_Scene->GetEntityRegistry().each([&](auto entityID)
+					{
+						Entity entity{ entityID, m_Scene };
+						if (entity.HasComponent<MeshRendererComponent>())
+							LoadEntity(entity);
+					});
+			}
 		}
 
 		ImGui::End();
@@ -568,6 +577,28 @@ namespace Engine
 			}
 		}
 		
+	}
+
+	void EditorLayer::LoadEntity(Entity entity)
+	{
+		if (entity.HasComponent<MeshRendererComponent>())
+		{
+			auto& comp = entity.GetComponent<MeshRendererComponent>();
+			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
+			comp.Model = std::make_shared<Model>(mesh);
+		}
+		if (entity.HasComponent<TextureComponent>())
+		{
+			std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
+			auto& comp = entity.GetComponent<TextureComponent>();
+			CComPtr<ID3D11Resource> Resource;
+			CComPtr<ID3D11ShaderResourceView> ResourceView;
+		
+			if (dx11Render->LoadTexture(comp.Path, &Resource, &ResourceView))
+			{
+				comp.ResourceView = ResourceView;
+			}
+		}
 	}
 
 
