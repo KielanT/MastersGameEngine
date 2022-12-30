@@ -26,7 +26,7 @@ namespace Engine
 		void SetScene(std::shared_ptr<Scene> scene) { m_Scene = scene; }
 		
 	private:
-		
+		void MainMenuBar();
 		void DockSpace();
 		void MainWindow();
 		void GameWindow();
@@ -60,6 +60,7 @@ namespace Engine
 
 	private:
 		bool IsPBR = false;
+		bool m_Unsaved = false;
 
 
 		std::shared_ptr<Texture2D> m_FileIcon;

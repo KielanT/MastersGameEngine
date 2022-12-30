@@ -55,15 +55,17 @@ namespace Engine
 
 		SaveSceneSettings(out, scene);
 		
+		if (!scene->GetEntityRegistry().empty())
+		{
+			out << YAML::Key << "Entities" << YAML::BeginSeq;
+			scene->GetEntityRegistry().each([&](auto entityID)
+				{
+					Entity entity{ entityID, scene };
+					SaveEntity(out, entity);
+				});
 
-		out << YAML::Key << "Entities" << YAML::BeginSeq;
-		scene->GetEntityRegistry().each([&](auto entityID)
-			{
-				Entity entity{ entityID, scene };
-				SaveEntity(out, entity);
-			});
-		
-		out << YAML::EndSeq;
+			out << YAML::EndSeq;
+		}
 		out << YAML::EndMap;
 
 		std::ofstream fout(path);

@@ -8,22 +8,9 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
-      ID: 4796552817276346230
-      Tag: Mesh Entity
+      ID: 13495052730016540070
+      Tag: Empty Entity
     TransformComponent:
       Position: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
-    TextureComponent:
-      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\iron-rusted4-albedo.dds
-      RoughPath: ""
-      HeightPath: ""
-      MetalnessPath: ""
-    MeshRendererComponent:
-      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\Cube.x
-      PixelShader: 0
-      VertexShader: 0
-      BlendState: 0
-      DepthStencil: 0
-      Rasterizer: 0
-      Sampler: 0

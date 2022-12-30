@@ -17,6 +17,7 @@ namespace Engine
 {
 	void EditorLayer::RenderGUI()
 	{
+		MainMenuBar();
 		DockSpace();
 		//MainWindow();
 		GameWindow();
@@ -24,14 +25,48 @@ namespace Engine
 		Details();
 		Assets();
 		
-		//ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow();
 
-		
 	}
 	
+	void EditorLayer::MainMenuBar()
+	{
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Save Scene"))
+				{
+					std::string testPath = "W:/Uni/Masters/CO4305/MastersGameEngine/test.txt";
+					SceneSerializer::SerializeScene(testPath, m_Scene);
+					m_Unsaved = false;
+				}
+				if (ImGui::MenuItem("Load Scene"))
+				{
+					std::string testPath = "W:/Uni/Masters/CO4305/MastersGameEngine/test.txt";
+					SceneSerializer::DeserializeScene(testPath, m_Scene);
+
+					if (m_Scene != nullptr)
+					{
+						m_Scene->GetEntityRegistry().each([&](auto entityID)
+							{
+								Entity entity{ entityID, m_Scene };
+								if (entity.HasComponent<MeshRendererComponent>())
+									LoadEntity(entity);
+							});
+					}
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::EndMainMenuBar();
+		}
+	}
+
 	void EditorLayer::DockSpace()
 	{
+		
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+		
 	}
 
 	void EditorLayer::MainWindow()
@@ -55,7 +90,12 @@ namespace Engine
 
 	void EditorLayer::EntitiesWindow()
 	{
-		ImGui::Begin("Entities");
+		
+		ImGuiWindowFlags window_flags = 0;
+		if (m_Unsaved)   window_flags |= ImGuiWindowFlags_UnsavedDocument;
+
+		
+		ImGui::Begin("Entities", (bool*)0, window_flags);
 		
 		bool btn = ImGui::Button("Add");
 		if (btn || (ImGui::IsMouseDown(1) && ImGui::IsWindowHovered()))
@@ -67,9 +107,15 @@ namespace Engine
 		{
 			//std::shared_ptr<TestScene> scene = std::static_pointer_cast<TestScene>(m_Scene);
 			if (ImGui::MenuItem("Create Empty Entity"))
-				m_SelectedEntity = m_Scene->CreateEntity("Empty Entity");
+			{
+				m_SelectedEntity = m_Scene->CreateEntity("Empty Entity"); 
+				m_Unsaved = true;
+			}
 			if (ImGui::MenuItem("Create Mesh Entity"))
-				m_SelectedEntity = m_Scene->CreateMeshEntity("Mesh Entity");
+			{
+				m_SelectedEntity = m_Scene->CreateMeshEntity("Mesh Entity"); 
+				m_Unsaved = true;
+			}
 
 			ImGui::EndPopup();
 		}
@@ -83,28 +129,7 @@ namespace Engine
 				});
 		}
 
-
-		if (ImGui::Button("Save"))
-		{
-			std::string testPath = "W:/Uni/Masters/CO4305/MastersGameEngine/test.txt";
-			SceneSerializer::SerializeScene(testPath, m_Scene);
-		}
-		if (ImGui::Button("Load"))
-		{
-			std::string testPath = "W:/Uni/Masters/CO4305/MastersGameEngine/test.txt";
-			SceneSerializer::DeserializeScene(testPath, m_Scene);
-
-			if (m_Scene != nullptr)
-			{
-				m_Scene->GetEntityRegistry().each([&](auto entityID)
-					{
-						Entity entity{ entityID, m_Scene };
-						if (entity.HasComponent<MeshRendererComponent>())
-							LoadEntity(entity);
-					});
-			}
-		}
-
+		
 		ImGui::End();
 	}
 
@@ -129,17 +154,35 @@ namespace Engine
 				if (ImGui::BeginPopup("AddComp"))
 				{
 					if (ImGui::MenuItem("MeshRenderer"))
-						m_SelectedEntity.AddComponent<MeshRendererComponent>();
+					{
+						m_SelectedEntity.AddComponent<MeshRendererComponent>();  
+						m_Unsaved = true;
+					}
 					if (ImGui::MenuItem("TextureComponent"))
-						m_SelectedEntity.AddComponent<TextureComponent>();
+					{
+						m_SelectedEntity.AddComponent<TextureComponent>();  
+						m_Unsaved = true;
+					}
 					if (ImGui::MenuItem("CameraComponent"))
-						m_SelectedEntity.AddComponent<CameraComponent>();
+					{
+						m_SelectedEntity.AddComponent<CameraComponent>();  
+						m_Unsaved = true;
+					}
 					if (ImGui::MenuItem("PhysicsComponent"))
-						m_SelectedEntity.AddComponent<PhysicsComponents>();
+					{
+						m_SelectedEntity.AddComponent<PhysicsComponents>(); 
+						m_Unsaved = true;
+					}
 					if (ImGui::MenuItem("CollisionComponent"))
-						m_SelectedEntity.AddComponent<CollisionComponents>();
+					{
+						m_SelectedEntity.AddComponent<CollisionComponents>();  
+						m_Unsaved = true;
+					}
 					if (ImGui::MenuItem("ScriptComponent"))
-						m_SelectedEntity.AddComponent<ScriptComponent>();
+					{
+						m_SelectedEntity.AddComponent<ScriptComponent>();  
+						m_Unsaved = true;
+					}
 
 					ImGui::EndPopup();
 				}
@@ -235,6 +278,7 @@ namespace Engine
 			{
 				m_Scene->DeleteEntity(entity);
 				m_SelectedEntity = {}; // Clears Selected entity
+				m_Unsaved = true;
 			}
 			ImGui::EndPopup();
 		}
@@ -251,8 +295,6 @@ namespace Engine
 		{
 			if (m_SelectedEntity.HasComponent<IDComponent>())
 				DrawIDComponent(m_SelectedEntity.GetComponent<IDComponent>()); 	ImGui::Separator();
-
-
 
 			if (m_SelectedEntity.HasComponent<TransformComponent>())
 			{
@@ -363,6 +405,7 @@ namespace Engine
 
 					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
 					comp.Model = std::make_shared<Model>(mesh);
+					m_Unsaved = true;
 				
 				}
 				ImGui::EndDragDropTarget();
@@ -383,6 +426,7 @@ namespace Engine
 					
 					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
 					comp.Model = std::make_shared<Model>(mesh);
+					m_Unsaved = true;
 				}
 			}
 
@@ -540,6 +584,7 @@ namespace Engine
 				if (dx11Render->LoadTexture(path, &Resource, &ResourceView))
 				{
 					resourseView = ResourceView;
+					m_Unsaved = true;
 				}
 				else
 				{
@@ -568,6 +613,7 @@ namespace Engine
 				if (dx11Render->LoadTexture(path, &Resource, &ResourceView))
 				{
 					resourseView = ResourceView;
+					m_Unsaved = true;
 				}
 				else
 				{
@@ -584,19 +630,75 @@ namespace Engine
 		if (entity.HasComponent<MeshRendererComponent>())
 		{
 			auto& comp = entity.GetComponent<MeshRendererComponent>();
-			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
-			comp.Model = std::make_shared<Model>(mesh);
+			if (!comp.Path.empty())
+			{
+				std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
+				comp.Model = std::make_shared<Model>(mesh);
+				m_Unsaved = true;
+			}
 		}
 		if (entity.HasComponent<TextureComponent>())
 		{
 			std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
 			auto& comp = entity.GetComponent<TextureComponent>();
-			CComPtr<ID3D11Resource> Resource;
-			CComPtr<ID3D11ShaderResourceView> ResourceView;
-		
-			if (dx11Render->LoadTexture(comp.Path, &Resource, &ResourceView))
+			if (!comp.Path.empty())
 			{
-				comp.ResourceView = ResourceView;
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(comp.Path, &Resource, &ResourceView))
+				{
+					comp.ResourceView = ResourceView;
+					m_Unsaved = true;
+				}
+			}
+			if (!comp.RoughPath.empty())
+			{
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(comp.RoughPath, &Resource, &ResourceView))
+				{
+					comp.RoughView = ResourceView;
+					m_Unsaved = true;
+				}
+
+			}
+			if (!comp.NormalPath.empty())
+			{
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(comp.NormalPath, &Resource, &ResourceView))
+				{
+					comp.NormalView = ResourceView;
+					m_Unsaved = true;
+				}
+
+			}
+			if (!comp.HeightPath.empty())
+			{
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(comp.HeightPath, &Resource, &ResourceView))
+				{
+					comp.HeightView = ResourceView;
+					m_Unsaved = true;
+				}
+
+			}
+			if (!comp.MetalnessPath.empty())
+			{
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(comp.MetalnessPath, &Resource, &ResourceView))
+				{
+					comp.MetalnessView = ResourceView;
+					m_Unsaved = true;
+				}
+
 			}
 		}
 	}

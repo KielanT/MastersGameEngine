@@ -38,7 +38,6 @@ namespace YAML
 
 namespace Engine
 {
-
 	void SceneReader::Read(std::string& path, std::shared_ptr<Scene> scene)
 	{
 		YAML::Node data = YAML::LoadFile(path);
