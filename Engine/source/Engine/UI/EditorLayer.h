@@ -55,6 +55,7 @@ namespace Engine
 		CComPtr<ID3D11ShaderResourceView> m_SceneTexture;
 		std::shared_ptr<Scene> m_Scene = nullptr;
 
+		std::string m_SceneFilePath = "";
 
 		Entity m_SelectedEntity;
 

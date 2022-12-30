@@ -25,7 +25,7 @@ namespace Engine
 		Details();
 		Assets();
 		
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 
 	}
 	
@@ -37,23 +37,56 @@ namespace Engine
 			{
 				if (ImGui::MenuItem("Save Scene"))
 				{
-					std::string testPath = "W:/Uni/Masters/CO4305/MastersGameEngine/test.txt";
-					SceneSerializer::SerializeScene(testPath, m_Scene);
-					m_Unsaved = false;
+					if (!m_SceneFilePath.empty())
+					{
+						SceneSerializer::SerializeScene(m_SceneFilePath, m_Scene);
+						m_Unsaved = false;
+					}
+					else
+					{
+						// Save As
+						std::string path = FileDialog::SaveFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene (*.mge)\0*.mge\0");
+						
+						if (!path.empty())
+						{
+							SceneSerializer::SerializeScene(path, m_Scene);
+							m_Unsaved = false;
+							m_SceneFilePath = path;
+						}
+					}
 				}
+				if (ImGui::MenuItem("Save As Scene"))
+				{
+					// Save As
+					std::string path = FileDialog::SaveFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene (*.mge)\0*.mge\0");
+
+					if (!path.empty())
+					{
+						SceneSerializer::SerializeScene(path, m_Scene);
+						m_Unsaved = false;
+						m_SceneFilePath = path;
+					}
+				}
+
 				if (ImGui::MenuItem("Load Scene"))
 				{
-					std::string testPath = "W:/Uni/Masters/CO4305/MastersGameEngine/test.txt";
-					SceneSerializer::DeserializeScene(testPath, m_Scene);
-
-					if (m_Scene != nullptr)
+					std::string path = FileDialog::OpenFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene\0*.mge\0");
+					if (!path.empty())
 					{
-						m_Scene->GetEntityRegistry().each([&](auto entityID)
-							{
-								Entity entity{ entityID, m_Scene };
-								if (entity.HasComponent<MeshRendererComponent>())
-									LoadEntity(entity);
-							});
+						m_Scene->UnloadScene();
+						m_SelectedEntity = {};
+
+						SceneSerializer::DeserializeScene(path, m_Scene);
+						m_SceneFilePath = path;
+						if (m_Scene != nullptr)
+						{
+							m_Scene->GetEntityRegistry().each([&](auto entityID)
+								{
+									Entity entity{ entityID, m_Scene };
+									if (entity.HasComponent<MeshRendererComponent>())
+										LoadEntity(entity);
+								});
+						}
 					}
 				}
 				ImGui::EndMenu();
@@ -91,12 +124,13 @@ namespace Engine
 	void EditorLayer::EntitiesWindow()
 	{
 		
+		
 		ImGuiWindowFlags window_flags = 0;
 		if (m_Unsaved)   window_flags |= ImGuiWindowFlags_UnsavedDocument;
 
 		
 		ImGui::Begin("Entities", (bool*)0, window_flags);
-		
+
 		bool btn = ImGui::Button("Add");
 		if (btn || (ImGui::IsMouseDown(1) && ImGui::IsWindowHovered()))
 		{
@@ -416,7 +450,7 @@ namespace Engine
 			if (ImGui::Button("Add##Model"))
 			{
 				const char* filter = "Select Type\0*.*\0PNG\0*.PNG\0JPG\0*.JPG\0JPEG\0*.JPEG\0DDS\0*.DDS\0";
-				std::string file = OpenFile(Renderer::GetWindowProperties().Hwnd, filter);
+				std::string file = FileDialog::OpenFile(Renderer::GetWindowProperties().Hwnd, filter);
 
 				if (!file.empty())
 				{
@@ -601,7 +635,7 @@ namespace Engine
 		if (ImGui::Button(btnLabel.c_str()))
 		{
 			const char* filter = "Select Type\0*.*\0PNG\0*.PNG\0JPG\0*.JPG\0JPEG\0*.JPEG\0DDS\0*.DDS\0";
-			std::string file = OpenFile(dx11Render->GetWindowProperties().Hwnd, filter);
+			std::string file = FileDialog::OpenFile(dx11Render->GetWindowProperties().Hwnd, filter);
 
 			if (!file.empty())
 			{

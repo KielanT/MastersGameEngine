@@ -25,6 +25,7 @@ namespace Engine
 		~Scene();
 
 		void InitScene();
+		void UnloadScene();
 		void RenderScene();
 		void UpdateScene(float frametime);
 		void RemoveScene();

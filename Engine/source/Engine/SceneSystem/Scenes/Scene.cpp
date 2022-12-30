@@ -25,6 +25,11 @@ namespace Engine
 		std::filesystem::current_path(meshPath); // Sets the current path to the mesh path
 	}
 
+	void Scene::UnloadScene()
+	{
+		m_Registry.clear();
+	}
+
 	void Scene::RenderScene()
 	{
 		m_Registry.each([&](auto entityID)
