@@ -7,6 +7,7 @@ namespace Engine
 {
 	Application::Application()
 	{
+		// Broken
 		WindowProperties props = WindowProperties();
 		
 		m_Renderer = NewRenderer(props.RendererType);
