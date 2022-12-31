@@ -27,7 +27,6 @@ namespace Engine
 		Shutdown();
 	}
 	
-	//void SDLWindow::Update(std::shared_ptr<ISceneManager> m_SceneManager)
 	void SDLWindow::Update()
 	{
 		//InitInput();
@@ -37,18 +36,6 @@ namespace Engine
 
 		if(ImGui::GetCurrentContext() != nullptr)
 			ImGui_ImplSDL2_InitForD3D(m_Window);
-
-
-
-		// Initialise scene
-		/*if (!m_SceneManager->LoadFirstScene())
-		{
-			LOG_ERROR("Error Loading First Scene");
-		}*/
-
-		//Renderer::SetScene(m_Scene);
-
-		//m_Scene->InitScene();
 
 		m_Timer.Start();
 
@@ -73,10 +60,8 @@ namespace Engine
 				}
 			}
 			
-			
 			float frameTime = m_Timer.DeltaTime();
 			Renderer::RenderLoop();
-			//m_Scene->UpdateScene(frameTime);
 			Layer::Update(frameTime);
 			
 
@@ -106,7 +91,6 @@ namespace Engine
 			LOG_ERROR("Error Initializing SDL");
 		}
 	
-		
 		m_Window = SDL_CreateWindow(m_Props.Title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			m_Props.Width, m_Props.Height, SDL_WINDOW_RESIZABLE);
 		
@@ -117,9 +101,6 @@ namespace Engine
 
 
 		props = m_Props;
-
-		//m_Scene = std::make_shared<Scene>();
-		
 
 		return TRUE;
 	}

@@ -17,7 +17,6 @@ namespace Engine
 	{
         HRESULT hr = S_OK;
 
-
         //// Initialise DirectX ////
 
         // Create a Direct3D device (i.e. initialise D3D) and create a swap-chain (create a back buffer to render to)
@@ -117,7 +116,6 @@ namespace Engine
         m_D3DContext->RSSetViewports(1, &vp);
 
         InitiliseSceneTexture(props);
-        //Layer.SetSceneTexture(m_SceneTextureSRV);
 
         InitGUI();
         
@@ -144,7 +142,6 @@ namespace Engine
     {
         RenderScene();
         Layer::Render();
-        //Layer.RenderGUI();
     }
 
     void DX11Renderer::Renderer(Entity entity)
@@ -355,30 +352,19 @@ namespace Engine
             PerFrameConstants.cameraPosition = m_Scene->GetCamera()->Position();
             glm::vec4 bgColour = m_Scene->GetSceneSettings().backgroundColour;
         }
-            m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, m_DepthStencil);
 
-            m_D3DContext->OMSetRenderTargets(1, &m_SceneRenderTarget.p, m_DepthStencil);
+        m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, m_DepthStencil);
 
-            // Clear the back buffer to a fixed colour and the depth buffer to the far distance
-            //glm::vec4 backgroundColour = m_Scenes[m_SceneIndex]->GetBackgroundColour();
-           
-            m_D3DContext->ClearRenderTargetView(m_BackBufferRenderTarget, &bgColour.r);
-            m_D3DContext->ClearRenderTargetView(m_SceneRenderTarget, &bgColour.r);
-            m_D3DContext->ClearDepthStencilView(m_DepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-            // Render the scene from the main camera
-            RenderSceneFromCamera();
-
-            //Layer.RenderGUI();
-
-
-
-            m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, nullptr);
-
+        m_D3DContext->OMSetRenderTargets(1, &m_SceneRenderTarget.p, m_DepthStencil);
         
-       
-        
-        //Layer.Update();
+        m_D3DContext->ClearRenderTargetView(m_BackBufferRenderTarget, &bgColour.r);
+        m_D3DContext->ClearRenderTargetView(m_SceneRenderTarget, &bgColour.r);
+        m_D3DContext->ClearDepthStencilView(m_DepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+        // Render the scene from the main camera
+        RenderSceneFromCamera();
+
+        m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, nullptr);
 
     }
 

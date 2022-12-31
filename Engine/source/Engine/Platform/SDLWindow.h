@@ -4,8 +4,6 @@
 #include "SDL.h"
 #include "Engine/Utility/ITimer.h"
 #include "SDLInput.h"
-#include "Engine/SceneSystem/Scenes/Scene.h"
-
 
 namespace Engine
 {
@@ -21,7 +19,6 @@ namespace Engine
 		SDLWindow& operator=(SDLWindow&&) = delete;
 
 	public:
-		//virtual void Update(std::shared_ptr<ISceneManager> m_SceneManager) override;
 		virtual void Update() override;
 		virtual void Shutdown() override;
 
@@ -36,8 +33,6 @@ namespace Engine
 		SDL_Window* m_Window;
 
 		ITimer m_Timer;
-
-		//std::shared_ptr<Scene> m_Scene = nullptr;
 
 	};
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Renderer/RendererAPI.h"
-//#include "Engine/UI/EditorLayer.h"
 
 #include "DX11Shader.h"
 #include "DX11States.h"
@@ -112,7 +111,6 @@ namespace Engine
 		std::shared_ptr<DX11States> m_States;
 
 		std::shared_ptr<Scene> m_Scene = nullptr;
-		//EditorLayer Layer;
 
 		WindowProperties m_Props;
 	};
