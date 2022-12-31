@@ -38,7 +38,6 @@ namespace Engine
 
 		int RendererComboBox(const std::string& label, const char* items[], int size, int& selected);
 		void TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView);
-		void LoadEntity(Entity entity);
 		void Save();
 		void SaveAs();
 

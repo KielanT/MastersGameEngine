@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "Engine/Renderer/Renderer.h"
+#include "Engine/Renderer/DirectX11/DX11Renderer.h"
 
 namespace Engine
 {
@@ -88,4 +89,88 @@ namespace Engine
 	{
 		m_Registry.destroy(entity);
 	}
+
+	void Scene::LoadEntities()
+	{
+		m_Registry.each([&](auto entityID)
+			{
+				Entity entity{ entityID, shared_from_this() };
+				LoadEntity(entity);
+			});
+	}
+
+	void Scene::LoadEntity(Entity entity)
+	{
+		if (entity.HasComponent<MeshRendererComponent>())
+		{
+			auto& comp = entity.GetComponent<MeshRendererComponent>();
+			if (!comp.Path.empty())
+			{
+				std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
+				comp.Model = std::make_shared<Model>(mesh);
+			}
+		}
+		if (entity.HasComponent<TextureComponent>())
+		{
+			std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
+			auto& comp = entity.GetComponent<TextureComponent>();
+			if (!comp.Path.empty())
+			{
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(comp.Path, &Resource, &ResourceView))
+				{
+					comp.ResourceView = ResourceView;
+				}
+			}
+			if (!comp.RoughPath.empty())
+			{
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(comp.RoughPath, &Resource, &ResourceView))
+				{
+					comp.RoughView = ResourceView;
+				}
+
+			}
+			if (!comp.NormalPath.empty())
+			{
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(comp.NormalPath, &Resource, &ResourceView))
+				{
+					comp.NormalView = ResourceView;
+				}
+
+			}
+			if (!comp.HeightPath.empty())
+			{
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(comp.HeightPath, &Resource, &ResourceView))
+				{
+					comp.HeightView = ResourceView;
+					
+				}
+
+			}
+			if (!comp.MetalnessPath.empty())
+			{
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(comp.MetalnessPath, &Resource, &ResourceView))
+				{
+					comp.MetalnessView = ResourceView;
+					
+				}
+
+			}
+		}
+	}
+
 }

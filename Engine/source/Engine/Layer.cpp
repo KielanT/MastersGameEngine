@@ -28,6 +28,9 @@ namespace Engine
 	}
 	void Layer::Update(float frameTime)
 	{
-		m_Layer->Update(frameTime);
+		if (m_Layer != nullptr)
+		{
+			m_Layer->Update(frameTime);
+		}
 	}
 }

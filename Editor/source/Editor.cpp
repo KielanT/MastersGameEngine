@@ -38,7 +38,7 @@ namespace Engine
 
 	void Editor::Update(float frameTime)
 	{
-		
+		m_Scene->UpdateScene(frameTime);
 	}
 
 	void Editor::DockSpace()
@@ -118,12 +118,7 @@ namespace Engine
 						m_CurrentSceneName = m_Scene->GetSceneSettings().title;
 						if (m_Scene != nullptr)
 						{
-							m_Scene->GetEntityRegistry().each([&](auto entityID)
-								{
-									Entity entity{ entityID, m_Scene };
-									if (entity.HasComponent<MeshRendererComponent>())
-										LoadEntity(entity);
-								});
+							m_Scene->LoadEntities();
 						}
 					}
 				}
@@ -688,85 +683,6 @@ namespace Engine
 		}
 
 	}
-
-	void Editor::LoadEntity(Entity entity)
-	{
-		if (entity.HasComponent<MeshRendererComponent>())
-		{
-			auto& comp = entity.GetComponent<MeshRendererComponent>();
-			if (!comp.Path.empty())
-			{
-				std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
-				comp.Model = std::make_shared<Model>(mesh);
-				bUnsaved = true;
-			}
-		}
-		if (entity.HasComponent<TextureComponent>())
-		{
-			std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
-			auto& comp = entity.GetComponent<TextureComponent>();
-			if (!comp.Path.empty())
-			{
-				CComPtr<ID3D11Resource> Resource;
-				CComPtr<ID3D11ShaderResourceView> ResourceView;
-
-				if (dx11Render->LoadTexture(comp.Path, &Resource, &ResourceView))
-				{
-					comp.ResourceView = ResourceView;
-					bUnsaved = true;
-				}
-			}
-			if (!comp.RoughPath.empty())
-			{
-				CComPtr<ID3D11Resource> Resource;
-				CComPtr<ID3D11ShaderResourceView> ResourceView;
-
-				if (dx11Render->LoadTexture(comp.RoughPath, &Resource, &ResourceView))
-				{
-					comp.RoughView = ResourceView;
-					bUnsaved = true;
-				}
-
-			}
-			if (!comp.NormalPath.empty())
-			{
-				CComPtr<ID3D11Resource> Resource;
-				CComPtr<ID3D11ShaderResourceView> ResourceView;
-
-				if (dx11Render->LoadTexture(comp.NormalPath, &Resource, &ResourceView))
-				{
-					comp.NormalView = ResourceView;
-					bUnsaved = true;
-				}
-
-			}
-			if (!comp.HeightPath.empty())
-			{
-				CComPtr<ID3D11Resource> Resource;
-				CComPtr<ID3D11ShaderResourceView> ResourceView;
-
-				if (dx11Render->LoadTexture(comp.HeightPath, &Resource, &ResourceView))
-				{
-					comp.HeightView = ResourceView;
-					bUnsaved = true;
-				}
-
-			}
-			if (!comp.MetalnessPath.empty())
-			{
-				CComPtr<ID3D11Resource> Resource;
-				CComPtr<ID3D11ShaderResourceView> ResourceView;
-
-				if (dx11Render->LoadTexture(comp.MetalnessPath, &Resource, &ResourceView))
-				{
-					comp.MetalnessView = ResourceView;
-					bUnsaved = true;
-				}
-
-			}
-		}
-	}
-
 	void Editor::Save()
 	{
 		if (!m_SceneFilePath.empty())

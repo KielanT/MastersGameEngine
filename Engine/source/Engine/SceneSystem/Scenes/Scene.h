@@ -35,10 +35,14 @@ namespace Engine
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& tag);
 		Entity CreateMeshEntity(const std::string& tag);
 		void DeleteEntity(Entity entity);
+		void LoadEntities();
 
 		SceneSettings GetSceneSettings() { return m_SceneSettings; }
 		void SetSceneSettings(SceneSettings& settings) { m_SceneSettings = settings; }
 		std::shared_ptr<Camera> GetCamera() { return m_MainCamera; }
+
+	private:
+		void LoadEntity(Entity entity);
 
 	private:
 		SceneSettings m_SceneSettings;

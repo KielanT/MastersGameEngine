@@ -184,7 +184,8 @@ project "Editor"
 
     defines
     {
-        "E_PLATFORM_WINDOWS"
+        "E_PLATFORM_WINDOWS",
+        "E_EDITOR"
     }
 
     filter "configurations:Debug"
@@ -197,6 +198,73 @@ project "Editor"
         runtime "Release"
         optimize "On"
 
+    filter "configurations:Distribution"
+        defines "E_DISTRIBUTION"
+        runtime "Release"
+        optimize "On"
+
+project "Game"
+    location "Game"
+    kind "WindowedApp"
+    language "C++"
+    cppdialect "C++20"
+    staticruntime "Off"
+    
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+    
+    files
+    {
+        "%{prj.name}/source/**.h",
+        "%{prj.name}/source/**.cpp"
+    }
+    
+    includedirs
+    {
+        "Engine/source",
+        "%{IncludeDir.DirectXTK}",
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.spdlog}",
+        "%{IncludeDir.ImGui}",
+        "%{IncludeDir.ImGuiBackends}",
+        "%{IncludeDir.SDL}",
+        "%{IncludeDir.entt}",
+        "%{IncludeDir.assimp}",
+    }
+    libdirs
+    {
+        "%{LibDir.DirectXTK}",
+        "%{LibDir.assimp}",
+    }
+    
+    links
+    {
+        "Engine",
+        "ImGui",
+        "d3d11.lib",
+        "assimp-vc143-mt.lib",
+    
+    }
+    
+    filter "system:windows"
+        cppdialect "C++20"
+        systemversion "latest"
+    
+    defines
+    {
+        "E_PLATFORM_WINDOWS"
+    }
+    
+    filter "configurations:Debug"
+        defines "E_DEBUG"
+        runtime "Debug"
+        symbols "On"
+    
+    filter "configurations:Release"
+        defines "E_RELEASE"
+        runtime "Release"
+        optimize "On"
+    
     filter "configurations:Distribution"
         defines "E_DISTRIBUTION"
         runtime "Release"
