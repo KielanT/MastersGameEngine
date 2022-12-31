@@ -41,11 +41,13 @@ namespace Engine
 		void SetSceneSettings(SceneSettings& settings) { m_SceneSettings = settings; }
 		std::shared_ptr<Camera> GetCamera() { return m_MainCamera; }
 
+		SceneSettings m_SceneSettings;
+
 	private:
 		void LoadEntity(Entity entity);
 
 	private:
-		SceneSettings m_SceneSettings;
+		
 		std::shared_ptr<Camera> m_MainCamera = nullptr;
 		entt::registry m_Registry;
 

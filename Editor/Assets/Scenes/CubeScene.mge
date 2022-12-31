@@ -1,0 +1,29 @@
+SceneSettings:
+  Title: CubeScene
+  Index: 0
+  AmbientColour: [0.200000003, 0.200000003, 0.300000012]
+  SpecularPower: 256
+  BackgroundColour: [0.200000003, 0.200000003, 0.300000012, 1]
+  VSYNC: true
+Entities:
+  -  # Entity
+    IDComponent:
+      ID: 4140551510097234591
+      Tag: Mesh Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\iron-rusted4-gloss.dds
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\Cube.x
+      PixelShader: 0
+      VertexShader: 0
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 0
+      Sampler: 0

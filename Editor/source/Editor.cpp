@@ -1,6 +1,6 @@
 #include "Editor.h"
 #include "imgui.h"
-#include <filesystem>
+
 
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Platform/SDLWinUtils.h"
@@ -11,9 +11,13 @@ namespace Engine
 {
 	Editor::Editor()
 	{
-		m_FileIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-file-150.png");
-		m_FolderIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-folder-150.png");
+		std::filesystem::path MainPath = std::filesystem::current_path().parent_path().append("Editor");
+		std::filesystem::path Resource = MainPath.string() + "\\Resources";
+		m_AssetPath = MainPath.string() + "\\Assets";
 
+		m_FileIcon = Texture2D::Create(Resource.string() + "/icons/icons8-file-150.png");
+		m_FolderIcon = Texture2D::Create(Resource.string() + "/icons/icons8-folder-150.png");
+		
 		m_Scene = std::make_shared<Scene>();
 		m_Scene->InitScene();
 		Renderer::SetScene(m_Scene);
@@ -29,10 +33,22 @@ namespace Engine
 	{
 		m_Scene->RenderScene();
 		DockSpace();
-		EntitiesWindow();
-		GameWindow();
-		Details();
-		Assets();
+
+		if(bShowEntitesWindow)
+			EntitiesWindow();
+
+		if(bShowGameWindow)
+			GameWindow();
+
+		if(bShowDetailsWindow)
+			Details();
+
+		if(bShowAssetsWindow)
+			Assets();
+
+		if (bShowSceneSettingsWindow)
+			SceneSettings();
+
 		//ImGui::ShowDemoWindow();
 	}
 
@@ -124,6 +140,30 @@ namespace Engine
 				}
 				ImGui::EndMenu();
 			}
+			
+
+			if (ImGui::BeginMenu("Windows"))
+			{
+				if (ImGui::MenuItem("Game", NULL, bShowGameWindow))
+					bShowGameWindow = !bShowGameWindow;
+
+				if (ImGui::MenuItem("Entities", NULL, bShowEntitesWindow))
+					bShowEntitesWindow = !bShowEntitesWindow;
+
+				if (ImGui::MenuItem("Details", NULL, bShowDetailsWindow))
+					bShowDetailsWindow = !bShowDetailsWindow;
+
+				if (ImGui::MenuItem("Assets", NULL, bShowAssetsWindow))
+					bShowAssetsWindow = !bShowAssetsWindow;
+
+				if (ImGui::MenuItem("Scene Settings", NULL, bShowSceneSettingsWindow))
+					bShowSceneSettingsWindow = !bShowSceneSettingsWindow;
+
+				
+
+				ImGui::EndMenu();
+			}
+			
 			ImGui::EndMenuBar();
 		}
 
@@ -269,9 +309,12 @@ namespace Engine
 	void Editor::Assets()
 	{
 		ImGui::Begin("Assets");
-		static std::filesystem::path currentPath = std::filesystem::current_path();
+		static std::filesystem::path currentPath = m_AssetPath;
+		ImGui::Text("Directory: "); ImGui::SameLine(); ImGui::Text(currentPath.string().c_str());
 
-		if (ImGui::Button("Back"))
+		ImGui::Separator();
+
+		if (ImGui::Button("Back") && currentPath != m_AssetPath)
 		{
 			currentPath = currentPath.parent_path();
 		}
@@ -317,6 +360,47 @@ namespace Engine
 
 		ImGui::End();
 	}
+
+	void Editor::SceneSettings()
+	{
+		ImGui::Begin("Scene Settings");
+		
+		ImGui::Text("Name: "); ImGui::SameLine(); ImGui::Text(m_Scene->GetSceneSettings().title.c_str());
+		
+		ImGui::Separator();
+
+		ImGui::PushItemWidth(50);
+		ImGui::Text("Specular Power"); ImGui::SameLine(); ImGui::InputFloat("##Specular", &m_Scene->m_SceneSettings.specularPower);
+		ImGui::PopItemWidth();
+
+		ImGui::Separator();
+
+		ImGui::Text("VSync"); ImGui::SameLine(); ImGui::Checkbox("##vsync", &m_Scene->m_SceneSettings.vsyncOn);
+
+		ImGui::Separator();
+
+		ImGui::Text("Ambient Colour:"); ImGui::SameLine();
+		ImGui::PushItemWidth(50);
+		ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##abx", &m_Scene->m_SceneSettings.ambientColour.x); ImGui::SameLine();
+		ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##abz", &m_Scene->m_SceneSettings.ambientColour.y); ImGui::SameLine();
+		ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##aby", &m_Scene->m_SceneSettings.ambientColour.z);
+		ImGui::PopItemWidth();
+
+		ImGui::Separator();
+
+		ImGui::Text("Background Colour:"); ImGui::SameLine();
+		ImGui::PushItemWidth(50);
+		ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##bgx", &m_Scene->m_SceneSettings.backgroundColour.x); ImGui::SameLine();
+		ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##bgz", &m_Scene->m_SceneSettings.backgroundColour.y); ImGui::SameLine();
+		ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##bgy", &m_Scene->m_SceneSettings.backgroundColour.z);  ImGui::SameLine();
+		ImGui::Text("A"); ImGui::SameLine(); ImGui::InputFloat("##bga", &m_Scene->m_SceneSettings.backgroundColour.w);
+		ImGui::PopItemWidth();
+
+		ImGui::Separator();
+
+		ImGui::End();
+	}
+
 	void Editor::EntityNode(Entity entity)
 	{
 		auto& id = entity.GetComponent<IDComponent>().ID;
@@ -349,6 +433,7 @@ namespace Engine
 			ImGui::TreePop();
 		}
 	}
+	
 	void Editor::DrawComponents()
 	{
 		if (m_SelectedEntity)
@@ -683,6 +768,7 @@ namespace Engine
 		}
 
 	}
+	
 	void Editor::Save()
 	{
 		if (!m_SceneFilePath.empty())

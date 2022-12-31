@@ -3,27 +3,5 @@ SceneSettings:
   Index: 0
   AmbientColour: [0.200000003, 0.200000003, 0.300000012]
   SpecularPower: 256
-  BackgroundColour: [0.200000003, 0.200000003, 0.300000012, 1]
+  BackgroundColour: [1, 0.200000003, 0.300000012, 1]
   VSYNC: true
-Entities:
-  -  # Entity
-    IDComponent:
-      ID: 5026336673899796885
-      Tag: Mesh Entity
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    TextureComponent:
-      Path: ""
-      RoughPath: ""
-      HeightPath: ""
-      MetalnessPath: ""
-    MeshRendererComponent:
-      Path: ""
-      PixelShader: 0
-      VertexShader: 0
-      BlendState: 0
-      DepthStencil: 0
-      Rasterizer: 0
-      Sampler: 0

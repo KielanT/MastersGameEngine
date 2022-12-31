@@ -344,13 +344,13 @@ namespace Engine
 
     void DX11Renderer::RenderScene()
     {
-        glm::vec4 bgColour = glm::vec4(0.2f, 0.2f, 0.3f, 1.0f);
+        static glm::vec4 bgColour = glm::vec4(0.2f, 0.2f, 0.3f, 1.0f);
         if (m_Scene != nullptr)
         {
             PerFrameConstants.ambientColour = m_Scene->GetSceneSettings().ambientColour;
             PerFrameConstants.specularPower = m_Scene->GetSceneSettings().specularPower;
             PerFrameConstants.cameraPosition = m_Scene->GetCamera()->Position();
-            glm::vec4 bgColour = m_Scene->GetSceneSettings().backgroundColour;
+            bgColour = m_Scene->GetSceneSettings().backgroundColour;
         }
 
         m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, m_DepthStencil);

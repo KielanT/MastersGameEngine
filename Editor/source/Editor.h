@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <filesystem>
 
 #include <Engine.h>
 
@@ -23,6 +24,7 @@ namespace Engine
 		void EntitiesWindow();
 		void Details();
 		void Assets();
+		void SceneSettings();
 
 		void EntityNode(Entity entity);
 		void DrawComponents();
@@ -42,6 +44,13 @@ namespace Engine
 		void SaveAs();
 
 	private:
+		bool bShowGameWindow = true;
+		bool bShowEntitesWindow = true;
+		bool bShowDetailsWindow = true;
+		bool bShowAssetsWindow = true;
+		bool bShowSceneSettingsWindow = true;
+
+	private:
 		Entity m_SelectedEntity;
 		bool bUnsaved = false;
 		bool bIsPBR = false;
@@ -52,5 +61,7 @@ namespace Engine
 		std::shared_ptr<Engine::Texture2D> m_FileIcon;
 		std::shared_ptr<Engine::Texture2D> m_FolderIcon;
 		std::shared_ptr<Engine::Scene> m_Scene;
+
+		std::filesystem::path m_AssetPath;
 	};
 }
