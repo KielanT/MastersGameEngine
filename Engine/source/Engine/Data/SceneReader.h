@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Scene.h"
-#include "Entity.h"
+#include "Engine/Scene/Scene.h"
+#include "Engine/Scene/Entity.h"
 #include <yaml-cpp/yaml.h>
 
 namespace Engine

@@ -5,7 +5,7 @@
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
-#include "Engine/SceneSystem/Scenes/SceneSerializer.h"
+#include "Engine/Data/SceneSerializer.h"
 
 namespace Engine
 {

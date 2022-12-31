@@ -1,7 +1,7 @@
 #pragma once
 
 #include "entt/entt.hpp"
-#include "Engine/SceneSystem/Scenes/Scene.h"
+#include "Engine/Scene/Scene.h"
 //#include "Engine/Interfaces/IScene.h"
 #include "Components.h"
 

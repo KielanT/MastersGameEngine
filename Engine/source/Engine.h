@@ -11,7 +11,7 @@
 
 #include "Engine/Interfaces/ILayer.h"
 #include "Engine/Interfaces/ITexture.h"
-#include "Engine/SceneSystem/Scenes/Scene.h"
-#include "Engine/SceneSystem/Scenes/Entity.h"
+#include "Engine/Scene/Scene.h"
+#include "Engine/Scene/Entity.h"
 
 

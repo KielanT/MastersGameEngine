@@ -4,7 +4,7 @@
 #include "imgui.h"
 #include "backends/imgui_impl_SDL.h"
 #include "backends/imgui_impl_dx11.h"
-#include "Engine/SceneSystem/Scenes/Entity.h"
+#include "Engine/Scene/Entity.h"
 
 namespace Engine
 {

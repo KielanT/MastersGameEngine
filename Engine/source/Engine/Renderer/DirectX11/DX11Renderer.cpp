@@ -1,7 +1,7 @@
 #include "epch.h"
 #include "DX11Renderer.h"
 #include "Engine/Lab/GraphicsHelpers.h"
-#include "Engine/SceneSystem/Scenes/Entity.h"
+#include "Engine/Scene/Entity.h"
 #include "Engine/Layer.h"
 
 #include "imgui.h"
