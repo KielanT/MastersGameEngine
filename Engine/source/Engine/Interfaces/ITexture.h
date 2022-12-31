@@ -16,6 +16,9 @@ namespace Engine
 	class Texture2D : public Texture
 	{
 	public:
+		virtual eint32 GetWidth() const = 0;
+		virtual eint32 GetHeight() const = 0;
+
 		static std::shared_ptr<Texture2D> Create(const std::string& path);
 	};
 }

@@ -30,6 +30,8 @@ namespace Engine
 		virtual void ShutdownRenderer() = 0;
 		
 		virtual void InitGUI() = 0;
+
+		virtual CComPtr<ID3D11ShaderResourceView> GetSceneTexture() = 0;
 	};
 
 	std::shared_ptr<RendererAPI> Create(const ERendererAPI API); // Create Renderer

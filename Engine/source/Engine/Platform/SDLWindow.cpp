@@ -8,7 +8,7 @@
 #include "backends/imgui_impl_dx11.h"
 
 #include "Engine/Renderer/Renderer.h"
-
+#include "Engine/Layer.h"
 
 namespace Engine
 {
@@ -46,9 +46,9 @@ namespace Engine
 			LOG_ERROR("Error Loading First Scene");
 		}*/
 
-		Renderer::SetScene(m_Scene);
+		//Renderer::SetScene(m_Scene);
 
-		m_Scene->InitScene();
+		//m_Scene->InitScene();
 
 		m_Timer.Start();
 
@@ -76,7 +76,8 @@ namespace Engine
 			
 			float frameTime = m_Timer.DeltaTime();
 			Renderer::RenderLoop();
-			m_Scene->UpdateScene(frameTime);
+			//m_Scene->UpdateScene(frameTime);
+			Layer::Update(frameTime);
 			
 
 		}
@@ -117,7 +118,7 @@ namespace Engine
 
 		props = m_Props;
 
-		m_Scene = std::make_shared<Scene>();
+		//m_Scene = std::make_shared<Scene>();
 		
 
 		return TRUE;

@@ -37,7 +37,7 @@ namespace Engine
 
 		ITimer m_Timer;
 
-		std::shared_ptr<Scene> m_Scene = nullptr;
+		//std::shared_ptr<Scene> m_Scene = nullptr;
 
 	};
 }

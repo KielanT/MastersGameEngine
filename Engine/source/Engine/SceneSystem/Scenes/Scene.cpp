@@ -28,6 +28,7 @@ namespace Engine
 	void Scene::UnloadScene()
 	{
 		m_Registry.clear();
+		m_SceneSettings = SceneSettings();
 	}
 
 	void Scene::RenderScene()

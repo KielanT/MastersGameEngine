@@ -1,71 +1,108 @@
- #include "epch.h"
+#include "Editor.h"
+#include "imgui.h"
 #include <filesystem>
 
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
-
-#include "Engine/UI/EditorLayer.h"
-#include "Engine/Lab/GraphicsHelpers.h"
-#include "Engine/Platform/SDLWinUtils.h"
-
 #include "Engine/Renderer/Renderer.h"
+#include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
 #include "Engine/SceneSystem/Scenes/SceneSerializer.h"
 
 namespace Engine
 {
-	void EditorLayer::RenderGUI()
+	Editor::Editor()
 	{
-		MainMenuBar();
+		m_FileIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-file-150.png");
+		m_FolderIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-folder-150.png");
+
+		m_Scene = std::make_shared<Scene>();
+		m_Scene->InitScene();
+		Renderer::SetScene(m_Scene);
+		m_CurrentSceneName = m_Scene->GetSceneSettings().title;
+	}
+
+	bool Editor::Init()
+	{
+		return true;
+	}
+
+	void Editor::Render()
+	{
+		m_Scene->RenderScene();
 		DockSpace();
-		//MainWindow();
-		GameWindow();
 		EntitiesWindow();
+		GameWindow();
 		Details();
 		Assets();
-		
 		//ImGui::ShowDemoWindow();
-
 	}
-	
-	void EditorLayer::MainMenuBar()
+
+	void Editor::Update(float frameTime)
 	{
-		if (ImGui::BeginMainMenuBar())
+		
+	}
+
+	void Editor::DockSpace()
+	{
+		//ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
+		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoCollapse
+			| ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_MenuBar;
+
+		ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->Pos);
+		ImGui::SetNextWindowSize(viewport->Size);
+		ImGui::SetNextWindowViewport(viewport->ID);
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+		std::string windowName = m_CurrentSceneName + "###";
+		ImGui::Begin(windowName.c_str(), (bool*)0, window_flags);
+		ImGui::PopStyleVar();
+		MainMenuBar();
+
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+		{
+			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+		}
+
+		ImGui::End();
+	}
+
+	void Editor::MainMenuBar()
+	{
+
+		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("Save Scene"))
+				if (ImGui::MenuItem("New Scene"))
 				{
-					if (!m_SceneFilePath.empty())
+					if (bUnsaved)
 					{
-						SceneSerializer::SerializeScene(m_SceneFilePath, m_Scene);
-						m_Unsaved = false;
+						// Save before changing
+						bIsSaveNeeded = true;
 					}
 					else
 					{
-						// Save As
-						std::string path = FileDialog::SaveFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene (*.mge)\0*.mge\0");
-						
-						if (!path.empty())
-						{
-							SceneSerializer::SerializeScene(path, m_Scene);
-							m_Unsaved = false;
-							m_SceneFilePath = path;
-						}
+						m_Scene->UnloadScene();
+						m_SelectedEntity = {};
+						m_CurrentSceneName = m_Scene->GetSceneSettings().title;
+						m_SceneFilePath = "";
+						bUnsaved = true;
 					}
+				}
+
+				if (ImGui::MenuItem("Save Scene"))
+				{
+					Save();
 				}
 				if (ImGui::MenuItem("Save As Scene"))
 				{
-					// Save As
-					std::string path = FileDialog::SaveFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene (*.mge)\0*.mge\0");
-
-					if (!path.empty())
-					{
-						SceneSerializer::SerializeScene(path, m_Scene);
-						m_Unsaved = false;
-						m_SceneFilePath = path;
-					}
+					SaveAs();
 				}
 
 				if (ImGui::MenuItem("Load Scene"))
@@ -78,6 +115,7 @@ namespace Engine
 
 						SceneSerializer::DeserializeScene(path, m_Scene);
 						m_SceneFilePath = path;
+						m_CurrentSceneName = m_Scene->GetSceneSettings().title;
 						if (m_Scene != nullptr)
 						{
 							m_Scene->GetEntityRegistry().each([&](auto entityID)
@@ -91,46 +129,55 @@ namespace Engine
 				}
 				ImGui::EndMenu();
 			}
-			ImGui::EndMainMenuBar();
+			ImGui::EndMenuBar();
+		}
+
+		if (bIsSaveNeeded)
+		{
+			ImGui::OpenPopup("Save");
+		}
+
+		if (ImGui::BeginPopupModal("Save", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::Text("Save the Current Scene");
+			if (ImGui::Button("Save", ImVec2(120, 0)))
+			{
+				Save();
+				m_Scene->UnloadScene();
+				m_SelectedEntity = {};
+				m_CurrentSceneName = m_Scene->GetSceneSettings().title;
+				m_SceneFilePath = "";
+				bUnsaved = true;
+
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SetItemDefaultFocus();
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+			
+			bIsSaveNeeded = false;
+
+			ImGui::EndPopup();
 		}
 	}
 
-	void EditorLayer::DockSpace()
-	{
-		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-		
-	}
-
-	void EditorLayer::MainWindow()
-	{
-		ImGui::Begin("Main");
-
-		ImGui::End();
-	}
-	
-	void EditorLayer::GameWindow()
+	void Editor::GameWindow()
 	{
 		ImGui::Begin("Game");
-		//ImVec2 size = ImGui::GetWindowSize();
-		
-		if(m_SceneTexture)
-			ImGui::Image(m_SceneTexture, ImVec2(1600 / 2, 900 / 2));
 
+		if (Renderer::GetSceneTexture() != nullptr)
+			ImGui::Image(Renderer::GetSceneTexture(), ImVec2(1600 / 2, 900 / 2));
 		ImGui::End();
 	}
 
-
-	void EditorLayer::EntitiesWindow()
+	void Editor::EntitiesWindow()
 	{
-		
-		
 		ImGuiWindowFlags window_flags = 0;
-		if (m_Unsaved)   window_flags |= ImGuiWindowFlags_UnsavedDocument;
+		if (bUnsaved)   window_flags |= ImGuiWindowFlags_UnsavedDocument;
 
-		
 		ImGui::Begin("Entities", (bool*)0, window_flags);
 
-		bool btn = ImGui::Button("Add");
+		bool btn = ImGui::Button("Add Entity");
 		if (btn || (ImGui::IsMouseDown(1) && ImGui::IsWindowHovered()))
 		{
 			ImGui::OpenPopup("EntityPopup");
@@ -138,16 +185,15 @@ namespace Engine
 
 		if (ImGui::BeginPopup("EntityPopup"))
 		{
-			//std::shared_ptr<TestScene> scene = std::static_pointer_cast<TestScene>(m_Scene);
 			if (ImGui::MenuItem("Create Empty Entity"))
 			{
-				m_SelectedEntity = m_Scene->CreateEntity("Empty Entity"); 
-				m_Unsaved = true;
+				m_SelectedEntity = m_Scene->CreateEntity("Empty Entity");
+				bUnsaved = true;
 			}
 			if (ImGui::MenuItem("Create Mesh Entity"))
 			{
-				m_SelectedEntity = m_Scene->CreateMeshEntity("Mesh Entity"); 
-				m_Unsaved = true;
+				m_SelectedEntity = m_Scene->CreateMeshEntity("Mesh Entity");
+				bUnsaved = true;
 			}
 
 			ImGui::EndPopup();
@@ -162,11 +208,10 @@ namespace Engine
 				});
 		}
 
-		
 		ImGui::End();
 	}
 
-	void EditorLayer::Details()
+	void Editor::Details()
 	{
 		ImGui::Begin("Details");
 
@@ -175,9 +220,6 @@ namespace Engine
 			if (m_SelectedEntity)
 			{
 				DrawComponents();
-
-
-				ImGui::Separator();
 
 				if (ImGui::Button("Add Component"))
 				{
@@ -188,33 +230,33 @@ namespace Engine
 				{
 					if (ImGui::MenuItem("MeshRenderer"))
 					{
-						m_SelectedEntity.AddComponent<MeshRendererComponent>();  
-						m_Unsaved = true;
+						m_SelectedEntity.AddComponent<MeshRendererComponent>();
+						bUnsaved = true;
 					}
 					if (ImGui::MenuItem("TextureComponent"))
 					{
-						m_SelectedEntity.AddComponent<TextureComponent>();  
-						m_Unsaved = true;
+						m_SelectedEntity.AddComponent<TextureComponent>();
+						bUnsaved = true;
 					}
 					if (ImGui::MenuItem("CameraComponent"))
 					{
-						m_SelectedEntity.AddComponent<CameraComponent>();  
-						m_Unsaved = true;
+						m_SelectedEntity.AddComponent<CameraComponent>();
+						bUnsaved = true;
 					}
 					if (ImGui::MenuItem("PhysicsComponent"))
 					{
-						m_SelectedEntity.AddComponent<PhysicsComponents>(); 
-						m_Unsaved = true;
+						m_SelectedEntity.AddComponent<PhysicsComponents>();
+						bUnsaved = true;
 					}
 					if (ImGui::MenuItem("CollisionComponent"))
 					{
-						m_SelectedEntity.AddComponent<CollisionComponents>();  
-						m_Unsaved = true;
+						m_SelectedEntity.AddComponent<CollisionComponents>();
+						bUnsaved = true;
 					}
 					if (ImGui::MenuItem("ScriptComponent"))
 					{
-						m_SelectedEntity.AddComponent<ScriptComponent>();  
-						m_Unsaved = true;
+						m_SelectedEntity.AddComponent<ScriptComponent>();
+						bUnsaved = true;
 					}
 
 					ImGui::EndPopup();
@@ -229,7 +271,7 @@ namespace Engine
 		ImGui::End();
 	}
 
-	void EditorLayer::Assets()
+	void Editor::Assets()
 	{
 		ImGui::Begin("Assets");
 		static std::filesystem::path currentPath = std::filesystem::current_path();
@@ -237,14 +279,6 @@ namespace Engine
 		if (ImGui::Button("Back"))
 		{
 			currentPath = currentPath.parent_path();
-		}
-
-		static bool test = true;
-		if (test)
-		{
-			m_FileIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-file-150.png");
-			m_FolderIcon = Texture2D::Create("W:/Uni/Masters/CO4305/MastersGameEngine/Engine/media/icons/icons8-folder-150.png");
-			test = false;
 		}
 
 		static float padding = 16.0f;
@@ -262,9 +296,9 @@ namespace Engine
 		{
 			ImGui::PushID(dir.path().filename().string().c_str());
 			std::shared_ptr<Texture2D> icon = dir.is_directory() ? m_FolderIcon : m_FileIcon;
-			
+
 			ImGui::ImageButton(icon->GetTexture(), { thumbnailSize , thumbnailSize });
-			
+
 			if (!dir.is_directory() && ImGui::BeginDragDropSource())
 			{
 				//auto relativePath = std::filesystem::relative(dir.path(), currentPath);
@@ -288,8 +322,7 @@ namespace Engine
 
 		ImGui::End();
 	}
-
-	void EditorLayer::EntityNode(Entity entity)
+	void Editor::EntityNode(Entity entity)
 	{
 		auto& id = entity.GetComponent<IDComponent>().ID;
 		auto& tag = entity.GetComponent<IDComponent>().Tag;
@@ -311,7 +344,7 @@ namespace Engine
 			{
 				m_Scene->DeleteEntity(entity);
 				m_SelectedEntity = {}; // Clears Selected entity
-				m_Unsaved = true;
+				bUnsaved = true;
 			}
 			ImGui::EndPopup();
 		}
@@ -321,13 +354,15 @@ namespace Engine
 			ImGui::TreePop();
 		}
 	}
-
-	void EditorLayer::DrawComponents()
+	void Editor::DrawComponents()
 	{
 		if (m_SelectedEntity)
 		{
 			if (m_SelectedEntity.HasComponent<IDComponent>())
-				DrawIDComponent(m_SelectedEntity.GetComponent<IDComponent>()); 	ImGui::Separator();
+			{
+				DrawIDComponent(m_SelectedEntity.GetComponent<IDComponent>());
+				ImGui::Separator();
+			}
 
 			if (m_SelectedEntity.HasComponent<TransformComponent>())
 			{
@@ -361,13 +396,13 @@ namespace Engine
 			}
 			if (m_SelectedEntity.HasComponent<ScriptComponent>())
 			{
-				DrawScriptComponent(m_SelectedEntity.GetComponent<ScriptComponent>()); 	
+				DrawScriptComponent(m_SelectedEntity.GetComponent<ScriptComponent>());
 				ImGui::Separator();
 			}
 		}
 	}
 
-	void EditorLayer::DrawIDComponent(IDComponent& comp)
+	void Editor::DrawIDComponent(IDComponent& comp)
 	{
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
@@ -378,7 +413,7 @@ namespace Engine
 		}
 	}
 
-	void EditorLayer::DrawTransformComponent(TransformComponent& comp)
+	void Editor::DrawTransformComponent(TransformComponent& comp)
 	{
 		float width = 50.0f;
 
@@ -389,7 +424,7 @@ namespace Engine
 			ImGui::PushItemWidth(width);
 			ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##px", &comp.Position.x); ImGui::SameLine();
 			ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##pz", &comp.Position.y); ImGui::SameLine();
-			ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##py", &comp.Position.z); 
+			ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##py", &comp.Position.z);
 			ImGui::PopItemWidth();
 
 
@@ -410,16 +445,13 @@ namespace Engine
 
 			ImGui::TreePop();
 		}
-			
 	}
 
-	void EditorLayer::DrawMeshRendererComponent(MeshRendererComponent& comp)
+	void Editor::DrawMeshRendererComponent(MeshRendererComponent& comp)
 	{
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 		if (ImGui::TreeNodeEx("Mesh Renderer", flags))
 		{
-			std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
-
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strncpy_s(buffer, comp.Path.c_str(), sizeof(buffer));
@@ -438,8 +470,8 @@ namespace Engine
 
 					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
 					comp.Model = std::make_shared<Model>(mesh);
-					m_Unsaved = true;
-				
+					bUnsaved = true;
+
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -456,10 +488,10 @@ namespace Engine
 					std::string last = comp.Path;
 					comp.Path = file;
 
-					
+
 					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
 					comp.Model = std::make_shared<Model>(mesh);
-					m_Unsaved = true;
+					bUnsaved = true;
 				}
 			}
 
@@ -485,7 +517,7 @@ namespace Engine
 			blendItems[1] = "AdditiveBlending";
 			comp.BlendState = static_cast<EBlendState>(RendererComboBox("Blend State: ", blendItems, static_cast<int>(EBlendState::EBlendStateSize), bs));
 
-			
+
 			static int dss = 0;
 			const char* dssItems[static_cast<int>(EDepthStencilState::EDepthStencilStateSize)];
 			dssItems[0] = "UseDepthBufferState";
@@ -512,18 +544,18 @@ namespace Engine
 		}
 
 		if (comp.PixelShader == EPixelShader::PBRPixelShader || comp.VertexShader == EVertexShader::PBRVertexShader)
-			IsPBR = true;
+			bIsPBR = true;
 		else
-			IsPBR = false;
+			bIsPBR = false;
 	}
 
-	void EditorLayer::DrawTextureComponent(TextureComponent& comp)
+	void Editor::DrawTextureComponent(TextureComponent& comp)
 	{
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
-		
+
 		if (ImGui::TreeNodeEx("Texture", flags))
 		{
-			if(!IsPBR)
+			if (!bIsPBR)
 				TextureBoxes("Texture", comp.Path, comp.ResourceView);
 			else
 			{
@@ -538,27 +570,28 @@ namespace Engine
 
 	}
 
-	void EditorLayer::DrawCameraComponent(CameraComponent& comp)
+	void Editor::DrawCameraComponent(CameraComponent& comp)
 	{
 		ImGui::Text("Camera Component : NOT IMPLEMENTED");
 	}
 
-	void EditorLayer::DrawPhysicsComponent(PhysicsComponents& comp)
+	void Editor::DrawPhysicsComponent(PhysicsComponents& comp)
 	{
+
 		ImGui::Text("Physics Component : NOT IMPLEMENTED");
 	}
 
-	void EditorLayer::DrawCollisionComponent(CollisionComponents& comp)
+	void Editor::DrawCollisionComponent(CollisionComponents& comp)
 	{
 		ImGui::Text("Collision Component : NOT IMPLEMENTED");
 	}
 
-	void EditorLayer::DrawScriptComponent(ScriptComponent& comp)
+	void Editor::DrawScriptComponent(ScriptComponent& comp)
 	{
 		ImGui::Text("Script Component : NOT IMPLEMENTED");
 	}
 
-	int EditorLayer::RendererComboBox(const std::string& label, const char* items[], int size, int& selected)
+	int Editor::RendererComboBox(const std::string& label, const char* items[], int size, int& selected)
 	{
 		const char* combo_preview_value = items[selected];
 		ImGui::PushItemWidth(310);
@@ -574,7 +607,6 @@ namespace Engine
 				if (ImGui::Selectable(items[n], is_selected))
 					selected = n;
 
-				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
 				if (is_selected)
 					ImGui::SetItemDefaultFocus();
 			}
@@ -584,15 +616,14 @@ namespace Engine
 		ImGui::PopItemWidth();
 
 		return selected;
-		
 	}
 
-	void EditorLayer::TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView)
+	void Editor::TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView)
 	{
 		std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
 
 		std::string label = Label;
-		
+
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
 		strncpy_s(buffer, path.c_str(), sizeof(buffer));
@@ -617,7 +648,7 @@ namespace Engine
 				if (dx11Render->LoadTexture(path, &Resource, &ResourceView))
 				{
 					resourseView = ResourceView;
-					m_Unsaved = true;
+					bUnsaved = true;
 				}
 				else
 				{
@@ -646,7 +677,7 @@ namespace Engine
 				if (dx11Render->LoadTexture(path, &Resource, &ResourceView))
 				{
 					resourseView = ResourceView;
-					m_Unsaved = true;
+					bUnsaved = true;
 				}
 				else
 				{
@@ -655,10 +686,10 @@ namespace Engine
 				}
 			}
 		}
-		
+
 	}
 
-	void EditorLayer::LoadEntity(Entity entity)
+	void Editor::LoadEntity(Entity entity)
 	{
 		if (entity.HasComponent<MeshRendererComponent>())
 		{
@@ -667,7 +698,7 @@ namespace Engine
 			{
 				std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
 				comp.Model = std::make_shared<Model>(mesh);
-				m_Unsaved = true;
+				bUnsaved = true;
 			}
 		}
 		if (entity.HasComponent<TextureComponent>())
@@ -682,7 +713,7 @@ namespace Engine
 				if (dx11Render->LoadTexture(comp.Path, &Resource, &ResourceView))
 				{
 					comp.ResourceView = ResourceView;
-					m_Unsaved = true;
+					bUnsaved = true;
 				}
 			}
 			if (!comp.RoughPath.empty())
@@ -693,7 +724,7 @@ namespace Engine
 				if (dx11Render->LoadTexture(comp.RoughPath, &Resource, &ResourceView))
 				{
 					comp.RoughView = ResourceView;
-					m_Unsaved = true;
+					bUnsaved = true;
 				}
 
 			}
@@ -705,7 +736,7 @@ namespace Engine
 				if (dx11Render->LoadTexture(comp.NormalPath, &Resource, &ResourceView))
 				{
 					comp.NormalView = ResourceView;
-					m_Unsaved = true;
+					bUnsaved = true;
 				}
 
 			}
@@ -717,7 +748,7 @@ namespace Engine
 				if (dx11Render->LoadTexture(comp.HeightPath, &Resource, &ResourceView))
 				{
 					comp.HeightView = ResourceView;
-					m_Unsaved = true;
+					bUnsaved = true;
 				}
 
 			}
@@ -729,12 +760,39 @@ namespace Engine
 				if (dx11Render->LoadTexture(comp.MetalnessPath, &Resource, &ResourceView))
 				{
 					comp.MetalnessView = ResourceView;
-					m_Unsaved = true;
+					bUnsaved = true;
 				}
 
 			}
 		}
 	}
 
+	void Editor::Save()
+	{
+		if (!m_SceneFilePath.empty())
+		{
+			SceneSerializer::SerializeScene(m_SceneFilePath, m_Scene);
+			bUnsaved = false;
+			m_CurrentSceneName = m_Scene->GetSceneSettings().title;
+		}
+		else
+		{
+			SaveAs();
+		}
+	}
 
+	void Editor::SaveAs()
+	{
+		// Save As
+		std::string path = FileDialog::SaveFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene (*.mge)\0*.mge\0");
+
+		if (!path.empty())
+		{
+			SceneSerializer::SerializeScene(path, m_Scene);
+			bUnsaved = false;
+			m_SceneFilePath = path;
+			m_CurrentSceneName = m_Scene->GetSceneSettings().title;
+
+		}
+	}
 }

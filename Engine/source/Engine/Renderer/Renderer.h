@@ -19,6 +19,8 @@ namespace Engine
 
 		static void ShutdownRenderer();
 
+		static CComPtr<ID3D11ShaderResourceView> GetSceneTexture();
+
 		static std::shared_ptr<RendererAPI> GetRendererAPI();
 		
 	};

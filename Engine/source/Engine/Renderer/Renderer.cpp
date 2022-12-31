@@ -87,6 +87,11 @@ namespace Engine
 		LOG_DEBUG("Renderer shutdown");
 	}
 
+	CComPtr<ID3D11ShaderResourceView> Renderer::GetSceneTexture()
+	{
+		return m_RendererAPI->GetSceneTexture();
+	}
+
 	std::shared_ptr<RendererAPI> Renderer::GetRendererAPI()
 	{
 		return m_RendererAPI;

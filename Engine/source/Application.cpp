@@ -1,5 +1,6 @@
 #include "epch.h"
 #include "Application.h"
+#include "Engine/Layer.h"
 
 #include <SDL.h>
 #include "Engine/Renderer/Renderer.h"
@@ -18,6 +19,7 @@ namespace Engine
 		}
 
 		Renderer::Init(props);
+		
 	}
 	
 	Application::~Application()
@@ -28,6 +30,7 @@ namespace Engine
 	
 	void Application::Run()
 	{
+		Layer::Init(m_Layer);
 		m_Window->Update();
 	}
 

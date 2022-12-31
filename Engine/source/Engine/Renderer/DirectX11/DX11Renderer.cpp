@@ -1,6 +1,8 @@
 #include "epch.h"
 #include "DX11Renderer.h"
 #include "Engine/Lab/GraphicsHelpers.h"
+#include "Engine/SceneSystem/Scenes/Entity.h"
+#include "Engine/Layer.h"
 
 #include "imgui.h"
 #include "backends/imgui_impl_SDL.h"
@@ -115,7 +117,7 @@ namespace Engine
         m_D3DContext->RSSetViewports(1, &vp);
 
         InitiliseSceneTexture(props);
-        Layer.SetSceneTexture(m_SceneTextureSRV);
+        //Layer.SetSceneTexture(m_SceneTextureSRV);
 
         InitGUI();
         
@@ -141,8 +143,8 @@ namespace Engine
     void DX11Renderer::RenderLoop()
     {
         RenderScene();
-        RenderSceneFromCamera();
-        Layer.RenderGUI();
+        Layer::Render();
+        //Layer.RenderGUI();
     }
 
     void DX11Renderer::Renderer(Entity entity)
@@ -182,7 +184,10 @@ namespace Engine
 
     void DX11Renderer::Present()
     {
-        m_SwapChain->Present(m_Scene->GetSceneSettings().vsyncOn ? 1 : 0, 0);
+        if(m_Scene != nullptr)
+            m_SwapChain->Present(m_Scene->GetSceneSettings().vsyncOn ? 1 : 0, 0);
+        else
+            m_SwapChain->Present(true, 0);
     }
 
     void DX11Renderer::GUINewFrame()
@@ -212,6 +217,11 @@ namespace Engine
     {
         if (ImGui::GetCurrentContext() != nullptr)
             ImGui_ImplDX11_Init(m_D3DDevice, m_D3DContext);
+    }
+
+    CComPtr<ID3D11ShaderResourceView> DX11Renderer::GetSceneTexture()
+    {
+        return m_SceneTextureSRV;
     }
 
     void DX11Renderer::InitiliseSceneTexture(WindowProperties& props)
@@ -337,31 +347,35 @@ namespace Engine
 
     void DX11Renderer::RenderScene()
     {
-        PerFrameConstants.ambientColour = m_Scene->GetSceneSettings().ambientColour;
-        PerFrameConstants.specularPower = m_Scene->GetSceneSettings().specularPower;
-        PerFrameConstants.cameraPosition = m_Scene->GetCamera()->Position();
+        glm::vec4 bgColour = glm::vec4(0.2f, 0.2f, 0.3f, 1.0f);
+        if (m_Scene != nullptr)
+        {
+            PerFrameConstants.ambientColour = m_Scene->GetSceneSettings().ambientColour;
+            PerFrameConstants.specularPower = m_Scene->GetSceneSettings().specularPower;
+            PerFrameConstants.cameraPosition = m_Scene->GetCamera()->Position();
+            glm::vec4 bgColour = m_Scene->GetSceneSettings().backgroundColour;
+        }
+            m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, m_DepthStencil);
+
+            m_D3DContext->OMSetRenderTargets(1, &m_SceneRenderTarget.p, m_DepthStencil);
+
+            // Clear the back buffer to a fixed colour and the depth buffer to the far distance
+            //glm::vec4 backgroundColour = m_Scenes[m_SceneIndex]->GetBackgroundColour();
+           
+            m_D3DContext->ClearRenderTargetView(m_BackBufferRenderTarget, &bgColour.r);
+            m_D3DContext->ClearRenderTargetView(m_SceneRenderTarget, &bgColour.r);
+            m_D3DContext->ClearDepthStencilView(m_DepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+            // Render the scene from the main camera
+            RenderSceneFromCamera();
+
+            //Layer.RenderGUI();
+
+
+
+            m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, nullptr);
+
         
-        m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, m_DepthStencil);
-        
-        m_D3DContext->OMSetRenderTargets(1, &m_SceneRenderTarget.p, m_DepthStencil);
-        
-        // Clear the back buffer to a fixed colour and the depth buffer to the far distance
-        //glm::vec4 backgroundColour = m_Scenes[m_SceneIndex]->GetBackgroundColour();
-        glm::vec4 backgroundColour = m_Scene->GetSceneSettings().backgroundColour;
-        m_D3DContext->ClearRenderTargetView(m_BackBufferRenderTarget, &backgroundColour.r);
-        m_D3DContext->ClearRenderTargetView(m_SceneRenderTarget, &backgroundColour.r);
-        m_D3DContext->ClearDepthStencilView(m_DepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
-        
-        // Render the scene from the main camera
-        RenderSceneFromCamera();
-       
-        //Layer.RenderGUI();
-   
-        
- 
-        m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, nullptr);
-        
-       
        
         
         //Layer.Update();
@@ -370,17 +384,22 @@ namespace Engine
 
     void DX11Renderer::RenderSceneFromCamera()
     {
-        PerFrameConstants.viewMatrix = m_Scene->GetCamera()->ViewMatrix();
-        PerFrameConstants.EngineionMatrix = m_Scene->GetCamera()->EngineionMatrix();
-        PerFrameConstants.viewEngineionMatrix = m_Scene->GetCamera()->ViewEngineionMatrix();
-
+        if (m_Scene != nullptr)
+        {
+            PerFrameConstants.viewMatrix = m_Scene->GetCamera()->ViewMatrix();
+            PerFrameConstants.EngineionMatrix = m_Scene->GetCamera()->EngineionMatrix();
+            PerFrameConstants.viewEngineionMatrix = m_Scene->GetCamera()->ViewEngineionMatrix();
+        }
         UpdateConstantBuffer(m_D3DContext, PerFrameConstantBuffer, PerFrameConstants);
 
         // Indicate that the constant buffer we just updated is for use in the vertex shader (VS) and pixel shader (PS)
         m_D3DContext->VSSetConstantBuffers(0, 1, &PerFrameConstantBuffer.p); // First parameter must match constant buffer number in the shader 
         m_D3DContext->PSSetConstantBuffers(0, 1, &PerFrameConstantBuffer.p);
 
-        m_Scene->RenderScene();
+        if (m_Scene != nullptr)
+        {
+            m_Scene->RenderScene();
+        }
     }
 
 }

@@ -53,6 +53,13 @@ namespace Engine
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 
+		std::filesystem::path scenePath = path;
+		SceneSettings settings = scene->GetSceneSettings();
+		//settings.title = scenePath.filename().string();
+		settings.title = scenePath.filename().replace_extension("").string();
+		scene->SetSceneSettings(settings);
+
+		//scene->GetSceneSettings().title = scenePath.filename().string();
 		SaveSceneSettings(out, scene);
 		
 		if (!scene->GetEntityRegistry().empty())

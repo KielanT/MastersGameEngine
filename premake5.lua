@@ -154,19 +154,27 @@ project "Editor"
     includedirs
     {
         "Engine/source",
+        "%{IncludeDir.DirectXTK}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.ImGui}",
 		"%{IncludeDir.ImGuiBackends}",
         "%{IncludeDir.SDL}",
         "%{IncludeDir.entt}",
+        "%{IncludeDir.assimp}",
+    }
+    libdirs
+    {
+        "%{LibDir.DirectXTK}",
+        "%{LibDir.assimp}",
     }
 
     links
     {
         "Engine",
         "ImGui",
-
+        "d3d11.lib",
+        "assimp-vc143-mt.lib",
 
     }
 

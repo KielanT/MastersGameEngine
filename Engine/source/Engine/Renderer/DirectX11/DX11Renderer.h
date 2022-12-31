@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Renderer/RendererAPI.h"
-#include "Engine/UI/EditorLayer.h"
+//#include "Engine/UI/EditorLayer.h"
 
 #include "DX11Shader.h"
 #include "DX11States.h"
@@ -52,7 +52,7 @@ namespace Engine
 	public:
 		virtual bool Init(WindowProperties& props) override;
 
-		virtual void SetScene(std::shared_ptr<Scene> scene) override { m_Scene = scene; Layer.SetScene(m_Scene); }
+		virtual void SetScene(std::shared_ptr<Scene> scene) override { m_Scene = scene; /*Layer.SetScene(m_Scene);*/ }
 
 		virtual void RenderLoop() override;
 		virtual void Renderer(Entity entity) override;
@@ -67,6 +67,8 @@ namespace Engine
 		virtual void ShutdownRenderer() override;
 
 		virtual void InitGUI() override;
+
+		virtual CComPtr<ID3D11ShaderResourceView> GetSceneTexture() override;
 
 		void InitiliseSceneTexture(WindowProperties& props);
 
@@ -110,7 +112,7 @@ namespace Engine
 		std::shared_ptr<DX11States> m_States;
 
 		std::shared_ptr<Scene> m_Scene = nullptr;
-		EditorLayer Layer;
+		//EditorLayer Layer;
 
 		WindowProperties m_Props;
 	};
