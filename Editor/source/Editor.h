@@ -20,11 +20,11 @@ namespace Engine
 	private:
 		void DockSpace();
 		void MainMenuBar();
-		void GameWindow();
-		void EntitiesWindow();
-		void Details();
-		void Assets();
-		void SceneSettings();
+		void GameWindow(bool* pOpen);
+		void EntitiesWindow(bool* pOpen);
+		void Details(bool* pOpen);
+		void Assets(bool* pOpen);
+		void SceneSettings(bool* pOpen);
 		void Preferences(bool* pOpen);
 
 		void EntityNode(Entity entity);

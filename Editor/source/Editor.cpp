@@ -45,19 +45,19 @@ namespace Engine
 		DockSpace();
 
 		if(bShowEntitesWindow)
-			EntitiesWindow();
+			EntitiesWindow(&bShowEntitesWindow);
 
 		if(bShowGameWindow)
-			GameWindow();
+			GameWindow(&bShowGameWindow);
 
 		if(bShowDetailsWindow)
-			Details();
+			Details(&bShowDetailsWindow);
 
 		if(bShowAssetsWindow)
-			Assets();
+			Assets(&bShowAssetsWindow);
 
 		if (bShowSceneSettingsWindow)
-			SceneSettings();
+			SceneSettings(&bShowSceneSettingsWindow);
 
 		if(bShowPreferencesWindow)
 			Preferences(&bShowPreferencesWindow);
@@ -224,9 +224,9 @@ namespace Engine
 		}
 	}
 
-	void Editor::GameWindow()
+	void Editor::GameWindow(bool* pOpen)
 	{
-		ImGui::Begin("Game");
+		ImGui::Begin("Game", pOpen);
 
 		if(ImGui::Button("Play"))
 		{
@@ -242,12 +242,12 @@ namespace Engine
 		ImGui::End();
 	}
 
-	void Editor::EntitiesWindow()
+	void Editor::EntitiesWindow(bool* pOpen)
 	{
 		ImGuiWindowFlags window_flags = 0;
 		if (bUnsaved)   window_flags |= ImGuiWindowFlags_UnsavedDocument;
 
-		ImGui::Begin("Entities", (bool*)0, window_flags);
+		ImGui::Begin("Entities", pOpen, window_flags);
 
 		bool btn = ImGui::Button("Add Entity");
 		if (btn || (ImGui::IsMouseDown(1) && ImGui::IsWindowHovered()))
@@ -283,9 +283,9 @@ namespace Engine
 		ImGui::End();
 	}
 
-	void Editor::Details()
+	void Editor::Details(bool* pOpen)
 	{
-		ImGui::Begin("Details");
+		ImGui::Begin("Details", pOpen);
 
 		if (m_Scene != nullptr)
 		{
@@ -343,9 +343,9 @@ namespace Engine
 		ImGui::End();
 	}
 
-	void Editor::Assets()
+	void Editor::Assets(bool* pOpen)
 	{
-		ImGui::Begin("Assets");
+		ImGui::Begin("Assets", pOpen);
 		static std::filesystem::path currentPath = m_Scene->GetSceneSettings().assetFilePath;
 		ImGui::Text("Directory: "); ImGui::SameLine(); ImGui::Text(currentPath.string().c_str());
 
@@ -398,9 +398,9 @@ namespace Engine
 		ImGui::End();
 	}
 
-	void Editor::SceneSettings()
+	void Editor::SceneSettings(bool* pOpen)
 	{
-		ImGui::Begin("Scene Settings");
+		ImGui::Begin("Scene Settings", pOpen);
 		
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 		if (ImGui::TreeNodeEx("Current Scene Settings", flags))
