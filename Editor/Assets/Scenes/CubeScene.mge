@@ -1,4 +1,5 @@
 SceneSettings:
+  AssetPath: W:\Uni\Masters\CO4305\MastersGameEngine\Editor\Assets
   Title: CubeScene
   Index: 0
   AmbientColour: [0.200000003, 0.200000003, 0.300000012]

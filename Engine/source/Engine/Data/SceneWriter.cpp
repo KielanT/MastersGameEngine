@@ -83,6 +83,7 @@ namespace Engine
 	{
 		out << YAML::Key << "SceneSettings";
 		out << YAML::BeginMap;
+		out << YAML::Key << "AssetPath" << YAML::Value << scene->GetSceneSettings().assetFilePath.string();
 		out << YAML::Key << "Title" << YAML::Value << scene->GetSceneSettings().title;
 		out << YAML::Key << "Index" << YAML::Value << scene->GetSceneSettings().index;
 		out << YAML::Key << "AmbientColour" << YAML::Value << scene->GetSceneSettings().ambientColour;

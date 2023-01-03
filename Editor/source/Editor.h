@@ -25,6 +25,7 @@ namespace Engine
 		void Details();
 		void Assets();
 		void SceneSettings();
+		void Preferences(bool* pOpen);
 
 		void EntityNode(Entity entity);
 		void DrawComponents();
@@ -49,6 +50,8 @@ namespace Engine
 		bool bShowDetailsWindow = true;
 		bool bShowAssetsWindow = true;
 		bool bShowSceneSettingsWindow = true;
+		
+		bool bShowPreferencesWindow = false;
 
 	private:
 		Entity m_SelectedEntity;
@@ -57,11 +60,13 @@ namespace Engine
 		bool bIsSaveNeeded = false;
 		std::string m_SceneFilePath = "";
 		std::string m_CurrentSceneName = "";
+		std::filesystem::path MainPath;
 
 		std::shared_ptr<Engine::Texture2D> m_FileIcon;
 		std::shared_ptr<Engine::Texture2D> m_FolderIcon;
 		std::shared_ptr<Engine::Scene> m_Scene;
+		SceneOrder m_SceneOrder;
 
-		std::filesystem::path m_AssetPath;
+		
 	};
 }

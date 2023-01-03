@@ -11,9 +11,8 @@ namespace Engine
 {
 	Editor::Editor()
 	{
-		std::filesystem::path MainPath = std::filesystem::current_path().parent_path().append("Editor");
-		std::filesystem::path Resource = MainPath.string() + "\\Resources";
-		m_AssetPath = MainPath.string() + "\\Assets";
+		MainPath = std::filesystem::current_path().parent_path().append("Editor");
+		std::filesystem::path Resource = MainPath.string() + "\\Resources"; 
 
 		m_FileIcon = Texture2D::Create(Resource.string() + "/icons/icons8-file-150.png");
 		m_FolderIcon = Texture2D::Create(Resource.string() + "/icons/icons8-folder-150.png");
@@ -22,10 +21,21 @@ namespace Engine
 		m_Scene->InitScene();
 		Renderer::SetScene(m_Scene);
 		m_CurrentSceneName = m_Scene->GetSceneSettings().title;
+		Engine::SceneSettings settings = m_Scene->GetSceneSettings();
+		settings.assetFilePath = MainPath.string() + "\\Assets";
+		m_Scene->SetSceneSettings(settings);
+
+		std::string path = settings.assetFilePath.string();
+		SceneOrderSerilizer::DeserializeSceneOrder(path, m_SceneOrder);
+
+		if (m_SceneOrder.assetFilePath.empty())
+			m_SceneOrder.assetFilePath = settings.assetFilePath.string() + "\\Scenes";
 	}
 
 	bool Editor::Init()
 	{
+
+		
 		return true;
 	}
 
@@ -48,6 +58,9 @@ namespace Engine
 
 		if (bShowSceneSettingsWindow)
 			SceneSettings();
+
+		if(bShowPreferencesWindow)
+			Preferences(&bShowPreferencesWindow);
 
 		//ImGui::ShowDemoWindow();
 	}
@@ -108,6 +121,11 @@ namespace Engine
 						m_SelectedEntity = {};
 						m_CurrentSceneName = m_Scene->GetSceneSettings().title;
 						m_SceneFilePath = "";
+
+						Engine::SceneSettings settings = m_Scene->GetSceneSettings();
+						settings.assetFilePath = MainPath.string() + "\\Assets";
+						m_Scene->SetSceneSettings(settings);
+
 						bUnsaved = true;
 					}
 				}
@@ -141,6 +159,14 @@ namespace Engine
 				ImGui::EndMenu();
 			}
 			
+			if (ImGui::BeginMenu("Edit"))
+			{
+				if (ImGui::MenuItem("Preferences"))
+				{
+					bShowPreferencesWindow = true;
+				}
+				ImGui::EndMenu();
+			}
 
 			if (ImGui::BeginMenu("Windows"))
 			{
@@ -163,6 +189,8 @@ namespace Engine
 
 				ImGui::EndMenu();
 			}
+
+			
 			
 			ImGui::EndMenuBar();
 		}
@@ -200,8 +228,17 @@ namespace Engine
 	{
 		ImGui::Begin("Game");
 
+		if(ImGui::Button("Play"))
+		{
+
+		}
+
+		ImGui::Separator();
+
 		if (Renderer::GetSceneTexture() != nullptr)
 			ImGui::Image(Renderer::GetSceneTexture(), ImVec2(1600 / 2, 900 / 2));
+
+
 		ImGui::End();
 	}
 
@@ -309,12 +346,12 @@ namespace Engine
 	void Editor::Assets()
 	{
 		ImGui::Begin("Assets");
-		static std::filesystem::path currentPath = m_AssetPath;
+		static std::filesystem::path currentPath = m_Scene->GetSceneSettings().assetFilePath;
 		ImGui::Text("Directory: "); ImGui::SameLine(); ImGui::Text(currentPath.string().c_str());
 
 		ImGui::Separator();
 
-		if (ImGui::Button("Back") && currentPath != m_AssetPath)
+		if (ImGui::Button("Back") && currentPath != m_Scene->GetSceneSettings().assetFilePath)
 		{
 			currentPath = currentPath.parent_path();
 		}
@@ -365,38 +402,147 @@ namespace Engine
 	{
 		ImGui::Begin("Scene Settings");
 		
-		ImGui::Text("Name: "); ImGui::SameLine(); ImGui::Text(m_Scene->GetSceneSettings().title.c_str());
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+		if (ImGui::TreeNodeEx("Current Scene Settings", flags))
+		{
+			ImGui::Text("Name: "); ImGui::SameLine(); ImGui::Text(m_Scene->GetSceneSettings().title.c_str());
+
+			//ImGui::Separator();
+
+			ImGui::PushItemWidth(50);
+			ImGui::Text("Specular Power"); ImGui::SameLine(); ImGui::InputFloat("##Specular", &m_Scene->m_SceneSettings.specularPower);
+			ImGui::PopItemWidth();
+
+			//ImGui::Separator();
+
+			ImGui::Text("VSync"); ImGui::SameLine(); ImGui::Checkbox("##vsync", &m_Scene->m_SceneSettings.vsyncOn);
+
+			//ImGui::Separator();
+
+			ImGui::Text("Ambient Colour:"); ImGui::SameLine();
+			ImGui::PushItemWidth(50);
+			ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##abx", &m_Scene->m_SceneSettings.ambientColour.x); ImGui::SameLine();
+			ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##abz", &m_Scene->m_SceneSettings.ambientColour.y); ImGui::SameLine();
+			ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##aby", &m_Scene->m_SceneSettings.ambientColour.z);
+			ImGui::PopItemWidth();
+
+			//ImGui::Separator();
+
+			ImGui::Text("Background Colour:"); ImGui::SameLine();
+			ImGui::PushItemWidth(50);
+			ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##bgx", &m_Scene->m_SceneSettings.backgroundColour.x); ImGui::SameLine();
+			ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##bgz", &m_Scene->m_SceneSettings.backgroundColour.y); ImGui::SameLine();
+			ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##bgy", &m_Scene->m_SceneSettings.backgroundColour.z);  ImGui::SameLine();
+			ImGui::Text("A"); ImGui::SameLine(); ImGui::InputFloat("##bga", &m_Scene->m_SceneSettings.backgroundColour.w);
+			ImGui::PopItemWidth();
+			ImGui::TreePop();
+
+		}		
+
+		ImGui::Separator();
+		if (ImGui::TreeNodeEx("Scene Order", flags))
+		{
+			static int index = m_SceneOrder.sceneOrderVar.size();
+			static bool HasScene = false;
+			static SceneOrderVar var;
+			if (ImGui::Button("Add"))
+			{
+				ImGui::OpenPopup("AddScene");
+				var.title = "";
+
+			}
+
+			if (ImGui::BeginPopupModal("AddScene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				ImGui::Text("Make Sure The map Name Is Correct!");
+
+				char buff[256];
+				memset(buff, 0, sizeof(buff));
+				strncpy_s(buff, var.title.c_str(), sizeof(buff));
+				if (IMGUI_LEFT_LABEL(ImGui::InputText, "Title: ", buff, sizeof(buff)))
+				{
+					var.title = std::string(buff);
+				}
+
+				if (ImGui::Button("Add Scene"))
+				{
+					var.index = index;
+					m_SceneOrder.sceneOrderVar.push_back(var);
+					index++;
+					HasScene = true;
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::SameLine();
+
+				if (ImGui::Button("Cancel"))
+				{
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
+
+			ImGui::SameLine();
+			
+			if (HasScene && ImGui::Button("Save Order"))
+			{
+				std::string path = m_Scene->GetSceneSettings().assetFilePath.string();
+				SceneOrderSerilizer::SerializeSceneOrder(path, m_SceneOrder);
+			}
+
+			if (index <= 0)
+				HasScene = false;
+			else
+				HasScene = true;
+
+			for (auto var : m_SceneOrder.sceneOrderVar)
+			{
+				ImGui::Text(var.title.c_str());
+				ImGui::SameLine();
+				ImGui::Text("%d", var.index);
+
+			}
+
+			if (HasScene && ImGui::Button("Remove"))
+			{
+				m_SceneOrder.sceneOrderVar.pop_back();
+				index--;
+				std::string path = m_Scene->GetSceneSettings().assetFilePath.string();
+				SceneOrderSerilizer::SerializeSceneOrder(path, m_SceneOrder);
+			}
+
+
+			ImGui::TreePop();
+		}
+
 		
-		ImGui::Separator();
+		ImGui::End();
+	}
 
-		ImGui::PushItemWidth(50);
-		ImGui::Text("Specular Power"); ImGui::SameLine(); ImGui::InputFloat("##Specular", &m_Scene->m_SceneSettings.specularPower);
-		ImGui::PopItemWidth();
+	void Editor::Preferences(bool* pOpen)
+	{
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse;
 
-		ImGui::Separator();
+		ImGui::SetWindowFocus("Preferences");
+		ImGui::Begin("Preferences", pOpen, window_flags);
+		
+		
+		char aBuffer[256];
+		memset(aBuffer, 0, sizeof(aBuffer));
+		strncpy_s(aBuffer, m_Scene->GetSceneSettings().assetFilePath.string().c_str(), sizeof(aBuffer));
+		if (IMGUI_LEFT_LABEL(ImGui::InputText, "Asset Path: ", aBuffer, sizeof(aBuffer)))
+		{
+			Engine::SceneSettings settings = m_Scene->GetSceneSettings();
+			settings.assetFilePath = std::string(aBuffer);
+			m_Scene->SetSceneSettings(settings);
+		}
 
-		ImGui::Text("VSync"); ImGui::SameLine(); ImGui::Checkbox("##vsync", &m_Scene->m_SceneSettings.vsyncOn);
-
-		ImGui::Separator();
-
-		ImGui::Text("Ambient Colour:"); ImGui::SameLine();
-		ImGui::PushItemWidth(50);
-		ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##abx", &m_Scene->m_SceneSettings.ambientColour.x); ImGui::SameLine();
-		ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##abz", &m_Scene->m_SceneSettings.ambientColour.y); ImGui::SameLine();
-		ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##aby", &m_Scene->m_SceneSettings.ambientColour.z);
-		ImGui::PopItemWidth();
-
-		ImGui::Separator();
-
-		ImGui::Text("Background Colour:"); ImGui::SameLine();
-		ImGui::PushItemWidth(50);
-		ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##bgx", &m_Scene->m_SceneSettings.backgroundColour.x); ImGui::SameLine();
-		ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##bgz", &m_Scene->m_SceneSettings.backgroundColour.y); ImGui::SameLine();
-		ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##bgy", &m_Scene->m_SceneSettings.backgroundColour.z);  ImGui::SameLine();
-		ImGui::Text("A"); ImGui::SameLine(); ImGui::InputFloat("##bga", &m_Scene->m_SceneSettings.backgroundColour.w);
-		ImGui::PopItemWidth();
-
-		ImGui::Separator();
+		char sBuffer[256];
+		memset(sBuffer, 0, sizeof(sBuffer));
+		strncpy_s(sBuffer, m_SceneOrder.assetFilePath.c_str(), sizeof(sBuffer));
+		if (IMGUI_LEFT_LABEL(ImGui::InputText, "Scene File Locations: ", sBuffer, sizeof(sBuffer)))
+		{
+			m_SceneOrder.assetFilePath = std::string(sBuffer);
+		}
 
 		ImGui::End();
 	}

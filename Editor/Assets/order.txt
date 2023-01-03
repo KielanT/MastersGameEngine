@@ -1,0 +1,3 @@
+AssetPath: W:\Uni\Masters\CO4305\MastersGameEngine\Editor\Assets\Scenes
+Scenes:
+  []

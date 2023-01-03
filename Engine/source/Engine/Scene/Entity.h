@@ -63,5 +63,6 @@ namespace Engine
 	private:
 		entt::entity m_EntityHandle{ entt::null };
 		std::shared_ptr<Scene> m_Scene = nullptr;
+		
 	};
 }

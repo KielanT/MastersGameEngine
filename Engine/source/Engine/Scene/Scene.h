@@ -3,10 +3,13 @@
 #include "Engine/Lab/Camera.h"
 #include "Engine/UUID.h"
 #include "entt/entt.hpp"
+#include <filesystem>
 
 namespace Engine
 {
 	class Entity;
+
+	
 
 	struct SceneSettings
 	{
@@ -16,6 +19,19 @@ namespace Engine
 		float specularPower = 256.0f;
 		glm::vec4 backgroundColour = glm::vec4(0.2f, 0.2f, 0.3f, 1.0f);
 		bool vsyncOn = true;
+		std::filesystem::path assetFilePath = "";
+	};
+
+	struct SceneOrderVar
+	{
+		std::string title;
+		eint32 index = 0;
+	};
+
+	struct SceneOrder
+	{
+		std::string assetFilePath;
+		std::vector<SceneOrderVar> sceneOrderVar;
 	};
 
 	class Scene : public std::enable_shared_from_this<Scene>
