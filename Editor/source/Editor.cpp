@@ -437,6 +437,14 @@ namespace Engine
 			ImGui::PopItemWidth();
 			ImGui::TreePop();
 
+			if (ImGui::Button("Reset To default"))
+			{
+				Engine::SceneSettings defaultSettings = Engine::SceneSettings();
+				m_Scene->m_SceneSettings.backgroundColour = defaultSettings.backgroundColour;
+				m_Scene->m_SceneSettings.specularPower = defaultSettings.specularPower;
+				m_Scene->m_SceneSettings.vsyncOn = defaultSettings.vsyncOn;
+				m_Scene->m_SceneSettings.ambientColour = defaultSettings.ambientColour;
+			}
 		}		
 
 		ImGui::Separator();
