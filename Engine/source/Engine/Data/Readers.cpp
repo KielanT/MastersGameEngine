@@ -1,6 +1,5 @@
 #include "epch.h"
-#include "SceneReader.h"
-
+#include "Readers.h"
 
 namespace YAML
 {
@@ -36,6 +35,7 @@ namespace YAML
 	};
 }
 
+
 namespace Engine
 {
 	void SceneReader::Read(std::string& path, std::shared_ptr<Scene> scene)
@@ -54,7 +54,7 @@ namespace Engine
 			settings.vsyncOn = SceneSettingsNode["VSYNC"].as<bool>();
 			scene->SetSceneSettings(settings);
 		}
-		
+
 		auto EntitiesNode = data["Entities"];
 		if (EntitiesNode)
 		{
@@ -100,4 +100,23 @@ namespace Engine
 
 	}
 
+	void SceneOrderReader::Read(std::string& path, SceneOrder& scene)
+	{
+
+		YAML::Node data = YAML::LoadFile(path + "\\order.txt");
+
+		if (!data["AssetPath"])
+			return;
+
+		scene.assetFilePath = data["AssetPath"].as<std::string>();
+
+		auto node = data["Scenes"];
+		if (node)
+		{
+			for (auto it : node)
+			{
+				scene.sceneOrderVar.push_back({ it["Title"].as<std::string>() , it["Index"].as<eint32>() });
+			}
+		}
+	}
 }

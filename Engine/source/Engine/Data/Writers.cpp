@@ -1,6 +1,5 @@
 #include "epch.h"
-#include "SceneWriter.h"
-
+#include "Writers.h"
 
 namespace YAML
 {
@@ -61,7 +60,7 @@ namespace Engine
 
 		//scene->GetSceneSettings().title = scenePath.filename().string();
 		SaveSceneSettings(out, scene);
-		
+
 		if (!scene->GetEntityRegistry().empty())
 		{
 			out << YAML::Key << "Entities" << YAML::BeginSeq;
@@ -95,7 +94,7 @@ namespace Engine
 
 	void SceneWriter::SaveEntity(YAML::Emitter& out, Entity entity)
 	{
-		
+
 		out << YAML::BeginMap;
 		out << YAML::Comment("Entity");
 		if (entity.HasComponent<IDComponent>())
@@ -105,7 +104,7 @@ namespace Engine
 			out << YAML::BeginMap;
 			out << YAML::Key << "ID" << YAML::Value << comp.ID;
 			out << YAML::Key << "Tag" << YAML::Value << comp.Tag;
-		
+
 			out << YAML::EndMap;
 		}
 
@@ -117,7 +116,7 @@ namespace Engine
 			out << YAML::Key << "Position" << YAML::Value << comp.Position;
 			out << YAML::Key << "Rotation" << YAML::Value << comp.Rotation;
 			out << YAML::Key << "Scale" << YAML::Value << comp.Scale;
-		
+
 			out << YAML::EndMap;
 		}
 
@@ -154,4 +153,26 @@ namespace Engine
 		out << YAML::EndMap;
 	}
 
+	void SceneOrderWriter::Write(std::string& path, SceneOrder scene)
+	{
+		YAML::Emitter out;
+
+		out << YAML::BeginMap;
+		out << YAML::Key << "AssetPath" << YAML::Value << scene.assetFilePath;
+
+		out << YAML::Key << "Scenes" << YAML::BeginSeq;
+		for (auto var : scene.sceneOrderVar)
+		{
+			out << YAML::BeginMap;
+			out << YAML::Key << "Title" << YAML::Value << var.title;
+			out << YAML::Key << "Index" << YAML::Value << var.index;
+			out << YAML::EndMap;
+		}
+		out << YAML::EndSeq;
+
+		out << YAML::EndMap;
+
+		std::ofstream fout(path + "/order.txt");
+		fout << out.c_str();
+	}
 }

@@ -1,4 +1,3 @@
-#pragma once
 
 #include "Engine/Scene/Scene.h"
 #include "Engine/Scene/Entity.h"
@@ -9,7 +8,7 @@ namespace Engine
 {
 	class SceneWriter
 	{
-	public: 
+	public:
 		void Write(std::string& path, std::shared_ptr<Scene> scene);
 
 	private:
@@ -17,5 +16,9 @@ namespace Engine
 		void SaveEntity(YAML::Emitter& out, Entity entity);
 	};
 
+	class SceneOrderWriter
+	{
+	public:
+		void Write(std::string& path, SceneOrder scene);
+	};
 }
-
