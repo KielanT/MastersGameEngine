@@ -18,7 +18,7 @@ namespace Engine
 		logSinks[1]->set_pattern("[%T] [%l]: %v");
 
 
-		m_Logger = std::make_shared<spdlog::logger>("Indigo", begin(logSinks), end(logSinks));
+		m_Logger = std::make_shared<spdlog::logger>("Engine", begin(logSinks), end(logSinks));
 		spdlog::register_logger(m_Logger);
 		m_Logger->set_level(spdlog::level::trace);
 		m_Logger->flush_on(spdlog::level::trace);

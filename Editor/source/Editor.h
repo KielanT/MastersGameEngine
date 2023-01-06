@@ -8,6 +8,7 @@
 
 namespace Engine
 {
+
 	class Editor : public ILayer
 	{
 	public:
