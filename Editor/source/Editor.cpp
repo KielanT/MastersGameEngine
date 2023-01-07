@@ -68,6 +68,11 @@ namespace Engine
 	void Editor::Update(float frameTime)
 	{
 		m_Scene->UpdateScene(frameTime);
+
+		if (bGamePlay)
+		{
+			m_Scene->SimulateScene(frameTime);
+		}
 	}
 
 	void Editor::DockSpace()
@@ -230,7 +235,7 @@ namespace Engine
 
 		if(ImGui::Button("Play"))
 		{
-
+			bGamePlay = !bGamePlay;
 		}
 
 		ImGui::Separator();

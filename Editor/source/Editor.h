@@ -53,7 +53,8 @@ namespace Engine
 		bool bShowSceneSettingsWindow = true;
 		
 		bool bShowPreferencesWindow = false;
-
+		
+		bool bGamePlay = false;
 	private:
 		Entity m_SelectedEntity;
 		bool bUnsaved = false;

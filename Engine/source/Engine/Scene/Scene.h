@@ -46,6 +46,8 @@ namespace Engine
 		void UpdateScene(float frametime);
 		void RemoveScene();
 
+		void SimulateScene(float frametime);
+
 		entt::registry& GetEntityRegistry() { return m_Registry; }
 		Entity CreateEntity(const std::string& tag);
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& tag);

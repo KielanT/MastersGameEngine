@@ -54,16 +54,17 @@ namespace Engine
 	void Scene::UpdateScene(float frametime)
 	{
 		m_MainCamera->Control(frametime);
-		Physics::Update(frametime);
-
 		
+		
+	}
 
-		static bool test = false;
+	void Scene::RemoveScene()
+	{
+	}
 
-		if (SDLInput::KeyHeld(SDLK_f))
-		{
-			test = true;
-		}
+	void Scene::SimulateScene(float frametime)
+	{
+		Physics::Update(frametime);
 
 
 		m_Registry.each([&](auto entityID)
@@ -71,14 +72,9 @@ namespace Engine
 				Entity entity{ entityID, shared_from_this() };
 				if (entity.HasComponent<MeshRendererComponent>())
 				{
-					Physics::TempTestFunction(entity, test);
+					Physics::TempTestFunction(entity, true);
 				}
 			});
-		
-	}
-
-	void Scene::RemoveScene()
-	{
 	}
 
 	Entity Scene::CreateEntity(const std::string& tag)

@@ -43,6 +43,7 @@ namespace Engine
 	void Game::Update(float frameTime)
 	{
 		m_Scene->UpdateScene(frameTime);
+		m_Scene->SimulateScene(frameTime);
 	}
 
 }
