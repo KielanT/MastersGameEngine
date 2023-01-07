@@ -1,2 +1,4 @@
-[16:28:26] [debug]: Renderer Initilised
-[16:28:51] [debug]: Renderer shutdown
+[17:28:40] [debug]: Renderer Initilised
+[17:28:40] [info]: Physics Initialising
+[17:28:40] [info]: PhysX 5 Initilised
+[17:29:00] [debug]: Renderer shutdown

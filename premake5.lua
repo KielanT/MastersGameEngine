@@ -22,12 +22,14 @@ workspace "MastersGameEngine"
     IncludeDir["entt"] = "Engine/external/entt/include"
     IncludeDir["stbImage"] = "Engine/external/stb_image"
     IncludeDir["yaml_cpp"] = "Engine/external/yaml-cpp/include"
+    IncludeDir["PhysX"] = "Engine/external/physx/physx/include"
 
     LibDir = {}
     LibDir["DirectXTK"] = "Engine/external/DirectXTK/%{cfg.buildcfg}"
     LibDir["assimp"] = "Engine/external/assimp/lib/%{cfg.buildcfg}"
     LibDir["SDL"] = "Engine/external/SDL/VisualC/x64/%{cfg.buildcfg}"
     LibDir["yaml_cpp"] = "Engine/external/yaml-cpp/lib/%{cfg.buildcfg}"
+    LibDir["PhysX"] = "Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}"
 
     include "Engine/external/imgui"
 
@@ -69,7 +71,7 @@ project "Engine"
         "%{IncludeDir.entt}",
         "%{IncludeDir.stbImage}",
         "%{IncludeDir.yaml_cpp}",
-        
+        "%{IncludeDir.PhysX}",
     }
 
     libdirs
@@ -78,6 +80,7 @@ project "Engine"
         "%{LibDir.assimp}",
         "%{LibDir.SDL}",
         "%{LibDir.yaml_cpp}",
+        "%{LibDir.PhysX}",
     }
 
     links
@@ -88,7 +91,15 @@ project "Engine"
         "assimp-vc143-mt.lib",
         "ImGui",
         "yaml-cpp.lib",
-        "SDL2.lib"
+        "SDL2.lib",
+
+        --> PhysX 5.1
+        "PhysX_64.lib",
+        "PhysXCommon_64.lib",
+        "PhysXCooking_64.lib",
+        "PhysXFoundation_64.lib",
+        "PhysXPvdSDK_static_64.lib",
+        "PhysXExtensions_static_64.lib",
     }
 
     files("Engine/source/Engine/Renderer/Shaders/HLSL/*.hlsl")
@@ -127,6 +138,7 @@ project "Engine"
 
     filter "configurations:Release"
         defines "E_RELEASE"
+        defines "NDEBUG"
         runtime "Release"
         optimize "On"
 
@@ -186,6 +198,14 @@ project "Editor"
     {
         "E_PLATFORM_WINDOWS",
         "E_EDITOR"
+    }
+
+    postbuildcommands 
+    {
+        "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXFoundation_64.dll %{cfg.targetdir}",
+        "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysX_64.dll %{cfg.targetdir}",
+        "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXCommon_64.dll %{cfg.targetdir}",
+        "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXGpu_64.dll %{cfg.targetdir}",
     }
 
     filter "configurations:Debug"
@@ -253,6 +273,14 @@ project "Game"
     defines
     {
         "E_PLATFORM_WINDOWS"
+    }
+
+    postbuildcommands 
+    {
+        "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXFoundation_64.dll %{cfg.targetdir}",
+        "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysX_64.dll %{cfg.targetdir}",
+        "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXCommon_64.dll %{cfg.targetdir}",
+        "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXGpu_64.dll %{cfg.targetdir}",
     }
     
     filter "configurations:Debug"

@@ -3,12 +3,15 @@
 #include "Entity.h"
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
+#include "Engine/Physics/Physics.h"
+#include "Engine/Platform/SDLInput.h"
 
 namespace Engine
 {
 
 	Scene::~Scene()
 	{
+		Physics::Shutdown();
 	}
 
 	void Scene::InitScene()
@@ -17,6 +20,7 @@ namespace Engine
 		m_MainCamera->SetPosition({ 0, 0, -50 });
 		m_MainCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
+
 		std::string path = "media/";
 
 		std::filesystem::path MainPath = std::filesystem::current_path();
@@ -24,6 +28,9 @@ namespace Engine
 		std::filesystem::path meshPath = std::filesystem::current_path().parent_path().append("Engine\\");
 
 		std::filesystem::current_path(meshPath); // Sets the current path to the mesh path
+
+
+		Physics::Init();
 	}
 
 	void Scene::UnloadScene()
@@ -47,6 +54,27 @@ namespace Engine
 	void Scene::UpdateScene(float frametime)
 	{
 		m_MainCamera->Control(frametime);
+		Physics::Update(frametime);
+
+		
+
+		static bool test = false;
+
+		if (SDLInput::KeyHeld(SDLK_f))
+		{
+			test = true;
+		}
+
+
+		m_Registry.each([&](auto entityID)
+			{
+				Entity entity{ entityID, shared_from_this() };
+				if (entity.HasComponent<MeshRendererComponent>())
+				{
+					Physics::TempTestFunction(entity, test);
+				}
+			});
+		
 	}
 
 	void Scene::RemoveScene()
