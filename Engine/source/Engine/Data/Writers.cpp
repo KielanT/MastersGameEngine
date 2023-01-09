@@ -149,6 +149,23 @@ namespace Engine
 
 			out << YAML::EndMap;
 		}
+		if (entity.HasComponent<RigidDynamicComponent>())
+		{
+			auto& comp = entity.GetComponent<RigidDynamicComponent>();
+			out << YAML::Key << "RigidDynamicComponent";
+			out << YAML::BeginMap;
+
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<RigidStaticComponent>())
+		{
+			auto& comp = entity.GetComponent<RigidStaticComponent>();
+			out << YAML::Key << "RigidStaticComponent";
+			out << YAML::BeginMap;
+
+			out << YAML::EndMap;
+		}
 
 		out << YAML::EndMap;
 	}

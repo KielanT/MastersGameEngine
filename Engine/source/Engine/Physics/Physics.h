@@ -10,6 +10,7 @@ namespace Engine
 		static bool Init();
 		static void Shutdown();
 		static void Update(float frameTime);
-		static void TempTestFunction(Entity& entity, bool test);
+		static void CreatePhysicsActor(Entity& entity);
+		static void UpdatePhysicsActor(Entity& entity);
 	};
 }

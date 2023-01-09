@@ -15,7 +15,10 @@ namespace Engine
 		virtual bool Init() override;
 		virtual void Shutdown() override;
 		virtual void Update(float frameTime) override;
-		virtual void TempTestFunction(Entity& entity, bool test) override;
+		virtual void CreatePhysicsActor(Entity& entity) override;
+		virtual void UpdatePhysicsActor(Entity& entity) override;
+
+
 
 	private:
 		physx::PxFoundation* m_Foundation;
@@ -26,11 +29,7 @@ namespace Engine
 		physx::PxDefaultCpuDispatcher* m_CpuDispatcher = NULL;
 		
 		physx::PxMaterial* m_DefaultMaterial;
-		
-		// temp actor
-		physx::PxRigidDynamic* actor;
-
-		
-
 	};
+
+	
 }

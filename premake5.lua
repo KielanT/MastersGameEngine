@@ -174,11 +174,13 @@ project "Editor"
         "%{IncludeDir.SDL}",
         "%{IncludeDir.entt}",
         "%{IncludeDir.assimp}",
+        "%{IncludeDir.PhysX}",
     }
     libdirs
     {
         "%{LibDir.DirectXTK}",
         "%{LibDir.assimp}",
+        "%{LibDir.PhysX}",
     }
 
     links
@@ -188,6 +190,13 @@ project "Editor"
         "d3d11.lib",
         "assimp-vc143-mt.lib",
 
+        --> PhysX 5.1
+        "PhysX_64.lib",
+        "PhysXCommon_64.lib",
+        "PhysXCooking_64.lib",
+        "PhysXFoundation_64.lib",
+        "PhysXPvdSDK_static_64.lib",
+        "PhysXExtensions_static_64.lib",
     }
 
     filter "system:windows"
@@ -215,11 +224,13 @@ project "Editor"
 
     filter "configurations:Release"
         defines "E_RELEASE"
+        defines "NDEBUG"
         runtime "Release"
         optimize "On"
 
     filter "configurations:Distribution"
         defines "E_DISTRIBUTION"
+        defines "NDEBUG"
         runtime "Release"
         optimize "On"
 
@@ -250,11 +261,13 @@ project "Game"
         "%{IncludeDir.SDL}",
         "%{IncludeDir.entt}",
         "%{IncludeDir.assimp}",
+        "%{IncludeDir.PhysX}",
     }
     libdirs
     {
         "%{LibDir.DirectXTK}",
         "%{LibDir.assimp}",
+        "%{LibDir.PhysX}",
     }
     
     links
@@ -263,7 +276,14 @@ project "Game"
         "ImGui",
         "d3d11.lib",
         "assimp-vc143-mt.lib",
-    
+        
+        --> PhysX 5.1
+        "PhysX_64.lib",
+        "PhysXCommon_64.lib",
+        "PhysXCooking_64.lib",
+        "PhysXFoundation_64.lib",
+        "PhysXPvdSDK_static_64.lib",
+        "PhysXExtensions_static_64.lib",
     }
     
     filter "system:windows"
@@ -290,10 +310,12 @@ project "Game"
     
     filter "configurations:Release"
         defines "E_RELEASE"
+        defines "NDEBUG"
         runtime "Release"
         optimize "On"
     
     filter "configurations:Distribution"
         defines "E_DISTRIBUTION"
+        defines "NDEBUG"
         runtime "Release"
         optimize "On"

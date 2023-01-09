@@ -36,10 +36,17 @@ namespace Engine
 			m_PhysicsAPI->Update(frameTime);
 	}
 
-	void Physics::TempTestFunction(Entity& entity, bool test)
+	void Physics::CreatePhysicsActor(Entity& entity)
 	{
 		if (m_PhysicsAPI)
-			m_PhysicsAPI->TempTestFunction(entity, test);
+			m_PhysicsAPI->CreatePhysicsActor(entity);
 	}
+
+	void Physics::UpdatePhysicsActor(Entity& entity)
+	{
+		if (m_PhysicsAPI)
+			m_PhysicsAPI->UpdatePhysicsActor(entity);
+	}
+
 
 }

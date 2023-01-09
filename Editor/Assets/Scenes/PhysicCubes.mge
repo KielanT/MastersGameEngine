@@ -1,0 +1,55 @@
+SceneSettings:
+  AssetPath: W:\Uni\Masters\CO4305\MastersGameEngine\Editor\Assets
+  Title: PhysicCubes
+  Index: 0
+  AmbientColour: [0.200000003, 0.200000003, 0.300000012]
+  SpecularPower: 256
+  BackgroundColour: [0.200000003, 0.200000003, 0.300000012, 1]
+  VSYNC: true
+Entities:
+  -  # Entity
+    IDComponent:
+      ID: 12806828965685975290
+      Tag: StaticCube
+    TransformComponent:
+      Position: [0, -10, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\iron-rusted4-albedo.dds
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\Cube.x
+      PixelShader: 0
+      VertexShader: 0
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 0
+      Sampler: 0
+    RigidStaticComponent:
+      {}
+  -  # Entity
+    IDComponent:
+      ID: 3084078573118750917
+      Tag: DynamicCube
+    TransformComponent:
+      Position: [0, 10, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\iron-rusted4-metalness.dds
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\Cube.x
+      PixelShader: 0
+      VertexShader: 0
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 0
+      Sampler: 0
+    RigidDynamicComponent:
+      {}

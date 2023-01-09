@@ -36,9 +36,12 @@ namespace Engine
 		void DrawMeshRendererComponent(MeshRendererComponent& comp);
 		void DrawTextureComponent(TextureComponent& comp);
 		void DrawCameraComponent(CameraComponent& comp);
-		void DrawPhysicsComponent(PhysicsComponents& comp);
+		void DrawRigidDynamic(RigidDynamicComponent& comp);
+		void DrawStaticDynamic(RigidStaticComponent& comp);
 		void DrawCollisionComponent(CollisionComponents& comp);
 		void DrawScriptComponent(ScriptComponent& comp);
+
+		
 
 		int RendererComboBox(const std::string& label, const char* items[], int size, int& selected);
 		void TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView);

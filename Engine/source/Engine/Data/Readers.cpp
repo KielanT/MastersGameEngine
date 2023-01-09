@@ -95,6 +95,18 @@ namespace Engine
 					renderer.RasterizerState = (ERasterizerState)meshRendererNode["Rasterizer"].as<int>();
 					renderer.SamplerState = (ESamplerState)meshRendererNode["Sampler"].as<int>();
 				}
+				auto dynamicNode = entityIT["RigidDynamicComponent"];
+				if (dynamicNode)
+				{
+					auto& dynamic = entity.AddComponent<RigidDynamicComponent>();
+					
+				}
+				auto staticNode = entityIT["RigidStaticComponent"];
+				if (staticNode)
+				{
+					auto& staticC = entity.AddComponent<RigidStaticComponent>();
+
+				}
 			}
 		}
 

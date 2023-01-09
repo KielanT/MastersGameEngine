@@ -70,9 +70,9 @@ namespace Engine
 		m_Registry.each([&](auto entityID)
 			{
 				Entity entity{ entityID, shared_from_this() };
-				if (entity.HasComponent<MeshRendererComponent>())
+				if (entity.HasComponent<RigidDynamicComponent>())
 				{
-					Physics::TempTestFunction(entity, true);
+					Physics::UpdatePhysicsActor(entity);
 				}
 			});
 	}
@@ -197,4 +197,42 @@ namespace Engine
 		}
 	}
 
+
+	template<typename T>
+	void Scene::OnComponentCreated(Entity entity, T& comp)
+	{
+		
+	}
+
+	template<>
+	void Scene::OnComponentCreated<RigidDynamicComponent>(Entity entity, RigidDynamicComponent& comp)
+	{
+		Physics::CreatePhysicsActor(entity);
+	}
+
+	template<>
+	void Scene::OnComponentCreated<RigidStaticComponent>(Entity entity, RigidStaticComponent& comp)
+	{
+		Physics::CreatePhysicsActor(entity);
+	}
+
+	template<>
+	void Scene::OnComponentCreated<CameraComponent>(Entity entity, CameraComponent& comp)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentCreated<CollisionComponents>(Entity entity, CollisionComponents& comp)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentCreated<ScriptComponent>(Entity entity, ScriptComponent& comp)
+	{
+
+	}
+
+	
 }

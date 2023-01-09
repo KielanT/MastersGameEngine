@@ -3,9 +3,11 @@
 
 
 #include "Engine/Renderer/Renderer.h"
+#include "Engine/Physics/Physics.h"
 #include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
 #include "Engine/Data/Serializer.h"
+
 
 namespace Engine
 {
@@ -233,7 +235,7 @@ namespace Engine
 	{
 		ImGui::Begin("Game", pOpen);
 
-		if(ImGui::Button("Play"))
+		if (ImGui::Button("Play"))
 		{
 			bGamePlay = !bGamePlay;
 		}
@@ -320,10 +322,17 @@ namespace Engine
 						m_SelectedEntity.AddComponent<CameraComponent>();
 						bUnsaved = true;
 					}
-					if (ImGui::MenuItem("PhysicsComponent"))
+					if (ImGui::MenuItem("RigidDynamicComponent"))
 					{
-						m_SelectedEntity.AddComponent<PhysicsComponents>();
+						m_SelectedEntity.AddComponent<RigidDynamicComponent>();
 						bUnsaved = true;
+
+					}
+					if (ImGui::MenuItem("RigidStaticComponent"))
+					{
+						m_SelectedEntity.AddComponent<RigidStaticComponent>();
+						bUnsaved = true;
+
 					}
 					if (ImGui::MenuItem("CollisionComponent"))
 					{
@@ -623,9 +632,14 @@ namespace Engine
 				DrawCameraComponent(m_SelectedEntity.GetComponent<CameraComponent>());
 				ImGui::Separator();
 			}
-			if (m_SelectedEntity.HasComponent<PhysicsComponents>())
+			if (m_SelectedEntity.HasComponent<RigidDynamicComponent>())
 			{
-				DrawPhysicsComponent(m_SelectedEntity.GetComponent<PhysicsComponents>());
+				DrawRigidDynamic(m_SelectedEntity.GetComponent<RigidDynamicComponent>());
+				ImGui::Separator();
+			}
+			if (m_SelectedEntity.HasComponent<RigidStaticComponent>())
+			{
+				DrawStaticDynamic(m_SelectedEntity.GetComponent<RigidStaticComponent>());
 				ImGui::Separator();
 			}
 			if (m_SelectedEntity.HasComponent<CollisionComponents>())
@@ -814,10 +828,26 @@ namespace Engine
 		ImGui::Text("Camera Component : NOT IMPLEMENTED");
 	}
 
-	void Editor::DrawPhysicsComponent(PhysicsComponents& comp)
+	void Editor::DrawRigidDynamic(RigidDynamicComponent& comp)
 	{
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 
-		ImGui::Text("Physics Component : NOT IMPLEMENTED");
+		if (ImGui::TreeNodeEx("Rigid Dynamic", flags))
+		{
+			
+
+			ImGui::TreePop();
+		}
+	}
+
+	void Editor::DrawStaticDynamic(RigidStaticComponent& comp)
+	{
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+
+		if (ImGui::TreeNodeEx("Rigid Static", flags))
+		{
+			ImGui::TreePop();
+		}
 	}
 
 	void Editor::DrawCollisionComponent(CollisionComponents& comp)

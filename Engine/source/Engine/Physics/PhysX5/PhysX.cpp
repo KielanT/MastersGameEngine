@@ -54,12 +54,6 @@ namespace Engine
 
 		m_DefaultMaterial = m_Physics->createMaterial(0.5f, 0.5f, 0.6f);
 
-		// TEMP Cube
-		actor = m_Physics->createRigidDynamic(physx::PxTransform({ 0.0f, 0.0f, 0.0f }));
-		physx::PxShape* boxShape = physx::PxRigidActorExt::createExclusiveShape(*actor, physx::PxBoxGeometry(1.0f, 1.0f, 1.0f), *m_DefaultMaterial);
-		m_Scene->addActor(*actor);
-		actor->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, true);
-
 		return true;
 	}
 	void PhysX::Shutdown()
@@ -84,22 +78,44 @@ namespace Engine
 		m_Scene->fetchResults(true);
 	}
 
-	void PhysX::TempTestFunction(Entity& entity, bool test)
+	void PhysX::CreatePhysicsActor(Entity& entity)
 	{
-		static int i = 0;
-		if (test)
+		if (entity.HasComponent<TransformComponent>())
 		{
-			if (i == 0)
+			auto& trans = entity.GetComponent<TransformComponent>();
+			if (entity.HasComponent<RigidDynamicComponent>())
 			{
-				actor->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, false);
-				actor->wakeUp();
-				i++;
+				auto& comp = entity.GetComponent<RigidDynamicComponent>();
+					
+
+					auto physxTrans = physx::PxTransform({ trans.Position.x ,trans.Position.y, trans.Position.z });
+
+					comp.actor = m_Physics->createRigidDynamic(physxTrans);
+					physx::PxShape* boxShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(1.0f, 1.0f, 1.0f), *m_DefaultMaterial);
+					m_Scene->addActor(*comp.actor);
 			}
-			entity.GetComponent<TransformComponent>().Position.x = actor->getGlobalPose().p.x;
-			entity.GetComponent<TransformComponent>().Position.y = actor->getGlobalPose().p.y;
-			entity.GetComponent<TransformComponent>().Position.z = actor->getGlobalPose().p.z;
+
+			if (entity.HasComponent<RigidStaticComponent>())
+			{
+				auto& comp = entity.GetComponent<RigidStaticComponent>();
+
+				auto physxTrans = physx::PxTransform({ trans.Position.x ,trans.Position.y, trans.Position.z });
+
+				comp.actor = m_Physics->createRigidStatic(physxTrans);
+				physx::PxShape* boxShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(1.0f, 1.0f, 1.0f), *m_DefaultMaterial);
+				m_Scene->addActor(*comp.actor);
+
+			}
 		}
+	}
 
-
+	void PhysX::UpdatePhysicsActor(Entity& entity)
+	{
+		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<RigidDynamicComponent>())
+		{
+			entity.GetComponent<TransformComponent>().Position.x = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().p.x;
+			entity.GetComponent<TransformComponent>().Position.y = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().p.y;
+			entity.GetComponent<TransformComponent>().Position.z = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().p.z;
+		}
 	}
 }

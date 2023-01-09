@@ -61,8 +61,13 @@ namespace Engine
 
 		SceneSettings m_SceneSettings;
 
+		template<typename T>
+		void OnComponentCreated(Entity entity, T& comp);
+
 	private:
 		void LoadEntity(Entity entity);
+
+		
 
 	private:
 		
@@ -70,5 +75,7 @@ namespace Engine
 		entt::registry m_Registry;
 
 	};
+
+	
 
 }
