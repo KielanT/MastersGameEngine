@@ -8,6 +8,10 @@
 
 namespace Engine
 {
+	struct EditorSettings
+	{
+		std::string defaultScene = "";
+	};
 
 	class Editor : public ILayer
 	{
@@ -72,6 +76,7 @@ namespace Engine
 		std::shared_ptr<Engine::Scene> m_Scene;
 		SceneOrder m_SceneOrder;
 
+		EditorSettings m_EditorSettings;
 		
 	};
 }

@@ -32,6 +32,18 @@ namespace Engine
 
 		if (m_SceneOrder.assetFilePath.empty())
 			m_SceneOrder.assetFilePath = settings.assetFilePath.string() + "\\Scenes";
+
+		if (!m_EditorSettings.defaultScene.empty())
+		{
+			std::string sceneToLoad = m_SceneOrder.assetFilePath + "\\" + m_EditorSettings.defaultScene + ".mge";
+			SceneSerializer::DeserializeScene(sceneToLoad, m_Scene);
+			m_SceneFilePath = sceneToLoad;
+			m_CurrentSceneName = m_Scene->GetSceneSettings().title;
+			if (m_Scene != nullptr)
+			{
+				m_Scene->LoadEntities();
+			}
+		}
 	}
 
 	bool Editor::Init()
@@ -565,6 +577,15 @@ namespace Engine
 		{
 			m_SceneOrder.assetFilePath = std::string(sBuffer);
 		}
+
+		/*char dBuffer[256];
+		memset(dBuffer, 0, sizeof(dBuffer));
+		strncpy_s(dBuffer, m_EditorSettings.defaultScene.c_str(), sizeof(dBuffer));
+		if (IMGUI_LEFT_LABEL(ImGui::InputText, "DefaultScene", dBuffer, sizeof(dBuffer)))
+		{
+			m_EditorSettings.defaultScene = std::string(dBuffer);
+		}*/
+
 
 		ImGui::End();
 	}
