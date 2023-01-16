@@ -92,7 +92,7 @@ namespace Engine
 					auto physxTrans = physx::PxTransform({ trans.Position.x ,trans.Position.y, trans.Position.z });
 
 					comp.actor = m_Physics->createRigidDynamic(physxTrans);
-					physx::PxShape* boxShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(9.0f, 9.0f, 9.0f), *m_DefaultMaterial);
+					physx::PxShape* boxShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(5.0f, 5.0f, 5.0f), *m_DefaultMaterial);
 					//physx::PxShape* boxShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(0.5f, 0.5f, 0.5f), *m_DefaultMaterial);
 					m_Scene->addActor(*comp.actor);
 			}
@@ -104,7 +104,7 @@ namespace Engine
 				auto physxTrans = physx::PxTransform({ trans.Position.x ,trans.Position.y, trans.Position.z });
 
 				comp.actor = m_Physics->createRigidStatic(physxTrans);
-				physx::PxShape* boxShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(1.0f, 1.0f, 1.0f), *m_DefaultMaterial);
+				physx::PxShape* boxShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(5.0f, 5.0f, 5.0f), *m_DefaultMaterial);
 				m_Scene->addActor(*comp.actor);
 
 			}
