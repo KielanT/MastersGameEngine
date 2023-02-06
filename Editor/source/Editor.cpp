@@ -30,12 +30,12 @@ namespace Engine
 		std::string path = settings.assetFilePath.string();
 		SceneOrderSerilizer::DeserializeSceneOrder(path, m_SceneOrder);
 
-		if (m_SceneOrder.assetFilePath.empty())
-			m_SceneOrder.assetFilePath = settings.assetFilePath.string() + "\\Scenes";
+		if (m_SceneOrder.sceneFilePath.empty())
+			m_SceneOrder.sceneFilePath = settings.assetFilePath.string() + "\\Scenes";
 
 		if (!m_EditorSettings.defaultScene.empty())
 		{
-			std::string sceneToLoad = m_SceneOrder.assetFilePath + "\\" + m_EditorSettings.defaultScene + ".mge";
+			std::string sceneToLoad = m_SceneOrder.sceneFilePath.string() + "\\" + m_EditorSettings.defaultScene + ".mge";
 			SceneSerializer::DeserializeScene(sceneToLoad, m_Scene);
 			m_SceneFilePath = sceneToLoad;
 			m_CurrentSceneName = m_Scene->GetSceneSettings().title;
@@ -249,6 +249,12 @@ namespace Engine
 
 		if (ImGui::Button("Play"))
 		{
+			if (bGamePlay)
+			{
+				Physics::ResetSimulation();
+
+			}
+			
 			bGamePlay = !bGamePlay;
 		}
 
@@ -572,10 +578,10 @@ namespace Engine
 
 		char sBuffer[256];
 		memset(sBuffer, 0, sizeof(sBuffer));
-		strncpy_s(sBuffer, m_SceneOrder.assetFilePath.c_str(), sizeof(sBuffer));
+		strncpy_s(sBuffer, m_SceneOrder.sceneFilePath.string().c_str(), sizeof(sBuffer));
 		if (IMGUI_LEFT_LABEL(ImGui::InputText, "Scene File Locations: ", sBuffer, sizeof(sBuffer)))
 		{
-			m_SceneOrder.assetFilePath = std::string(sBuffer);
+			m_SceneOrder.sceneFilePath = std::string(sBuffer);
 		}
 
 		/*char dBuffer[256];

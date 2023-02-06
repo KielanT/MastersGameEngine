@@ -175,7 +175,8 @@ namespace Engine
 		YAML::Emitter out;
 
 		out << YAML::BeginMap;
-		out << YAML::Key << "AssetPath" << YAML::Value << scene.assetFilePath;
+
+		out << YAML::Key << "AssetPath" << YAML::Value << scene.sceneFilePath.string();
 
 		out << YAML::Key << "Scenes" << YAML::BeginSeq;
 		for (auto var : scene.sceneOrderVar)

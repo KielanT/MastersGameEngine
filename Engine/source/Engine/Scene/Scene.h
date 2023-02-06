@@ -30,7 +30,7 @@ namespace Engine
 
 	struct SceneOrder
 	{
-		std::string assetFilePath;
+		std::filesystem::path sceneFilePath;
 		std::vector<SceneOrderVar> sceneOrderVar;
 	};
 

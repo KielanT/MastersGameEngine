@@ -120,4 +120,11 @@ namespace Engine
 			entity.GetComponent<TransformComponent>().Position.z = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().p.z;
 		}
 	}
+
+	void PhysX::ResetSimulation()
+	{
+		m_Scene->flushSimulation();
+		m_Scene->flushUpdates();
+		// https://forums.developer.nvidia.com/t/how-to-reset-simulation-in-physx-3-3/47494
+	}
 }

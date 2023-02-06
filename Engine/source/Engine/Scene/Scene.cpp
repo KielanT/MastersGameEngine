@@ -77,6 +77,7 @@ namespace Engine
 			});
 	}
 
+
 	Entity Scene::CreateEntity(const std::string& tag)
 	{
 		Entity entity = { m_Registry.create(), shared_from_this() };

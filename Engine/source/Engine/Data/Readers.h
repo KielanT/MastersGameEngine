@@ -13,6 +13,6 @@ namespace Engine
 	class SceneOrderReader
 	{
 	public:
-		void Read(std::string& path, SceneOrder& scene);
+		bool Read(std::string& path, SceneOrder& scene);
 	};
 }

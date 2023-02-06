@@ -16,9 +16,12 @@ namespace Engine
 		virtual bool Init() = 0;
 		virtual void Shutdown() = 0;
 		virtual void Update(float frameTime) = 0;
+		virtual void ResetSimulation() = 0;
+
 
 		virtual void CreatePhysicsActor(Entity& entity) = 0;
 		virtual void UpdatePhysicsActor(Entity& entity) = 0;
+		
 		
 	};
 

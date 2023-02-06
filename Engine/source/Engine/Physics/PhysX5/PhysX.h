@@ -7,6 +7,7 @@
 namespace Engine
 {
 
+
 	class PhysX : public PhysicsAPI
 	{
 	public:
@@ -17,14 +18,14 @@ namespace Engine
 		virtual void Update(float frameTime) override;
 		virtual void CreatePhysicsActor(Entity& entity) override;
 		virtual void UpdatePhysicsActor(Entity& entity) override;
-
-
+		virtual void ResetSimulation() override;
 
 	private:
 		physx::PxFoundation* m_Foundation;
 		physx::PxPvd* m_PVD;
 		physx::PxPhysics* m_Physics;
 		physx::PxScene* m_Scene;
+
 		
 		physx::PxDefaultCpuDispatcher* m_CpuDispatcher = NULL;
 		

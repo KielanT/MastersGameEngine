@@ -12,5 +12,6 @@ namespace Engine
 		static void Update(float frameTime);
 		static void CreatePhysicsActor(Entity& entity);
 		static void UpdatePhysicsActor(Entity& entity);
+		static void ResetSimulation();
 	};
 }
