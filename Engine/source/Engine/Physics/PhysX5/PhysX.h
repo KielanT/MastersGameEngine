@@ -21,6 +21,9 @@ namespace Engine
 		virtual void ResetSimulation() override;
 
 	private:
+		physx::PxScene* CreateScene();
+
+	private:
 		physx::PxFoundation* m_Foundation;
 		physx::PxPvd* m_PVD;
 		physx::PxPhysics* m_Physics;

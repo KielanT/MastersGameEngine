@@ -14,7 +14,7 @@ namespace Engine
 			return false;
 		}
 
-		if (layer->Init())
+		if (!layer->Init())
 			return false;
 
 		return true;

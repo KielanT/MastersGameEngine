@@ -11,7 +11,7 @@ namespace Engine
 
 	Scene::~Scene()
 	{
-		Physics::Shutdown();
+		
 	}
 
 	void Scene::InitScene()
@@ -20,16 +20,6 @@ namespace Engine
 		m_MainCamera->SetPosition({ 0, 0, -50 });
 		m_MainCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-
-		std::string path = "media/";
-
-		std::filesystem::path MainPath = std::filesystem::current_path();
-
-		std::filesystem::path meshPath = std::filesystem::current_path().parent_path().append("Engine\\");
-
-		std::filesystem::current_path(meshPath); // Sets the current path to the mesh path
-
-
 		Physics::Init();
 	}
 
@@ -37,6 +27,7 @@ namespace Engine
 	{
 		m_Registry.clear();
 		m_SceneSettings = SceneSettings();
+		Physics::ResetSimulation();
 	}
 
 	void Scene::RenderScene()

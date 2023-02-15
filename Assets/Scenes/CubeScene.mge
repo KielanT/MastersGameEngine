@@ -1,5 +1,5 @@
 SceneSettings:
-  AssetPath: D:\Users\ktodd2\Documents\Masters\MastersGameEngine\Editor\Assets
+  AssetPath: ""
   Title: CubeScene
   Index: 0
   AmbientColour: [0.200000003, 0.200000003, 0.300000012]
@@ -9,19 +9,19 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
-      ID: 4140551510097234591
+      ID: 8443015731173230670
       Tag: Mesh Entity
     TransformComponent:
       Position: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     TextureComponent:
-      Path: D:\Users\ktodd2\Documents\Masters\MastersGameEngine\Engine\media\iron-rusted4-gloss.dds
+      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\iron-rusted4-albedo.dds
       RoughPath: ""
       HeightPath: ""
       MetalnessPath: ""
     MeshRendererComponent:
-      Path: D:\Users\ktodd2\Documents\Masters\MastersGameEngine\Engine\media\Cube.x
+      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\Cube.x
       PixelShader: 0
       VertexShader: 0
       BlendState: 0

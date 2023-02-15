@@ -43,32 +43,25 @@ namespace Engine
 			return false;
 		}
 
-		physx::PxSceneDesc sceneDesc(m_Physics->getTolerancesScale());
-		sceneDesc.gravity = physx::PxVec3(0.0f, -9.81, 0.0f);
-		m_CpuDispatcher = physx::PxDefaultCpuDispatcherCreate(2);
-		sceneDesc.cpuDispatcher = m_CpuDispatcher;
-		sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
-
-		m_Scene = m_Physics->createScene(sceneDesc);
-		m_Scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.0f);
-		m_Scene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);
+		m_Scene = CreateScene();
 
 		m_DefaultMaterial = m_Physics->createMaterial(0.5f, 0.5f, 0.6f);
+
 
 		return true;
 	}
 	void PhysX::Shutdown()
 	{
 		//PxCloseExtensions();
-
-		/*Causes Error When shutting down */
+		//
+		////Causes Error When shutting down */
 		//if (m_Physics)
 		//	m_Physics->release();
-
+		//
 		//if (m_PVD)
 		//	m_PVD->release();
-
-		// Must be last
+		//
+		// //Must be last
 		//if (m_Foundation)
 		//	m_Foundation->release();
 		
@@ -123,8 +116,26 @@ namespace Engine
 
 	void PhysX::ResetSimulation()
 	{
-		m_Scene->flushSimulation();
-		m_Scene->flushUpdates();
+		m_Scene = nullptr;
+		m_Scene = CreateScene();
+		//m_Scene->flushSimulation();
+		//m_Scene->flushUpdates();
 		// https://forums.developer.nvidia.com/t/how-to-reset-simulation-in-physx-3-3/47494
+	}
+
+	physx::PxScene* PhysX::CreateScene()
+	{
+		physx::PxScene* scene = nullptr;
+		physx::PxSceneDesc sceneDesc(m_Physics->getTolerancesScale());
+		sceneDesc.gravity = physx::PxVec3(0.0f, -9.81, 0.0f);
+		m_CpuDispatcher = physx::PxDefaultCpuDispatcherCreate(2);
+		sceneDesc.cpuDispatcher = m_CpuDispatcher;
+		sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
+
+		scene = m_Physics->createScene(sceneDesc);
+		scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.0f);
+		scene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);
+
+		return scene;
 	}
 }
