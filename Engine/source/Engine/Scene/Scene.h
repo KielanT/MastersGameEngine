@@ -30,7 +30,7 @@ namespace Engine
 
 	struct SceneOrder
 	{
-		std::string assetFilePath;
+		std::filesystem::path sceneFilePath;
 		std::vector<SceneOrderVar> sceneOrderVar;
 	};
 
@@ -46,6 +46,8 @@ namespace Engine
 		void UpdateScene(float frametime);
 		void RemoveScene();
 
+		void SimulateScene(float frametime);
+
 		entt::registry& GetEntityRegistry() { return m_Registry; }
 		Entity CreateEntity(const std::string& tag);
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& tag);
@@ -59,8 +61,13 @@ namespace Engine
 
 		SceneSettings m_SceneSettings;
 
+		template<typename T>
+		void OnComponentCreated(Entity entity, T& comp);
+
 	private:
 		void LoadEntity(Entity entity);
+
+		
 
 	private:
 		
@@ -68,5 +75,7 @@ namespace Engine
 		entt::registry m_Registry;
 
 	};
+
+	
 
 }

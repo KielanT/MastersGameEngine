@@ -149,6 +149,23 @@ namespace Engine
 
 			out << YAML::EndMap;
 		}
+		if (entity.HasComponent<RigidDynamicComponent>())
+		{
+			auto& comp = entity.GetComponent<RigidDynamicComponent>();
+			out << YAML::Key << "RigidDynamicComponent";
+			out << YAML::BeginMap;
+
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<RigidStaticComponent>())
+		{
+			auto& comp = entity.GetComponent<RigidStaticComponent>();
+			out << YAML::Key << "RigidStaticComponent";
+			out << YAML::BeginMap;
+
+			out << YAML::EndMap;
+		}
 
 		out << YAML::EndMap;
 	}
@@ -158,7 +175,8 @@ namespace Engine
 		YAML::Emitter out;
 
 		out << YAML::BeginMap;
-		out << YAML::Key << "AssetPath" << YAML::Value << scene.assetFilePath;
+
+		out << YAML::Key << "AssetPath" << YAML::Value << scene.sceneFilePath.string();
 
 		out << YAML::Key << "Scenes" << YAML::BeginSeq;
 		for (auto var : scene.sceneOrderVar)

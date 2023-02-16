@@ -345,7 +345,7 @@ namespace Engine
     void DX11Renderer::RenderScene()
     {
         static glm::vec4 bgColour = glm::vec4(0.2f, 0.2f, 0.3f, 1.0f);
-        if (m_Scene != nullptr)
+        if (m_Scene != nullptr && m_Scene->GetCamera() != nullptr)
         {
             PerFrameConstants.ambientColour = m_Scene->GetSceneSettings().ambientColour;
             PerFrameConstants.specularPower = m_Scene->GetSceneSettings().specularPower;
@@ -370,7 +370,7 @@ namespace Engine
 
     void DX11Renderer::RenderSceneFromCamera()
     {
-        if (m_Scene != nullptr)
+        if (m_Scene != nullptr && m_Scene->GetCamera() != nullptr)
         {
             PerFrameConstants.viewMatrix = m_Scene->GetCamera()->ViewMatrix();
             PerFrameConstants.EngineionMatrix = m_Scene->GetCamera()->EngineionMatrix();

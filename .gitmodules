@@ -4,3 +4,7 @@
 [submodule "Engine/external/SDL"]
 	path = Engine/external/SDL
 	url = https://github.com/KielanT/SDL.git
+
+[submodule "Engine/external/physx"]
+	path = Engine/external/physx
+	url = https://github.com/KielanT/PhysX.git

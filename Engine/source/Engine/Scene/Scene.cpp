@@ -3,12 +3,15 @@
 #include "Entity.h"
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
+#include "Engine/Physics/Physics.h"
+#include "Engine/Platform/SDLInput.h"
 
 namespace Engine
 {
 
 	Scene::~Scene()
 	{
+		
 	}
 
 	void Scene::InitScene()
@@ -17,19 +20,14 @@ namespace Engine
 		m_MainCamera->SetPosition({ 0, 0, -50 });
 		m_MainCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-		std::string path = "media/";
-
-		std::filesystem::path MainPath = std::filesystem::current_path();
-
-		std::filesystem::path meshPath = std::filesystem::current_path().parent_path().append("Engine\\");
-
-		std::filesystem::current_path(meshPath); // Sets the current path to the mesh path
+		Physics::Init();
 	}
 
 	void Scene::UnloadScene()
 	{
 		m_Registry.clear();
 		m_SceneSettings = SceneSettings();
+		Physics::ResetSimulation();
 	}
 
 	void Scene::RenderScene()
@@ -47,11 +45,29 @@ namespace Engine
 	void Scene::UpdateScene(float frametime)
 	{
 		m_MainCamera->Control(frametime);
+		
+		
 	}
 
 	void Scene::RemoveScene()
 	{
 	}
+
+	void Scene::SimulateScene(float frametime)
+	{
+		Physics::Update(frametime);
+
+
+		m_Registry.each([&](auto entityID)
+			{
+				Entity entity{ entityID, shared_from_this() };
+				if (entity.HasComponent<RigidDynamicComponent>())
+				{
+					Physics::UpdatePhysicsActor(entity);
+				}
+			});
+	}
+
 
 	Entity Scene::CreateEntity(const std::string& tag)
 	{
@@ -173,4 +189,42 @@ namespace Engine
 		}
 	}
 
+
+	template<typename T>
+	void Scene::OnComponentCreated(Entity entity, T& comp)
+	{
+		
+	}
+
+	template<>
+	void Scene::OnComponentCreated<RigidDynamicComponent>(Entity entity, RigidDynamicComponent& comp)
+	{
+		Physics::CreatePhysicsActor(entity);
+	}
+
+	template<>
+	void Scene::OnComponentCreated<RigidStaticComponent>(Entity entity, RigidStaticComponent& comp)
+	{
+		Physics::CreatePhysicsActor(entity);
+	}
+
+	template<>
+	void Scene::OnComponentCreated<CameraComponent>(Entity entity, CameraComponent& comp)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentCreated<CollisionComponents>(Entity entity, CollisionComponents& comp)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentCreated<ScriptComponent>(Entity entity, ScriptComponent& comp)
+	{
+
+	}
+
+	
 }

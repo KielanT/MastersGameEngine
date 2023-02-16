@@ -1,6 +1,7 @@
 #include <Engine.h>
 #include <EntryPoint.h>
-#include "Editor.h"
+
+#include "MainEditor.h"
 
 
 class Main : public Engine::Application
@@ -8,7 +9,7 @@ class Main : public Engine::Application
 public:
 	Main()
 	{
-		AddLayer(std::make_shared<Engine::Editor>());
+		AddLayer(std::make_shared<Engine::MainEditor>());
 	}
 	~Main()
 	{

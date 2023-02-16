@@ -4,7 +4,9 @@
 
 #include <glm/glm.hpp>
 
+// Remove these includes
 #include "Engine/Lab/Model.h"
+#include <PxPhysicsAPI.h>
 
 namespace Engine
 {
@@ -114,11 +116,14 @@ namespace Engine
 		std::string temp = ""; // Requires at least one var
 	};
 
-	// Physics Components will need to be split up in different components
-	struct PhysicsComponents
+	struct RigidDynamicComponent
 	{
-		// CreatePhysicsComponents  // Requires physic Library
-		std::string temp = "";
+		physx::PxRigidDynamic* actor;
+	};
+
+	struct RigidStaticComponent
+	{
+		physx::PxRigidStatic* actor;
 	};
 
 	// Need different colliison components
