@@ -212,12 +212,13 @@ namespace Engine
 	void Scene::OnComponentCreated<CameraComponent>(Entity entity, CameraComponent& comp)
 	{
 
+
 	}
 
 	template<>
 	void Scene::OnComponentCreated<CollisionComponents>(Entity entity, CollisionComponents& comp)
 	{
-
+		Physics::CreateCollision(entity);
 	}
 
 	template<>

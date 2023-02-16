@@ -3,6 +3,7 @@
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
+#include <Engine/Physics/Physics.h>
 
 namespace Engine
 {
@@ -43,12 +44,12 @@ namespace Engine
 			}
 			if (entity.HasComponent<RigidStaticComponent>())
 			{
-				DrawStaticDynamic(entity.GetComponent<RigidStaticComponent>());
+				DrawRigidStatic(entity.GetComponent<RigidStaticComponent>());
 				ImGui::Separator();
 			}
 			if (entity.HasComponent<CollisionComponents>())
 			{
-				DrawCollisionComponent(entity.GetComponent<CollisionComponents>());
+				DrawCollisionComponent(entity.GetComponent<CollisionComponents>(), entity);
 				ImGui::Separator();
 			}
 			if (entity.HasComponent<ScriptComponent>())
@@ -150,50 +151,48 @@ namespace Engine
 				}
 			}
 
-			static int ps = 0;
+			int ps = static_cast<int>(comp.PixelShader);
 			const char* pixelItems[static_cast<int>(EPixelShader::EPixelShaderSize)];
 			pixelItems[0] = "PixelLightingPixelShader";
 			pixelItems[1] = "LightModelPixelShader";
 			pixelItems[2] = "PBRPixelShader";
-			comp.PixelShader = static_cast<EPixelShader>(RendererComboBox("Pixel Shader: ", pixelItems, static_cast<int>(EPixelShader::EPixelShaderSize), ps));
+			comp.PixelShader = static_cast<EPixelShader>(ComboBox("Pixel Shader: ", pixelItems, static_cast<int>(EPixelShader::EPixelShaderSize), ps));
 
-
-			static int vs = 0;
+			int vs = static_cast<int>(comp.VertexShader);
 			const char* vertexItems[static_cast<int>(EVertexShader::EVertexShaderSize)];
 			vertexItems[0] = "PixelLightingVertexShader";
 			vertexItems[1] = "BasicTransformVertexShader";
 			vertexItems[2] = "SkinningVertexShader";
 			vertexItems[3] = "PBRVertexShader";
-			comp.VertexShader = static_cast<EVertexShader>(RendererComboBox("Vertex Shader: ", vertexItems, static_cast<int>(EVertexShader::EVertexShaderSize), vs));
+			comp.VertexShader = static_cast<EVertexShader>(ComboBox("Vertex Shader: ", vertexItems, static_cast<int>(EVertexShader::EVertexShaderSize), vs));
 
-			static int bs = 0;
+			int bs = static_cast<int>(comp.BlendState);
 			const char* blendItems[static_cast<int>(EBlendState::EBlendStateSize)];
 			blendItems[0] = "NoBlendingState";
 			blendItems[1] = "AdditiveBlending";
-			comp.BlendState = static_cast<EBlendState>(RendererComboBox("Blend State: ", blendItems, static_cast<int>(EBlendState::EBlendStateSize), bs));
+			comp.BlendState = static_cast<EBlendState>(ComboBox("Blend State: ", blendItems, static_cast<int>(EBlendState::EBlendStateSize), bs));
 
-
-			static int dss = 0;
+			int dss = static_cast<int>(comp.DepthStencil);
 			const char* dssItems[static_cast<int>(EDepthStencilState::EDepthStencilStateSize)];
 			dssItems[0] = "UseDepthBufferState";
 			dssItems[1] = "DepthReadOnlyState";
 			dssItems[2] = "NoDepthBufferState";
-			comp.DepthStencil = static_cast<EDepthStencilState>(RendererComboBox("Depth Stencil State: ", dssItems, static_cast<int>(EDepthStencilState::EDepthStencilStateSize), dss));
+			comp.DepthStencil = static_cast<EDepthStencilState>(ComboBox("Depth Stencil State: ", dssItems, static_cast<int>(EDepthStencilState::EDepthStencilStateSize), dss));
 
-			static int rs = 0;
+			int rs = static_cast<int>(comp.RasterizerState);
 			const char* rasterizerItems[static_cast<int>(ERasterizerState::ERasterizerStateSize)];
 			rasterizerItems[0] = "CullBackState";
 			rasterizerItems[1] = "CullFrontState";
 			rasterizerItems[2] = "CullNoneState";
-			comp.RasterizerState = static_cast<ERasterizerState>(RendererComboBox("Rasterizer State: ", rasterizerItems, static_cast<int>(ERasterizerState::ERasterizerStateSize), rs));
+			comp.RasterizerState = static_cast<ERasterizerState>(ComboBox("Rasterizer State: ", rasterizerItems, static_cast<int>(ERasterizerState::ERasterizerStateSize), rs));
 
-			static int ss = 0;
+			int ss = static_cast<int>(comp.SamplerState);
 			const char* samplerItems[static_cast<int>(ESamplerState::ESamplerStateSize)];
 			samplerItems[0] = "Anisotropic4xSampler";
 			samplerItems[1] = "TrilinearSampler";
 			samplerItems[2] = "PointSampler";
-			comp.SamplerState = static_cast<ESamplerState>(RendererComboBox("Sampler State: ", samplerItems, static_cast<int>(ESamplerState::ESamplerStateSize), ss));
-
+			comp.SamplerState = static_cast<ESamplerState>(ComboBox("Sampler State: ", samplerItems, static_cast<int>(ESamplerState::ESamplerStateSize), ss));
+			
 
 			ImGui::TreePop();
 		}
@@ -238,19 +237,36 @@ namespace Engine
 		}
 	}
 
-	void EditorDraws::DrawStaticDynamic(RigidStaticComponent& comp)
+	void EditorDraws::DrawRigidStatic(RigidStaticComponent& comp)
 	{
-		if (ImGui::TreeNodeEx("Static Dynamic", m_Flags))
+		if (ImGui::TreeNodeEx("Rigid Static", m_Flags))
 		{
-			ImGui::Text("Static Dynamic Component : BEING IMPLEMENTED");
+			ImGui::Text("Rigid Static Component : BEING IMPLEMENTED");
 
 			ImGui::TreePop();
 		}
 	}
 
-	void EditorDraws::DrawCollisionComponent(CollisionComponents& comp)
+	void EditorDraws::DrawCollisionComponent(CollisionComponents& comp, Entity& entity)
 	{
-		ImGui::Text("Collision Component : NOT IMPLEMENTED");
+		if (ImGui::TreeNodeEx("Collision Component", m_Flags))
+		{
+			int ct = static_cast<int>(comp.CollisionType);
+			const char* ColTypeItems[static_cast<int>(ECollisionTypes::ECollisionTypesSize)];
+			ColTypeItems[0] = "Box Collision";
+			ColTypeItems[1] = "Sphere Collision";
+			
+			int previousSelected = ct;
+			comp.CollisionType = static_cast<ECollisionTypes>(ComboBox("Collision Type: ", ColTypeItems, static_cast<int>(ECollisionTypes::ECollisionTypesSize), ct));
+			
+			if (previousSelected != static_cast<int>(comp.CollisionType))
+			{
+				Physics::CreateCollision(entity);
+			}
+
+			ImGui::TreePop();
+		}
+	
 	}
 
 	void EditorDraws::DrawScriptComponent(ScriptComponent& comp)
@@ -258,7 +274,7 @@ namespace Engine
 		ImGui::Text("Script Component : NOT IMPLEMENTED");
 	}
 
-	int EditorDraws::RendererComboBox(const std::string& label, const char* items[], int size, int& selected)
+	int EditorDraws::ComboBox(const std::string& label, const char* items[], int size, int& selected)
 	{
 		const char* combo_preview_value = items[selected];
 		ImGui::PushItemWidth(310);

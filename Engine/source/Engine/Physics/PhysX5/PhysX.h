@@ -17,11 +17,13 @@ namespace Engine
 		virtual void Shutdown() override;
 		virtual void Update(float frameTime) override;
 		virtual void CreatePhysicsActor(Entity& entity) override;
+		virtual void CreateCollision(Entity& entity) override;
 		virtual void UpdatePhysicsActor(Entity& entity) override;
 		virtual void ResetSimulation() override;
 
 	private:
 		physx::PxScene* CreateScene();
+
 
 	private:
 		physx::PxFoundation* m_Foundation;
@@ -33,6 +35,8 @@ namespace Engine
 		physx::PxDefaultCpuDispatcher* m_CpuDispatcher = NULL;
 		
 		physx::PxMaterial* m_DefaultMaterial;
+
+		physx::PxPvdTransport* m_Transport;
 	};
 
 	

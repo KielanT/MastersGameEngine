@@ -67,6 +67,14 @@ namespace Engine
 		EDepthStencilStateSize
 	};
 
+	enum class ECollisionTypes
+	{
+		Box = 0,
+		Sphere,
+
+		ECollisionTypesSize
+	};
+
 	struct IDComponent
 	{
 		UUID ID;
@@ -119,6 +127,7 @@ namespace Engine
 	struct RigidDynamicComponent
 	{
 		physx::PxRigidDynamic* actor;
+		
 	};
 
 	struct RigidStaticComponent
@@ -128,9 +137,9 @@ namespace Engine
 
 	// Need different colliison components
 	struct CollisionComponents
-	{
-		// Create collisions // Requires physic Library
-		std::string temp = "";
+	{ 
+		ECollisionTypes CollisionType = ECollisionTypes::Box;
+		physx::PxShape* CollisionShape;
 	};
 
 	struct ScriptComponent

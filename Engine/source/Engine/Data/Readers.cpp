@@ -1,5 +1,6 @@
 #include "epch.h"
 #include "Readers.h"
+#include <Engine/Physics/Physics.h>
 
 namespace YAML
 {
@@ -105,6 +106,16 @@ namespace Engine
 				if (staticNode)
 				{
 					auto& staticC = entity.AddComponent<RigidStaticComponent>();
+
+				}
+				auto collisonNode = entityIT["CollisionComponents"];
+				if (collisonNode)
+				{
+					auto col = CollisionComponents();
+					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
+					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
+					auto& colComp = entity.AddComponent<CollisionComponents>(col);
+					
 
 				}
 			}

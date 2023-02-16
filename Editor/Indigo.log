@@ -1,4 +1,6 @@
-[17:49:27] [debug]: Renderer Initilised
-[17:49:27] [info]: Physics Initialising
-[17:49:27] [info]: PhysX 5 Initilised
-[17:49:50] [debug]: Renderer shutdown
+[19:24:45] [debug]: Renderer Initilised
+[19:24:45] [info]: Physics Initialising
+[19:24:45] [info]: PhysX 5 Initilised
+[19:24:55] [info]: Collision Shape Already exist
+[19:25:12] [info]: Collision Shape Already exist
+[19:25:35] [debug]: Renderer shutdown

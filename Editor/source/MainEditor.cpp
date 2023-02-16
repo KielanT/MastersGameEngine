@@ -206,6 +206,7 @@ namespace Engine
 			if (ImGui::Button("Play"))
 			{
 				m_PlayState = EPlaystate::Playing;
+				Save();
 			}
 		}
 		else if (m_PlayState == EPlaystate::Playing)

@@ -11,6 +11,7 @@ namespace Engine
 		static void Shutdown();
 		static void Update(float frameTime);
 		static void CreatePhysicsActor(Entity& entity);
+		static void CreateCollision(Entity& entity);
 		static void UpdatePhysicsActor(Entity& entity);
 		static void ResetSimulation();
 	};

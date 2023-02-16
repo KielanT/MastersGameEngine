@@ -166,6 +166,15 @@ namespace Engine
 
 			out << YAML::EndMap;
 		}
+		if (entity.HasComponent<CollisionComponents>())
+		{
+			auto& comp = entity.GetComponent<CollisionComponents>();
+			out << YAML::Key << "CollisionComponents";
+			out << YAML::BeginMap;
+			out << YAML::Key << "CollisionType" << YAML::Value << (int)comp.CollisionType;
+		
+			out << YAML::EndMap;
+		}
 
 		out << YAML::EndMap;
 	}
