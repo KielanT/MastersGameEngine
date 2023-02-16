@@ -320,11 +320,6 @@ namespace Engine
 					m_SelectedEntity.AddComponent<RigidDynamicComponent>();
 					bUnsaved = true;
 				}
-				if (ImGui::MenuItem("RigidStaticComponent"))
-				{
-					m_SelectedEntity.AddComponent<RigidStaticComponent>();
-					bUnsaved = true;
-				}
 				if (ImGui::MenuItem("CollisionComponent"))
 				{
 					m_SelectedEntity.AddComponent<CollisionComponents>();

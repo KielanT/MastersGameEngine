@@ -26,8 +26,6 @@ namespace Engine
 
 		void DrawRigidDynamic(RigidDynamicComponent& comp);
 
-		void DrawRigidStatic(RigidStaticComponent& comp);
-
 		void DrawCollisionComponent(CollisionComponents& comp, Entity& entity);
 
 		void DrawScriptComponent(ScriptComponent& comp);

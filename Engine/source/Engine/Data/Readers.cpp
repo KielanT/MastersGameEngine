@@ -102,12 +102,6 @@ namespace Engine
 					auto& dynamic = entity.AddComponent<RigidDynamicComponent>();
 					
 				}
-				auto staticNode = entityIT["RigidStaticComponent"];
-				if (staticNode)
-				{
-					auto& staticC = entity.AddComponent<RigidStaticComponent>();
-
-				}
 				auto collisonNode = entityIT["CollisionComponents"];
 				if (collisonNode)
 				{

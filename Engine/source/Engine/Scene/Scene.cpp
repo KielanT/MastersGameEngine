@@ -203,12 +203,6 @@ namespace Engine
 	}
 
 	template<>
-	void Scene::OnComponentCreated<RigidStaticComponent>(Entity entity, RigidStaticComponent& comp)
-	{
-		Physics::CreatePhysicsActor(entity);
-	}
-
-	template<>
 	void Scene::OnComponentCreated<CameraComponent>(Entity entity, CameraComponent& comp)
 	{
 

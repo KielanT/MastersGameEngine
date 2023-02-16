@@ -130,16 +130,15 @@ namespace Engine
 		
 	};
 
-	struct RigidStaticComponent
-	{
-		physx::PxRigidStatic* actor;
-	};
 
-	// Need different colliison components
 	struct CollisionComponents
 	{ 
+		physx::PxRigidStatic* actor = nullptr; // Only gets set if the there isn't a rigid dynamic actor
 		ECollisionTypes CollisionType = ECollisionTypes::Box;
 		physx::PxShape* CollisionShape;
+
+		glm::vec3 BoxBounds = glm::vec3(5.0f, 5.0f, 5.0f);
+		float SphereRadius = 5.0f;
 	};
 
 	struct ScriptComponent

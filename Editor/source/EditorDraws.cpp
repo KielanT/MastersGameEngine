@@ -42,11 +42,6 @@ namespace Engine
 				DrawRigidDynamic(entity.GetComponent<RigidDynamicComponent>());
 				ImGui::Separator();
 			}
-			if (entity.HasComponent<RigidStaticComponent>())
-			{
-				DrawRigidStatic(entity.GetComponent<RigidStaticComponent>());
-				ImGui::Separator();
-			}
 			if (entity.HasComponent<CollisionComponents>())
 			{
 				DrawCollisionComponent(entity.GetComponent<CollisionComponents>(), entity);
@@ -237,15 +232,6 @@ namespace Engine
 		}
 	}
 
-	void EditorDraws::DrawRigidStatic(RigidStaticComponent& comp)
-	{
-		if (ImGui::TreeNodeEx("Rigid Static", m_Flags))
-		{
-			ImGui::Text("Rigid Static Component : BEING IMPLEMENTED");
-
-			ImGui::TreePop();
-		}
-	}
 
 	void EditorDraws::DrawCollisionComponent(CollisionComponents& comp, Entity& entity)
 	{

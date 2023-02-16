@@ -87,17 +87,6 @@ namespace Engine
 					m_Scene->addActor(*comp.actor);
 
 			}
-
-			if (entity.HasComponent<RigidStaticComponent>())
-			{
-				auto& comp = entity.GetComponent<RigidStaticComponent>();
-
-				auto physxTrans = physx::PxTransform({ trans.Position.x ,trans.Position.y, trans.Position.z });
-
-				comp.actor = m_Physics->createRigidStatic(physxTrans);
-				m_Scene->addActor(*comp.actor);
-				
-			}
 		}
 	}
 
@@ -112,33 +101,34 @@ namespace Engine
 				auto& comp = entity.GetComponent<RigidDynamicComponent>();
 				if (collisionComp.CollisionType == ECollisionTypes::Box)
 				{
-					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(5.0f, 5.0f, 5.0f), *m_DefaultMaterial);
+					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(collisionComp.BoxBounds.x, collisionComp.BoxBounds.y, collisionComp.BoxBounds.z), *m_DefaultMaterial);
 				}
 				if (collisionComp.CollisionType == ECollisionTypes::Sphere)
 				{
-					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxSphereGeometry(5.0f), *m_DefaultMaterial);
-				}
-			}
-			else if (entity.HasComponent<RigidStaticComponent>())
-			{
-				auto& comp = entity.GetComponent<RigidStaticComponent>();
-
-				if (collisionComp.CollisionShape != nullptr)
-				{
-					LOG_INFO("Collision Shape Already exist");
-				}
-
-				if (collisionComp.CollisionType == ECollisionTypes::Box)
-				{
-					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(5.0f, 5.0f, 5.0f), *m_DefaultMaterial);
-				}
-				if (collisionComp.CollisionType == ECollisionTypes::Sphere)
-				{
-					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxSphereGeometry(5.0f), *m_DefaultMaterial);
+					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxSphereGeometry(collisionComp.SphereRadius), *m_DefaultMaterial);
 				}
 			}
 			else // if does not have a component create a new actor
 			{
+				if (entity.HasComponent<TransformComponent>())
+				{
+					auto& trans = entity.GetComponent<TransformComponent>();
+					
+					auto physxTrans = physx::PxTransform({ trans.Position.x ,trans.Position.y, trans.Position.z });
+
+					collisionComp.actor = m_Physics->createRigidStatic(physxTrans);
+					m_Scene->addActor(*collisionComp.actor);
+
+					if (collisionComp.CollisionType == ECollisionTypes::Box)
+					{
+						collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*collisionComp.actor, physx::PxBoxGeometry(collisionComp.BoxBounds.x, collisionComp.BoxBounds.y, collisionComp.BoxBounds.z), *m_DefaultMaterial);
+					}
+					if (collisionComp.CollisionType == ECollisionTypes::Sphere)
+					{
+						collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*collisionComp.actor, physx::PxSphereGeometry(collisionComp.SphereRadius), *m_DefaultMaterial);
+					}
+				}
+
 				
 			}
 		}
@@ -153,6 +143,16 @@ namespace Engine
 			entity.GetComponent<TransformComponent>().Position.y = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().p.y;
 			entity.GetComponent<TransformComponent>().Position.z = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().p.z;
 		}
+		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<CollisionComponents>())
+		{
+			if (entity.GetComponent<CollisionComponents>().actor != nullptr)
+			{
+				entity.GetComponent<TransformComponent>().Position.x = entity.GetComponent<CollisionComponents>().actor->getGlobalPose().p.x;
+				entity.GetComponent<TransformComponent>().Position.y = entity.GetComponent<CollisionComponents>().actor->getGlobalPose().p.y;
+				entity.GetComponent<TransformComponent>().Position.z = entity.GetComponent<CollisionComponents>().actor->getGlobalPose().p.z;
+			}
+		}
+
 	}
 
 	void PhysX::ResetSimulation()
