@@ -12,8 +12,8 @@ Entities:
       ID: 3084078573118750917
       Tag: DynamicCube
     TransformComponent:
-      Position: [5, 10, 0]
-      Rotation: [0, 0, 0]
+      Position: [0, 10, 0]
+      Rotation: [0, 0, 90]
       Scale: [1, 1, 1]
     TextureComponent:
       Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\iron-rusted4-metalness.dds
@@ -38,7 +38,7 @@ Entities:
       Tag: StaticCube
     TransformComponent:
       Position: [0, -10, 0]
-      Rotation: [0, 0, 0]
+      Rotation: [0, 0, 90]
       Scale: [1, 1, 1]
     TextureComponent:
       Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\iron-rusted4-albedo.dds

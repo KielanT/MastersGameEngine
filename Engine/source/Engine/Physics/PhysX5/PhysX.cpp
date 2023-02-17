@@ -142,6 +142,14 @@ namespace Engine
 			entity.GetComponent<TransformComponent>().Position.x = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().p.x;
 			entity.GetComponent<TransformComponent>().Position.y = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().p.y;
 			entity.GetComponent<TransformComponent>().Position.z = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().p.z;
+
+			glm::quat rot;
+			rot.x = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().q.x;
+			rot.y = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().q.y;
+			rot.z = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().q.z;
+			rot.w = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().q.w;
+
+			entity.GetComponent<TransformComponent>().Rotation = glm::eulerAngles(rot * 3.14159f / 180.f);
 		}
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<CollisionComponents>())
 		{
@@ -150,6 +158,14 @@ namespace Engine
 				entity.GetComponent<TransformComponent>().Position.x = entity.GetComponent<CollisionComponents>().actor->getGlobalPose().p.x;
 				entity.GetComponent<TransformComponent>().Position.y = entity.GetComponent<CollisionComponents>().actor->getGlobalPose().p.y;
 				entity.GetComponent<TransformComponent>().Position.z = entity.GetComponent<CollisionComponents>().actor->getGlobalPose().p.z;
+
+				glm::quat rot;
+				rot.x = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().q.x;
+				rot.y = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().q.y;
+				rot.z = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().q.z;
+				rot.w = entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose().q.w;
+
+				entity.GetComponent<TransformComponent>().Rotation = glm::eulerAngles(rot * 3.14159f / 180.f);
 			}
 		}
 
@@ -160,16 +176,40 @@ namespace Engine
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<RigidDynamicComponent>())
 		{
 			auto position = entity.GetComponent<TransformComponent>().Position;
-			entity.GetComponent<RigidDynamicComponent>().actor->setGlobalPose({ position.x, position.y, position.z });
+			auto rotation = entity.GetComponent<TransformComponent>().Rotation;
+			glm::quat gQuat = glm::quat(rotation);
+			physx::PxQuat pQuat;
+			pQuat.x = gQuat.x;
+			pQuat.y = gQuat.y;
+			pQuat.z = gQuat.z;
+			pQuat.w = gQuat.w;
 
 
+			physx::PxTransform transform;
+			transform.p = { position.x, position.y, position.z };
+			transform.q = pQuat;
+
+			entity.GetComponent<RigidDynamicComponent>().actor->setGlobalPose(transform);
 		}
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<CollisionComponents>())
 		{
 			if (entity.GetComponent<CollisionComponents>().actor != nullptr)
 			{
 				auto position = entity.GetComponent<TransformComponent>().Position;
-				entity.GetComponent<CollisionComponents>().actor->setGlobalPose({ position.x, position.y, position.z });
+				auto rotation = entity.GetComponent<TransformComponent>().Rotation;
+				glm::quat gQuat = glm::quat(rotation);
+				physx::PxQuat pQuat;
+				pQuat.x = gQuat.x;
+				pQuat.y = gQuat.y;
+				pQuat.z = gQuat.z;
+				pQuat.w = gQuat.w;
+
+				physx::PxTransform transform;
+				transform.p = { position.x, position.y, position.z };
+				transform.q = pQuat;
+
+
+				entity.GetComponent<CollisionComponents>().actor->setGlobalPose(transform);
 			}
 		}
 	}
