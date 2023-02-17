@@ -12,12 +12,6 @@ namespace Engine
 		void Read(std::string& path, std::shared_ptr<Scene> scene);
 	};
 
-	class SceneOrderReader
-	{
-	public:
-		bool Read(std::string& path, SceneOrder& scene);
-	};
-
 	class EditorSettingsReader
 	{
 	public:

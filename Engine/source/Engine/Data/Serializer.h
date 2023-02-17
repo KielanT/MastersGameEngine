@@ -16,13 +16,6 @@ namespace Engine
 		static void DeserializeScene(std::string& path, std::shared_ptr<Scene> scene);
 	};
 
-	class SceneOrderSerilizer
-	{
-	public:
-		static void SerializeSceneOrder(std::string& path, SceneOrder scene);
-		static void DeserializeSceneOrder(std::string& path, SceneOrder& scene);
-	};
-
 	class SettingsSerilizer
 	{
 	public:

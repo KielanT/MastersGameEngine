@@ -18,18 +18,7 @@ namespace Engine
 		reader.Read(path, scene);
 	}
 
-	void SceneOrderSerilizer::SerializeSceneOrder(std::string& path, SceneOrder scene)
-	{
-		SceneOrderWriter writer;
-		writer.Write(path, scene);
-	}
 
-	
-	void SceneOrderSerilizer::DeserializeSceneOrder(std::string& path, SceneOrder& scene)
-	{
-		SceneOrderReader reader;
-		reader.Read(path, scene);
-	}
 
 	void SettingsSerilizer::SerializeEditorSettings(std::string& path, EditorSettings& settings)
 	{

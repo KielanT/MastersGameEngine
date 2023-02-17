@@ -17,11 +17,6 @@ namespace Engine
 		void SaveEntity(YAML::Emitter& out, Entity entity);
 	};
 
-	class SceneOrderWriter
-	{
-	public:
-		void Write(std::string& path, SceneOrder scene);
-	};
 
 	class EditorSettingsWriter
 	{

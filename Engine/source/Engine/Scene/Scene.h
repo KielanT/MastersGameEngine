@@ -22,17 +22,6 @@ namespace Engine
 		std::filesystem::path assetFilePath = "";
 	};
 
-	struct SceneOrderVar
-	{
-		std::string title;
-		eint32 index = 0;
-	};
-
-	struct SceneOrder
-	{
-		std::filesystem::path sceneFilePath;
-		std::vector<SceneOrderVar> sceneOrderVar;
-	};
 
 	class Scene : public std::enable_shared_from_this<Scene>
 	{

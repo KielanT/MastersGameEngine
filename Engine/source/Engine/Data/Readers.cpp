@@ -117,41 +117,6 @@ namespace Engine
 
 	}
 
-	bool SceneOrderReader::Read(std::string& path, SceneOrder& scene)
-	{
-		YAML::Node data;
-		try
-		{
-			std::string loadPath = path + "\\order.txt";
-			data = YAML::LoadFile(loadPath);
-		}
-		catch (YAML::Exception e)
-		{
-			LOG_ERROR("Failed to load file {0}", e.what());
-			return false;
-		}
-		catch (YAML::ParserException e)
-		{
-			LOG_ERROR("Failed to load file {0}", e.what());
-			return false;
-		}
-
-		if (!data["AssetPath"])
-			return false;
-
-		scene.sceneFilePath = data["AssetPath"].as<std::string>();
-
-		auto node = data["Scenes"];
-		if (node)
-		{
-			for (auto it : node)
-			{
-				scene.sceneOrderVar.push_back({ it["Title"].as<std::string>() , it["Index"].as<eint32>() });
-			}
-		}
-		return true;
-	}
-
 	bool EditorSettingsReader::Read(std::string& path, EditorSettings& settings)
 	{
 		YAML::Node data;

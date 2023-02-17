@@ -25,6 +25,8 @@ namespace Engine
 	private:
 		physx::PxScene* CreateScene();
 
+		void SetRenderedTransform(TransformComponent& transform, physx::PxTransform pTransform);
+		physx::PxTransform SetPhysicsTransform(TransformComponent& transform);
 
 	private:
 		physx::PxFoundation* m_Foundation;
