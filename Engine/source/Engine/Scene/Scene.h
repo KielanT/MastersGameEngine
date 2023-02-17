@@ -47,6 +47,7 @@ namespace Engine
 		void RemoveScene();
 
 		void SimulateScene(float frametime);
+		void EditorUpdatePhysicsScene(float frametime);
 
 		entt::registry& GetEntityRegistry() { return m_Registry; }
 		Entity CreateEntity(const std::string& tag);

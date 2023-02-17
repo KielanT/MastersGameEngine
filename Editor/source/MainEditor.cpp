@@ -4,7 +4,10 @@
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Data/Serializer.h"
+
+
 #include "EditorDraws.h"
+
 
 namespace Engine
 {
@@ -14,8 +17,6 @@ namespace Engine
 		std::filesystem::path Resource = std::filesystem::current_path().string() + "\\Resources";
 		m_AssetPath = m_SystemPath.parent_path().string() + "\\Assets";
 		
-
-
 		m_FileIcon = Texture2D::Create(Resource.string() + "/icons/icons8-file-150.png");
 		m_FolderIcon = Texture2D::Create(Resource.string() + "/icons/icons8-folder-150.png");
 
@@ -24,7 +25,7 @@ namespace Engine
 		m_EditorScene = std::make_shared<Scene>();
 		m_Scene = m_EditorScene;
 		
-
+		
 	}
 
 	bool MainEditor::Init()
@@ -32,6 +33,14 @@ namespace Engine
 		m_Scene = std::make_shared<Scene>();
 		m_Scene->InitScene();
 		Renderer::SetScene(m_Scene);
+
+		SettingsSerilizer settings;
+		std::string syspath = m_SystemPath.string();
+		settings.DeserializeEditorSettings(syspath, m_EditorSettings);
+		if (!m_EditorSettings.m_StartUpScene.empty())
+		{
+			LoadScene(m_EditorSettings.m_StartUpScene);
+		}
 
 		return true;
 	}
@@ -58,6 +67,9 @@ namespace Engine
 		if(bShowSceneSettingsWindow)
 			SceneSettings(&bShowSceneSettingsWindow);
 
+		if (bShowSettingsWindow)
+			Settings(&bShowSettingsWindow);
+
 	}
 
 	void MainEditor::Update(float frameTime)
@@ -67,6 +79,10 @@ namespace Engine
 		if (m_PlayState == EPlaystate::Playing)
 		{
 			m_Scene->SimulateScene(frameTime);
+		}
+		else
+		{
+			m_Scene->EditorUpdatePhysicsScene(frameTime);
 		}
 	}
 
@@ -168,6 +184,10 @@ namespace Engine
 
 				if (ImGui::MenuItem("Scene Settings", NULL, bShowSceneSettingsWindow))
 					bShowSceneSettingsWindow = !bShowSceneSettingsWindow;
+
+				if (ImGui::MenuItem("Settings", NULL, bShowSettingsWindow))
+					bShowSettingsWindow = !bShowSettingsWindow;
+
 				ImGui::EndMenu();
 			}
 
@@ -522,11 +542,22 @@ namespace Engine
 		ImGui::End();
 	}
 
-	void MainEditor::Preferences(bool* pOpen)
+	void MainEditor::Settings(bool* pOpen)
 	{
 		ImGuiWindowFlags window_flags = 0;
 
 		ImGui::Begin("Perferences", pOpen, window_flags);
+		
+		char buffer[256];
+		memset(buffer, 0, sizeof(buffer));
+		strncpy_s(buffer, m_EditorSettings.m_StartUpScene.c_str(), sizeof(buffer));
+		if (IMGUI_LEFT_LABEL(ImGui::InputText, "Start Up Scene: ", buffer, sizeof(buffer)))
+		{
+			m_EditorSettings.m_StartUpScene = std::string(buffer);
+			SettingsSerilizer settings;
+			std::string syspath = m_SystemPath.string();
+			settings.SerializeEditorSettings(syspath, m_EditorSettings);
+		}
 
 		ImGui::End();
 	}
@@ -579,6 +610,30 @@ namespace Engine
 
 		
 
+		if (!path.empty())
+		{
+			m_SelectedEntity = {};
+			m_Scene->UnloadScene();
+
+			std::shared_ptr<Engine::Scene> scene = std::make_shared<Scene>();
+			SceneSerializer::DeserializeScene(path, scene);
+			m_SceneFilePath = path;
+			m_CurrentSceneName = scene->GetSceneSettings().title;
+
+			if (scene != nullptr)
+			{
+				m_EditorScene = scene;
+				m_Scene = m_EditorScene;
+				m_Scene->InitScene();
+				Renderer::SetScene(m_Scene);
+				m_Scene->LoadEntities();
+			}
+		}
+	}
+
+	void MainEditor::LoadScene(std::string& sceneName)
+	{
+		std::string path = m_AssetPath.string() + "\\Scenes" + "\\" + sceneName + ".mge";
 		if (!path.empty())
 		{
 			m_SelectedEntity = {};

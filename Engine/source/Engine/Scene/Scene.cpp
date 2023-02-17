@@ -68,6 +68,18 @@ namespace Engine
 			});
 	}
 
+	void Scene::EditorUpdatePhysicsScene(float frametime)
+	{
+		m_Registry.each([&](auto entityID)
+			{
+				Entity entity{ entityID, shared_from_this() };
+				if (entity.HasComponent<RigidDynamicComponent>() || entity.HasComponent<CollisionComponents>())
+				{
+					Physics::EditorUpdateActors(entity);
+				}
+			});
+	}
+
 
 	Entity Scene::CreateEntity(const std::string& tag)
 	{

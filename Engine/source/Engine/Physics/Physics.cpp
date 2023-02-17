@@ -64,6 +64,12 @@ namespace Engine
 			m_PhysicsAPI->UpdatePhysicsActor(entity);
 	}
 
+	void Physics::EditorUpdateActors(Entity& entity)
+	{
+		if (m_PhysicsAPI)
+			m_PhysicsAPI->EditorUpdateActors(entity);
+	}
+
 	void Physics::ResetSimulation()
 	{
 		if (m_PhysicsAPI)

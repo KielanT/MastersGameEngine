@@ -19,6 +19,7 @@ namespace Engine
 		virtual void CreatePhysicsActor(Entity& entity) override;
 		virtual void CreateCollision(Entity& entity) override;
 		virtual void UpdatePhysicsActor(Entity& entity) override;
+		virtual void EditorUpdateActors(Entity& entity) override;
 		virtual void ResetSimulation() override;
 
 	private:

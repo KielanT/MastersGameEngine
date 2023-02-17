@@ -194,4 +194,17 @@ namespace Engine
 		std::ofstream fout(path + "/order.txt");
 		fout << out.c_str();
 	}
+
+	void EditorSettingsWriter::Write(std::string& path, EditorSettings settings)
+	{
+		YAML::Emitter out;
+		out << YAML::BeginMap;
+		out << YAML::Key << "EditorSettings";
+		out << YAML::BeginMap;
+		out << YAML::Key << "StartUpScene" << YAML::Value << settings.m_StartUpScene;
+		out << YAML::EndMap;
+
+		std::ofstream fout(path + "\\Settings.txt");
+		fout << out.c_str();
+	}
 }

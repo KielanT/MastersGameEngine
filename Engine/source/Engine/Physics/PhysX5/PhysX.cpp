@@ -155,6 +155,25 @@ namespace Engine
 
 	}
 
+	void PhysX::EditorUpdateActors(Entity& entity)
+	{
+		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<RigidDynamicComponent>())
+		{
+			auto position = entity.GetComponent<TransformComponent>().Position;
+			entity.GetComponent<RigidDynamicComponent>().actor->setGlobalPose({ position.x, position.y, position.z });
+
+
+		}
+		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<CollisionComponents>())
+		{
+			if (entity.GetComponent<CollisionComponents>().actor != nullptr)
+			{
+				auto position = entity.GetComponent<TransformComponent>().Position;
+				entity.GetComponent<CollisionComponents>().actor->setGlobalPose({ position.x, position.y, position.z });
+			}
+		}
+	}
+
 	void PhysX::ResetSimulation()
 	{
 		if (m_Scene != nullptr)

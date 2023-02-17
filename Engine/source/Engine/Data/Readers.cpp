@@ -151,4 +151,32 @@ namespace Engine
 		}
 		return true;
 	}
+
+	bool EditorSettingsReader::Read(std::string& path, EditorSettings& settings)
+	{
+		YAML::Node data;
+		try
+		{
+			std::string loadPath = path + "\\Settings.txt";
+			data = YAML::LoadFile(loadPath);
+		}
+		catch (YAML::Exception e)
+		{
+			LOG_ERROR("Failed to load file: {0}", e.what());
+			return false;
+		}
+		catch (YAML::ParserException e)
+		{
+			LOG_ERROR("Failed to load file: {0}", e.what());
+			return false;
+		}
+
+		auto EditorSettings = data["EditorSettings"];
+		if (EditorSettings)
+		{
+			settings.m_StartUpScene = EditorSettings["StartUpScene"].as<std::string>();
+		}
+
+		return true;
+	}
 }

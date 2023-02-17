@@ -12,6 +12,8 @@ namespace Engine
 		NotPlaying,
 	};
 
+	
+
 	class MainEditor : public Engine::ILayer
 	{
 	public:
@@ -29,18 +31,21 @@ namespace Engine
 		void Details(bool* pOpen);
 		void Assets(bool* pOpen);
 		void SceneSettings(bool* pOpen);
-		void Preferences(bool* pOpen);
+		void Settings(bool* pOpen);
 		
 		void EntityNode(Entity entity);
 		
 		void LoadScene(bool reset = false);
+		void LoadScene(std::string& sceneName);
 		void Save();
 		void SaveAs();
 
 	private:
 		std::shared_ptr<Engine::Scene> m_EditorScene;
 		std::shared_ptr<Engine::Scene> m_Scene;
-
+			
+		EditorSettings m_EditorSettings;
+		
 		std::string m_SceneFilePath = "";
 		std::string m_CurrentSceneName = "Untitled";
 
@@ -62,6 +67,6 @@ namespace Engine
 		bool bShowDetailsWindow = true;
 		bool bShowAssetsWindow = true;
 		bool bShowSceneSettingsWindow = false;
-		bool bShowPreferencesWindow = false;
+		bool bShowSettingsWindow = false;
 	};
 }
