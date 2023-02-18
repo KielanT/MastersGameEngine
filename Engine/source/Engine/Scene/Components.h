@@ -122,12 +122,25 @@ namespace Engine
 	{
 		// Create Camera;
 		std::string temp = ""; // Requires at least one var
+		bool IsActive;
 	};
 
 	struct RigidDynamicComponent
 	{
 		physx::PxRigidDynamic* actor;
 		
+		// Gravity on/off
+		bool Gravity = false;
+
+		//Mass;
+		float Mass = 1.0f;
+		glm::vec3 MassSpaceInertiaTensor = glm::vec3(1.0f, 1.0f, 1.0f);
+
+		//velocity
+		glm::vec3 LinearVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 AngularVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
+		float AngularDamping = 0.0f;
+	
 	};
 
 
@@ -139,6 +152,15 @@ namespace Engine
 
 		glm::vec3 BoxBounds = glm::vec3(5.0f, 5.0f, 5.0f);
 		float SphereRadius = 5.0f;
+
+		struct SPhysicsMaterial
+		{
+			float staticFriction = 0.5f;
+			float dynamicFriction = 0.5f;
+			float restitution = 0.6f;
+		};
+
+		SPhysicsMaterial PhysicsMaterial;
 	};
 
 	struct ScriptComponent

@@ -154,7 +154,12 @@ namespace Engine
 			auto& comp = entity.GetComponent<RigidDynamicComponent>();
 			out << YAML::Key << "RigidDynamicComponent";
 			out << YAML::BeginMap;
-
+			out << YAML::Key << "Gravity" << YAML::Value << (bool)comp.Gravity;
+			out << YAML::Key << "Mass" << YAML::Value << (float)comp.Mass;
+			out << YAML::Key << "MassSpaceInertiaTensor" << YAML::Value << comp.MassSpaceInertiaTensor;
+			out << YAML::Key << "LinearVelocity" << YAML::Value << comp.LinearVelocity;
+			out << YAML::Key << "AngularVelocity" << YAML::Value << comp.AngularVelocity;
+			out << YAML::Key << "AngularDamping" << YAML::Value << (float)comp.AngularDamping;
 			out << YAML::EndMap;
 		}
 

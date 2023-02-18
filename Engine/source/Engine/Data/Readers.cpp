@@ -99,7 +99,16 @@ namespace Engine
 				auto dynamicNode = entityIT["RigidDynamicComponent"];
 				if (dynamicNode)
 				{
-					auto& dynamic = entity.AddComponent<RigidDynamicComponent>();
+					auto comp = RigidDynamicComponent();
+					comp.Gravity = dynamicNode["Gravity"].as<bool>();
+					comp.Mass = dynamicNode["Mass"].as<float>();
+					comp.MassSpaceInertiaTensor = dynamicNode["MassSpaceInertiaTensor"].as<glm::vec3>();
+					comp.LinearVelocity = dynamicNode["LinearVelocity"].as<glm::vec3>();
+					comp.AngularVelocity = dynamicNode["AngularVelocity"].as<glm::vec3>();
+					comp.AngularDamping = dynamicNode["AngularDamping"].as<float>();
+
+					auto& dynamic = entity.AddComponent<RigidDynamicComponent>(comp);
+
 					
 				}
 				auto collisonNode = entityIT["CollisionComponents"];

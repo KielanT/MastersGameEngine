@@ -28,6 +28,8 @@ namespace Engine
 		void SetRenderedTransform(TransformComponent& transform, physx::PxTransform pTransform);
 		physx::PxTransform SetPhysicsTransform(TransformComponent& transform);
 
+		void SetPhysicsSettings(RigidDynamicComponent& comp);
+
 	private:
 		physx::PxFoundation* m_Foundation;
 		physx::PxPvd* m_PVD;

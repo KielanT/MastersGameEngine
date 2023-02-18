@@ -226,7 +226,37 @@ namespace Engine
 
 		if (ImGui::TreeNodeEx("Rigid Dynamic", m_Flags))
 		{
-			ImGui::Text("Rigid Dynamic Component : BEING IMPLEMENTED");
+			IMGUI_LEFT_LABEL(ImGui::Checkbox, "Gravity", &comp.Gravity);
+			ImGui::SameLine();
+
+			ImGui::PushItemWidth(m_InputNumWidth);
+			ImGui::Text("Mass"); ImGui::SameLine(); ImGui::InputFloat("##mass", &comp.Mass);
+			ImGui::PopItemWidth();
+
+			//ImGui::Text("Mass Space Inertia Tensor: "); ImGui::SameLine();
+			//ImGui::PushItemWidth(m_InputNumWidth);
+			//ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##msitx", &comp.MassSpaceInertiaTensor.x); ImGui::SameLine();
+			//ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##msitz", &comp.MassSpaceInertiaTensor.y); ImGui::SameLine();
+			//ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##msity", &comp.MassSpaceInertiaTensor.z);
+			//ImGui::PopItemWidth();
+			//
+			//ImGui::Text("Linear Velocity: "); ImGui::SameLine();
+			//ImGui::PushItemWidth(m_InputNumWidth);
+			//ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##lvx", &comp.LinearVelocity.x); ImGui::SameLine();
+			//ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##lvz", &comp.LinearVelocity.y); ImGui::SameLine();
+			//ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##lvy", &comp.LinearVelocity.z);
+			//ImGui::PopItemWidth();
+			//
+			//ImGui::Text("Angular Velocity: "); ImGui::SameLine();
+			//ImGui::PushItemWidth(m_InputNumWidth);
+			//ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##avx", &comp.AngularVelocity.x); ImGui::SameLine();
+			//ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##avz", &comp.AngularVelocity.y); ImGui::SameLine();
+			//ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##avy", &comp.AngularVelocity.z);
+			//ImGui::PopItemWidth();
+
+			//ImGui::PushItemWidth(m_InputNumWidth);
+			//ImGui::Text("Angular Damping"); ImGui::SameLine(); ImGui::InputFloat("##adx", &comp.AngularDamping);
+			//ImGui::PopItemWidth();
 
 			ImGui::TreePop();
 		}

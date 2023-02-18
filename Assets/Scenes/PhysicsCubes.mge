@@ -9,29 +9,6 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
-      ID: 12806828965685975290
-      Tag: StaticCube
-    TransformComponent:
-      Position: [0, -10, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    TextureComponent:
-      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\iron-rusted4-albedo.dds
-      RoughPath: ""
-      HeightPath: ""
-      MetalnessPath: ""
-    MeshRendererComponent:
-      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\Cube.x
-      PixelShader: 0
-      VertexShader: 0
-      BlendState: 0
-      DepthStencil: 0
-      Rasterizer: 0
-      Sampler: 0
-    CollisionComponents:
-      CollisionType: 0
-  -  # Entity
-    IDComponent:
       ID: 3084078573118750917
       Tag: DynamicCube
     TransformComponent:
@@ -52,6 +29,34 @@ Entities:
       Rasterizer: 0
       Sampler: 0
     RigidDynamicComponent:
-      {}
+      Gravity: true
+      Mass: 1
+      MassSpaceInertiaTensor: [0, 0, 0]
+      LinearVelocity: [0, 0, 0]
+      AngularVelocity: [0, 0, 0]
+      AngularDamping: 0
+    CollisionComponents:
+      CollisionType: 0
+  -  # Entity
+    IDComponent:
+      ID: 12806828965685975290
+      Tag: StaticCube
+    TransformComponent:
+      Position: [0, -10, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\iron-rusted4-albedo.dds
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: W:\Uni\Masters\CO4305\MastersGameEngine\Engine\media\Cube.x
+      PixelShader: 0
+      VertexShader: 0
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 0
+      Sampler: 0
     CollisionComponents:
       CollisionType: 0

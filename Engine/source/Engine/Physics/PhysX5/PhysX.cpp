@@ -80,11 +80,11 @@ namespace Engine
 			{
 				auto& comp = entity.GetComponent<RigidDynamicComponent>();
 					
+				physx::PxTransform transform = SetPhysicsTransform(entity.GetComponent<TransformComponent>());
 
-					auto physxTrans = physx::PxTransform({ trans.Position.x ,trans.Position.y, trans.Position.z });
-
-					comp.actor = m_Physics->createRigidDynamic(physxTrans);
-					m_Scene->addActor(*comp.actor);
+				comp.actor = m_Physics->createRigidDynamic(transform);
+				SetPhysicsSettings(entity.GetComponent<RigidDynamicComponent>());
+				m_Scene->addActor(*comp.actor);
 
 			}
 		}
@@ -140,6 +140,8 @@ namespace Engine
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<RigidDynamicComponent>())
 		{
 			SetRenderedTransform(entity.GetComponent<TransformComponent>(), entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose());
+			SetPhysicsSettings(entity.GetComponent<RigidDynamicComponent>());
+			
 		}
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<CollisionComponents>())
 		{
@@ -234,6 +236,15 @@ namespace Engine
 		pTransform.q = pQuat;
 
 		return pTransform;
+	}
+
+	void PhysX::SetPhysicsSettings(RigidDynamicComponent& comp)
+	{
+		comp.actor->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, !comp.Gravity);
+		comp.actor->setMass(comp.Mass);
+		//comp.actor->setMassSpaceInertiaTensor({ comp.MassSpaceInertiaTensor.x, comp.MassSpaceInertiaTensor.y,comp.MassSpaceInertiaTensor.z });
+		//comp.actor->setLinearVelocity({ (physx::PxReal)comp.LinearVelocity.x, (physx::PxReal)comp.LinearVelocity.y, (physx::PxReal)comp.LinearVelocity.z });
+		//comp.actor->setAngularDamping(comp.AngularDamping);
 	}
 	
 }

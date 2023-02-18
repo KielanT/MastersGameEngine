@@ -50,23 +50,23 @@ namespace Engine
 		m_Scene->RenderScene();
 
 		DockSpace();
-
+		
 		bool showWindow = true;
 		
 		if(bShowGameWindow)
 			EntitiesWindow(&bShowGameWindow);
 		if(bShowGameWindow)
 			GameWindow(&bShowGameWindow);
-
+		
 		if(bShowDetailsWindow)
 			Details(&bShowDetailsWindow);
-
+		
 		if(bShowAssetsWindow)
 			Assets(&bShowAssetsWindow);
-
+		
 		if(bShowSceneSettingsWindow)
 			SceneSettings(&bShowSceneSettingsWindow);
-
+		
 		if (bShowSettingsWindow)
 			Settings(&bShowSettingsWindow);
 
