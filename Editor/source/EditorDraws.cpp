@@ -7,8 +7,9 @@
 
 namespace Engine
 {
-	void EditorDraws::DrawComponents(Entity& entity)
+	void EditorDraws::DrawComponents(Entity& entity, std::filesystem::path assetPath)
 	{
+		m_AssetPath = assetPath;
 		if (entity)
 		{
 			if (entity.HasComponent<IDComponent>())
@@ -117,33 +118,36 @@ namespace Engine
 				{
 					const wchar_t* pathp = (const wchar_t*)payload->Data;
 					std::filesystem::path texturePath = pathp;
-
+			
 					std::string last = comp.Path;
-					comp.Path = texturePath.generic_string();
 
-					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
+					std::string fileName = texturePath.filename().string();
+
+					std::filesystem::path newF = texturePath;
+					std::string s;
+					while (newF != m_AssetPath)
+					{
+
+						if (newF.parent_path() == m_AssetPath)
+							break;
+
+
+						if (s.empty())
+							s += newF.parent_path().filename().string() + "/";
+						else
+							s.insert(0, newF.parent_path().filename().string() + "/");
+
+						newF = newF.parent_path();
+					}
+
+					s += fileName;
+					comp.Path = s;
+			
+					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(texturePath.string());
 					comp.Model = std::make_shared<Model>(mesh);
 					bIsUnsaved = true;
 				}
 				ImGui::EndDragDropTarget();
-			}
-
-			ImGui::SameLine();
-
-			if (ImGui::Button("Add##Model"))
-			{
-				const char* filter = "Select Type\0*.*\0PNG\0*.PNG\0JPG\0*.JPG\0JPEG\0*.JPEG\0DDS\0*.DDS\0";
-				std::string file = FileDialog::OpenFile(Renderer::GetWindowProperties().Hwnd, filter);
-
-				if (!file.empty())
-				{
-					std::string last = comp.Path;
-					comp.Path = file;
-
-					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
-					comp.Model = std::make_shared<Model>(mesh);
-					bIsUnsaved = true;
-				}
 			}
 
 			int ps = static_cast<int>(comp.PixelShader);
@@ -203,7 +207,7 @@ namespace Engine
 		if (ImGui::TreeNodeEx("Texture", m_Flags))
 		{
 			//if (!bIsPBR)
-				TextureBoxes("Texture", comp.Path, comp.ResourceView);
+				TextureBoxes("Texture", comp, comp.ResourceView);
 			//else
 			//{
 			//	TextureBoxes("Albedo", comp.Path, comp.ResourceView);
@@ -317,7 +321,7 @@ namespace Engine
 		return selected;
 	}
 
-	void EditorDraws::TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView)
+	void EditorDraws::TextureBoxes(std::string Label, TextureComponent& comp, CComPtr<ID3D11ShaderResourceView>& resourseView)
 	{
 		std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
 
@@ -325,12 +329,13 @@ namespace Engine
 
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
-		strncpy_s(buffer, path.c_str(), sizeof(buffer));
+		strncpy_s(buffer, comp.Path.c_str(), sizeof(buffer));
 
 		std::string textLabel = "##" + Label + "text";
 		ImGui::Text(Label.c_str()); ImGui::SameLine();
 		ImGuiInputTextFlags flags = ImGuiInputTextFlags_ReadOnly;
 		ImGui::InputText(textLabel.c_str(), buffer, sizeof(buffer), flags);
+
 		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetPayload"))
@@ -338,50 +343,45 @@ namespace Engine
 				const wchar_t* pathp = (const wchar_t*)payload->Data;
 				std::filesystem::path texturePath = pathp;
 
-				std::string last = path;
-				path = texturePath.generic_string();
+				std::string last = comp.Path;
+
+				std::string fileName = texturePath.filename().string();
+
+				std::filesystem::path newF = texturePath;
+				std::string s;
+				while (newF != m_AssetPath)
+				{
+
+					if (newF.parent_path() == m_AssetPath)
+						break;
+
+
+					if (s.empty())
+						s += newF.parent_path().filename().string() + "/";
+					else
+						s.insert(0, newF.parent_path().filename().string() + "/");
+
+					newF = newF.parent_path();
+				}
+
+				s += fileName;
+				comp.Path = s;
 
 				CComPtr<ID3D11Resource> Resource;
 				CComPtr<ID3D11ShaderResourceView> ResourceView;
 
-				if (dx11Render->LoadTexture(path, &Resource, &ResourceView))
+				if (dx11Render->LoadTexture(texturePath.string(), &Resource, &ResourceView))
 				{
 					resourseView = ResourceView;
 				}
 				else
 				{
-					path = last;
+					comp.Path = last;
 					//TODO: Error Pop up
 				}
+
 			}
 			ImGui::EndDragDropTarget();
-		}
-
-
-		ImGui::SameLine();
-		std::string btnLabel = "Add##" + Label + "texture";
-		if (ImGui::Button(btnLabel.c_str()))
-		{
-			const char* filter = "Select Type\0*.*\0PNG\0*.PNG\0JPG\0*.JPG\0JPEG\0*.JPEG\0DDS\0*.DDS\0";
-			std::string file = FileDialog::OpenFile(dx11Render->GetWindowProperties().Hwnd, filter);
-
-			if (!file.empty())
-			{
-				std::string last = path;
-				path = file;
-				CComPtr<ID3D11Resource> Resource;
-				CComPtr<ID3D11ShaderResourceView> ResourceView;
-
-				if (dx11Render->LoadTexture(path, &Resource, &ResourceView))
-				{
-					resourseView = ResourceView;
-				}
-				else
-				{
-					path = last;
-					//TODO: Error Pop up
-				}
-			}
 		}
 	}
 

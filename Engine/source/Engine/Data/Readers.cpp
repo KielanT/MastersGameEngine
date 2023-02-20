@@ -46,7 +46,6 @@ namespace Engine
 		if (SceneSettingsNode)
 		{
 			SceneSettings settings;
-			settings.assetFilePath = SceneSettingsNode["AssetPath"].as<std::string>();
 			settings.title = SceneSettingsNode["Title"].as<std::string>();
 			settings.index = SceneSettingsNode["Index"].as<eint32>();
 			settings.ambientColour = SceneSettingsNode["AmbientColour"].as<glm::vec3>();

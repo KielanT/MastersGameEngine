@@ -303,7 +303,7 @@ namespace Engine
 		if (m_Scene != nullptr && m_SelectedEntity)
 		{
 			EditorDraws drawer;
-			drawer.DrawComponents(m_SelectedEntity);
+			drawer.DrawComponents(m_SelectedEntity, m_AssetPath);
 
 			if (drawer.bIsUnsaved)
 			{
@@ -626,7 +626,7 @@ namespace Engine
 				m_Scene = m_EditorScene;
 				m_Scene->InitScene();
 				Renderer::SetScene(m_Scene);
-				m_Scene->LoadEntities();
+				m_Scene->LoadEntities(m_AssetPath.string());
 			}
 		}
 	}
@@ -650,7 +650,7 @@ namespace Engine
 				m_Scene = m_EditorScene;
 				m_Scene->InitScene();
 				Renderer::SetScene(m_Scene);
-				m_Scene->LoadEntities();
+				m_Scene->LoadEntities(m_AssetPath.string());
 			}
 		}
 	}

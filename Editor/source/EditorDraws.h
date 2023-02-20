@@ -11,7 +11,7 @@ namespace Engine
 	class EditorDraws
 	{
 	public:
-		void DrawComponents(Entity& entity);
+		void DrawComponents(Entity& entity, std::filesystem::path assetPath);
 
 	private:
 		void DrawIDComponent(IDComponent& comp);
@@ -32,7 +32,7 @@ namespace Engine
 
 
 		int ComboBox(const std::string& label, const char* items[], int size, int& selected);
-		void TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView);
+		void TextureBoxes(std::string Label, TextureComponent& comp, CComPtr<ID3D11ShaderResourceView>& resourseView);
 
 		//void ChangePhysicsCollision();
 
@@ -44,6 +44,8 @@ namespace Engine
 		int m_Flags; // ImGuiTreeNodeFlags
 
 		float m_InputNumWidth = 50.0f;
+
+		std::filesystem::path m_AssetPath;
 	};
 }
 

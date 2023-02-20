@@ -43,7 +43,7 @@ namespace Engine
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& tag);
 		Entity CreateMeshEntity(const std::string& tag);
 		void DeleteEntity(Entity entity);
-		void LoadEntities();
+		void LoadEntities(std::string assetPath);
 
 		SceneSettings GetSceneSettings() { return m_SceneSettings; }
 		void SetSceneSettings(SceneSettings& settings) { m_SceneSettings = settings; }
@@ -55,7 +55,7 @@ namespace Engine
 		void OnComponentCreated(Entity entity, T& comp);
 
 	private:
-		void LoadEntity(Entity entity);
+		void LoadEntity(Entity entity, std::string& assetPath);
 
 		
 

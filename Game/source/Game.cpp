@@ -22,22 +22,22 @@ namespace Engine
 	void Game::Render()
 	{
 		m_Scene->RenderScene();
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration;
-		bool open = true;
-		ImGui::Begin("Temp Scene Loader", &open, window_flags);
-		if (ImGui::Button("Open Scene"))
-		{
-			std::string path = FileDialog::OpenFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene\0*.mge\0");
-			if (!path.empty())
-			{
-				m_Scene->UnloadScene();
-
-				SceneSerializer::DeserializeScene(path, m_Scene);
-				m_Scene->LoadEntities();
-			}
-		}
-
-		ImGui::End();
+		//ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration;
+		//bool open = true;
+		//ImGui::Begin("Temp Scene Loader", &open, window_flags);
+		//if (ImGui::Button("Open Scene"))
+		//{
+		//	std::string path = FileDialog::OpenFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene\0*.mge\0");
+		//	if (!path.empty())
+		//	{
+		//		m_Scene->UnloadScene();
+		//
+		//		SceneSerializer::DeserializeScene(path, m_Scene);
+		//		m_Scene->LoadEntities();
+		//	}
+		//}
+		//
+		//ImGui::End();
 	}
 
 	void Game::Update(float frameTime)

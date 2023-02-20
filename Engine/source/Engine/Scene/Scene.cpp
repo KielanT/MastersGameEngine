@@ -118,23 +118,23 @@ namespace Engine
 		m_Registry.destroy(entity);
 	}
 
-	void Scene::LoadEntities()
+	void Scene::LoadEntities(std::string assetPath)
 	{
 		m_Registry.each([&](auto entityID)
 			{
 				Entity entity{ entityID, shared_from_this() };
-				LoadEntity(entity);
+				LoadEntity(entity, assetPath);
 			});
 	}
 
-	void Scene::LoadEntity(Entity entity)
+	void Scene::LoadEntity(Entity entity, std::string& assetPath)
 	{
 		if (entity.HasComponent<MeshRendererComponent>())
 		{
 			auto& comp = entity.GetComponent<MeshRendererComponent>();
 			if (!comp.Path.empty())
 			{
-				std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(comp.Path);
+				std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(assetPath + "/" + comp.Path);
 				comp.Model = std::make_shared<Model>(mesh);
 			}
 		}
@@ -147,12 +147,12 @@ namespace Engine
 				CComPtr<ID3D11Resource> Resource;
 				CComPtr<ID3D11ShaderResourceView> ResourceView;
 
-				if (dx11Render->LoadTexture(comp.Path, &Resource, &ResourceView))
+				if (dx11Render->LoadTexture(assetPath + "/" + comp.Path, &Resource, &ResourceView))
 				{
 					comp.ResourceView = ResourceView;
 				}
 			}
-			if (!comp.RoughPath.empty())
+			/*if (!comp.RoughPath.empty())
 			{
 				CComPtr<ID3D11Resource> Resource;
 				CComPtr<ID3D11ShaderResourceView> ResourceView;
@@ -197,7 +197,7 @@ namespace Engine
 					
 				}
 
-			}
+			}*/
 		}
 	}
 
