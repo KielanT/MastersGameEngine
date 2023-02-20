@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	std::string FileDialog::OpenFile(HWND hwnd, const char* filter)
+	std::string FileDialog::OpenFile(HWND hwnd, const char* filter, std::string path, std::string title)
 	{
 		OPENFILENAMEA ofn;
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -17,9 +17,15 @@ namespace Engine
 		ofn.lpstrFilter = filter;
 		ofn.lpstrCustomFilter = NULL;
 		ofn.nFilterIndex = 1;
+
 		ofn.lpstrFileTitle = NULL;
-		ofn.lpstrInitialDir = NULL;
-		ofn.lpstrTitle = "Open";
+
+		if (!path.empty())
+			ofn.lpstrInitialDir = path.c_str();
+		else
+			ofn.lpstrInitialDir = NULL;
+
+		ofn.lpstrTitle = title.c_str();
 
 		if (GetOpenFileNameA(&ofn))
 			return ofn.lpstrFile;
@@ -27,7 +33,7 @@ namespace Engine
 		return std::string();
 	}
 
-	std::string FileDialog::SaveFile(HWND hwnd, const char* filter)
+	std::string FileDialog::SaveFile(HWND hwnd, const char* filter, std::string path, std::string title)
 	{
 		OPENFILENAMEA ofn;
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -42,8 +48,13 @@ namespace Engine
 		ofn.lpstrCustomFilter = NULL;
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
-		ofn.lpstrInitialDir = NULL;
-		ofn.lpstrTitle = NULL;
+
+		if(!path.empty())
+			ofn.lpstrInitialDir = path.c_str();
+		else
+			ofn.lpstrInitialDir = NULL;
+		
+		ofn.lpstrTitle = title.c_str();
 		ofn.lpstrDefExt = strchr(filter, '\0') + 1;
 
 		if (GetSaveFileNameA(&ofn))

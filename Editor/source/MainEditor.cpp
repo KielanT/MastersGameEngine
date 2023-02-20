@@ -601,7 +601,7 @@ namespace Engine
 
 		if (!reset)
 		{
-			path = FileDialog::OpenFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene\0*.mge\0");
+			path = FileDialog::OpenFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene\0*.mge\0", m_AssetPath.string() + "\\Scenes", "Open Scene");
 		}
 		else
 		{
@@ -672,7 +672,7 @@ namespace Engine
 	void MainEditor::SaveAs()
 	{
 		// Save As
-		std::string path = FileDialog::SaveFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene (*.mge)\0*.mge\0");
+		std::string path = FileDialog::SaveFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene (*.mge)\0*.mge\0", m_AssetPath.string() + "\\Scenes", "Save Scene");
 
 		if (!path.empty())
 		{
