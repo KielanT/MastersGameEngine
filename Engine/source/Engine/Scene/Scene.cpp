@@ -17,7 +17,7 @@ namespace Engine
 	void Scene::InitScene()
 	{
 		m_MainCamera = std::make_unique<Camera>();
-		m_MainCamera->SetPosition({ 0, 0, -50 });
+		m_MainCamera->SetPosition({ 0, 0, -50.0f });
 		m_MainCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		Physics::Init();

@@ -223,7 +223,9 @@ namespace Engine
 	physx::PxTransform PhysX::SetPhysicsTransform(TransformComponent& transform)
 	{
 		auto position = transform.Position;
+		position.z = -position.z;
 		auto rotation = transform.Rotation;
+		//rotation.z = -rotation.z;
 		glm::quat gQuat = glm::quat(rotation);
 		physx::PxQuat pQuat;
 		pQuat.x = gQuat.x;
@@ -242,7 +244,7 @@ namespace Engine
 	{
 		comp.actor->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, !comp.Gravity);
 		comp.actor->setMass(comp.Mass);
-		//comp.actor->setMassSpaceInertiaTensor({ comp.MassSpaceInertiaTensor.x, comp.MassSpaceInertiaTensor.y,comp.MassSpaceInertiaTensor.z });
+		comp.actor->setMassSpaceInertiaTensor({ comp.MassSpaceInertiaTensor.x, comp.MassSpaceInertiaTensor.y,comp.MassSpaceInertiaTensor.z });
 		//comp.actor->setLinearVelocity({ (physx::PxReal)comp.LinearVelocity.x, (physx::PxReal)comp.LinearVelocity.y, (physx::PxReal)comp.LinearVelocity.z });
 		//comp.actor->setAngularDamping(comp.AngularDamping);
 	}

@@ -8,6 +8,36 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
+      ID: 11350834667489270259
+      Tag: DynamicCube
+    TransformComponent:
+      Position: [0, 10.3339996, 0]
+      Rotation: [0, -0, 45]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: Textures/iron-rusted4-albedo.dds
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: Mesh/Basic/Cube.x
+      PixelShader: 0
+      VertexShader: 0
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    RigidDynamicComponent:
+      Gravity: true
+      Mass: 0.100000001
+      MassSpaceInertiaTensor: [1, 1, 1]
+      LinearVelocity: [0, 0, 0]
+      AngularVelocity: [0, 0, 0]
+      AngularDamping: 0
+    CollisionComponents:
+      CollisionType: 0
+  -  # Entity
+    IDComponent:
       ID: 293644093417950831
       Tag: StaticCube
     TransformComponent:
@@ -31,14 +61,14 @@ Entities:
       CollisionType: 0
   -  # Entity
     IDComponent:
-      ID: 11350834667489270259
-      Tag: DynamicCube
+      ID: 1092412749519471209
+      Tag: Mesh Entity
     TransformComponent:
-      Position: [0, 8.07696629, 0]
-      Rotation: [0, -0, 0]
+      Position: [10.5, -15, 0]
+      Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     TextureComponent:
-      Path: Textures/iron-rusted4-albedo.dds
+      Path: ""
       RoughPath: ""
       HeightPath: ""
       MetalnessPath: ""
@@ -50,12 +80,28 @@ Entities:
       DepthStencil: 0
       Rasterizer: 2
       Sampler: 0
-    RigidDynamicComponent:
-      Gravity: true
-      Mass: 1
-      MassSpaceInertiaTensor: [1, 1, 1]
-      LinearVelocity: [0, 0, 0]
-      AngularVelocity: [0, 0, 0]
-      AngularDamping: 0
+    CollisionComponents:
+      CollisionType: 0
+  -  # Entity
+    IDComponent:
+      ID: 7739995163489381900
+      Tag: Mesh Entity
+    TransformComponent:
+      Position: [0, 0, 20]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: ""
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: Mesh/Basic/Cube.x
+      PixelShader: 0
+      VertexShader: 0
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
     CollisionComponents:
       CollisionType: 0
