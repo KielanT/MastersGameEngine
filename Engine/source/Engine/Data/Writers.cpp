@@ -125,6 +125,7 @@ namespace Engine
 			out << YAML::Key << "TextureComponent";
 			out << YAML::BeginMap;
 			out << YAML::Key << "Path" << YAML::Value << comp.Path;
+			out << YAML::Key << "NormalPath" << YAML::Value << comp.NormalPath;
 			out << YAML::Key << "RoughPath" << YAML::Value << comp.RoughPath;
 			out << YAML::Key << "HeightPath" << YAML::Value << comp.HeightPath;
 			out << YAML::Key << "MetalnessPath" << YAML::Value << comp.MetalnessPath;

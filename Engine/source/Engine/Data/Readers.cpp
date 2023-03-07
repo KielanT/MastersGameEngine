@@ -78,6 +78,7 @@ namespace Engine
 				{
 					auto& texture = entity.AddComponent<TextureComponent>();
 					texture.Path = textureNode["Path"].as<std::string>();
+					texture.NormalPath = textureNode["NormalPath"].as<std::string>();
 					texture.RoughPath = textureNode["RoughPath"].as<std::string>();
 					texture.HeightPath = textureNode["HeightPath"].as<std::string>();
 					texture.MetalnessPath = textureNode["MetalnessPath"].as<std::string>();

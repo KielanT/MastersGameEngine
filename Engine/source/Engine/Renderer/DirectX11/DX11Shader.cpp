@@ -21,6 +21,7 @@ namespace Engine
 		m_BasicTransformVertexShader = LoadVertexShader("BasicTransform_vs");
 		m_SkinningVertexShader = LoadVertexShader("Skinning_vs");
 		m_PBRVertexShader = LoadVertexShader("PBR_vs");
+		
 
 		// Loads the pixel shaders
 		m_LightModelPixelShader = LoadPixelShader("LightModel_ps");
@@ -30,14 +31,14 @@ namespace Engine
 		std::filesystem::current_path(currentPath); // Resets path to the main 
 
 		if (m_PixelLightingVertexShader == nullptr || m_BasicTransformVertexShader == nullptr || 
-			m_SkinningVertexShader      == nullptr || m_PBRVertexShader			   == nullptr)
+			m_SkinningVertexShader      == nullptr || m_PBRVertexShader == nullptr)
 		{
 			LOG_ERROR("Failed to create Vertex shaders");
 			return false;
 		}
 
 		if (m_LightModelPixelShader == nullptr || m_PixelLightingPixelShader == nullptr ||
-			m_PBRPixelShader        == nullptr)
+			m_PBRPixelShader == nullptr)
 		{
 			LOG_ERROR("Failed to create Pixel shaders");
 			return false;
@@ -58,6 +59,7 @@ namespace Engine
 			break;
 		case EVertexShader::SkinningVertexShader:
 			return m_SkinningVertexShader;
+			break;
 		case EVertexShader::PBRVertexShader:
 			return m_PBRVertexShader;
 			break;
@@ -73,6 +75,7 @@ namespace Engine
 			break;
 		case EPixelShader::LightModelPixelShader:
 			return m_LightModelPixelShader;
+			break;
 		case EPixelShader::PBRPixelShader:
 			return m_PBRPixelShader;
 			break;

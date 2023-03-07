@@ -61,15 +61,20 @@ struct SimplePixelShaderInput
     float2 uv : uv;
 };
 
+//--------------------------------------------------------------------------------------
+// PBR 
+//--------------------------------------------------------------------------------------
 
-struct PBRInput
+
+struct PBR_Input
 {
-    float4 ProjectionPosition : SV_Position;
-    float3 WorldPosition : postition;
-    float3 ModelNormal : normal;
-    float3 ModelTangent : tangent;
-    float2 UV : uv;
+    float4 projectedPosition : SV_Position;
+    float3 worldPosition : worldPosition;
+    float3 worldNormal : worldNormal;
+    float3 tangent : tangent;
+    float2 uv : uv;
 };
+
 
 //--------------------------------------------------------------------------------------
 // Constant Buffers
@@ -91,7 +96,7 @@ cbuffer PerFrameConstants : register(b0) // The b0 gives this constant buffer th
     float    padding1;        // Pad above variable to float4 (HLSL requirement - copied in the the C++ version of this structure)
     float3   gLight1Colour;
     float    padding2;
-
+    
     float3   gLight2Position;
     float    padding3;
     float3   gLight2Colour;

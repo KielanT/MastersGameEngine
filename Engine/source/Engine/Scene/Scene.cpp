@@ -152,12 +152,12 @@ namespace Engine
 					comp.ResourceView = ResourceView;
 				}
 			}
-			/*if (!comp.RoughPath.empty())
+			if (!comp.RoughPath.empty())
 			{
 				CComPtr<ID3D11Resource> Resource;
 				CComPtr<ID3D11ShaderResourceView> ResourceView;
 
-				if (dx11Render->LoadTexture(comp.RoughPath, &Resource, &ResourceView))
+				if (dx11Render->LoadTexture(assetPath + "/" + comp.RoughPath, &Resource, &ResourceView))
 				{
 					comp.RoughView = ResourceView;
 				}
@@ -168,7 +168,7 @@ namespace Engine
 				CComPtr<ID3D11Resource> Resource;
 				CComPtr<ID3D11ShaderResourceView> ResourceView;
 
-				if (dx11Render->LoadTexture(comp.NormalPath, &Resource, &ResourceView))
+				if (dx11Render->LoadTexture(assetPath + "/" + comp.NormalPath, &Resource, &ResourceView))
 				{
 					comp.NormalView = ResourceView;
 				}
@@ -179,7 +179,7 @@ namespace Engine
 				CComPtr<ID3D11Resource> Resource;
 				CComPtr<ID3D11ShaderResourceView> ResourceView;
 
-				if (dx11Render->LoadTexture(comp.HeightPath, &Resource, &ResourceView))
+				if (dx11Render->LoadTexture(assetPath + "/" + comp.HeightPath, &Resource, &ResourceView))
 				{
 					comp.HeightView = ResourceView;
 					
@@ -191,13 +191,13 @@ namespace Engine
 				CComPtr<ID3D11Resource> Resource;
 				CComPtr<ID3D11ShaderResourceView> ResourceView;
 
-				if (dx11Render->LoadTexture(comp.MetalnessPath, &Resource, &ResourceView))
+				if (dx11Render->LoadTexture(assetPath + "/" + comp.MetalnessPath, &Resource, &ResourceView))
 				{
 					comp.MetalnessView = ResourceView;
 					
 				}
 
-			}*/
+			}
 		}
 	}
 
