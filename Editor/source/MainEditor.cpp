@@ -25,12 +25,16 @@ namespace Engine
 		m_EditorScene = std::make_shared<Scene>();
 		m_Scene = m_EditorScene;
 		
-		
 	}
 
 	bool MainEditor::Init()
 	{
+		m_EditorCamera = std::make_shared<Camera>();
+		m_EditorCamera->SetPosition({ 0, 0, -50.0f });
+		m_EditorCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
+
 		m_Scene = std::make_shared<Scene>();
+		m_Scene->SetCamera(m_EditorCamera);
 		m_Scene->InitScene();
 		Renderer::SetScene(m_Scene);
 
@@ -74,15 +78,16 @@ namespace Engine
 
 	void MainEditor::Update(float frameTime)
 	{
-		m_Scene->UpdateScene(frameTime);
+		
 
 		if (m_PlayState == EPlaystate::Playing)
 		{
+			m_Scene->UpdateScene(frameTime);
 			m_Scene->SimulateScene(frameTime);
 		}
 		else
 		{
-			m_Scene->EditorUpdatePhysicsScene(frameTime);
+			m_Scene->EditorUpdateScene(frameTime);
 		}
 	}
 
@@ -225,6 +230,7 @@ namespace Engine
 		{
 			if (ImGui::Button("Play"))
 			{
+				m_Scene->FindActiveCamera();
 				m_PlayState = EPlaystate::Playing;
 				Save();
 			}
@@ -276,6 +282,11 @@ namespace Engine
 			if (ImGui::MenuItem("Create Mesh Entity"))
 			{
 				m_SelectedEntity = m_Scene->CreateMeshEntity("Mesh Entity");
+				bUnsaved = true;
+			}
+			if (ImGui::MenuItem("Create Camera Entity"))
+			{
+				m_SelectedEntity = m_Scene->CreateCameraEntity("Camera Entity");
 				bUnsaved = true;
 			}
 
@@ -624,6 +635,7 @@ namespace Engine
 			{
 				m_EditorScene = scene;
 				m_Scene = m_EditorScene;
+				m_Scene->SetCamera(m_EditorCamera);
 				m_Scene->InitScene();
 				Renderer::SetScene(m_Scene);
 				m_Scene->LoadEntities(m_AssetPath.string());
@@ -648,6 +660,7 @@ namespace Engine
 			{
 				m_EditorScene = scene;
 				m_Scene = m_EditorScene;
+				m_Scene->SetCamera(m_EditorCamera);
 				m_Scene->InitScene();
 				Renderer::SetScene(m_Scene);
 				m_Scene->LoadEntities(m_AssetPath.string());

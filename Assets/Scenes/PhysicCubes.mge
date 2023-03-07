@@ -16,13 +16,12 @@ Entities:
       Scale: [1, 1, 1]
     TextureComponent:
       Path: Textures/iron-rusted4-albedo.dds
+      NormalPath: ""
       RoughPath: ""
       HeightPath: ""
       MetalnessPath: ""
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
-      PixelShader: 0
-      VertexShader: 0
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
@@ -46,13 +45,12 @@ Entities:
       Scale: [1, 1, 1]
     TextureComponent:
       Path: Textures/iron-rusted4-metalness.dds
+      NormalPath: ""
       RoughPath: ""
       HeightPath: ""
       MetalnessPath: ""
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
-      PixelShader: 0
-      VertexShader: 0
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
@@ -69,13 +67,12 @@ Entities:
       Scale: [1, 1, 1]
     TextureComponent:
       Path: ""
+      NormalPath: ""
       RoughPath: ""
       HeightPath: ""
       MetalnessPath: ""
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
-      PixelShader: 0
-      VertexShader: 0
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
@@ -92,16 +89,25 @@ Entities:
       Scale: [1, 1, 1]
     TextureComponent:
       Path: ""
+      NormalPath: ""
       RoughPath: ""
       HeightPath: ""
       MetalnessPath: ""
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
-      PixelShader: 0
-      VertexShader: 0
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
       Sampler: 0
     CollisionComponents:
       CollisionType: 0
+  -  # Entity
+    IDComponent:
+      ID: 14699178282228933364
+      Tag: Camera Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      {}

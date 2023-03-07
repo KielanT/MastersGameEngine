@@ -171,6 +171,15 @@ namespace Engine
 			out << YAML::EndMap;
 		}
 
+		if (entity.HasComponent<CameraComponent>()) 
+		{
+			auto& comp = entity.GetComponent<CameraComponent>();
+			out << YAML::Key << "CameraComponent";
+			out << YAML::BeginMap;
+			//out << YAML::Key << 
+			out << YAML::EndMap;
+		}
+
 		out << YAML::EndMap;
 	}
 

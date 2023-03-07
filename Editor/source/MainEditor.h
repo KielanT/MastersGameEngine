@@ -41,9 +41,13 @@ namespace Engine
 		void SaveAs();
 
 	private:
+		std::shared_ptr<Engine::Camera> m_EditorCamera;
+
+
 		std::shared_ptr<Engine::Scene> m_EditorScene;
 		std::shared_ptr<Engine::Scene> m_Scene;
-			
+		
+		
 		EditorSettings m_EditorSettings;
 		
 		std::string m_SceneFilePath = "";
