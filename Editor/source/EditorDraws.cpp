@@ -150,20 +150,7 @@ namespace Engine
 				ImGui::EndDragDropTarget();
 			}
 
-			int ps = static_cast<int>(comp.PixelShader);
-			const char* pixelItems[static_cast<int>(EPixelShader::EPixelShaderSize)];
-			pixelItems[0] = "PixelLightingPixelShader";
-			pixelItems[1] = "LightModelPixelShader";
-			pixelItems[2] = "PBRPixelShader";
-			comp.PixelShader = static_cast<EPixelShader>(ComboBox("Pixel Shader: ", pixelItems, static_cast<int>(EPixelShader::EPixelShaderSize), ps));
 
-			int vs = static_cast<int>(comp.VertexShader);
-			const char* vertexItems[static_cast<int>(EVertexShader::EVertexShaderSize)];
-			vertexItems[0] = "PixelLightingVertexShader";
-			vertexItems[1] = "BasicTransformVertexShader";
-			vertexItems[2] = "SkinningVertexShader";
-			vertexItems[3] = "PBRVertexShader";
-			comp.VertexShader = static_cast<EVertexShader>(ComboBox("Vertex Shader: ", vertexItems, static_cast<int>(EVertexShader::EVertexShaderSize), vs));
 
 			int bs = static_cast<int>(comp.BlendState);
 			const char* blendItems[static_cast<int>(EBlendState::EBlendStateSize)];
@@ -196,26 +183,19 @@ namespace Engine
 			ImGui::TreePop();
 		}
 
-		//if (comp.PixelShader == EPixelShader::PBRPixelShader || comp.VertexShader == EVertexShader::PBRVertexShader)
-		//	bIsPBR = true;
-		//else
-		//	bIsPBR = false;
 	}
 
 	void EditorDraws::DrawTextureComponent(TextureComponent& comp)
 	{
 		if (ImGui::TreeNodeEx("Texture", m_Flags))
 		{
-			//if (!bIsPBR)
-				//TextureBoxes("Texture", comp, comp.ResourceView);
-			//else
-			//{
+
 			TextureBoxes("Albedo", comp.Path, comp.ResourceView);
 			TextureBoxes("Roughness", comp.RoughPath, comp.RoughView);
 			TextureBoxes("Normal", comp.NormalPath, comp.NormalView);
 			TextureBoxes("Height", comp.HeightPath, comp.HeightView);
 			TextureBoxes("Metalness", comp.MetalnessPath, comp.MetalnessView);
-			//}
+			
 			ImGui::TreePop();
 		}
 	}

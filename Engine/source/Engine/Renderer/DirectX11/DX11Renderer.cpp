@@ -154,12 +154,9 @@ namespace Engine
                 mesh.Model->SetPosition(transfrom.Position);
                 mesh.Model->SetRotation(transfrom.Rotation);
                 mesh.Model->SetScale(transfrom.Scale);
-                
-                //m_D3DContext->VSSetShader(m_Shader->GetVertexShader(mesh.VertexShader), nullptr, 0);
-                //m_D3DContext->PSSetShader(m_Shader->GetPixelShader(mesh.PixelShader), nullptr, 0);
 
-                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(EVertexShader::PBRVertexShader), nullptr, 0);
-                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(EPixelShader::PBRPixelShader), nullptr, 0);
+                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(), nullptr, 0);
+                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(), nullptr, 0);
                 
                 m_D3DContext->PSSetShaderResources(0, 1, &texture.ResourceView.p);
                 m_D3DContext->PSSetShaderResources(1, 1, &texture.RoughView.p);

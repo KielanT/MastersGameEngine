@@ -10,24 +10,7 @@
 
 namespace Engine
 {
-	enum class EVertexShader
-	{
-		PixelLightingVertexShader = 0,
-		BasicTransformVertexShader,
-		SkinningVertexShader,
-		PBRVertexShader,
 
-		EVertexShaderSize
-	};
-
-	enum class EPixelShader
-	{
-		PixelLightingPixelShader = 0,
-		LightModelPixelShader,
-		PBRPixelShader,
-
-		EPixelShaderSize
-	};
 
 	enum class ESamplerState
 	{
@@ -110,8 +93,6 @@ namespace Engine
 	{
 		std::string Path = ""; // Mesh Path
 		std::shared_ptr<Model> Model;
-		EPixelShader PixelShader = EPixelShader::PixelLightingPixelShader; // PixelShader
-		EVertexShader VertexShader = EVertexShader::PixelLightingVertexShader; // VertexShader
 		EBlendState BlendState = EBlendState::NoBlendingState; // BlendState
 		EDepthStencilState DepthStencil = EDepthStencilState::UseDepthBufferState; // Depeth Stencil State
 		ERasterizerState RasterizerState = ERasterizerState::CullNoneState; // Rasterize State

@@ -16,70 +16,37 @@ namespace Engine
 
 		std::filesystem::current_path(shaderPath);
 
-		// Loads the vertex shaders
-		m_PixelLightingVertexShader = LoadVertexShader("PixelLighting_vs");
-		m_BasicTransformVertexShader = LoadVertexShader("BasicTransform_vs");
-		m_SkinningVertexShader = LoadVertexShader("Skinning_vs");
+		// Loads the vertex shader
 		m_PBRVertexShader = LoadVertexShader("PBR_vs");
-		
 
-		// Loads the pixel shaders
-		m_LightModelPixelShader = LoadPixelShader("LightModel_ps");
-		m_PixelLightingPixelShader = LoadPixelShader("PixelLighting_ps");
+		// Loads the pixel shader
 		m_PBRPixelShader = LoadPixelShader("PBR_ps");
 
 		std::filesystem::current_path(currentPath); // Resets path to the main 
 
-		if (m_PixelLightingVertexShader == nullptr || m_BasicTransformVertexShader == nullptr || 
-			m_SkinningVertexShader      == nullptr || m_PBRVertexShader == nullptr)
+		if (m_PBRVertexShader == nullptr)
 		{
-			LOG_ERROR("Failed to create Vertex shaders");
+			LOG_ERROR("Failed to create Vertex shader");
 			return false;
 		}
 
-		if (m_LightModelPixelShader == nullptr || m_PixelLightingPixelShader == nullptr ||
-			m_PBRPixelShader == nullptr)
+		if (m_PBRPixelShader == nullptr)
 		{
-			LOG_ERROR("Failed to create Pixel shaders");
+			LOG_ERROR("Failed to create Pixel shader");
 			return false;
 		}
 
 		return true;
 	}
 
-	CComPtr<ID3D11VertexShader> DX11Shader::GetVertexShader(EVertexShader vertexShader)
+	CComPtr<ID3D11VertexShader> DX11Shader::GetVertexShader()
 	{
-		switch (vertexShader)
-		{
-		case EVertexShader::PixelLightingVertexShader:
-			return m_PixelLightingVertexShader;
-			break;
-		case EVertexShader::BasicTransformVertexShader:
-			return m_BasicTransformVertexShader;
-			break;
-		case EVertexShader::SkinningVertexShader:
-			return m_SkinningVertexShader;
-			break;
-		case EVertexShader::PBRVertexShader:
-			return m_PBRVertexShader;
-			break;
-		}
+		return m_PBRVertexShader;
 	}
 
-	CComPtr<ID3D11PixelShader> DX11Shader::GetPixelShader(EPixelShader pixelShader)
+	CComPtr<ID3D11PixelShader> DX11Shader::GetPixelShader()
 	{
-		switch (pixelShader)
-		{
-		case EPixelShader::PixelLightingPixelShader:
-			return m_PixelLightingPixelShader;
-			break;
-		case EPixelShader::LightModelPixelShader:
-			return m_LightModelPixelShader;
-			break;
-		case EPixelShader::PBRPixelShader:
-			return m_PBRPixelShader;
-			break;
-		}
+		return m_PBRPixelShader;
 	}
 
 	CComPtr<ID3D11VertexShader> DX11Shader::LoadVertexShader(std::string shaderName)
