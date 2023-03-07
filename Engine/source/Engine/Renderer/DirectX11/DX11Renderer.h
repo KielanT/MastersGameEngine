@@ -17,15 +17,15 @@ namespace Engine
 		glm::mat4 EngineionMatrix;
 		glm::mat4 viewEngineionMatrix; // The above two matrices multiplied together to combine their effects
 
-		glm::vec3   light1Position; // 3 floats: x, y z
-		float      padding1;       // Pad above variable to float4 (HLSL requirement - which we must duplicate in this the C++ version of the structure)
-		glm::vec3   light1Colour;
-		float      padding2;
+		//glm::vec3   light1Position; // 3 floats: x, y z
+		//float      padding1;       // Pad above variable to float4 (HLSL requirement - which we must duplicate in this the C++ version of the structure)
+		//glm::vec3   light1Colour;
+		//float      padding2;
 
-		glm::vec3   light2Position;
-		float      padding3;
-		glm::vec3   light2Colour;
-		float      padding4;
+		//glm::vec3   light2Position;
+		//float      padding3;
+		//glm::vec3   light2Colour;
+		//float      padding4;
 
 		glm::vec3   ambientColour;
 		float      specularPower;

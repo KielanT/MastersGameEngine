@@ -92,15 +92,15 @@ cbuffer PerFrameConstants : register(b0) // The b0 gives this constant buffer th
     float4x4 gProjectionMatrix;
     float4x4 gViewProjectionMatrix; // The above two matrices multiplied together to combine their effects
 
-    float3   gLight1Position; // 3 floats: x, y z
-    float    padding1;        // Pad above variable to float4 (HLSL requirement - copied in the the C++ version of this structure)
-    float3   gLight1Colour;
-    float    padding2;
+    //float3   gLight1Position; // 3 floats: x, y z
+    //float    padding1;        // Pad above variable to float4 (HLSL requirement - copied in the the C++ version of this structure)
+    //float3   gLight1Colour;
+    //float    padding2;
     
-    float3   gLight2Position;
-    float    padding3;
-    float3   gLight2Colour;
-    float    padding4;
+    //float3   gLight2Position;
+    //float    padding3;
+    //float3   gLight2Colour;
+    //float    padding4;
 
     float3   gAmbientColour;
     float    gSpecularPower;

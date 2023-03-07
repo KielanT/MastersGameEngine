@@ -88,7 +88,7 @@ namespace Engine
 		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
 	};
 
-	struct TextureComponent
+	struct TextureComponent 
 	{
 		std::string Path = "";
 		CComPtr<ID3D11ShaderResourceView> ResourceView;
