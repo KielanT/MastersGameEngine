@@ -189,7 +189,7 @@ project "Editor"
         "ImGui",
         "d3d11.lib",
         "assimp-vc143-mt.lib",
-
+        
         --> PhysX 5.1
         "PhysX_64.lib",
         "PhysXCommon_64.lib",
