@@ -32,7 +32,7 @@ namespace Engine
 
 
 		int ComboBox(const std::string& label, const char* items[], int size, int& selected);
-		void TextureBoxes(std::string Label, TextureComponent& comp, CComPtr<ID3D11ShaderResourceView>& resourseView);
+		void TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView);
 
 		//void ChangePhysicsCollision();
 

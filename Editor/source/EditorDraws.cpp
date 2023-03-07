@@ -150,20 +150,7 @@ namespace Engine
 				ImGui::EndDragDropTarget();
 			}
 
-			int ps = static_cast<int>(comp.PixelShader);
-			const char* pixelItems[static_cast<int>(EPixelShader::EPixelShaderSize)];
-			pixelItems[0] = "PixelLightingPixelShader";
-			pixelItems[1] = "LightModelPixelShader";
-			pixelItems[2] = "PBRPixelShader";
-			comp.PixelShader = static_cast<EPixelShader>(ComboBox("Pixel Shader: ", pixelItems, static_cast<int>(EPixelShader::EPixelShaderSize), ps));
 
-			int vs = static_cast<int>(comp.VertexShader);
-			const char* vertexItems[static_cast<int>(EVertexShader::EVertexShaderSize)];
-			vertexItems[0] = "PixelLightingVertexShader";
-			vertexItems[1] = "BasicTransformVertexShader";
-			vertexItems[2] = "SkinningVertexShader";
-			vertexItems[3] = "PBRVertexShader";
-			comp.VertexShader = static_cast<EVertexShader>(ComboBox("Vertex Shader: ", vertexItems, static_cast<int>(EVertexShader::EVertexShaderSize), vs));
 
 			int bs = static_cast<int>(comp.BlendState);
 			const char* blendItems[static_cast<int>(EBlendState::EBlendStateSize)];
@@ -196,26 +183,19 @@ namespace Engine
 			ImGui::TreePop();
 		}
 
-		//if (comp.PixelShader == EPixelShader::PBRPixelShader || comp.VertexShader == EVertexShader::PBRVertexShader)
-		//	bIsPBR = true;
-		//else
-		//	bIsPBR = false;
 	}
 
 	void EditorDraws::DrawTextureComponent(TextureComponent& comp)
 	{
 		if (ImGui::TreeNodeEx("Texture", m_Flags))
 		{
-			//if (!bIsPBR)
-				TextureBoxes("Texture", comp, comp.ResourceView);
-			//else
-			//{
-			//	TextureBoxes("Albedo", comp.Path, comp.ResourceView);
-			//	TextureBoxes("Roughness", comp.RoughPath, comp.RoughView);
-			//	TextureBoxes("Normal", comp.NormalPath, comp.NormalView);
-			//	TextureBoxes("Height", comp.HeightPath, comp.HeightView);
-			//	TextureBoxes("Metalness", comp.MetalnessPath, comp.MetalnessView);
-			//}
+
+			TextureBoxes("Albedo", comp.Path, comp.ResourceView);
+			TextureBoxes("Roughness", comp.RoughPath, comp.RoughView);
+			TextureBoxes("Normal", comp.NormalPath, comp.NormalView);
+			TextureBoxes("Height", comp.HeightPath, comp.HeightView);
+			TextureBoxes("Metalness", comp.MetalnessPath, comp.MetalnessView);
+			
 			ImGui::TreePop();
 		}
 	}
@@ -321,7 +301,7 @@ namespace Engine
 		return selected;
 	}
 
-	void EditorDraws::TextureBoxes(std::string Label, TextureComponent& comp, CComPtr<ID3D11ShaderResourceView>& resourseView)
+	void EditorDraws::TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView)
 	{
 		std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
 
@@ -329,7 +309,7 @@ namespace Engine
 
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
-		strncpy_s(buffer, comp.Path.c_str(), sizeof(buffer));
+		strncpy_s(buffer, path.c_str(), sizeof(buffer));
 
 		std::string textLabel = "##" + Label + "text";
 		ImGui::Text(Label.c_str()); ImGui::SameLine();
@@ -343,7 +323,7 @@ namespace Engine
 				const wchar_t* pathp = (const wchar_t*)payload->Data;
 				std::filesystem::path texturePath = pathp;
 
-				std::string last = comp.Path;
+				std::string last = path;
 
 				std::string fileName = texturePath.filename().string();
 
@@ -365,7 +345,7 @@ namespace Engine
 				}
 
 				s += fileName;
-				comp.Path = s;
+				path = s;
 
 				CComPtr<ID3D11Resource> Resource;
 				CComPtr<ID3D11ShaderResourceView> ResourceView;
@@ -376,7 +356,7 @@ namespace Engine
 				}
 				else
 				{
-					comp.Path = last;
+					path = last;
 					//TODO: Error Pop up
 				}
 

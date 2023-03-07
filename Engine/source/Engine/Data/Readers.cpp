@@ -58,7 +58,6 @@ namespace Engine
 		auto EntitiesNode = data["Entities"];
 		if (EntitiesNode)
 		{
-			//LOG_DEBUG(EntitiesNode);
 			for (auto entityIT : EntitiesNode)
 			{
 				auto idNode = entityIT["IDComponent"];
@@ -78,6 +77,7 @@ namespace Engine
 				{
 					auto& texture = entity.AddComponent<TextureComponent>();
 					texture.Path = textureNode["Path"].as<std::string>();
+					texture.NormalPath = textureNode["NormalPath"].as<std::string>();
 					texture.RoughPath = textureNode["RoughPath"].as<std::string>();
 					texture.HeightPath = textureNode["HeightPath"].as<std::string>();
 					texture.MetalnessPath = textureNode["MetalnessPath"].as<std::string>();
@@ -88,8 +88,6 @@ namespace Engine
 				{
 					auto& renderer = entity.AddComponent<MeshRendererComponent>();
 					renderer.Path = meshRendererNode["Path"].as<std::string>();
-					renderer.PixelShader = (EPixelShader)meshRendererNode["PixelShader"].as<int>();
-					renderer.VertexShader = (EVertexShader)meshRendererNode["VertexShader"].as<int>();
 					renderer.BlendState = (EBlendState)meshRendererNode["BlendState"].as<int>();
 					renderer.DepthStencil = (EDepthStencilState)meshRendererNode["DepthStencil"].as<int>();
 					renderer.RasterizerState = (ERasterizerState)meshRendererNode["Rasterizer"].as<int>();

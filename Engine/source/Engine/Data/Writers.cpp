@@ -125,6 +125,7 @@ namespace Engine
 			out << YAML::Key << "TextureComponent";
 			out << YAML::BeginMap;
 			out << YAML::Key << "Path" << YAML::Value << comp.Path;
+			out << YAML::Key << "NormalPath" << YAML::Value << comp.NormalPath;
 			out << YAML::Key << "RoughPath" << YAML::Value << comp.RoughPath;
 			out << YAML::Key << "HeightPath" << YAML::Value << comp.HeightPath;
 			out << YAML::Key << "MetalnessPath" << YAML::Value << comp.MetalnessPath;
@@ -138,8 +139,6 @@ namespace Engine
 			out << YAML::Key << "MeshRendererComponent";
 			out << YAML::BeginMap;
 			out << YAML::Key << "Path" << YAML::Value << comp.Path;
-			out << YAML::Key << "PixelShader" << YAML::Value << (int)comp.PixelShader;
-			out << YAML::Key << "VertexShader" << YAML::Value << (int)comp.VertexShader;
 			out << YAML::Key << "BlendState" << YAML::Value << (int)comp.BlendState;
 			out << YAML::Key << "DepthStencil" << YAML::Value << (int)comp.DepthStencil;
 			out << YAML::Key << "Rasterizer" << YAML::Value << (int)comp.RasterizerState;

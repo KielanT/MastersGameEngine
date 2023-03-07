@@ -95,9 +95,6 @@ namespace Engine
             return false;
         }
 
-        // Create GPU-side constant buffers to receive the gPerFrameConstants and gPerModelConstants structures above
-        // These allow us to pass data from CPU to shaders such as lighting information or matrices
-        // See the comments above where these variable are declared and also the UpdateScene function
         PerFrameConstantBuffer = CreateConstantBuffer(sizeof(PerFrameConstants));
         PerModelConstantBuffer = CreateConstantBuffer(sizeof(PerModelConstants));
         if (PerFrameConstantBuffer == nullptr || PerModelConstantBuffer == nullptr)
@@ -157,9 +154,9 @@ namespace Engine
                 mesh.Model->SetPosition(transfrom.Position);
                 mesh.Model->SetRotation(transfrom.Rotation);
                 mesh.Model->SetScale(transfrom.Scale);
-                
-                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(mesh.VertexShader), nullptr, 0);
-                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(mesh.PixelShader), nullptr, 0);
+
+                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(), nullptr, 0);
+                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(), nullptr, 0);
                 
                 m_D3DContext->PSSetShaderResources(0, 1, &texture.ResourceView.p);
                 m_D3DContext->PSSetShaderResources(1, 1, &texture.RoughView.p);
@@ -167,7 +164,7 @@ namespace Engine
                 m_D3DContext->PSSetShaderResources(3, 1, &texture.HeightView.p);
                 m_D3DContext->PSSetShaderResources(4, 1, &texture.MetalnessView.p);
                 
-                CComPtr<ID3D11SamplerState> sampler = m_States->GetSamplerState(mesh.SamplerState);
+                CComPtr<ID3D11SamplerState> sampler =  m_States->GetSamplerState(mesh.SamplerState);
                 m_D3DContext->PSSetSamplers(0, 1, &sampler.p);
                 
                 m_D3DContext->OMSetBlendState(m_States->GetBlendState(mesh.BlendState), nullptr, 0xffffff);

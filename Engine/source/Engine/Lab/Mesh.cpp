@@ -447,16 +447,14 @@ namespace Engine
                 absoluteMatrices[nodeIndex] = mNodes[nodeIndex].offsetMatrix * absoluteMatrices[nodeIndex];
             }
 
-            // Send all matrices over to the GPU for skinning via a constant buffer - each matrix can represent a bone which influences nearby vertices
-            // MISSING - code to fill the m_Renderer->PerModelConstants.boneMatrices array with the contents of the absoluteMatrices vector
-            //-->
+
 
            
 
-            for (int i = 0; i < absoluteMatrices.size(); i++)
-            {
-                dx11Render->PerModelConstants.boneMatrices[i] = absoluteMatrices[i];
-            }
+            //for (int i = 0; i < absoluteMatrices.size(); i++)
+            //{
+            //    dx11Render->PerModelConstants.boneMatrices[i] = absoluteMatrices[i];
+            //}
 
             UpdateConstantBuffer(dx11Render->GetDeviceContext(), dx11Render->PerModelConstantBuffer, dx11Render->PerModelConstants); // Send to GPU
 

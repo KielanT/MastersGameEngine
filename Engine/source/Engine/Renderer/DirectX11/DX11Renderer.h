@@ -17,15 +17,6 @@ namespace Engine
 		glm::mat4 EngineionMatrix;
 		glm::mat4 viewEngineionMatrix; // The above two matrices multiplied together to combine their effects
 
-		glm::vec3   light1Position; // 3 floats: x, y z
-		float      padding1;       // Pad above variable to float4 (HLSL requirement - which we must duplicate in this the C++ version of the structure)
-		glm::vec3   light1Colour;
-		float      padding2;
-
-		glm::vec3   light2Position;
-		float      padding3;
-		glm::vec3   light2Colour;
-		float      padding4;
 
 		glm::vec3   ambientColour;
 		float      specularPower;
@@ -37,13 +28,12 @@ namespace Engine
 	// This is the matrix that positions the next thing to be rendered in the scene. Unlike the structure above this data can be
 	// updated and sent to the GPU several times every frame (once per model). However, apart from that it works in the same way.
 
-	static const int MAX_BONES = 64;
 	struct PerModelConstants
 	{
 		glm::mat4 worldMatrix;
 		glm::vec3   objectColour; // Allows each light model to be tinted to match the light colour they cast
 		float      padding6;
-		glm::mat4 boneMatrices[MAX_BONES]; /*** MISSING - fill in this array size - easy. Relates to another MISSING*/
+
 	};
 
 	class DX11Renderer : public RendererAPI
