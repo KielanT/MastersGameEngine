@@ -7,6 +7,7 @@
 
 
 #include "EditorDraws.h"
+#include "EditorCamera.h"
 
 
 namespace Engine
@@ -29,12 +30,13 @@ namespace Engine
 
 	bool MainEditor::Init()
 	{
-		m_EditorCamera = std::make_shared<Camera>();
+		m_EditorCamera = std::make_shared<EditorCamera>();
 		m_EditorCamera->SetPosition({ 0, 0, -50.0f });
 		m_EditorCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		m_Scene = std::make_shared<Scene>();
-		m_Scene->SetCamera(m_EditorCamera);
+		
+		m_Scene->SetCamera(static_pointer_cast<ICamera>(m_EditorCamera));
 		m_Scene->InitScene();
 		Renderer::SetScene(m_Scene);
 
@@ -635,7 +637,7 @@ namespace Engine
 			{
 				m_EditorScene = scene;
 				m_Scene = m_EditorScene;
-				m_Scene->SetCamera(m_EditorCamera);
+				m_Scene->SetCamera(static_pointer_cast<ICamera>(m_EditorCamera));
 				m_Scene->InitScene();
 				Renderer::SetScene(m_Scene);
 				m_Scene->LoadEntities(m_AssetPath.string());
@@ -660,7 +662,7 @@ namespace Engine
 			{
 				m_EditorScene = scene;
 				m_Scene = m_EditorScene;
-				m_Scene->SetCamera(m_EditorCamera);
+				m_Scene->SetCamera(static_pointer_cast<ICamera>(m_EditorCamera));
 				m_Scene->InitScene();
 				Renderer::SetScene(m_Scene);
 				m_Scene->LoadEntities(m_AssetPath.string());

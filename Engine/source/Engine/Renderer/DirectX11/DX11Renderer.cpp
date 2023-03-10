@@ -346,7 +346,7 @@ namespace Engine
         {
             PerFrameConstants.ambientColour = m_Scene->GetSceneSettings().ambientColour;
             PerFrameConstants.specularPower = m_Scene->GetSceneSettings().specularPower;
-            PerFrameConstants.cameraPosition = m_Scene->GetCamera()->Position();
+            PerFrameConstants.cameraPosition = m_Scene->GetCamera()->GetPosition();
             bgColour = m_Scene->GetSceneSettings().backgroundColour;
         }
 
@@ -369,9 +369,9 @@ namespace Engine
     {
         if (m_Scene != nullptr && m_Scene->GetCamera() != nullptr)
         {
-            PerFrameConstants.viewMatrix = m_Scene->GetCamera()->ViewMatrix();
-            PerFrameConstants.EngineionMatrix = m_Scene->GetCamera()->EngineionMatrix();
-            PerFrameConstants.viewEngineionMatrix = m_Scene->GetCamera()->ViewEngineionMatrix();
+            PerFrameConstants.viewMatrix = m_Scene->GetCamera()->GetViewMatrix();
+            PerFrameConstants.EngineionMatrix = m_Scene->GetCamera()->GetEngineionMatrix();
+            PerFrameConstants.viewEngineionMatrix = m_Scene->GetCamera()->GetViewEngineionMatrix();
         }
         UpdateConstantBuffer(m_D3DContext, PerFrameConstantBuffer, PerFrameConstants);
 

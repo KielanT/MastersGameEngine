@@ -17,10 +17,6 @@ namespace Engine
 	void Scene::InitScene()
 	{
 
-		//m_MainCamera = std::make_unique<Camera>();
-		//m_MainCamera->SetPosition({ 0, 0, -50.0f });
-		//m_MainCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
-
 		Physics::Init();
 	}
 
@@ -46,9 +42,6 @@ namespace Engine
 	void Scene::UpdateScene(float frametime)
 	{
 
-		if (m_MainCamera != nullptr)
-			m_MainCamera->Control(frametime);
-		
 		
 	}
 
@@ -73,8 +66,6 @@ namespace Engine
 
 	void Scene::EditorUpdateScene(float frametime)
 	{
-		if (m_MainCamera != nullptr)
-			m_MainCamera->Control(frametime);
 
 
 		m_Registry.each([&](auto entityID)
@@ -256,7 +247,7 @@ namespace Engine
 	template<>
 	void Scene::OnComponentCreated<CameraComponent>(Entity entity, CameraComponent& comp)
 	{
-		comp.Camera = std::make_shared<Camera>();
+		comp.Camera = std::make_shared<ICamera>();
 
 	}
 

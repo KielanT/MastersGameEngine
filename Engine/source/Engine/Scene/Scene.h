@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Lab/Camera.h"
+#include "Engine/Interfaces/ICamera.h"
 #include "Engine/UUID.h"
 #include "entt/entt.hpp"
 #include <filesystem>
@@ -49,8 +49,8 @@ namespace Engine
 		SceneSettings GetSceneSettings() { return m_SceneSettings; }
 		void SetSceneSettings(SceneSettings& settings) { m_SceneSettings = settings; }
 
-		void SetCamera(std::shared_ptr<Camera> camera) { m_MainCamera = camera; };
-		std::shared_ptr<Camera> GetCamera() { return m_MainCamera; }
+		void SetCamera(std::shared_ptr<ICamera> camera) { m_MainCamera = camera; };
+		std::shared_ptr<ICamera> GetCamera() { return m_MainCamera; }
 
 		void FindActiveCamera();
 
@@ -66,7 +66,7 @@ namespace Engine
 
 	private:
 		
-		std::shared_ptr<Camera> m_MainCamera = nullptr;
+		std::shared_ptr<ICamera> m_MainCamera = nullptr;
 		entt::registry m_Registry;
 
 

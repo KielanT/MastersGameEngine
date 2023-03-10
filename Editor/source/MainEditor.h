@@ -1,7 +1,7 @@
 #pragma once
 #include <Engine.h>
 
-
+#include "EditorCamera.h"
 
 namespace Engine
 {
@@ -41,7 +41,7 @@ namespace Engine
 		void SaveAs();
 
 	private:
-		std::shared_ptr<Engine::Camera> m_EditorCamera;
+		std::shared_ptr<Engine::EditorCamera> m_EditorCamera;
 
 
 		std::shared_ptr<Engine::Scene> m_EditorScene;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/UUID.h"
-#include "Engine/Lab/Camera.h"
+#include "Engine/Interfaces/ICamera.h"
 
 #include <glm/glm.hpp>
 
@@ -102,7 +102,7 @@ namespace Engine
 
 	struct CameraComponent
 	{
-		std::shared_ptr<Camera> Camera;
+		std::shared_ptr<ICamera> Camera;
 		bool IsActive = true;
 	};
 
