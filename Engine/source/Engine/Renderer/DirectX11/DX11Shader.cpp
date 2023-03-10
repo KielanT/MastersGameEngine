@@ -18,19 +18,21 @@ namespace Engine
 
 		// Loads the vertex shader
 		m_PBRVertexShader = LoadVertexShader("PBR_vs");
+		m_SkyboxVertexShader = LoadVertexShader("Skybox_vs");
 
 		// Loads the pixel shader
 		m_PBRPixelShader = LoadPixelShader("PBR_ps");
+		m_SkyboxPixelShader = LoadPixelShader("Skybox_ps");
 
 		std::filesystem::current_path(currentPath); // Resets path to the main 
 
-		if (m_PBRVertexShader == nullptr)
+		if (m_PBRVertexShader == nullptr || m_SkyboxVertexShader == nullptr)
 		{
 			LOG_ERROR("Failed to create Vertex shader");
 			return false;
 		}
 
-		if (m_PBRPixelShader == nullptr)
+		if (m_PBRPixelShader == nullptr || m_SkyboxPixelShader == nullptr)
 		{
 			LOG_ERROR("Failed to create Pixel shader");
 			return false;
@@ -39,14 +41,37 @@ namespace Engine
 		return true;
 	}
 
-	CComPtr<ID3D11VertexShader> DX11Shader::GetVertexShader()
+	CComPtr<ID3D11VertexShader> DX11Shader::GetVertexShader(EShaderType type)
 	{
-		return m_PBRVertexShader;
+		switch (type)
+		{
+		case Engine::EShaderType::PBR:
+			return m_PBRVertexShader;
+			break;
+		case Engine::EShaderType::Skybox:
+			return m_SkyboxVertexShader;
+			break;
+		default:
+			return m_PBRVertexShader;
+			break;
+		}
+
 	}
 
-	CComPtr<ID3D11PixelShader> DX11Shader::GetPixelShader()
+	CComPtr<ID3D11PixelShader> DX11Shader::GetPixelShader(EShaderType type)
 	{
-		return m_PBRPixelShader;
+		switch (type)
+		{
+		case Engine::EShaderType::PBR:
+			return m_PBRPixelShader;
+			break;
+		case Engine::EShaderType::Skybox:
+			return m_SkyboxPixelShader;
+			break;
+		default:
+			return m_PBRPixelShader;
+			break;
+		}
 	}
 
 	CComPtr<ID3D11VertexShader> DX11Shader::LoadVertexShader(std::string shaderName)

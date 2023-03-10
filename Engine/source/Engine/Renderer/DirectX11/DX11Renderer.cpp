@@ -155,8 +155,8 @@ namespace Engine
                 mesh.Model->SetRotation(transfrom.Rotation);
                 mesh.Model->SetScale(transfrom.Scale);
 
-                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(), nullptr, 0);
-                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(), nullptr, 0);
+                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(EShaderType::PBR), nullptr, 0);
+                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(EShaderType::PBR), nullptr, 0);
                 
                 m_D3DContext->PSSetShaderResources(0, 1, &texture.ResourceView.p);
                 m_D3DContext->PSSetShaderResources(1, 1, &texture.RoughView.p);
@@ -174,7 +174,36 @@ namespace Engine
                 entity.GetComponent<MeshRendererComponent>().Model->Render();
             }
         }
+        else if (entity.HasComponent<SkyboxComponent>())
+        {
+            auto transfrom = entity.GetComponent<TransformComponent>();
+            auto skybox = entity.GetComponent<SkyboxComponent>();
+
+            if (skybox.Model != nullptr)
+            {
+                skybox.Model->SetPosition(transfrom.Position);
+                skybox.Model->SetRotation(transfrom.Rotation);
+                skybox.Model->SetScale(transfrom.Scale);
+
+                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(EShaderType::Skybox), nullptr, 0);
+                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(EShaderType::Skybox), nullptr, 0);
+
+                m_D3DContext->PSSetShaderResources(0, 1, &skybox.ResourceView.p);
+
+
+                CComPtr<ID3D11SamplerState> sampler = m_States->GetSamplerState(ESamplerState::TrilinearSampler);
+                m_D3DContext->PSSetSamplers(0, 1, &sampler.p);
+
+                m_D3DContext->OMSetBlendState(m_States->GetBlendState(EBlendState::NoBlendingState), nullptr, 0xffffff);
+                m_D3DContext->OMSetDepthStencilState(m_States->GetDepthStencilState(EDepthStencilState::NoDepthBufferState), 0);
+                m_D3DContext->RSSetState(m_States->GetRasterizerState(ERasterizerState::CullNoneState));
+
+                entity.GetComponent<SkyboxComponent>().Model->Render();
+            }
+        }
     }
+
+    
 
     void DX11Renderer::Present()
     {

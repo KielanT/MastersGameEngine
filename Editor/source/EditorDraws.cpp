@@ -53,6 +53,11 @@ namespace Engine
 				//DrawScriptComponent(m_SelectedEntity.GetComponent<ScriptComponent>());
 				ImGui::Separator();
 			}
+			if (entity.HasComponent<SkyboxComponent>())
+			{
+				DrawSkyboxComponent(entity.GetComponent<SkyboxComponent>());
+				ImGui::Separator();
+			}
 		}
 	}
 
@@ -272,6 +277,61 @@ namespace Engine
 	void EditorDraws::DrawScriptComponent(ScriptComponent& comp)
 	{
 		ImGui::Text("Script Component : NOT IMPLEMENTED");
+	}
+
+	void EditorDraws::DrawSkyboxComponent(SkyboxComponent& comp)
+	{
+		if (ImGui::TreeNodeEx("Skybox", m_Flags))
+		{
+			char buffer[256];
+			memset(buffer, 0, sizeof(buffer));
+			strncpy_s(buffer, comp.MeshPath.c_str(), sizeof(buffer));
+			ImGuiInputTextFlags flags = ImGuiInputTextFlags_ReadOnly;
+			IMGUI_LEFT_LABEL(ImGui::InputText, "File Path: ", buffer, sizeof(buffer), flags);
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("AssetPayload"))
+				{
+					const wchar_t* pathp = (const wchar_t*)payload->Data;
+					std::filesystem::path path = pathp;
+
+					std::string last = comp.TexPath;
+
+					std::string fileName = path.filename().string();
+
+					std::filesystem::path newF = path;
+					std::string s;
+					while (newF != m_AssetPath)
+					{
+
+						if (newF.parent_path() == m_AssetPath)
+							break;
+
+
+						if (s.empty())
+							s += newF.parent_path().filename().string() + "/";
+						else
+							s.insert(0, newF.parent_path().filename().string() + "/");
+
+						newF = newF.parent_path();
+					}
+
+					s += fileName;
+					comp.MeshPath = s;
+
+					std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(path.string());
+					comp.Model = std::make_shared<Model>(mesh);
+					
+					bIsUnsaved = true;
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+
+			TextureBoxes("Skybox map", comp.TexPath, comp.ResourceView);
+			ImGui::TreePop();
+		}
 	}
 
 	int EditorDraws::ComboBox(const std::string& label, const char* items[], int size, int& selected)

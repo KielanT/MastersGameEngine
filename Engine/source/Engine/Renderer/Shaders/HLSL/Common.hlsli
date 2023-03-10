@@ -18,6 +18,17 @@ struct BasicVertex
 };
 
 
+struct VertexIn
+{
+    float3 PosL : position;
+};
+
+struct VertexOut
+{
+    float4 PosH : SV_Position;
+    float3 PosL : position;
+};
+
 //--------------------------------------------------------------------------------------
 // PBR 
 //--------------------------------------------------------------------------------------

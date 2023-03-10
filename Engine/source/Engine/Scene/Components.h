@@ -149,4 +149,14 @@ namespace Engine
 		// Create Scripts // Require scripting library
 		std::string temp = "";
 	};
+
+	struct SkyboxComponent
+	{
+		std::string MeshPath = ""; // Mesh Path
+		std::shared_ptr<Model> Model;
+
+		std::string TexPath = "";
+		CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+	};
 }

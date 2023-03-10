@@ -35,7 +35,7 @@ namespace Engine
 		m_Registry.each([&](auto entityID)
 			{
 				Entity entity{ entityID, shared_from_this() };
-				if (entity.HasComponent<MeshRendererComponent>())
+				if (entity.HasComponent<MeshRendererComponent>() || entity.HasComponent<SkyboxComponent>())
 				{
 					Renderer::RendererEntity(entity);
 				}
@@ -231,6 +231,12 @@ namespace Engine
 	void Scene::OnComponentCreated<ScriptComponent>(Entity entity, ScriptComponent& comp)
 	{
 
+	}
+
+	template<>
+	void Scene::OnComponentCreated<SkyboxComponent>(Entity entity, SkyboxComponent& comp)
+	{
+		
 	}
 
 	

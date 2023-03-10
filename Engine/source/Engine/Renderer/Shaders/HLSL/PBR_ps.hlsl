@@ -70,50 +70,6 @@ float4 main(PBR_Input input) : SV_Target
     float3 specular = gSpecularPower;
     float3 colour = albedo * gAmbientColour;;// * ao;
    
-    //for (int i = 0; i < NUM_LIGHTS; ++i)
-    //{
- 
-    //    float3 l = Lights[i].position - input.WorldPosition;
-    //    float rdist = 1 / length(l);
-    //    l *= rdist;
-    //    float li = Lights[i].intensity * rdist * rdist;
-    //    float3 lc = Lights[i].colour;
-
-    //    float3 h = normalize(l + v);
-
-    //    diffuse += li * lc * max(dot(n, l), 0);
-    //    specular += li * lc * pow(max(dot(n, h), 0), SpecularPower);
-
-    //    float nv = dot(n, v);
-    //    if (nv < 0.0f)
-    //        nv = 0.001f;
-
-    //    float nl = dot(n, l);
-    //    if (nl < 0.0f)
-    //        nl = 0.001f;
-
-    //    float nh = dot(n, h);
-    //    if (nh < 0.0f)
-    //        nh = 0.001f;
-
-    //    float3 Lambert = albedo / PI;
-       
-    //    float3 roughnessSquare = (roughness * roughness) * (roughness * roughness);
-    //    float3 nhSquare = nh * nh;
-    //    float3 normalDistribution = roughnessSquare / (PI * pow(nhSquare * (roughnessSquare - 1) + 1, 2));
-        
-    //    float k = (roughness + 1) * (roughness + 1) / 8;
-    //    float3 geom = nl / (nl * (1 - k) + k);
-    //    float3 geometry = nv / (nv * (1 - k) + k);
-    //    float3 finalGeom = geometry * geom;
-        
-    //    float3 fresnel = specColour + (1 - specColour) * pow(1 - nh, 5);
-    //    float3 specularBRDF = (fresnel * finalGeom * normalDistribution) / (4 * nl * nv);
-        
-        
-    //    float3 punctualLight = Lambert + specularBRDF;
-    //    colour += PI * punctualLight * li * lc * nl * cavity;
-    //}
 
     return float4(pow(colour, 1 / GAMMA), 1.0f);
 }

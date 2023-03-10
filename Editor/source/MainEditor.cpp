@@ -350,6 +350,11 @@ namespace Engine
 					m_SelectedEntity.AddComponent<ScriptComponent>();
 					bUnsaved = true;
 				}
+				if (ImGui::MenuItem("Skybox"))
+				{
+					m_SelectedEntity.AddComponent<SkyboxComponent>();
+					bUnsaved = true;
+				}
 
 				ImGui::EndPopup();
 			}
