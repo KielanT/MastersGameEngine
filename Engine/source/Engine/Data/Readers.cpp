@@ -125,7 +125,6 @@ namespace Engine
 					auto col = SkyboxComponent();
 					col.MeshPath = skyboxNode["MeshPath"].as<std::string>();
 					col.TexPath = skyboxNode["TexPath"].as<std::string>();
-					col.RadiancePath = skyboxNode["RadiancePath"].as<std::string>();
 					entity.AddComponent<SkyboxComponent>(col);
 				}
 			}

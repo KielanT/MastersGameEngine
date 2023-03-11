@@ -158,9 +158,5 @@ namespace Engine
 
 		std::string TexPath = "";
 		CComPtr<ID3D11ShaderResourceView> TexMapView;
-
-
-		std::string RadiancePath = "";
-		CComPtr<ID3D11ShaderResourceView> RadianceMapView;
 	};
 }

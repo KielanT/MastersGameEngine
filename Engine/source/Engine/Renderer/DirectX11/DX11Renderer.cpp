@@ -222,7 +222,7 @@ namespace Engine
     {
         if (entity.HasComponent<SkyboxComponent>()) 
         {
-            RadianceMap = entity.GetComponent<SkyboxComponent>().RadianceMapView;
+            RadianceMap = entity.GetComponent<SkyboxComponent>().TexMapView;
         }
     }
 

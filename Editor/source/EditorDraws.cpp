@@ -330,7 +330,6 @@ namespace Engine
 
 
 			TextureBoxes("Skybox map", comp.TexPath, comp.TexMapView);
-			TextureBoxes("Radiance Map", comp.RadiancePath, comp.RadianceMapView);
 			ImGui::TreePop();
 		}
 	}

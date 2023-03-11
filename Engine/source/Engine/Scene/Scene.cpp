@@ -264,16 +264,6 @@ namespace Engine
 					comp.TexMapView = ResourceView;
 				}
 			}
-			if (!comp.RadiancePath.empty())
-			{
-				CComPtr<ID3D11Resource> Resource;
-				CComPtr<ID3D11ShaderResourceView> ResourceView;
-
-				if (dx11Render->LoadTexture(assetPath + "/" + comp.RadiancePath, &Resource, &ResourceView))
-				{
-					comp.RadianceMapView = ResourceView;
-				}
-			}
 		}
 	}
 
