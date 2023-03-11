@@ -30,6 +30,8 @@ namespace Engine
 
 		void DrawScriptComponent(ScriptComponent& comp);
 
+		void DrawSkyboxComponent(SkyboxComponent& comp);
+
 
 		int ComboBox(const std::string& label, const char* items[], int size, int& selected);
 		void TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView);

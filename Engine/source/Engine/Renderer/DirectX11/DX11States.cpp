@@ -201,9 +201,21 @@ namespace Engine
 
 
         ////-------- Disable depth buffer --------////
+       // depthStencilDesc.DepthEnable = FALSE;
+       // depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+       // depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+       // depthStencilDesc.StencilEnable = FALSE;
+       //
+       // // Create a DirectX object for the description above that can be used by a shader
+       // if (FAILED(render->GetDevice()->CreateDepthStencilState(&depthStencilDesc, &m_NoDepthBufferState)))
+       // {
+       //     LOG_ERROR("Error creating no-depth-buffer state");
+       //     return false;
+       // }
+
         depthStencilDesc.DepthEnable = FALSE;
         depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-        depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+        depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
         depthStencilDesc.StencilEnable = FALSE;
 
         // Create a DirectX object for the description above that can be used by a shader

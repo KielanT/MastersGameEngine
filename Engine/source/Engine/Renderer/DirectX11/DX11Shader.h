@@ -2,6 +2,8 @@
 
 #include "Engine/Scene/Components.h"
 
+
+
 namespace Engine
 {
 
@@ -10,9 +12,9 @@ namespace Engine
 	public:
 		bool InitShaders();
 
-		CComPtr<ID3D11VertexShader> GetVertexShader();
+		CComPtr<ID3D11VertexShader> GetVertexShader(EShaderType type);
 
-		CComPtr<ID3D11PixelShader> GetPixelShader();
+		CComPtr<ID3D11PixelShader> GetPixelShader(EShaderType type);
 
 	private:
 		CComPtr<ID3D11VertexShader> LoadVertexShader(std::string shaderName); // Loads the vertex shader
@@ -21,8 +23,11 @@ namespace Engine
 	private:
 		// Vertex shader member variables
 		CComPtr<ID3D11VertexShader> m_PBRVertexShader;
+		CComPtr<ID3D11VertexShader> m_SkyboxVertexShader;
+
 
 		// Pixel shader member variables
 		CComPtr<ID3D11PixelShader> m_PBRPixelShader;
+		CComPtr<ID3D11PixelShader> m_SkyboxPixelShader;
 	};
 }
