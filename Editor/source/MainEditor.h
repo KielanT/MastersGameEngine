@@ -1,7 +1,6 @@
 #pragma once
 #include <Engine.h>
 
-#include "EditorCamera.h"
 
 namespace Engine
 {

@@ -7,7 +7,6 @@
 
 
 #include "EditorDraws.h"
-#include "EditorCamera.h"
 
 
 namespace Engine

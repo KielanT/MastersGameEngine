@@ -369,9 +369,9 @@ namespace Engine
     {
         if (m_Scene != nullptr && m_Scene->GetCamera() != nullptr)
         {
-            PerFrameConstants.viewMatrix = m_Scene->GetCamera()->GetViewMatrix();
-            PerFrameConstants.EngineionMatrix = m_Scene->GetCamera()->GetEngineionMatrix();
-            PerFrameConstants.viewEngineionMatrix = m_Scene->GetCamera()->GetViewEngineionMatrix();
+            PerFrameConstants.viewMatrix = m_Scene->GetCamera()->GetView();
+            PerFrameConstants.EngineionMatrix = m_Scene->GetCamera()->GetProj();
+            PerFrameConstants.viewEngineionMatrix = m_Scene->GetCamera()->GetView() * m_Scene->GetCamera()->GetProj();
         }
         UpdateConstantBuffer(m_D3DContext, PerFrameConstantBuffer, PerFrameConstants);
 
