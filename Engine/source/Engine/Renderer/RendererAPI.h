@@ -20,6 +20,7 @@ namespace Engine
 		virtual void RenderLoop() = 0;
 		virtual void Renderer(Entity entity) = 0;
 
+
 		virtual void Present() = 0;
 
 		virtual void GUINewFrame() = 0;

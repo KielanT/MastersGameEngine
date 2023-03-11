@@ -40,10 +40,12 @@ namespace Engine
 		void SimulateScene(float frametime);
 		void EditorUpdatePhysicsScene(float frametime);
 
+		//void SetSkybox(std::string meshPath, std::string texPath, std::string assetPath);
 		entt::registry& GetEntityRegistry() { return m_Registry; }
 		Entity CreateEntity(const std::string& tag);
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& tag);
 		Entity CreateMeshEntity(const std::string& tag);
+		Entity CreateSkyboxEntity(const std::string& tag);
 		void DeleteEntity(Entity entity);
 		void LoadEntities(std::string assetPath);
 
@@ -60,12 +62,15 @@ namespace Engine
 	private:
 		void LoadEntity(Entity entity, std::string& assetPath);
 
-		
-
+	
 	private:
 		
 		std::shared_ptr<GameCamera> m_MainCamera = nullptr;
 		//std::shared_ptr<Camera> m_MainCamera = nullptr;
+		
+		//std::shared_ptr<Model> m_Skybox;
+		//CComPtr<ID3D11ShaderResourceView> SkyboxResourceView;
+
 		entt::registry m_Registry;
 
 	};

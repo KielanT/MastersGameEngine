@@ -9,21 +9,21 @@ VertexOut main(VertexIn input)
     //********** DX11 book
     //**********
     
-    //output.PosH = mul(gWorldMatrix, float4(input.PosL, 1.0f)).xyww;
-    
-   // output.PosL = input.PosL;
+    //output.PosH = mul(float4(input.PosL, 1.0f), gViewProjectionMatrix).xyww;
+    //
+    //output.PosL = input.PosL;
     
     
     //********** DX12 book
     //**********
     
-    output.PosL = input.PosL;
-    
-    float4 posW = mul(float4(input.PosL, 1.0f), gWorldMatrix);  
-    
-    //posW.xyz += gCameraPosition;
-    
-    output.PosH = mul(posW, gViewProjectionMatrix).xyww;
+   output.PosL = input.PosL;
+   
+   float4 posW = mul(float4(input.PosL, 1.0f), gWorldMatrix);  
+   
+   posW.xyz += gCameraPosition;
+   
+   output.PosH = mul(posW, gViewProjectionMatrix).xyww;
     
     return output;
 }

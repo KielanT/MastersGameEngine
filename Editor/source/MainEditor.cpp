@@ -278,6 +278,11 @@ namespace Engine
 				m_SelectedEntity = m_Scene->CreateMeshEntity("Mesh Entity");
 				bUnsaved = true;
 			}
+			if (ImGui::MenuItem("Create Skybox Entity"))
+			{
+				m_SelectedEntity = m_Scene->CreateSkyboxEntity("Skybox Entity");
+				bUnsaved = true;
+			}
 
 			ImGui::EndPopup();
 		}
@@ -348,11 +353,6 @@ namespace Engine
 				if (ImGui::MenuItem("ScriptComponent"))
 				{
 					m_SelectedEntity.AddComponent<ScriptComponent>();
-					bUnsaved = true;
-				}
-				if (ImGui::MenuItem("Skybox"))
-				{
-					m_SelectedEntity.AddComponent<SkyboxComponent>();
 					bUnsaved = true;
 				}
 

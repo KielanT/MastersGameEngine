@@ -33,14 +33,20 @@ namespace Engine
 
 	void Scene::RenderScene()
 	{
-		m_Registry.each([&](auto entityID)
-			{
-				Entity entity{ entityID, shared_from_this() };
-				if (entity.HasComponent<MeshRendererComponent>() || entity.HasComponent<SkyboxComponent>())
-				{
-					Renderer::RendererEntity(entity);
-				}
-			});
+		auto skyboxView = m_Registry.view<SkyboxComponent>();
+		for (auto entityID : skyboxView) 
+		{
+			Entity entity{ entityID, shared_from_this() };
+			Renderer::RendererEntity(entity);
+		}
+
+
+		auto MeshRenderers = m_Registry.view<MeshRendererComponent>();
+		for (auto entityID : MeshRenderers)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			Renderer::RendererEntity(entity);
+		}
 	}
 
 	void Scene::UpdateScene(float frametime)
@@ -80,6 +86,27 @@ namespace Engine
 			});
 	}
 
+	/*void Scene::SetSkybox(std::string meshPath, std::string texPath, std::string assetPath)
+	{
+		if (!meshPath.empty())
+		{
+			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(assetPath + "/" + meshPath);
+			m_Skybox = std::make_shared<Model>(mesh);
+		}
+
+		std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
+		if (!texPath.empty())
+		{
+			CComPtr<ID3D11Resource> Resource;
+			CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+			if (dx11Render->LoadTexture(assetPath + "/" + texPath, &Resource, &ResourceView))
+			{
+				SkyboxResourceView = ResourceView;
+			}
+		}
+	}*/
+
 
 	Entity Scene::CreateEntity(const std::string& tag)
 	{
@@ -93,6 +120,7 @@ namespace Engine
 
 	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& tag)
 	{
+		
 		Entity entity = { m_Registry.create(), shared_from_this() };
 		auto& ID = entity.AddComponent<IDComponent>();
 		ID.ID = uuid;
@@ -111,6 +139,19 @@ namespace Engine
 		entity.AddComponent<MeshRendererComponent>();
 		entity.AddComponent<TextureComponent>();
 		return entity; 
+	}
+
+	Entity Scene::CreateSkyboxEntity(const std::string& tag)
+	{
+
+		Entity entity = { m_Registry.create(), shared_from_this() };
+		auto& ID = entity.AddComponent<IDComponent>();
+		ID.ID = UUID();
+		ID.Tag = tag;
+		entity.AddComponent<TransformComponent>();
+		entity.AddComponent<SkyboxComponent>();
+		
+		return entity;
 	}
 
 	void Scene::DeleteEntity(Entity entity)
@@ -236,7 +277,11 @@ namespace Engine
 	template<>
 	void Scene::OnComponentCreated<SkyboxComponent>(Entity entity, SkyboxComponent& comp)
 	{
-		
+		if (entity.HasComponent<TransformComponent>()) 
+		{
+			auto& trans = entity.GetComponent<TransformComponent>();
+			trans.Scale = { 50000.0f, 50000.0f, 50000.0f };
+		}
 	}
 
 	

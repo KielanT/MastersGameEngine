@@ -49,7 +49,7 @@ namespace Engine
 			ImGui_ImplSDL2_NewFrame();
 			ImGui::NewFrame();
 		}
-;
+;		
 		m_RendererAPI->RenderLoop();
 
 		if (ImGui::GetCurrentContext() != nullptr)
