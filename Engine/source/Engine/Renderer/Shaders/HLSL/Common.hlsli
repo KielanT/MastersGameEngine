@@ -21,6 +21,8 @@ struct BasicVertex
 struct VertexIn
 {
     float3 PosL : position;
+    float3 NormalL : normal;
+    float2 uv : uv;
 };
 
 struct VertexOut
