@@ -2,12 +2,14 @@
 #include "Common.hlsli"
 
 Texture2D AlbedoMap : register(t0);
-Texture2D RoughnessMap : register(t2);
-Texture2D NormalMap : register(t3);
-Texture2D HeightMap : register(t4);
-Texture2D MetalnessMap : register(t5);
+Texture2D RoughnessMap : register(t1);
+Texture2D NormalMap : register(t2);
+Texture2D HeightMap : register(t3);
+Texture2D MetalnessMap : register(t4);
+TextureCube IBLMap : register(t5);
 
 SamplerState TexSampler : register(s0);
+SamplerState BilinearSampler : register(S1);
 
 
 static const float GAMMA = 2.2f;
@@ -63,13 +65,31 @@ float4 main(PBR_Input input) : SV_Target
     float metalness = MetalnessMap.Sample(TexSampler, input.uv).r;
     //float cavity = lerp(1, CavityMap.Sample(TexSampler, input.uv).r, UseCavity);
     //float ao = lerp(cavity, AOMap.Sample(TexSampler, input.uv).r, UseAO);
+    float nDotV = max(dot(n, v), 0.001f);
     float3 specColour = lerp(float3(0.04, 0.04, 0.04), albedo, metalness);
 
     
-    float3 diffuse = gAmbientColour;
-    float3 specular = gSpecularPower;
-    float3 colour = albedo * gAmbientColour;;// * ao;
+    //float3 diffuse = gAmbientColour;
+    //float3 specular = gSpecularPower;
    
-
+    float3 colour;
+    if (gEnableIBL)
+    {
+        float3 reflectionVector = reflect(-v, n);
+    
+        float3 diffuseLevel = IBLMap.SampleLevel(BilinearSampler, n, 8).rgb * 2.0f;
+        float3 specularLevel = IBLMap.SampleLevel(BilinearSampler, reflectionVector, 8 * log(roughness + 1) / log(2)).rgb;
+    
+        float3 fresnel = specColour + (1 - specColour) * pow(max(1.0f - nDotV, 0.0f), 5.0f);
+        colour = /*ao * */(albedo * diffuseLevel + (1 - roughness) * fresnel * specularLevel);
+    }
+    else
+    {
+        colour = albedo * gAmbientColour;
+    }
+  
+    
+    // TODO lighting code here
+    
     return float4(pow(colour, 1 / GAMMA), 1.0f);
 }

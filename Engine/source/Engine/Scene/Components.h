@@ -17,6 +17,7 @@ namespace Engine
 		Anisotropic4xSampler = 0,
 		TrilinearSampler,
 		PointSampler,
+		BilinearClamp,
 
 		ESamplerStateSize
 	};
@@ -156,7 +157,10 @@ namespace Engine
 		std::shared_ptr<Model> Model;
 
 		std::string TexPath = "";
-		CComPtr<ID3D11ShaderResourceView> ResourceView;
+		CComPtr<ID3D11ShaderResourceView> TexMapView;
 
+
+		std::string RadiancePath = "";
+		CComPtr<ID3D11ShaderResourceView> RadianceMapView;
 	};
 }

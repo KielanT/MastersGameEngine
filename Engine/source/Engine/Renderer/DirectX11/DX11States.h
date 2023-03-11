@@ -20,6 +20,7 @@ namespace Engine
 		CComPtr<ID3D11SamplerState> m_PointSampler; // Variable for the Point sampler
 		CComPtr<ID3D11SamplerState> m_TrilinearSampler; // Variable for the Trilinear sampler
 		CComPtr<ID3D11SamplerState> m_Anisotropic4xSampler; // Variable for the Anisotropic4x sampler
+		CComPtr<ID3D11SamplerState> m_BilinearClamp; 
 
 		CComPtr<ID3D11BlendState> m_NoBlendingState;  // Variable for the No Blending state
 		CComPtr<ID3D11BlendState> m_AdditiveBlendingState; // Variable for the Additive Blending state

@@ -158,8 +158,7 @@ namespace Engine
                 m_D3DContext->VSSetShader(m_Shader->GetVertexShader(EShaderType::Skybox), nullptr, 0);
                 m_D3DContext->PSSetShader(m_Shader->GetPixelShader(EShaderType::Skybox), nullptr, 0);
 
-                m_D3DContext->PSSetShaderResources(0, 1, &skybox.ResourceView.p);
-
+                m_D3DContext->PSSetShaderResources(0, 1, &skybox.TexMapView.p);
 
                 CComPtr<ID3D11SamplerState> sampler = m_States->GetSamplerState(ESamplerState::TrilinearSampler);
                 m_D3DContext->PSSetSamplers(0, 1, &sampler.p);
@@ -193,8 +192,21 @@ namespace Engine
                 m_D3DContext->PSSetShaderResources(3, 1, &texture.HeightView.p);
                 m_D3DContext->PSSetShaderResources(4, 1, &texture.MetalnessView.p);
                 
+                if (RadianceMap != nullptr) 
+                {
+                    m_D3DContext->PSSetShaderResources(5, 1, &RadianceMap.p);
+                    PerFrameConstants.enableIBL = true;
+                }
+                else 
+                {
+                    PerFrameConstants.enableIBL = false;
+                }
+
                 CComPtr<ID3D11SamplerState> sampler =  m_States->GetSamplerState(mesh.SamplerState);
                 m_D3DContext->PSSetSamplers(0, 1, &sampler.p);
+
+                sampler = m_States->GetSamplerState(ESamplerState::BilinearClamp);
+                m_D3DContext->PSSetSamplers(1, 1, &sampler.p);
                 
                 m_D3DContext->OMSetBlendState(m_States->GetBlendState(mesh.BlendState), nullptr, 0xffffff);
                 m_D3DContext->OMSetDepthStencilState(m_States->GetDepthStencilState(mesh.DepthStencil), 0);
@@ -204,6 +216,14 @@ namespace Engine
             }
         }
        
+    }
+
+    void DX11Renderer::SetSkyboxEntity(Entity entity)
+    {
+        if (entity.HasComponent<SkyboxComponent>()) 
+        {
+            RadianceMap = entity.GetComponent<SkyboxComponent>().RadianceMapView;
+        }
     }
 
     void DX11Renderer::Present()

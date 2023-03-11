@@ -178,6 +178,7 @@ namespace Engine
 			out << YAML::BeginMap;
 			out << YAML::Key << "MeshPath" << YAML::Value << comp.MeshPath;
 			out << YAML::Key << "TexPath" << YAML::Value << comp.TexPath;
+			out << YAML::Key << "RadiancePath" << YAML::Value << comp.RadiancePath;
 
 			out << YAML::EndMap;
 		}

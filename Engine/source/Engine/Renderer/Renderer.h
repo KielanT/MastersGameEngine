@@ -14,6 +14,7 @@ namespace Engine
 		static void RenderLoop();
 
 		static void RendererEntity(Entity entity);
+		static void SetSkyboxEntity(Entity entity);
 
 		static WindowProperties GetWindowProperties();
 

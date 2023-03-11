@@ -37,7 +37,9 @@ namespace Engine
 		for (auto entityID : skyboxView) 
 		{
 			Entity entity{ entityID, shared_from_this() };
+			Renderer::SetSkyboxEntity(entity);
 			Renderer::RendererEntity(entity);
+			
 		}
 
 
@@ -45,6 +47,7 @@ namespace Engine
 		for (auto entityID : MeshRenderers)
 		{
 			Entity entity{ entityID, shared_from_this() };
+			
 			Renderer::RendererEntity(entity);
 		}
 	}
@@ -258,7 +261,7 @@ namespace Engine
 
 				if (dx11Render->LoadTexture(assetPath + "/" + comp.TexPath, &Resource, &ResourceView))
 				{
-					comp.ResourceView = ResourceView;
+					comp.TexMapView = ResourceView;
 				}
 			}
 		}

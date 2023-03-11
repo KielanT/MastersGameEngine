@@ -74,6 +74,10 @@ namespace Engine
 		m_RendererAPI->Renderer(entity);
 	}
 
+	void Renderer::SetSkyboxEntity(Entity entity)
+	{
+		m_RendererAPI->SetSkyboxEntity(entity);
+	}
 
 	WindowProperties Renderer::GetWindowProperties()
 	{

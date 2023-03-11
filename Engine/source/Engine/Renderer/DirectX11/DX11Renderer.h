@@ -17,12 +17,13 @@ namespace Engine
 		glm::mat4 EngineionMatrix;
 		glm::mat4 viewEngineionMatrix; // The above two matrices multiplied together to combine their effects
 
-
 		glm::vec3   ambientColour;
 		float      specularPower;
 
 		glm::vec3   cameraPosition;
-		float      padding5;
+		bool		enableIBL;
+
+
 	};
 
 	// This is the matrix that positions the next thing to be rendered in the scene. Unlike the structure above this data can be
@@ -45,6 +46,7 @@ namespace Engine
 
 		virtual void RenderLoop() override;
 		virtual void Renderer(Entity entity) override;
+		virtual void SetSkyboxEntity(Entity entity) override;
 
 		virtual void Present() override;
 
@@ -96,6 +98,9 @@ namespace Engine
 		CComPtr<ID3D11Texture2D> m_SceneTexture = nullptr;
 		CComPtr<ID3D11RenderTargetView> m_SceneRenderTarget = nullptr;
 		CComPtr<ID3D11ShaderResourceView> m_SceneTextureSRV = nullptr;
+
+		CComPtr<ID3D11ShaderResourceView> RadianceMap = nullptr;
+
 
 		std::shared_ptr<DX11Shader> m_Shader;
 		std::shared_ptr<DX11States> m_States;
