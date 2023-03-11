@@ -171,6 +171,17 @@ namespace Engine
 			out << YAML::EndMap;
 		}
 
+		if (entity.HasComponent<SkyboxComponent>())
+		{
+			auto& comp = entity.GetComponent<SkyboxComponent>();
+			out << YAML::Key << "SkyboxComponent";
+			out << YAML::BeginMap;
+			out << YAML::Key << "MeshPath" << YAML::Value << comp.MeshPath;
+			out << YAML::Key << "TexPath" << YAML::Value << comp.TexPath;
+
+			out << YAML::EndMap;
+		}
+
 		out << YAML::EndMap;
 	}
 

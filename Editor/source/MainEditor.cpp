@@ -139,6 +139,7 @@ namespace Engine
 						std::shared_ptr<Engine::Scene> scene = std::make_shared<Scene>();
 						m_EditorScene = scene;
 						m_Scene = m_EditorScene;
+						m_Scene->InitScene();
 						Renderer::SetScene(m_Scene);
 						bUnsaved = true;
 

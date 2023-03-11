@@ -11,18 +11,17 @@ Entities:
       ID: 11350834667489270259
       Tag: DynamicCube
     TransformComponent:
-      Position: [0, 10.3339996, 0]
-      Rotation: [0, -0, 45]
+      Position: [0, 8.27808094, 0]
+      Rotation: [-0, -0, 1.01770282]
       Scale: [1, 1, 1]
     TextureComponent:
       Path: Textures/iron-rusted4-albedo.dds
+      NormalPath: ""
       RoughPath: ""
       HeightPath: ""
       MetalnessPath: ""
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
-      PixelShader: 0
-      VertexShader: 0
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
@@ -46,13 +45,12 @@ Entities:
       Scale: [1, 1, 1]
     TextureComponent:
       Path: Textures/iron-rusted4-metalness.dds
+      NormalPath: ""
       RoughPath: ""
       HeightPath: ""
       MetalnessPath: ""
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
-      PixelShader: 0
-      VertexShader: 0
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
@@ -69,13 +67,12 @@ Entities:
       Scale: [1, 1, 1]
     TextureComponent:
       Path: ""
+      NormalPath: ""
       RoughPath: ""
       HeightPath: ""
       MetalnessPath: ""
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
-      PixelShader: 0
-      VertexShader: 0
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
@@ -92,13 +89,12 @@ Entities:
       Scale: [1, 1, 1]
     TextureComponent:
       Path: ""
+      NormalPath: ""
       RoughPath: ""
       HeightPath: ""
       MetalnessPath: ""
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
-      PixelShader: 0
-      VertexShader: 0
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2

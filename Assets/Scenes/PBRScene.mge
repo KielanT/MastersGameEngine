@@ -8,24 +8,15 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
-      ID: 1565500994374662177
-      Tag: PBRMesh
+      ID: 6078177373065914951
+      Tag: Skybox Entity
     TransformComponent:
-      Position: [10, 0, 0]
-      Rotation: [-90, 0, 0]
-      Scale: [2, 2, 2]
-    TextureComponent:
-      Path: Textures/iron-rusted4-albedo.dds
-      NormalPath: Textures/iron-rusted4-normal.dds
-      RoughPath: Textures/iron-rusted4-roughness.dds
-      HeightPath: Textures/iron-rusted4-height.dds
-      MetalnessPath: Textures/iron-rusted4-metalness.dds
-    MeshRendererComponent:
-      Path: Mesh/Basic/Octopus.x
-      BlendState: 0
-      DepthStencil: 0
-      Rasterizer: 2
-      Sampler: 0
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [50000, 50000, 50000]
+    SkyboxComponent:
+      MeshPath: Mesh/Basic/Cube.x
+      TexPath: Textures/Cubemap2.dds
   -  # Entity
     IDComponent:
       ID: 1360875847982544762
@@ -42,6 +33,26 @@ Entities:
       MetalnessPath: Textures/iron-rusted4-metalness.dds
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+  -  # Entity
+    IDComponent:
+      ID: 1565500994374662177
+      Tag: PBRMesh
+    TransformComponent:
+      Position: [10, 0, 0]
+      Rotation: [-90, 0, 0]
+      Scale: [2, 2, 2]
+    TextureComponent:
+      Path: Textures/iron-rusted4-albedo.dds
+      NormalPath: Textures/iron-rusted4-normal.dds
+      RoughPath: Textures/iron-rusted4-roughness.dds
+      HeightPath: Textures/iron-rusted4-height.dds
+      MetalnessPath: Textures/iron-rusted4-metalness.dds
+    MeshRendererComponent:
+      Path: Mesh/Basic/Octopus.x
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2

@@ -240,6 +240,28 @@ namespace Engine
 
 			}
 		}
+
+		if (entity.HasComponent<SkyboxComponent>()) 
+		{
+			auto& comp = entity.GetComponent<SkyboxComponent>();
+			if (!comp.MeshPath.empty()) 
+			{
+				std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(assetPath + "/" + comp.MeshPath);
+				comp.Model = std::make_shared<Model>(mesh);
+			}
+
+			std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
+			if (!comp.TexPath.empty())
+			{
+				CComPtr<ID3D11Resource> Resource;
+				CComPtr<ID3D11ShaderResourceView> ResourceView;
+
+				if (dx11Render->LoadTexture(assetPath + "/" + comp.TexPath, &Resource, &ResourceView))
+				{
+					comp.ResourceView = ResourceView;
+				}
+			}
+		}
 	}
 
 

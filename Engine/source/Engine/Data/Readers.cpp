@@ -118,6 +118,15 @@ namespace Engine
 					
 
 				}
+
+				auto skyboxNode = entityIT["SkyboxComponent"];
+				if (skyboxNode)
+				{
+					auto col = SkyboxComponent();
+					col.MeshPath = skyboxNode["MeshPath"].as<std::string>();
+					col.TexPath = skyboxNode["TexPath"].as<std::string>();
+					entity.AddComponent<SkyboxComponent>(col);
+				}
 			}
 		}
 
