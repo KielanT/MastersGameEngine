@@ -36,23 +36,18 @@ namespace Engine
 		void RemoveScene();
 
 		void SimulateScene(float frametime);
-		void EditorUpdateScene(float frametime);
+		void EditorUpdatePhysicsScene(float frametime);
 
 		entt::registry& GetEntityRegistry() { return m_Registry; }
 		Entity CreateEntity(const std::string& tag);
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& tag);
 		Entity CreateMeshEntity(const std::string& tag);
-		Entity CreateCameraEntity(const std::string& tag);
 		void DeleteEntity(Entity entity);
 		void LoadEntities(std::string assetPath);
 
 		SceneSettings GetSceneSettings() { return m_SceneSettings; }
 		void SetSceneSettings(SceneSettings& settings) { m_SceneSettings = settings; }
-
-		void SetCamera(std::shared_ptr<ICamera> camera) { m_MainCamera = camera; };
-		std::shared_ptr<ICamera> GetCamera() { return m_MainCamera; }
-
-		void FindActiveCamera();
+		std::shared_ptr<Camera> GetCamera() { return m_MainCamera; }
 
 		SceneSettings m_SceneSettings;
 
@@ -68,7 +63,6 @@ namespace Engine
 		
 		std::shared_ptr<ICamera> m_MainCamera = nullptr;
 		entt::registry m_Registry;
-
 
 	};
 

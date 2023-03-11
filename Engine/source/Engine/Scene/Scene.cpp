@@ -16,6 +16,9 @@ namespace Engine
 
 	void Scene::InitScene()
 	{
+		m_MainCamera = std::make_unique<Camera>();
+		m_MainCamera->SetPosition({ 0, 0, -50.0f });
+		m_MainCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		Physics::Init();
 	}
@@ -41,7 +44,7 @@ namespace Engine
 
 	void Scene::UpdateScene(float frametime)
 	{
-
+		m_MainCamera->Control(frametime);
 		
 	}
 
@@ -64,10 +67,8 @@ namespace Engine
 			});
 	}
 
-	void Scene::EditorUpdateScene(float frametime)
+	void Scene::EditorUpdatePhysicsScene(float frametime)
 	{
-
-
 		m_Registry.each([&](auto entityID)
 			{
 				Entity entity{ entityID, shared_from_this() };
@@ -109,18 +110,6 @@ namespace Engine
 		entity.AddComponent<MeshRendererComponent>();
 		entity.AddComponent<TextureComponent>();
 		return entity; 
-	}
-
-	Entity Scene::CreateCameraEntity(const std::string& tag)
-	{
-		Entity entity = { m_Registry.create(), shared_from_this() };
-		auto& ID = entity.AddComponent<IDComponent>();
-		ID.ID = UUID();
-		ID.Tag = tag;
-		entity.AddComponent<TransformComponent>();
-		entity.AddComponent<CameraComponent>();
-
-		return entity;
 	}
 
 	void Scene::DeleteEntity(Entity entity)
@@ -211,26 +200,6 @@ namespace Engine
 		}
 	}
 
-	void Scene::FindActiveCamera()
-	{
-		m_Registry.each([&](auto entityID)
-			{
-				Entity entity{ entityID, shared_from_this() };
-				{
-					
-					if (entity.HasComponent<CameraComponent>()) 
-					{
-						
-						if (entity.GetComponent<CameraComponent>().IsActive) 
-						{
-							LOG_INFO("Set Camera");
-							m_MainCamera = entity.GetComponent<CameraComponent>().Camera;
-						}
-					}
-				}
-			});
-	}
-
 
 	template<typename T>
 	void Scene::OnComponentCreated(Entity entity, T& comp)
@@ -247,7 +216,7 @@ namespace Engine
 	template<>
 	void Scene::OnComponentCreated<CameraComponent>(Entity entity, CameraComponent& comp)
 	{
-		comp.Camera = std::make_shared<ICamera>();
+
 
 	}
 

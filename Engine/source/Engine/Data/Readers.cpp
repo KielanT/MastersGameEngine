@@ -115,13 +115,8 @@ namespace Engine
 					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
 					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
 					auto& colComp = entity.AddComponent<CollisionComponents>(col);
-				}
-				
-				auto cameraNode = entityIT["CameraComponent"];
-				if (cameraNode) {
-					auto comp = CameraComponent();
-					// set settings
-					entity.AddComponent<CameraComponent>(comp);
+					
+
 				}
 			}
 		}

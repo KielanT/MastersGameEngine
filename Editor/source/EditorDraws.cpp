@@ -202,7 +202,7 @@ namespace Engine
 
 	void EditorDraws::DrawCameraComponent(CameraComponent& comp)
 	{
-		ImGui::Text("Camera Component : BEING IMPLEMENTED");
+		ImGui::Text("Camera Component : NOT IMPLEMENTED");
 	}
 
 	void EditorDraws::DrawRigidDynamic(RigidDynamicComponent& comp)

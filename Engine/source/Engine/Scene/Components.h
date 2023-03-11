@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Engine/UUID.h"
-#include "Engine/Interfaces/ICamera.h"
 
 #include <glm/glm.hpp>
 
-// TODO Remove these includes
+// Remove these includes
 #include "Engine/Lab/Model.h"
 #include <PxPhysicsAPI.h>
 
@@ -102,8 +101,9 @@ namespace Engine
 
 	struct CameraComponent
 	{
-		std::shared_ptr<ICamera> Camera;
-		bool IsActive = true;
+		// Create Camera;
+		std::string temp = ""; // Requires at least one var
+		bool IsActive;
 	};
 
 	struct RigidDynamicComponent
