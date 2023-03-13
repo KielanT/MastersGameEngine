@@ -45,22 +45,6 @@ namespace Engine
 
         m_Props = props;
 
-        //// Get a "render target view" of back-buffer - standard behaviour
-        //CComPtr<ID3D11Texture2D> backBuffer;
-        //hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
-        //if (FAILED(hr))
-        //{
-        //    LOG_ERROR("Error creating swap chain");
-        //    return false;
-        //}
-        //hr = m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
-        ////backBuffer->Release();
-        //if (FAILED(hr))
-        //{
-        //    LOG_ERROR("Error creating render target view");
-        //    return false;
-        //}
-
         OnResize(m_Props.Width, m_Props.Height);
 
 
@@ -248,7 +232,6 @@ namespace Engine
                 entity.GetComponent<MeshRendererComponent>().Model->Render();
             }
         }
-       
     }
 
     void DX11Renderer::SetSkyboxEntity(Entity entity)

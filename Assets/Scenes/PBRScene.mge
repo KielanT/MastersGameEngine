@@ -17,7 +17,6 @@ Entities:
     SkyboxComponent:
       MeshPath: Mesh/Basic/Cube.x
       TexPath: Textures/Cubemap2.dds
-      RadiancePath: Textures/beach-cube.dds
   -  # Entity
     IDComponent:
       ID: 1360875847982544762
@@ -54,6 +53,26 @@ Entities:
       MetalnessPath: Textures/iron-rusted4-metalness.dds
     MeshRendererComponent:
       Path: Mesh/Basic/Octopus.x
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+  -  # Entity
+    IDComponent:
+      ID: 6912709038302011437
+      Tag: Mesh Entity
+    TransformComponent:
+      Position: [0, -10, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: Textures/iron-rusted4-roughness.dds
+      NormalPath: ""
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: Mesh/Basic/Floor.x
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2

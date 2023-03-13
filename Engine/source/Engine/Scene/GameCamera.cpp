@@ -130,13 +130,13 @@ namespace Engine
 	void GameCamera::Pitch(float angle)
 	{
 		glm::mat4 r = glm::rotate(angle, m_Right);
-
-		glm::vec4 up4(m_Up, 0.0f);
-		m_Up = up4 * r;
-
-		glm::vec4 look4(m_Look, 1.0f); // Check this
+	
+		/////glm::vec4 up4(m_Up, 0.0f);
+		/////m_Up = up4 * r;
+		///
+		glm::vec4 look4(m_Look, 0.0f); // Check this
 		m_Look = look4 * r;
-
+	   //
 		m_ViewDirty = true;
 	}
 
@@ -144,13 +144,13 @@ namespace Engine
 	{
 		glm::mat4 r = glm::rotate(angle, m_Up);
 
-		glm::vec4 right4(m_Right, 1.0f);
-		m_Right = right4 * r;
+		//glm::vec4 right4(m_Right, 0.0f);
+		//m_Right = right4 * r;
 
-		glm::vec4 up4(m_Up, 0.0f);
-		m_Up = up4 * r;
-
-		glm::vec4 look4(m_Look, 1.0f); // Check this
+		//glm::vec4 up4(m_Up, 0.0f);
+		//m_Up = up4 * r;
+		//
+		glm::vec4 look4(m_Look, 0.0f); // Check this
 		m_Look = look4 * r;
 
 		m_ViewDirty = true;
@@ -160,26 +160,26 @@ namespace Engine
 	{
 		if (m_ViewDirty)
 		{
-			glm::vec3 R = m_Right;
-			glm::vec3 U = m_Up;
-			glm::vec3 L = m_Look;
-			glm::vec3 P = m_Position;
+			//glm::vec3 R = m_Right;
+			//glm::vec3 U = m_Up;
+			//glm::vec3 L = m_Look;
+			//glm::vec3 P = m_Position;
 
 			// Keep camera's axes orthogonal to each other and of unit length.
-			L = glm::normalize(L);
-			U = glm::normalize(glm::cross(L, R));
+			m_Look = glm::normalize(m_Look);
+			m_Up = glm::normalize(glm::cross(m_Look, m_Right));
 
 			// U, L already ortho-normal, so no need to normalize cross product.
-			R = glm::cross(U, L);
+			m_Right = glm::cross(m_Up, m_Look);
 
 			// Fill in the view matrix entries.
-			float x = -glm::dot(P, R);
-			float y = -glm::dot(P, U);
-			float z = -glm::dot(P, L);
+			float x = -glm::dot(m_Position, m_Right);
+			float y = -glm::dot(m_Position, m_Up);
+			float z = -glm::dot(m_Position, m_Look);
 
-			m_Right = R;
-			m_Up    = U;
-			m_Look  = L;
+			//m_Right = R;
+			//m_Up    = U;
+			//m_Look  = L;
 
 			m_View[0][0] = m_Right.x;
 			m_View[1][0] = m_Right.y;
@@ -209,21 +209,21 @@ namespace Engine
 	{
 		if (SDLInput::KeyHeld(SDLK_DOWN)/*KeyHeld(Key_Down)*/)
 		{
-			Pitch(2.0f * frameTime);
+			Pitch(glm::radians(60.0f) * frameTime);
 			//mRotation.x += ROTATION_SPEED * frameTime; // Use of frameTime to ensure same speed on different machines
 		}
-		if (SDLInput::KeyHeld(SDLK_UP)/*KeyHeld(Key_Up)*/)
+		else if (SDLInput::KeyHeld(SDLK_UP)/*KeyHeld(Key_Up)*/)
 		{
-			Pitch(-2.0f * frameTime);
+			Pitch(glm::radians(-60.0f) * frameTime);
 			//mRotation.x -= ROTATION_SPEED * frameTime;
 		}
-		if (SDLInput::KeyHeld(SDLK_RIGHT)/*KeyHeld(Key_Right)*/)
+		else if (SDLInput::KeyHeld(SDLK_RIGHT)/*KeyHeld(Key_Right)*/)
 		{
-			RotateY(2.0f * frameTime);
+			RotateY(glm::radians(60.0f) * frameTime);
 		}
-		if (SDLInput::KeyHeld(SDLK_LEFT)/*KeyHeld(Key_Left)*/)
+		else if (SDLInput::KeyHeld(SDLK_LEFT)/*KeyHeld(Key_Left)*/)
 		{
-			RotateY(-2.0f * frameTime);
+			RotateY(glm::radians(-60.0f) * frameTime);
 			//mRotation.y -= ROTATION_SPEED * frameTime;
 		}
 		
