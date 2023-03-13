@@ -56,7 +56,17 @@ namespace Engine
 				}
 				else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 				{
+					
 					SDLInput::KeyEvent(event.key);
+				}
+				else if (event.type == SDL_WINDOWEVENT)
+				{
+					if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+					{
+						int w, h;
+						SDL_GetWindowSize(m_Window, &w, &h);
+						Renderer::OnResize(w, h);
+					}
 				}
 			}
 			
@@ -91,8 +101,10 @@ namespace Engine
 			LOG_ERROR("Error Initializing SDL");
 		}
 	
+		Uint32 flags = 0;
+		flags |= SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN;
 		m_Window = SDL_CreateWindow(m_Props.Title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-			m_Props.Width, m_Props.Height, SDL_WINDOW_RESIZABLE);
+			m_Props.Width, m_Props.Height, flags);
 		
 		SDL_SysWMinfo wmInfo;
 		SDL_VERSION(&wmInfo.version);

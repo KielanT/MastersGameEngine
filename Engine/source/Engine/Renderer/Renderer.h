@@ -11,6 +11,8 @@ namespace Engine
 
 		static void SetScene(std::shared_ptr<Scene> scene);
 
+		static void OnResize(int w, int height);
+
 		static void RenderLoop();
 
 		static void RendererEntity(Entity entity);

@@ -8,6 +8,8 @@
 #include "backends/imgui_impl_SDL.h"
 #include "backends/imgui_impl_dx11.h"
 
+
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
@@ -41,82 +43,32 @@ namespace Engine
             return false;
         }
 
+        m_Props = props;
 
-        // Get a "render target view" of back-buffer - standard behaviour
-        CComPtr<ID3D11Texture2D> backBuffer;
-        hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
-        if (FAILED(hr))
-        {
-            LOG_ERROR("Error creating swap chain");
-            return false;
-        }
-        hr = m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
-        //backBuffer->Release();
-        if (FAILED(hr))
-        {
-            LOG_ERROR("Error creating render target view");
-            return false;
-        }
+        //// Get a "render target view" of back-buffer - standard behaviour
+        //CComPtr<ID3D11Texture2D> backBuffer;
+        //hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
+        //if (FAILED(hr))
+        //{
+        //    LOG_ERROR("Error creating swap chain");
+        //    return false;
+        //}
+        //hr = m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
+        ////backBuffer->Release();
+        //if (FAILED(hr))
+        //{
+        //    LOG_ERROR("Error creating render target view");
+        //    return false;
+        //}
 
+        OnResize(m_Props.Width, m_Props.Height);
 
-        //// Create depth buffer to go along with the back buffer ////
-
-        // First create a texture to hold the depth buffer values
-        D3D11_TEXTURE2D_DESC dbDesc = {};
-        dbDesc.Width = props.Width; // Same size as viewport / back-buffer
-        dbDesc.Height = props.Height;
-        dbDesc.MipLevels = 1;
-        dbDesc.ArraySize = 1;
-        dbDesc.Format = DXGI_FORMAT_D32_FLOAT; // Each depth value is a single float
-        dbDesc.SampleDesc.Count = 1;
-        dbDesc.SampleDesc.Quality = 0;
-        dbDesc.Usage = D3D11_USAGE_DEFAULT;
-        dbDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-        dbDesc.CPUAccessFlags = 0;
-        dbDesc.MiscFlags = 0;
-        hr = m_D3DDevice->CreateTexture2D(&dbDesc, nullptr, &m_DepthStencilTexture);
-        if (FAILED(hr))
-        {
-            LOG_ERROR("Error creating depth buffer texture");
-            return false;
-        }
-
-        // Create the depth stencil view - an object to allow us to use the texture
-        // just created as a depth buffer
-        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-        dsvDesc.Format = dbDesc.Format;
-        dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-        dsvDesc.Texture2D.MipSlice = 0;
-        hr = m_D3DDevice->CreateDepthStencilView(m_DepthStencilTexture, &dsvDesc,
-            &m_DepthStencil);
-        if (FAILED(hr))
-        {
-            LOG_ERROR("Error creating depth buffer view");
-            return false;
-        }
-
-        PerFrameConstantBuffer = CreateConstantBuffer(sizeof(PerFrameConstants));
-        PerModelConstantBuffer = CreateConstantBuffer(sizeof(PerModelConstants));
-        if (PerFrameConstantBuffer == nullptr || PerModelConstantBuffer == nullptr)
-        {
-            LOG_ERROR("Error creating constant buffers");
-            return false;
-        }
-
-        D3D11_VIEWPORT vp;
-        vp.Width = static_cast<FLOAT>(props.Width);
-        vp.Height = static_cast<FLOAT>(props.Height);
-        vp.MinDepth = 0.0f;
-        vp.MaxDepth = 1.0f;
-        vp.TopLeftX = 0;
-        vp.TopLeftY = 0;
-        m_D3DContext->RSSetViewports(1, &vp);
 
         InitiliseSceneTexture(props);
 
         InitGUI();
         
-        m_Props = props;
+      
 
         m_Shader = std::make_shared<DX11Shader>();
         if (!m_Shader->InitShaders())
@@ -132,8 +84,91 @@ namespace Engine
             return false;
         }
 
+        PerFrameConstantBuffer = CreateConstantBuffer(sizeof(PerFrameConstants));
+        PerModelConstantBuffer = CreateConstantBuffer(sizeof(PerModelConstants));
+        if (PerFrameConstantBuffer == nullptr || PerModelConstantBuffer == nullptr)
+        {
+            LOG_ERROR("Error creating constant buffers");
+            return false;
+        }
+
         return true;
 	}
+
+    void DX11Renderer::OnResize(int w, int height)
+    {
+        m_BackBufferRenderTarget.Release();  m_BackBufferRenderTarget = nullptr;
+        m_DepthStencilTexture.Release();  m_DepthStencilTexture = nullptr;
+        m_DepthStencil.Release();  m_DepthStencil = nullptr;
+
+        HRESULT hr = S_OK;
+        m_SwapChain->ResizeBuffers(1, w, height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+        CComPtr<ID3D11Texture2D> backBuffer;
+        m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
+        
+        
+        m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
+
+
+        //// Create depth buffer to go along with the back buffer ////
+
+        // First create a texture to hold the depth buffer values
+        D3D11_TEXTURE2D_DESC dbDesc = {};
+        dbDesc.Width = w; // Same size as viewport / back-buffer
+        dbDesc.Height = height;
+        dbDesc.MipLevels = 1;
+        dbDesc.ArraySize = 1;
+        dbDesc.Format = DXGI_FORMAT_D32_FLOAT; // Each depth value is a single float
+        dbDesc.SampleDesc.Count = 1;
+        dbDesc.SampleDesc.Quality = 0;
+        dbDesc.Usage = D3D11_USAGE_DEFAULT;
+        dbDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+        dbDesc.CPUAccessFlags = 0;
+        dbDesc.MiscFlags = 0;
+        hr = m_D3DDevice->CreateTexture2D(&dbDesc, nullptr, &m_DepthStencilTexture);
+        if (FAILED(hr))
+        {
+            LOG_ERROR("Error creating depth buffer texture");
+            //return false;
+        }
+
+        // Create the depth stencil view - an object to allow us to use the texture
+        // just created as a depth buffer
+        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+        dsvDesc.Format = dbDesc.Format;
+        dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+        dsvDesc.Texture2D.MipSlice = 0;
+        hr = m_D3DDevice->CreateDepthStencilView(m_DepthStencilTexture, &dsvDesc,
+            &m_DepthStencil);
+        if (FAILED(hr))
+        {
+            LOG_ERROR("Error creating depth buffer view");
+            //return false;
+        }
+
+
+
+        D3D11_VIEWPORT vp;
+        vp.Width = static_cast<FLOAT>(w);
+        vp.Height = static_cast<FLOAT>(height);
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        m_D3DContext->RSSetViewports(1, &vp);
+
+        m_Props.Width = w;
+        m_Props.Height = height;
+
+        if (m_Scene != nullptr) 
+        {
+            if (m_Scene->GetCamera() != nullptr)
+            {
+                m_Scene->GetCamera()->SetLens(0.25f * glm::pi<float>(), w / height, 1.0f, 1000.0f);
+            }
+        }
+
+    }
 
     void DX11Renderer::RenderLoop()
     {

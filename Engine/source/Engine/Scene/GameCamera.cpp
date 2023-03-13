@@ -10,7 +10,7 @@ namespace Engine
 
 	GameCamera::GameCamera()
 	{
-		SetLens(0.25f * glm::pi<float>(), 1.0f, 1.0f, 1000.0f);
+		//SetLens(0.25f * glm::pi<float>(), 1.0f, 1.0f, 1000.0f);
 	}
 
 	GameCamera::~GameCamera()
@@ -99,7 +99,7 @@ namespace Engine
 		m_NearWindowHeight = 2.0f * m_NearZ * tanf(0.5f * m_FovY);
 		m_FarWindowHeight = 2.0f * m_FarZ * tanf(0.5f * m_FovY);
 
-		m_Proj = glm::perspective(m_FovY, m_Aspect, m_NearZ, m_FarZ);;
+		m_Proj = glm::perspective(m_FovY, m_Aspect, m_NearZ, m_FarZ);
 	}
 
 	glm::mat4 GameCamera::GetView() const

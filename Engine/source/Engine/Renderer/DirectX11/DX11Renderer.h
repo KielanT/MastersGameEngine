@@ -5,6 +5,7 @@
 #include "DX11Shader.h"
 #include "DX11States.h"
 
+
 namespace Engine
 {
 	// TODO for Renderer
@@ -43,6 +44,8 @@ namespace Engine
 		virtual bool Init(WindowProperties& props) override;
 
 		virtual void SetScene(std::shared_ptr<Scene> scene) override { m_Scene = scene; /*Layer.SetScene(m_Scene);*/ }
+
+		virtual void OnResize(int w, int height) override;
 
 		virtual void RenderLoop() override;
 		virtual void Renderer(Entity entity) override;
