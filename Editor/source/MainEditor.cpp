@@ -70,6 +70,8 @@ namespace Engine
 		if (bShowSettingsWindow)
 			Settings(&bShowSettingsWindow);
 
+		
+
 	}
 
 	void MainEditor::Update(float frameTime)

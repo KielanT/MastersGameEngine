@@ -106,7 +106,7 @@ project "Engine"
 	files("Engine/source/Engine/Renderer/Shaders/HLSL/*.hlsli")
 	shadermodel("5.0")
 	
-	local shader_dir = "../Editor/Shaders/"
+    local shader_dir = "../Engine/Shaders/"
 
 	filter("files:**.hlsl")
       flags("ExcludeFromBuild")
@@ -156,6 +156,8 @@ project "Editor"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+   
 
     files
 	{
@@ -215,6 +217,7 @@ project "Editor"
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysX_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXCommon_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXGpu_64.dll %{cfg.targetdir}",
+        "{COPY} ../Engine/Shaders/*.cso ../Editor/Shaders",
     }
 
     filter "configurations:Debug"
@@ -244,6 +247,8 @@ project "Game"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
     
+    
+
     files
     {
         "%{prj.name}/source/**.h",
@@ -301,8 +306,11 @@ project "Game"
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysX_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXCommon_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXGpu_64.dll %{cfg.targetdir}",
+        "{COPY} ../Engine/Shaders/*.cso ../Game/Shaders",
     }
     
+   
+
     filter "configurations:Debug"
         defines "E_DEBUG"
         runtime "Debug"

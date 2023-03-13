@@ -205,8 +205,6 @@ namespace Engine
                 CComPtr<ID3D11SamplerState> sampler =  m_States->GetSamplerState(mesh.SamplerState);
                 m_D3DContext->PSSetSamplers(0, 1, &sampler.p);
 
-                sampler = m_States->GetSamplerState(ESamplerState::BilinearClamp);
-                m_D3DContext->PSSetSamplers(1, 1, &sampler.p);
                 
                 m_D3DContext->OMSetBlendState(m_States->GetBlendState(mesh.BlendState), nullptr, 0xffffff);
                 m_D3DContext->OMSetDepthStencilState(m_States->GetDepthStencilState(mesh.DepthStencil), 0);
@@ -402,16 +400,26 @@ namespace Engine
 
         m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, m_DepthStencil);
 
-        m_D3DContext->OMSetRenderTargets(1, &m_SceneRenderTarget.p, m_DepthStencil);
+       m_D3DContext->OMSetRenderTargets(1, &m_SceneRenderTarget.p, m_DepthStencil);
         
         m_D3DContext->ClearRenderTargetView(m_BackBufferRenderTarget, &bgColour.r);
-        m_D3DContext->ClearRenderTargetView(m_SceneRenderTarget, &bgColour.r);
         m_D3DContext->ClearDepthStencilView(m_DepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+        m_D3DContext->ClearRenderTargetView(m_SceneRenderTarget, &bgColour.r);
+        
+        D3D11_VIEWPORT vp;
+        vp.Width = static_cast<FLOAT>(m_Props.Width);
+        vp.Height = static_cast<FLOAT>(m_Props.Height);
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        m_D3DContext->RSSetViewports(1, &vp);
 
         // Render the scene from the main camera
         RenderSceneFromCamera();
 
-        m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, nullptr);
+       m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, m_DepthStencil);
+       m_D3DContext->ClearDepthStencilView(m_DepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     }
 
