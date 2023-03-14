@@ -136,12 +136,12 @@ namespace Engine
 	{
 		glm::mat4 r = glm::rotate(angle, m_Right);
 	
-		/////glm::vec4 up4(m_Up, 0.0f);
-		/////m_Up = up4 * r;
-		///
+		glm::vec4 up4(m_Up, 0.0f);
+		m_Up = up4 * r;
+		
 		glm::vec4 look4(m_Look, 0.0f); // Check this
 		m_Look = look4 * r;
-	   //
+	   
 		m_ViewDirty = true;
 	}
 
@@ -149,11 +149,11 @@ namespace Engine
 	{
 		glm::mat4 r = glm::rotate(angle, m_Up);
 
-		//glm::vec4 right4(m_Right, 0.0f);
-		//m_Right = right4 * r;
+		glm::vec4 right4(m_Right, 0.0f);
+		m_Right = right4 * r;
 
-		//glm::vec4 up4(m_Up, 0.0f);
-		//m_Up = up4 * r;
+		glm::vec4 up4(m_Up, 0.0f);
+		m_Up = up4 * r;
 		//
 		glm::vec4 look4(m_Look, 0.0f); // Check this
 		m_Look = look4 * r;

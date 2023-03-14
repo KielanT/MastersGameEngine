@@ -55,9 +55,16 @@ namespace Engine
 					close = 1;
 				}
 				else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
-				{
-					
+				{	
 					SDLInput::KeyEvent(event.key);
+				}
+				else if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) 
+				{
+					SDLInput::MouseButtonEvent(event.button);
+				}
+				else if (event.type == SDL_MOUSEMOTION) 
+				{
+					SDLInput::MouseMotionEvent(event.motion);
 				}
 				else if (event.type == SDL_WINDOWEVENT)
 				{

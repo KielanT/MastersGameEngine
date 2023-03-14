@@ -66,7 +66,6 @@ cbuffer PerFrameConstants : register(b0) // The b0 gives this constant buffer th
     float    gSpecularPower;
 
     float3   gCameraPosition;
-    
     bool    gEnableIBL;
     
     

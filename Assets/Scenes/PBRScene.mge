@@ -8,41 +8,20 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
-      ID: 8960847575265662525
-      Tag: Camera Entity
+      ID: 6912709038302011437
+      Tag: Mesh Entity
     TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      {}
-  -  # Entity
-    IDComponent:
-      ID: 6078177373065914951
-      Tag: Skybox Entity
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [50000, 50000, 50000]
-    SkyboxComponent:
-      MeshPath: Mesh/Basic/Cube.x
-      TexPath: Textures/Cubemap2.dds
-  -  # Entity
-    IDComponent:
-      ID: 1360875847982544762
-      Tag: CubeMesh
-    TransformComponent:
-      Position: [-10, 0, 0]
+      Position: [0, -10, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     TextureComponent:
-      Path: Textures/iron-rusted4-albedo.dds
-      NormalPath: Textures/iron-rusted4-normal.dds
-      RoughPath: Textures/iron-rusted4-roughness.dds
-      HeightPath: Textures/iron-rusted4-height.dds
-      MetalnessPath: Textures/iron-rusted4-metalness.dds
+      Path: Textures/iron-rusted4-roughness.dds
+      NormalPath: ""
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
     MeshRendererComponent:
-      Path: Mesh/Basic/Cube.x
+      Path: Mesh/Basic/Floor.x
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
@@ -69,21 +48,42 @@ Entities:
       Sampler: 0
   -  # Entity
     IDComponent:
-      ID: 6912709038302011437
-      Tag: Mesh Entity
+      ID: 1360875847982544762
+      Tag: CubeMesh
     TransformComponent:
-      Position: [0, -10, 0]
+      Position: [-10, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     TextureComponent:
-      Path: Textures/iron-rusted4-roughness.dds
-      NormalPath: ""
-      RoughPath: ""
-      HeightPath: ""
-      MetalnessPath: ""
+      Path: Textures/iron-rusted4-albedo.dds
+      NormalPath: Textures/iron-rusted4-normal.dds
+      RoughPath: Textures/iron-rusted4-roughness.dds
+      HeightPath: Textures/iron-rusted4-height.dds
+      MetalnessPath: Textures/iron-rusted4-metalness.dds
     MeshRendererComponent:
-      Path: Mesh/Basic/Floor.x
+      Path: Mesh/Basic/Cube.x
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
       Sampler: 0
+  -  # Entity
+    IDComponent:
+      ID: 6078177373065914951
+      Tag: Skybox Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [50000, 50000, 50000]
+    SkyboxComponent:
+      MeshPath: Mesh/Basic/Sphere.x
+      TexPath: Textures/Cubemap2.dds
+  -  # Entity
+    IDComponent:
+      ID: 8960847575265662525
+      Tag: Camera Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      {}

@@ -105,7 +105,16 @@ namespace Engine
 			RotateY(glm::radians(-60.0f) * frameTime);
 			//mRotation.y -= ROTATION_SPEED * frameTime;
 		}
+
+		if (SDLInput::MouseHeld(SDL_BUTTON_LEFT)) 
+		{
+			//float dx = glm::radians(SDLInput::GetMouseMovement().x * frameTime);
+			//float dy = glm::radians(SDLInput::GetMouseMovement().y * frameTime);
+			//RotateY(dx * frameTime);
+			//Pitch(dy * frameTime);
+		}
 		
+
 		//**** LOCAL MOVEMENT ****
 		if (SDLInput::KeyHeld(SDLK_d)/*KeyHeld(Key_D)*/)
 		{
@@ -145,12 +154,12 @@ namespace Engine
 	{
 		glm::mat4 r = glm::rotate(angle, m_Right);
 
-		/////glm::vec4 up4(m_Up, 0.0f);
-		/////m_Up = up4 * r;
-		///
+		glm::vec4 up4(m_Up, 0.0f);
+		m_Up = up4 * r;
+		
 		glm::vec4 look4(m_Look, 0.0f); // Check this
 		m_Look = look4 * r;
-		//
+		
 		m_ViewDirty = true;
 	}
 
@@ -158,12 +167,12 @@ namespace Engine
 	{
 		glm::mat4 r = glm::rotate(angle, m_Up);
 
-		//glm::vec4 right4(m_Right, 0.0f);
-		//m_Right = right4 * r;
+		glm::vec4 right4(m_Right, 0.0f);
+		m_Right = right4 * r;
 
-		//glm::vec4 up4(m_Up, 0.0f);
-		//m_Up = up4 * r;
-		//
+		glm::vec4 up4(m_Up, 0.0f);
+		m_Up = up4 * r;
+		
 		glm::vec4 look4(m_Look, 0.0f); // Check this
 		m_Look = look4 * r;
 
