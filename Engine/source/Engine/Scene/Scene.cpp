@@ -5,6 +5,8 @@
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
 #include "Engine/Physics/Physics.h"
 #include "Engine/Platform/SDLInput.h"
+#include "GameCamera.h"
+
 
 namespace Engine
 {
@@ -16,7 +18,7 @@ namespace Engine
 
 	void Scene::InitScene()
 	{
-		m_MainCamera = std::make_unique<GameCamera>();
+		m_MainCamera = std::make_shared<GameCamera>();
 		m_MainCamera->SetPosition({ 0, 0, 50.0f });
 		m_MainCamera->SetLens(0.25f * glm::pi<float>(), 1600.0f / 900.0f, 1.0f, 1000.0f);
 		//m_MainCamera->SetRotation({ 0.0f, 0.0f, 0.0f });

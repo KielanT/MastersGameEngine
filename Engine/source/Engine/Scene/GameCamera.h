@@ -3,18 +3,20 @@
 // Camera code is from Introduction to 3D Game Programming with DirectX 12 by Frank Luna
 //**************************************************************************************
 
+#include "Engine/Interfaces/ICamera.h"
+
 namespace Engine
 {
 
-	class GameCamera
+	class GameCamera : public ICamera
 	{
 	public:
 		GameCamera();
 		~GameCamera();
 
 		// Setters and getters
-		glm::vec3 GetPosition();
-		void SetPosition(const glm::vec3& pos);
+		virtual glm::vec3 GetPosition() override;
+		virtual void SetPosition(const glm::vec3& pos) override;
 
 		// Get Camera Vectors
 		glm::vec3 GetRight()const;
@@ -36,15 +38,16 @@ namespace Engine
 
 
 		// Set frustum.
-		void SetLens(float fovY, float aspect, float zn, float zf);
+		virtual void SetLens(float fovY, float aspect, float zn, float zf) override;
 
 		// Define camera space via LookAt parameters.
 		//void LookAt(DirectX::FXMVECTOR pos, DirectX::FXMVECTOR target, DirectX::FXMVECTOR worldUp);
 		//void LookAt(const DirectX::XMFLOAT3& pos, const DirectX::XMFLOAT3& target, const DirectX::XMFLOAT3& up);
 
 		// Get View/Proj matrices.
-		glm::mat4 GetView()const;
-		glm::mat4 GetProj()const;
+		virtual glm::mat4 GetViewMatrix() override;
+		virtual glm::mat4 GetProjectionMatrix() override;
+		virtual glm::mat4 GetViewProjectionMatrix() override;
 
 		// Strafe/Walk the camera a distance d.
 		void Strafe(float d);
@@ -56,9 +59,9 @@ namespace Engine
 
 
 		// After modifying camera position/orientation, call to rebuild the view matrix.
-		void UpdateViewMatrix();
+		virtual void UpdateViewMatrix() override;
 
-		void Control(float frameTime);
+		virtual void Control(float frameTime) override;
 
 	private:
 		// Camera coordinate system with coordinates relative to world space.

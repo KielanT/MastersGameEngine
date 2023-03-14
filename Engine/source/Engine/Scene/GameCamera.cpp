@@ -102,14 +102,19 @@ namespace Engine
 		m_Proj = glm::perspective(m_FovY, m_Aspect, m_NearZ, m_FarZ);
 	}
 
-	glm::mat4 GameCamera::GetView() const
+	glm::mat4 GameCamera::GetViewMatrix()
 	{
 		return m_View;
 	}
 
-	glm::mat4 GameCamera::GetProj() const
+	glm::mat4 GameCamera::GetProjectionMatrix()
 	{
 		return m_Proj;
+	}
+
+	glm::mat4 GameCamera::GetViewProjectionMatrix()
+	{
+		return m_View * m_Proj;
 	}
 
 	void GameCamera::Strafe(float d)

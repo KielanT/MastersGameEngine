@@ -1,6 +1,6 @@
 #pragma once
 #include <Engine.h>
-
+#include "EditorCamera.h"
 
 namespace Engine
 {
@@ -42,6 +42,7 @@ namespace Engine
 	private:
 		std::shared_ptr<Engine::Scene> m_EditorScene;
 		std::shared_ptr<Engine::Scene> m_Scene;
+		std::shared_ptr<EditorCamera> m_EditorCamera;
 			
 		EditorSettings m_EditorSettings;
 		

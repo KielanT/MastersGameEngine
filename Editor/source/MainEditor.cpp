@@ -9,6 +9,7 @@
 #include "EditorDraws.h"
 
 
+
 namespace Engine
 {
 	MainEditor::MainEditor()
@@ -30,8 +31,13 @@ namespace Engine
 
 	bool MainEditor::Init()
 	{
+		m_EditorCamera = std::make_shared<EditorCamera>();
+		m_EditorCamera->SetPosition({ 0, 0, 50.0f });
+		m_EditorCamera->SetLens(0.25f * glm::pi<float>(), 1600.0f / 900.0f, 1.0f, 1000.0f);
+
 		m_Scene = std::make_shared<Scene>();
 		m_Scene->InitScene();
+		m_Scene->SetCamera(m_EditorCamera);
 		Renderer::SetScene(m_Scene);
 
 		SettingsSerilizer settings;
@@ -142,6 +148,7 @@ namespace Engine
 						m_EditorScene = scene;
 						m_Scene = m_EditorScene;
 						m_Scene->InitScene();
+						m_Scene->SetCamera(m_EditorCamera);
 						Renderer::SetScene(m_Scene);
 						bUnsaved = true;
 
@@ -633,6 +640,7 @@ namespace Engine
 				m_EditorScene = scene;
 				m_Scene = m_EditorScene;
 				m_Scene->InitScene();
+				m_Scene->SetCamera(m_EditorCamera);
 				Renderer::SetScene(m_Scene);
 				m_Scene->LoadEntities(m_AssetPath.string());
 			}
@@ -657,6 +665,7 @@ namespace Engine
 				m_EditorScene = scene;
 				m_Scene = m_EditorScene;
 				m_Scene->InitScene();
+				m_Scene->SetCamera(m_EditorCamera);
 				Renderer::SetScene(m_Scene);
 				m_Scene->LoadEntities(m_AssetPath.string());
 			}
