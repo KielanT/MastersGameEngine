@@ -207,7 +207,16 @@ namespace Engine
 
 	void EditorDraws::DrawCameraComponent(CameraComponent& comp)
 	{
-		ImGui::Text("Camera Component : NOT IMPLEMENTED");
+		
+		if (ImGui::TreeNodeEx("Camera Component", m_Flags)) 
+		{
+			ImGui::Text("Camera Component : IN PROGRESS");
+			//IMGUI_LEFT_LABEL(ImGui::Checkbox, "Active", &comp.IsActive);
+
+			ImGui::TreePop();
+		}
+		
+
 	}
 
 	void EditorDraws::DrawRigidDynamic(RigidDynamicComponent& comp)

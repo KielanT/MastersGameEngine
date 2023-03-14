@@ -127,6 +127,13 @@ namespace Engine
 					col.TexPath = skyboxNode["TexPath"].as<std::string>();
 					entity.AddComponent<SkyboxComponent>(col);
 				}
+
+				auto cameraNode = entityIT["CameraComponent"];
+				if (cameraNode)
+				{
+					auto col = CameraComponent();
+					entity.AddComponent<CameraComponent>(col);
+				}
 			}
 		}
 

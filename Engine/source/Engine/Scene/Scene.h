@@ -46,8 +46,10 @@ namespace Engine
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& tag);
 		Entity CreateMeshEntity(const std::string& tag);
 		Entity CreateSkyboxEntity(const std::string& tag);
+		Entity CreateCameraEntity(const std::string& tag);
 		void DeleteEntity(Entity entity);
 		void LoadEntities(std::string assetPath);
+		void SetActiveCamera();
 
 		SceneSettings GetSceneSettings() { return m_SceneSettings; }
 		void SetSceneSettings(SceneSettings& settings) { m_SceneSettings = settings; }

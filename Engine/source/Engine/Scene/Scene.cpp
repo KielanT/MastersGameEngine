@@ -68,7 +68,6 @@ namespace Engine
 	{
 		Physics::Update(frametime);
 
-
 		m_Registry.each([&](auto entityID)
 			{
 				Entity entity{ entityID, shared_from_this() };
@@ -159,6 +158,18 @@ namespace Engine
 		return entity;
 	}
 
+	Entity Scene::CreateCameraEntity(const std::string& tag)
+	{
+		Entity entity = { m_Registry.create(), shared_from_this() };
+		auto& ID = entity.AddComponent<IDComponent>();
+		ID.ID = UUID();
+		ID.Tag = tag;
+		entity.AddComponent<TransformComponent>();
+		entity.AddComponent<CameraComponent>();
+
+		return entity;
+	}
+
 	void Scene::DeleteEntity(Entity entity)
 	{
 		m_Registry.destroy(entity);
@@ -171,6 +182,16 @@ namespace Engine
 				Entity entity{ entityID, shared_from_this() };
 				LoadEntity(entity, assetPath);
 			});
+	}
+
+	void Scene::SetActiveCamera()
+	{
+		auto CamView = m_Registry.view<CameraComponent>();
+		for (auto entityID : CamView)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			m_MainCamera = entity.GetComponent<CameraComponent>().Camera;
+		}
 	}
 
 	void Scene::LoadEntity(Entity entity, std::string& assetPath)
@@ -267,6 +288,14 @@ namespace Engine
 				}
 			}
 		}
+
+		if (entity.HasComponent<CameraComponent>())
+		{
+			auto& comp = entity.GetComponent<CameraComponent>();
+			comp.Camera = std::make_shared<GameCamera>();
+			comp.Camera->SetLens(0.25f * glm::pi<float>(), 1600.0f / 900.0f, 1.0f, 1000.0f);
+		}
+
 	}
 
 
@@ -285,8 +314,8 @@ namespace Engine
 	template<>
 	void Scene::OnComponentCreated<CameraComponent>(Entity entity, CameraComponent& comp)
 	{
-
-
+		comp.Camera = std::make_shared<GameCamera>();
+		comp.Camera->SetLens(0.25f * glm::pi<float>(), 1600.0f / 900.0f, 1.0f, 1000.0f);
 	}
 
 	template<>

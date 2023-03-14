@@ -235,6 +235,7 @@ namespace Engine
 		{
 			if (ImGui::Button("Play"))
 			{
+				m_Scene->SetActiveCamera();
 				m_PlayState = EPlaystate::Playing;
 				Save();
 			}
@@ -254,6 +255,7 @@ namespace Engine
 			{
 				m_PlayState = EPlaystate::NotPlaying;
 				LoadScene(true);
+			
 			}
 		}
 
@@ -278,6 +280,11 @@ namespace Engine
 
 		if (ImGui::BeginPopup("EntityPopup"))
 		{
+			if (ImGui::MenuItem("Create Camera Entity"))
+			{
+				m_SelectedEntity = m_Scene->CreateCameraEntity("Camera Entity");
+				bUnsaved = true;
+			}
 			if (ImGui::MenuItem("Create Empty Entity"))
 			{
 				m_SelectedEntity = m_Scene->CreateEntity("Empty Entity");

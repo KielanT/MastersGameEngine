@@ -8,6 +8,16 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
+      ID: 8960847575265662525
+      Tag: Camera Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      {}
+  -  # Entity
+    IDComponent:
       ID: 6078177373065914951
       Tag: Skybox Entity
     TransformComponent:
