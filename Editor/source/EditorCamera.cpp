@@ -106,15 +106,7 @@ namespace Engine
 			//mRotation.y -= ROTATION_SPEED * frameTime;
 		}
 
-		if (SDLInput::MouseHeld(SDL_BUTTON_LEFT)) 
-		{
-			//float dx = glm::radians(SDLInput::GetMouseMovement().x * frameTime);
-			//float dy = glm::radians(SDLInput::GetMouseMovement().y * frameTime);
-			//RotateY(dx * frameTime);
-			//Pitch(dy * frameTime);
-		}
-		
-
+	
 		//**** LOCAL MOVEMENT ****
 		if (SDLInput::KeyHeld(SDLK_d)/*KeyHeld(Key_D)*/)
 		{

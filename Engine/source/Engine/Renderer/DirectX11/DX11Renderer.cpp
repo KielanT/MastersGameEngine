@@ -418,7 +418,7 @@ namespace Engine
 
         m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, m_DepthStencil);
 
-       m_D3DContext->OMSetRenderTargets(1, &m_SceneRenderTarget.p, m_DepthStencil);
+        m_D3DContext->OMSetRenderTargets(1, &m_SceneRenderTarget.p, m_DepthStencil);
         
         m_D3DContext->ClearRenderTargetView(m_BackBufferRenderTarget, &bgColour.r);
         m_D3DContext->ClearDepthStencilView(m_DepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);

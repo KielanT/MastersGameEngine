@@ -23,8 +23,8 @@ namespace Engine
 		static void MouseMotionEvent(const SDL_MouseMotionEvent& event);
 
 		static glm::ivec2 GetMousePos() { return m_MousePos; }
+		static glm::ivec2 GetLastMousePos() { return m_LastMousePos; }
 		static glm::ivec2 GetMouseMovement() { return m_MouseMovement; }
-
 	
 		enum EKeyPressedState
 		{
@@ -47,6 +47,8 @@ namespace Engine
 
 		static glm::ivec2 m_MousePos;
 		static glm::ivec2 m_MouseMovement;
+
+		static glm::ivec2 m_LastMousePos;
 	};
 }
 

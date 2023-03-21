@@ -25,8 +25,7 @@ namespace Engine
 
 		m_EditorScene = std::make_shared<Scene>();
 		m_Scene = m_EditorScene;
-		
-		
+
 	}
 
 	bool MainEditor::Init()
@@ -61,6 +60,7 @@ namespace Engine
 		
 		if(bShowGameWindow)
 			EntitiesWindow(&bShowGameWindow);
+		
 		if(bShowGameWindow)
 			GameWindow(&bShowGameWindow);
 		
