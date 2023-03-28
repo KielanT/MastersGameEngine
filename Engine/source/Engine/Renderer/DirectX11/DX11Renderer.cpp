@@ -334,6 +334,7 @@ namespace Engine
             return false;
             LOG_ERROR("Image Data is Null");
         }
+
         // Create texture
         D3D11_TEXTURE2D_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
@@ -378,7 +379,7 @@ namespace Engine
         if (filename.size() >= 4 &&
             std::equal(dds.rbegin(), dds.rend(), filename.rbegin(), [](unsigned char a, unsigned char b) { return std::tolower(a) == std::tolower(b); }))
         {
-            return SUCCEEDED(DirectX::CreateDDSTextureFromFile(m_D3DDevice, CA2CT(filename.c_str()), texture, textureSRV));
+            return SUCCEEDED(DirectX::CreateDDSTextureFromFile(m_D3DDevice, m_D3DContext, CA2CT(filename.c_str()), texture, textureSRV));
         }
         else
         {

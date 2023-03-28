@@ -139,7 +139,7 @@ namespace Engine
 		glm::vec4 up4(m_Up, 0.0f);
 		m_Up = up4 * r;
 		
-		glm::vec4 look4(m_Look, 0.0f); // Check this
+		glm::vec4 look4(m_Look, 0.0f); 
 		m_Look = look4 * r;
 	   
 		m_ViewDirty = true;
@@ -154,8 +154,8 @@ namespace Engine
 
 		glm::vec4 up4(m_Up, 0.0f);
 		m_Up = up4 * r;
-		//
-		glm::vec4 look4(m_Look, 0.0f); // Check this
+		
+		glm::vec4 look4(m_Look, 0.0f); 
 		m_Look = look4 * r;
 
 		m_ViewDirty = true;

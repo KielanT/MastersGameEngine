@@ -217,7 +217,6 @@ project "Editor"
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysX_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXCommon_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXGpu_64.dll %{cfg.targetdir}",
-        "{COPY} ../Engine/Shaders/*.cso ../Editor/Shaders",
     }
 
     filter "configurations:Debug"

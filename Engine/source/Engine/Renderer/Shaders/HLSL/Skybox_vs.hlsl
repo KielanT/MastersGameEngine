@@ -19,11 +19,11 @@ VertexOut main(VertexIn input)
     
    output.PosL = input.PosL;
    
-    float4 posW = mul(float4(input.PosL, 1.0f), gWorldMatrix);
+    float4 posW = mul(gWorldMatrix, float4(input.PosL, 1.0f));
    
    posW.xyz += gCameraPosition;
    
-   output.PosH = mul(posW, gViewProjectionMatrix).xyww;
+    output.PosH = mul(gViewProjectionMatrix, posW).xyww;
     
     return output;
 }

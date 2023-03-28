@@ -205,6 +205,7 @@ namespace Engine
 				comp.Model = std::make_shared<Model>(mesh);
 			}
 		}
+
 		if (entity.HasComponent<TextureComponent>())
 		{
 			std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());

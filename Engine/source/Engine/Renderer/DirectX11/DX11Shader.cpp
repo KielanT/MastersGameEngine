@@ -10,8 +10,8 @@ namespace Engine
 	{
 		std::filesystem::path currentPath = std::filesystem::current_path();
 
-		std::filesystem::path shaderPath = currentPath;
-		shaderPath.append("Shaders\\");
+		std::filesystem::path shaderPath = currentPath.parent_path();
+		shaderPath.append("Engine\\Shaders\\");
 
 
 		std::filesystem::current_path(shaderPath);

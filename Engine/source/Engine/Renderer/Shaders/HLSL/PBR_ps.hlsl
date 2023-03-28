@@ -54,7 +54,7 @@ float4 main(PBR_Input input) : SV_Target
     float3 modelNormal = normalize(input.worldNormal);
     float3 modelTangent = normalize(input.tangent);
 
-    float3 n = SampleNormal(input.worldNormal, modelNormal, modelTangent, input.uv, true);
+    float3 n = SampleNormal(input.worldPosition, modelNormal, modelTangent, input.uv, true);
 	
 	// View vector (normal towards camera from pixel)
     float3 v = normalize(gCameraPosition - input.worldPosition);

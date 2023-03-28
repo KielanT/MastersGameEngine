@@ -182,6 +182,7 @@ namespace Engine
 			samplerItems[0] = "Anisotropic4xSampler";
 			samplerItems[1] = "TrilinearSampler";
 			samplerItems[2] = "PointSampler";
+			samplerItems[3] = "BilinearClamp";
 			comp.SamplerState = static_cast<ESamplerState>(ComboBox("Sampler State: ", samplerItems, static_cast<int>(ESamplerState::ESamplerStateSize), ss));
 			
 
