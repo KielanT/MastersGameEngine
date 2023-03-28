@@ -114,7 +114,7 @@ namespace Engine
 
 	glm::mat4 GameCamera::GetViewProjectionMatrix()
 	{
-		return m_View * m_Proj;
+		return m_Proj * m_View;
 	}
 
 	void GameCamera::Strafe(float d)
@@ -135,12 +135,12 @@ namespace Engine
 	void GameCamera::Pitch(float angle)
 	{
 		glm::mat4 r = glm::rotate(angle, m_Right);
-	
+
 		glm::vec4 up4(m_Up, 0.0f);
-		m_Up = up4 * r;
-		
-		glm::vec4 look4(m_Look, 0.0f); 
-		m_Look = look4 * r;
+		m_Up = glm::normalize(up4 * r);
+
+		glm::vec4 look4(m_Look, 0.0f);
+		m_Look = glm::normalize(look4 * r);
 	   
 		m_ViewDirty = true;
 	}
@@ -150,13 +150,13 @@ namespace Engine
 		glm::mat4 r = glm::rotate(angle, m_Up);
 
 		glm::vec4 right4(m_Right, 0.0f);
-		m_Right = right4 * r;
+		m_Right = glm::normalize(right4 * r);
 
 		glm::vec4 up4(m_Up, 0.0f);
-		m_Up = up4 * r;
-		
-		glm::vec4 look4(m_Look, 0.0f); 
-		m_Look = look4 * r;
+		m_Up = glm::normalize(up4 * r);
+
+		glm::vec4 look4(m_Look, 0.0f);
+		m_Look = glm::normalize(look4 * r);
 
 		m_ViewDirty = true;
 	}
@@ -165,42 +165,39 @@ namespace Engine
 	{
 		if (m_ViewDirty)
 		{
-			//glm::vec3 R = m_Right;
-			//glm::vec3 U = m_Up;
-			//glm::vec3 L = m_Look;
-			//glm::vec3 P = m_Position;
+			glm::vec3 L = m_Look;
+			glm::vec3 U = m_Up;
+			glm::vec3 R = m_Right;
 
-			// Keep camera's axes orthogonal to each other and of unit length.
-			m_Look = glm::normalize(m_Look);
-			m_Up = glm::normalize(glm::cross(m_Look, m_Right));
+			L = glm::normalize(m_Look);
+			U = glm::normalize(glm::cross(L, R));
 
-			// U, L already ortho-normal, so no need to normalize cross product.
-			m_Right = glm::cross(m_Up, m_Look);
+			R = glm::cross(U, L);
 
 			// Fill in the view matrix entries.
-			float x = -glm::dot(m_Position, m_Right);
-			float y = -glm::dot(m_Position, m_Up);
-			float z = -glm::dot(m_Position, m_Look);
+			float x = -glm::dot(m_Position, R);
+			float y = -glm::dot(m_Position, U);
+			float z = -glm::dot(m_Position, L);
 
-			//m_Right = R;
-			//m_Up    = U;
-			//m_Look  = L;
+			m_Look = L;
+			m_Up = U;
+			m_Right = R;
 
 			m_View[0][0] = m_Right.x;
 			m_View[1][0] = m_Right.y;
 			m_View[2][0] = m_Right.z;
 			m_View[3][0] = x;
-				  	
+
 			m_View[0][1] = m_Up.x;
 			m_View[1][1] = m_Up.y;
 			m_View[2][1] = m_Up.z;
 			m_View[3][1] = y;
-				  	
+
 			m_View[0][2] = m_Look.x;
 			m_View[1][2] = m_Look.y;
 			m_View[2][2] = m_Look.z;
 			m_View[3][2] = z;
-				  	
+
 			m_View[0][3] = 0.0f;
 			m_View[1][3] = 0.0f;
 			m_View[2][3] = 0.0f;
