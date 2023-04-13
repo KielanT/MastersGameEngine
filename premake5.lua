@@ -23,6 +23,7 @@ workspace "MastersGameEngine"
     IncludeDir["stbImage"] = "Engine/external/stb_image"
     IncludeDir["yaml_cpp"] = "Engine/external/yaml-cpp/include"
     IncludeDir["PhysX"] = "Engine/external/physx/physx/include"
+    IncludeDir["mono"] = "Engine/external/mono/include"
 
     LibDir = {}
     LibDir["DirectXTK"] = "Engine/external/DirectXTK/%{cfg.buildcfg}"
@@ -30,6 +31,7 @@ workspace "MastersGameEngine"
     LibDir["SDL"] = "Engine/external/SDL/VisualC/x64/%{cfg.buildcfg}"
     LibDir["yaml_cpp"] = "Engine/external/yaml-cpp/lib/%{cfg.buildcfg}"
     LibDir["PhysX"] = "Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}"
+    LibDir["mono"] = "Engine/external/mono/lib/%{cfg.buildcfg}"
 
     include "Engine/external/imgui"
 
@@ -72,6 +74,7 @@ project "Engine"
         "%{IncludeDir.stbImage}",
         "%{IncludeDir.yaml_cpp}",
         "%{IncludeDir.PhysX}",
+        "%{IncludeDir.mono}",
     }
 
     libdirs
@@ -81,6 +84,7 @@ project "Engine"
         "%{LibDir.SDL}",
         "%{LibDir.yaml_cpp}",
         "%{LibDir.PhysX}",
+        "%{LibDir.mono}",
     }
 
     links
@@ -100,6 +104,22 @@ project "Engine"
         "PhysXFoundation_64.lib",
         "PhysXPvdSDK_static_64.lib",
         "PhysXExtensions_static_64.lib",
+
+        --> Mono
+       --> "eglib.lib",
+       --> "libgcmonosgen.lib",
+       --> "libmini-sgen.lib",
+       --> "libmonoruntime-sgen.lib",
+       "libmono-static-sgen.lib",
+       --> "libmonoutils.lib",
+       --> "mono-2.0-sgen.lib",
+       --> "MonoPosixHelper.lib",
+
+       --> Need for mono for static linking
+       "Ws2_32.lib",
+       "Winmm.lib",
+       "Version.lib",
+       "Bcrypt.lib"
     }
 
     files("Engine/source/Engine/Renderer/Shaders/HLSL/*.hlsl")
@@ -177,6 +197,7 @@ project "Editor"
         "%{IncludeDir.entt}",
         "%{IncludeDir.assimp}",
         "%{IncludeDir.PhysX}",
+        "%{IncludeDir.mono}",
     }
     libdirs
     {
@@ -199,6 +220,7 @@ project "Editor"
         "PhysXFoundation_64.lib",
         "PhysXPvdSDK_static_64.lib",
         "PhysXExtensions_static_64.lib",
+
     }
 
     filter "system:windows"
@@ -217,6 +239,7 @@ project "Editor"
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysX_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXCommon_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXGpu_64.dll %{cfg.targetdir}",
+    
     }
 
     filter "configurations:Debug"
@@ -288,6 +311,7 @@ project "Game"
         "PhysXFoundation_64.lib",
         "PhysXPvdSDK_static_64.lib",
         "PhysXExtensions_static_64.lib",
+
     }
     
     filter "system:windows"

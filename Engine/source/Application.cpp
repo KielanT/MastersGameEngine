@@ -4,6 +4,7 @@
 
 #include <SDL.h>
 #include "Engine/Renderer/Renderer.h"
+#include "Engine/Scripting/Scripting.h"
 
 namespace Engine
 {
@@ -20,11 +21,16 @@ namespace Engine
 
 		Renderer::Init(props);
 		
+		if (!Scripting::InitScripting())
+		{
+			LOG_ERROR("Failed Creating Scripting Engine");
+		}
 	}
 	
 	Application::~Application()
 	{
 		Renderer::ShutdownRenderer();
+		Scripting::ShutdownScripting();
 
 	}
 	
