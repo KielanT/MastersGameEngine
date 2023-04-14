@@ -1,4 +1,11 @@
-[20:40:39] [debug]: Renderer Initilised
-[20:40:39] [info]: Physics Initialising
-[20:40:39] [info]: PhysX 5 Initilised
-[20:40:41] [debug]: Renderer shutdown
+[16:35:35] [debug]: Renderer Initilised
+[16:35:35] [info]: namspace 
+[16:35:35] [info]: name <Module>
+[16:35:35] [info]: namspace 
+[16:35:35] [info]: name CSharpTesting
+[16:35:36] [info]: Float set from c# to c++ 10
+[16:35:36] [info]: Float set & get from c# to c++ 20
+[16:35:36] [info]: string value from c# getter Hello
+[16:35:36] [info]: string value from c# setter Hello, World
+[16:35:36] [info]: Physics Initialising
+[16:35:36] [info]: PhysX 5 Initilised
