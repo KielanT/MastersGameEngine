@@ -1,6 +1,7 @@
 #include "epch.h"
 #include "ScriptingAPI.h"
-#include <winver.h>
+#include "ScriptingCalls.h"
+
 #include "mono/jit/jit.h"
 #include "mono/metadata/assembly.h"
 
@@ -18,11 +19,16 @@ namespace Engine
 			return false;
 		}
 
+		
 
 		m_Assembly = LoadAssembly("Resources/Scripts/EngineScripting.dll");
+		
+		
 
-
+		
 		MainTestFunction();
+		ScriptingCalls::RegisterScriptFunctions();
+
 
 		return true;
 	}
@@ -247,6 +253,18 @@ namespace Engine
 		mono_property_set_value(nameProperty, objectInstance, (void**)&nameValue, nullptr);
 		std::string newNameStr(mono_string_to_utf8_checked(nameValue, &error));
 		LOG_INFO("string value from c# setter {0}", newNameStr);
+	}
+
+	void ScriptingAPI::CallTestScript()
+	{
+		MonoClass* testClass = GetClassInAssembly("Game", "TestScript");
+		MonoObject* classInstance = mono_object_new(m_AppDomain, testClass);
+		mono_runtime_object_init(classInstance);
+
+		MonoMethod* method = mono_class_get_method_from_name(testClass, "OnBegin", 0);
+
+		MonoObject* exception = nullptr;
+		mono_runtime_invoke(method, classInstance, nullptr, &exception);
 	}
 
 

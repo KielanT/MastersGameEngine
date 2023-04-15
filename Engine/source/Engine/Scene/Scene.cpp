@@ -6,7 +6,7 @@
 #include "Engine/Physics/Physics.h"
 #include "Engine/Platform/SDLInput.h"
 #include "GameCamera.h"
-
+#include "Engine/Scripting/Scripting.h"
 
 namespace Engine
 {
@@ -24,7 +24,9 @@ namespace Engine
 		//m_MainCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		Physics::Init();
+		Scripting::test();
 	}
+	
 
 	void Scene::UnloadScene()
 	{

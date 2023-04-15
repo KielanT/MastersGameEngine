@@ -7,7 +7,7 @@ namespace Engine
 	{
 	public:
 		static bool InitScripting();
-
+		static void test();
 		static void ShutdownScripting();
 	};
 

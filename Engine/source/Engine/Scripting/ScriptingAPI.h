@@ -34,6 +34,9 @@ namespace Engine
 
 		void ShutdownScripting();
 
+		// Test Vars
+		void CallTestScript();
+
 	private:
 		bool InitMono();
 
@@ -63,6 +66,7 @@ namespace Engine
 
 		void PropertiesAndFieldsTest(_MonoObject* objectInstance);
 
+		
 
 	private:
 		MonoDomain* m_Domain;

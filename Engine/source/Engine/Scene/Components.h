@@ -150,6 +150,7 @@ namespace Engine
 	{
 		// Create Scripts // Require scripting library
 		std::string temp = "";
+
 	};
 
 	struct SkyboxComponent

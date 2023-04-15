@@ -13,6 +13,11 @@ namespace Engine
 		return m_ScriptingAPI->InitScripting();
 	}
 
+	void Scripting::test()
+	{
+		m_ScriptingAPI->CallTestScript();
+	}
+
 	void Scripting::ShutdownScripting()
 	{
 		if (m_ScriptingAPI != nullptr)
