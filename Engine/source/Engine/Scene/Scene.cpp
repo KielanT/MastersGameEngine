@@ -24,7 +24,7 @@ namespace Engine
 		//m_MainCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
 		Physics::Init();
-		Scripting::test();
+
 	}
 	
 
@@ -53,6 +53,16 @@ namespace Engine
 			Entity entity{ entityID, shared_from_this() };
 			
 			Renderer::RendererEntity(entity);
+		}
+	}
+
+	void Scene::BeginScene()
+	{
+		auto scriptView = m_Registry.view<ScriptComponent>();
+		for (auto entityID : scriptView)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			Scripting::GetInstance()->OnBeginEntity(entity);
 		}
 	}
 

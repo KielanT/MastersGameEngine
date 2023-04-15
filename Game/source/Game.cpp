@@ -22,6 +22,7 @@ namespace Engine
 		m_Scene->InitScene();
 		Renderer::SetScene(m_Scene);
 		m_Scene->LoadEntities(AssetPath.string());
+		m_Scene->BeginScene();
 
 		return true;
 	}

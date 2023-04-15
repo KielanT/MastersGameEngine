@@ -1,18 +1,4 @@
-[16:58:59] [debug]: Renderer Initilised
-[16:58:59] [info]: namspace 
-[16:58:59] [info]: name <Module>
-[16:58:59] [info]: namspace 
-[16:58:59] [info]: name CSharpTesting
-[16:58:59] [info]: namspace Game
-[16:58:59] [info]: name TestScript
-[16:58:59] [info]: namspace Engine
-[16:58:59] [info]: name InternalCalls
-[16:58:59] [info]: namspace Engine
-[16:58:59] [info]: name Utility
-[16:58:59] [info]: Float set from c# to c++ 10
-[16:58:59] [info]: Float set & get from c# to c++ 20
-[16:58:59] [info]: string value from c# getter Hello
-[16:58:59] [info]: string value from c# setter Hello, World
-[16:58:59] [info]: Physics Initialising
-[16:58:59] [info]: PhysX 5 Initilised
-[16:58:59] [info]: OnBegin
+[20:39:01] [debug]: Renderer Initilised
+[20:39:01] [info]: Physics Initialising
+[20:39:01] [info]: PhysX 5 Initilised
+[20:39:05] [info]: OnBegin C# call to C++

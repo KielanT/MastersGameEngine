@@ -12,8 +12,8 @@ namespace Game
     {
         public void OnBegin()
         {
-            Utility.UT_LogInfo("OnBegin");
-            Console.WriteLine("OnBegin but console");
+            Utility.UT_LogInfo("OnBegin C# call to C++");
+            Console.WriteLine("OnBegin from C# ");
         }
 
         public void OnUpdate(float deltaTime)

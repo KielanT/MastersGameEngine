@@ -149,7 +149,7 @@ namespace Engine
 	struct ScriptComponent
 	{
 		// Create Scripts // Require scripting library
-		std::string temp = "";
+		std::string ClassName = "TestScript";
 
 	};
 

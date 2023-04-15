@@ -238,6 +238,7 @@ namespace Engine
 				m_Scene->SetActiveCamera();
 				m_PlayState = EPlaystate::Playing;
 				Save();
+				m_Scene->BeginScene();
 			}
 		}
 		else if (m_PlayState == EPlaystate::Playing)

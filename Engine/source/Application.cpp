@@ -21,7 +21,9 @@ namespace Engine
 
 		Renderer::Init(props);
 		
-		if (!Scripting::InitScripting())
+		
+
+		if (!Scripting::GetInstance()->InitScripting())
 		{
 			LOG_ERROR("Failed Creating Scripting Engine");
 		}
@@ -30,7 +32,7 @@ namespace Engine
 	Application::~Application()
 	{
 		Renderer::ShutdownRenderer();
-		Scripting::ShutdownScripting();
+		Scripting::GetInstance()->ShutdownScripting();
 
 	}
 	

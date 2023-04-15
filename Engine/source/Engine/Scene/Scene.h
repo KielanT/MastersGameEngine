@@ -34,6 +34,8 @@ namespace Engine
 		void InitScene();
 		void UnloadScene();
 		void RenderScene();
+
+		void BeginScene();
 		void UpdateScene(float frametime);
 		void RemoveScene();
 
