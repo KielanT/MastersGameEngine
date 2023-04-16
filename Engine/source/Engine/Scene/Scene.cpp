@@ -43,7 +43,7 @@ namespace Engine
 			Entity entity{ entityID, shared_from_this() };
 			Renderer::SetSkyboxEntity(entity);
 			Renderer::RendererEntity(entity);
-			
+			break; // Only is one
 		}
 
 
@@ -78,16 +78,22 @@ namespace Engine
 
 	void Scene::SimulateScene(float frametime)
 	{
+		auto scriptView = m_Registry.view<ScriptComponent>();
+		for (auto entityID : scriptView)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			Scripting::GetInstance()->OnUpdateEntity(entity, frametime);
+		}
+		
+		
 		Physics::Update(frametime);
 
-		m_Registry.each([&](auto entityID)
-			{
-				Entity entity{ entityID, shared_from_this() };
-				if (entity.HasComponent<RigidDynamicComponent>())
-				{
-					Physics::UpdatePhysicsActor(entity);
-				}
-			});
+		auto RDView = m_Registry.view<RigidDynamicComponent>();
+		for (auto entityID : RDView)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			Physics::UpdatePhysicsActor(entity);
+		}
 	}
 
 	void Scene::EditorUpdatePhysicsScene(float frametime)

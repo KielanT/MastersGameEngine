@@ -1,4 +1,7 @@
-[20:39:01] [debug]: Renderer Initilised
-[20:39:01] [info]: Physics Initialising
-[20:39:01] [info]: PhysX 5 Initilised
-[20:39:05] [info]: OnBegin C# call to C++
+[16:10:07] [debug]: Renderer Initilised
+[16:10:07] [info]: Physics Initialising
+[16:10:07] [info]: PhysX 5 Initilised
+[16:10:12] [info]: OnBegin C# call to C++
+[16:10:12] [warning]: OnBegin C# call to C++
+[16:10:12] [debug]: OnBegin C# call to C++
+[16:10:12] [error]: OnBegin C# call to C++

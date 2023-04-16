@@ -26,6 +26,22 @@ namespace Engine
 
 	}
 
+	void ScriptClass::OnUpdate(float deltaTime)
+	{
+		if (m_OnUpdate != nullptr && m_ClassInstance != nullptr)
+		{
+			MonoObject* exception = nullptr;
+
+			// mono_runtime_invoke slow but does a lot of checks
+			// mono_method_get_unmanaged_thunk is faster since it has less overhead (eg best for update functions) (not sure how to use)
+			void* param = &deltaTime;
+			mono_runtime_invoke(m_OnUpdate, m_ClassInstance, &param, &exception);
+		
+
+			// TODO: handle exception
+		}
+	}
+
 	void ScriptClass::SetClass()
 	{
 		MonoImage* image = mono_assembly_get_image(Scripting::GetInstance()->GetAssembly());
@@ -55,6 +71,7 @@ namespace Engine
 			mono_runtime_object_init(m_ClassInstance);
 
 			m_OnBegin = mono_class_get_method_from_name(m_Class, "OnBegin", 0);
+			m_OnUpdate = mono_class_get_method_from_name(m_Class, "OnUpdate", 1);
 
 		}
 	}

@@ -25,4 +25,12 @@ namespace Engine
 		}
 	}
 
+	void ScriptInstance::OnUpdate(float deltaTime)
+	{
+		if (m_ScriptClass != nullptr)
+		{
+			m_ScriptClass->OnUpdate(deltaTime);
+		}
+	}
+
 }

@@ -17,6 +17,7 @@ namespace Engine
 		ScriptClass(const std::string& classNamespace, const std::string& className);
 
 		void OnBegin();
+		void OnUpdate(float deltaTime);
 
 		void InitClassInstance();
 
@@ -32,5 +33,6 @@ namespace Engine
 		MonoObject* m_ClassInstance;
 
 		MonoMethod* m_OnBegin;
+		MonoMethod* m_OnUpdate;
 	};
 }

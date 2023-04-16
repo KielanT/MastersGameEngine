@@ -70,6 +70,18 @@ namespace Engine
 		}
 	}
 
+	void Scripting::OnUpdateEntity(Entity entity, float deltaTime)
+	{
+		const auto& IDComp = entity.GetComponent<IDComponent>();
+		const auto& ScriptComp = entity.GetComponent<ScriptComponent>();
+
+		std::shared_ptr<ScriptInstance> Instance = m_ScriptInstances.find(IDComp.ID)->second;
+		if (Instance != nullptr)
+		{
+			Instance->OnUpdate(deltaTime);
+		}
+	}
+
 	_MonoAssembly* Scripting::GetAssembly()
 	{
 		return m_Assembly;

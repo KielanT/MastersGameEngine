@@ -11,6 +11,7 @@ namespace Engine
 		ScriptInstance(std::shared_ptr<ScriptClass> ScriptClass);
 
 		void OnBegin();
+		void OnUpdate(float deltaTime);
 
 	private:
 		std::shared_ptr<ScriptClass> m_ScriptClass;

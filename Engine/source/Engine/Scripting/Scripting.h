@@ -41,6 +41,7 @@ namespace Engine
 		void ShutdownScripting();
 
 		void OnBeginEntity(Entity entity);
+		void OnUpdateEntity(Entity entity, float deltaTime);
 
 		_MonoAssembly* GetAssembly();
 		MonoDomain* GetAppDomain();

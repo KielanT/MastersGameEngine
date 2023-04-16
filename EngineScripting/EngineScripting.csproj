@@ -56,7 +56,6 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Distribution|x64' ">
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="source\CSharpTesting.cs" />
     <Compile Include="source\Engine\InternalCalls.cs" />
     <Compile Include="source\Engine\TestScript.cs" />
     <Compile Include="source\Engine\Utility.cs" />
