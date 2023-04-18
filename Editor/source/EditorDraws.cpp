@@ -4,6 +4,7 @@
 #include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
 #include <Engine/Physics/Physics.h>
+#include <Engine/Scripting/Scripting.h>
 
 namespace Engine
 {
@@ -50,7 +51,7 @@ namespace Engine
 			}
 			if (entity.HasComponent<ScriptComponent>())
 			{
-				//DrawScriptComponent(m_SelectedEntity.GetComponent<ScriptComponent>());
+				DrawScriptComponent(entity.GetComponent<ScriptComponent>());
 				ImGui::Separator();
 			}
 			if (entity.HasComponent<SkyboxComponent>())
@@ -286,7 +287,39 @@ namespace Engine
 
 	void EditorDraws::DrawScriptComponent(ScriptComponent& comp)
 	{
-		ImGui::Text("Script Component : NOT IMPLEMENTED");
+		if (ImGui::TreeNodeEx("Script Component", m_Flags)) 
+		{
+			ImGui::Text("Script Component : BEING IMPLEMENTED");
+
+			// TODO: Create a script or select from script list
+			std::vector<std::string> ListOfClassNames = Scripting::GetInstance()->GetAllClassNames();
+
+			
+			std::string preview_value = ListOfClassNames[comp.selected];
+			comp.ClassName = ListOfClassNames[comp.selected];
+
+			if (ImGui::BeginCombo("##Script", preview_value.c_str()))
+			{
+				for (int n = 0; n < ListOfClassNames.size(); ++n)
+				{
+					const bool is_selected = (comp.selected == n);
+					if (ImGui::Selectable(ListOfClassNames[n].c_str(), is_selected))
+					{
+						comp.selected = n;
+					}
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+
+
+			// TODO be able to change properties and field's from selected script
+
+			ImGui::TreePop();
+		}
 	}
 
 	void EditorDraws::DrawSkyboxComponent(SkyboxComponent& comp)

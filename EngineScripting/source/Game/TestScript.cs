@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 using Engine;
 
@@ -21,7 +18,7 @@ namespace Game
 
         public void OnUpdate(float deltaTime)
         {
-            //Utility.Logger(LogType.Debug, "OnUpdate C# call to C++");
+            Utility.Logger(LogType.Debug, "OnUpdate from script one");
             Console.WriteLine("OnUpdate:  {0}", deltaTime);
         }
     }

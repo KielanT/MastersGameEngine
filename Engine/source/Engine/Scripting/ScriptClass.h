@@ -21,6 +21,8 @@ namespace Engine
 
 		void InitClassInstance();
 
+		std::string GetMonoClassName();
+
 	private:
 		void SetClass();
 		

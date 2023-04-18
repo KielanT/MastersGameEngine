@@ -21,7 +21,8 @@
     <OutputPath>..\Editor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\Editor\Resources\Scripts\Intermediates\Debug\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -33,7 +34,8 @@
     <OutputPath>..\Editor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\Editor\Resources\Scripts\Intermediates\Release\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -45,7 +47,8 @@
     <OutputPath>..\Editor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\Editor\Resources\Scripts\Intermediates\Distribution\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -57,8 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="source\Engine\InternalCalls.cs" />
-    <Compile Include="source\Engine\TestScript.cs" />
+    <Compile Include="source\Game\TestScript.cs" />
     <Compile Include="source\Engine\Utility.cs" />
+    <Compile Include="source\Game\TestScriptTwo.cs" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

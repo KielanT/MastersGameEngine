@@ -55,8 +55,9 @@ namespace Engine
 	{
 		const auto& IDComp = entity.GetComponent<IDComponent>();
 		const auto& ScriptComp = entity.GetComponent<ScriptComponent>();
-
-		if (CheckClassExists(ScriptComp.ClassName))
+		
+		m_ScriptInstances.clear();
+		if (CheckClassExists(ScriptComp.ClassName) && !m_ClassMaps.empty())
 		{
 			// Create Instance
 			std::shared_ptr<ScriptInstance> Instance = std::make_shared<ScriptInstance>(m_ClassMaps.find(ScriptComp.ClassName)->second);
@@ -75,10 +76,13 @@ namespace Engine
 		const auto& IDComp = entity.GetComponent<IDComponent>();
 		const auto& ScriptComp = entity.GetComponent<ScriptComponent>();
 
-		std::shared_ptr<ScriptInstance> Instance = m_ScriptInstances.find(IDComp.ID)->second;
-		if (Instance != nullptr)
+		if (!m_ScriptInstances.empty()) 
 		{
-			Instance->OnUpdate(deltaTime);
+			std::shared_ptr<ScriptInstance> Instance = m_ScriptInstances.find(IDComp.ID)->second;
+			if (Instance != nullptr)
+			{
+				Instance->OnUpdate(deltaTime);
+			}
 		}
 	}
 
@@ -91,6 +95,22 @@ namespace Engine
 	{
 		return m_AppDomain;
 	}
+
+	std::vector<std::string> Scripting::GetAllClassNames()
+	{
+		// TODO: find a better way this is bad
+		
+		std::vector<std::string> outVector;
+		
+		for (const auto klass : m_ClassMaps) 
+		{
+			outVector.push_back(klass.second->GetMonoClassName());
+		}
+
+		return outVector;
+	}
+
+
 
 	bool Scripting::InitMono()
 	{
@@ -149,7 +169,10 @@ namespace Engine
 
 			std::shared_ptr<ScriptClass> SC = std::make_shared<ScriptClass>(nameSpace, name);
 
-			m_ClassMaps.insert(std::make_pair(name, SC));
+			if ((std::string)nameSpace == "Game")
+			{
+				m_ClassMaps.insert(std::make_pair(name, SC));
+			}
 		}
 	}
 

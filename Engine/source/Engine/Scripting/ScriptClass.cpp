@@ -76,4 +76,9 @@ namespace Engine
 		}
 	}
 
+	std::string ScriptClass::GetMonoClassName()
+	{
+		return m_ClassName;
+	}
+
 }

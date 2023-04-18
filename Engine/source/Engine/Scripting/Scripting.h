@@ -46,6 +46,8 @@ namespace Engine
 		_MonoAssembly* GetAssembly();
 		MonoDomain* GetAppDomain();
 
+		std::vector<std::string> GetAllClassNames();
+
 	private:
 		bool InitMono();
 
