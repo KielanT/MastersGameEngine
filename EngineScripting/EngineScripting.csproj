@@ -59,13 +59,15 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Distribution|x64' ">
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="source\Engine\Component.cs" />
+    <Compile Include="source\Engine\Entity.cs" />
     <Compile Include="source\Engine\InternalCalls.cs" />
-    <Compile Include="source\Game\TestScript.cs" />
     <Compile Include="source\Engine\Utility.cs" />
-    <Compile Include="source\Game\TestScriptTwo.cs" />
+    <Compile Include="source\Engine\Vector3.cs" />
+    <Compile Include="source\Game\Spawner.cs" />
+    <Compile Include="source\Game\TestScript.cs" />
   </ItemGroup>
-  <ItemGroup>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

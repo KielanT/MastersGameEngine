@@ -93,18 +93,19 @@ namespace Engine
 					renderer.RasterizerState = (ERasterizerState)meshRendererNode["Rasterizer"].as<int>();
 					renderer.SamplerState = (ESamplerState)meshRendererNode["Sampler"].as<int>();
 				}
+
 				auto dynamicNode = entityIT["RigidDynamicComponent"];
 				if (dynamicNode)
 				{
-					auto comp = RigidDynamicComponent();
-					comp.Gravity = dynamicNode["Gravity"].as<bool>();
-					comp.Mass = dynamicNode["Mass"].as<float>();
-					comp.MassSpaceInertiaTensor = dynamicNode["MassSpaceInertiaTensor"].as<glm::vec3>();
-					comp.LinearVelocity = dynamicNode["LinearVelocity"].as<glm::vec3>();
-					comp.AngularVelocity = dynamicNode["AngularVelocity"].as<glm::vec3>();
-					comp.AngularDamping = dynamicNode["AngularDamping"].as<float>();
+					auto rigidDynamic = RigidDynamicComponent();
+					rigidDynamic.Gravity = dynamicNode["Gravity"].as<bool>();
+					rigidDynamic.Mass = dynamicNode["Mass"].as<float>();
+					rigidDynamic.MassSpaceInertiaTensor = dynamicNode["MassSpaceInertiaTensor"].as<glm::vec3>();
+					rigidDynamic.LinearVelocity = dynamicNode["LinearVelocity"].as<glm::vec3>();
+					rigidDynamic.AngularVelocity = dynamicNode["AngularVelocity"].as<glm::vec3>();
+					rigidDynamic.AngularDamping = dynamicNode["AngularDamping"].as<float>();
 
-					auto& dynamic = entity.AddComponent<RigidDynamicComponent>(comp);
+					entity.AddComponent<RigidDynamicComponent>(rigidDynamic);
 
 					
 				}
@@ -114,7 +115,8 @@ namespace Engine
 					auto col = CollisionComponents();
 					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
 					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
-					auto& colComp = entity.AddComponent<CollisionComponents>(col);
+					
+					entity.AddComponent<CollisionComponents>(col);
 					
 
 				}
@@ -122,17 +124,25 @@ namespace Engine
 				auto skyboxNode = entityIT["SkyboxComponent"];
 				if (skyboxNode)
 				{
-					auto col = SkyboxComponent();
-					col.MeshPath = skyboxNode["MeshPath"].as<std::string>();
-					col.TexPath = skyboxNode["TexPath"].as<std::string>();
-					entity.AddComponent<SkyboxComponent>(col);
+					auto skybox = SkyboxComponent();
+					skybox.MeshPath = skyboxNode["MeshPath"].as<std::string>();
+					skybox.TexPath = skyboxNode["TexPath"].as<std::string>();
+					entity.AddComponent<SkyboxComponent>(skybox);
 				}
 
 				auto cameraNode = entityIT["CameraComponent"];
 				if (cameraNode)
 				{
-					auto col = CameraComponent();
-					entity.AddComponent<CameraComponent>(col);
+					auto cam = CameraComponent();
+					entity.AddComponent<CameraComponent>(cam);
+				}
+
+				auto scriptNode = entityIT["ScriptComponent"];
+				if (scriptNode)
+				{
+					auto script = ScriptComponent();
+					script.selected = scriptNode["SelectedIndex"].as<int>();
+					entity.AddComponent<ScriptComponent>(script);
 				}
 			}
 		}

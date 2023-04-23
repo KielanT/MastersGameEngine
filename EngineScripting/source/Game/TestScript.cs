@@ -1,11 +1,10 @@
 ﻿using System;
 
-
 using Engine;
 
 namespace Game
 {
-    public class TestScript
+    public class TestScript : Entity
     {
         public void OnBegin()
         {

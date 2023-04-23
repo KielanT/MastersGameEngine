@@ -26,3 +26,5 @@ Entities:
       DepthStencil: 0
       Rasterizer: 2
       Sampler: 0
+    ScriptComponent:
+      SelectedIndex: 0

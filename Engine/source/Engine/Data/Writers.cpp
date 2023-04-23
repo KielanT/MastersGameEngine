@@ -181,12 +181,22 @@ namespace Engine
 
 			out << YAML::EndMap;
 		}
+
 		if(entity.HasComponent<CameraComponent>())
 		{
 			auto& comp = entity.GetComponent<CameraComponent>();
 			out << YAML::Key << "CameraComponent";
 			out << YAML::BeginMap;
 
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			auto& comp = entity.GetComponent<ScriptComponent>();
+			out << YAML::Key << "ScriptComponent";
+			out << YAML::BeginMap;
+			out << YAML::Key << "SelectedIndex" << YAML::Value << comp.selected;
 			out << YAML::EndMap;
 		}
 

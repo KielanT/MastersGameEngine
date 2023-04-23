@@ -77,7 +77,7 @@ namespace Engine
 			Settings(&bShowSettingsWindow);
 
 		
-
+		//ImGui::ShowDemoWindow();
 	}
 
 	void MainEditor::Update(float frameTime)

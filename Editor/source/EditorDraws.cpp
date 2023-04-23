@@ -294,27 +294,35 @@ namespace Engine
 			// TODO: Create a script or select from script list
 			std::vector<std::string> ListOfClassNames = Scripting::GetInstance()->GetAllClassNames();
 
-			
-			std::string preview_value = ListOfClassNames[comp.selected];
-			comp.ClassName = ListOfClassNames[comp.selected];
-
-			if (ImGui::BeginCombo("##Script", preview_value.c_str()))
+			if (!ListOfClassNames.empty())
 			{
-				for (int n = 0; n < ListOfClassNames.size(); ++n)
+
+				std::string preview_value = ListOfClassNames[comp.selected];
+				comp.ClassName = ListOfClassNames[comp.selected];
+
+				if (ImGui::BeginCombo("##Script", preview_value.c_str()))
 				{
-					const bool is_selected = (comp.selected == n);
-					if (ImGui::Selectable(ListOfClassNames[n].c_str(), is_selected))
+					for (int n = 0; n < ListOfClassNames.size(); ++n)
 					{
-						comp.selected = n;
+						const bool is_selected = (comp.selected == n);
+						if (ImGui::Selectable(ListOfClassNames[n].c_str(), is_selected))
+						{
+							comp.selected = n;
+						}
+
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();
 					}
 
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();
+					ImGui::EndCombo();
 				}
-
-				ImGui::EndCombo();
 			}
-
+			else
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+				ImGui::Text("No Script Found");
+				ImGui::PopStyleColor();
+			}
 
 			// TODO be able to change properties and field's from selected script
 
