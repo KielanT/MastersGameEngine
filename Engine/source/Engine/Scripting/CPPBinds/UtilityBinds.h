@@ -1,6 +1,9 @@
 #pragma once
-
+#include "Engine/Scene/Scene.h"
+#include "Engine/Scripting/Scripting.h"
+#include "Engine/Scene/Entity.h"
 #include "mono/metadata/object.h"
+
 
 static void Utility_Log_Debug(MonoString* message)
 {
@@ -16,8 +19,6 @@ static void Utility_Log_Error(MonoString* message)
 	LOG_ERROR(messageStr);
 }
 
-
-
 static void Utility_Log_Info(MonoString* message)
 {
 	MonoError error;
@@ -30,4 +31,19 @@ static void Utility_Log_Warn(MonoString* message)
 	MonoError error;
 	std::string messageStr(mono_string_to_utf8_checked(message, &error));
 	LOG_WARN(messageStr);
+}
+
+static uint64_t Entity_FindEntityByName(MonoString* name)
+{
+	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();
+	if (scene != nullptr)
+	{
+		std::string nameStr(mono_string_to_utf8(name));
+		Engine::Entity entity = scene->FindEntityByName(nameStr);
+
+		if (!entity)
+			return 0;
+
+		return entity.GetUUID();
+	}
 }

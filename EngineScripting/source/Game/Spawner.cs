@@ -13,7 +13,8 @@ namespace Game
         
         public void OnBegin()
         {
-
+            Entity entity = FindEntityByName("Cube");
+            
         }
 
         public void OnUpdate(float deltaTime)

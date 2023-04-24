@@ -62,6 +62,7 @@ namespace Engine
 		for (auto entityID : scriptView)
 		{
 			Entity entity{ entityID, shared_from_this() };
+			Scripting::GetInstance()->SetScene(shared_from_this());
 			Scripting::GetInstance()->OnBeginEntity(entity);
 		}
 	}
@@ -210,6 +211,19 @@ namespace Engine
 			Entity entity{ entityID, shared_from_this() };
 			m_MainCamera = entity.GetComponent<CameraComponent>().Camera;
 		}
+	}
+
+	Entity Scene::FindEntityByName(const std::string& name)
+	{
+		auto IDView = m_Registry.view<IDComponent>();
+		for (auto entityID : IDView)
+		{
+			const auto& id = IDView.get<IDComponent>(entityID);
+			if (id.Tag == name)
+				return Entity{ entityID, shared_from_this() };
+		}
+
+		return {};
 	}
 
 	void Scene::LoadEntity(Entity entity, std::string& assetPath)

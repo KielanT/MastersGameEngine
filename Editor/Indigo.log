@@ -1,3 +1,7 @@
-[10:15:26] [debug]: Renderer Initilised
-[10:15:26] [info]: Physics Initialising
-[10:15:26] [info]: PhysX 5 Initilised
+[12:51:32] [debug]: Renderer Initilised
+[12:51:32] [info]: Physics Initialising
+[12:51:32] [info]: PhysX 5 Initilised
+[12:51:44] [warning]: Cube Found
+[12:51:44] [warning]: 0
+[12:51:44] [warning]: 6341982882276192738
+[12:51:49] [debug]: Renderer shutdown

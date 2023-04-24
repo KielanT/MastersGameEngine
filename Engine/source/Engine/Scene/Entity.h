@@ -47,6 +47,9 @@ namespace Engine
 			return m_EntityHandle;
 		}
 
+		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
+		const std::string& GetName() { return GetComponent<IDComponent>().Tag; }
+
 		bool operator==(const Entity& other) const
 		{
 			return m_EntityHandle == other.m_EntityHandle/* && m_Scene == other.m_Scene*/;

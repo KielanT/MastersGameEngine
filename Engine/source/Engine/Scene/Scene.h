@@ -64,6 +64,8 @@ namespace Engine
 		template<typename T>
 		void OnComponentCreated(Entity entity, T& comp);
 
+		Entity FindEntityByName(const std::string& name);
+
 	private:
 		void LoadEntity(Entity entity, std::string& assetPath);
 
@@ -71,10 +73,7 @@ namespace Engine
 	private:
 		
 		std::shared_ptr<ICamera> m_MainCamera = nullptr;
-		//std::shared_ptr<Camera> m_MainCamera = nullptr;
-		
-		//std::shared_ptr<Model> m_Skybox;
-		//CComPtr<ID3D11ShaderResourceView> SkyboxResourceView;
+
 
 		entt::registry m_Registry;
 

@@ -29,7 +29,6 @@ namespace Engine
 
 	void Game::Render()
 	{
-
 		m_Scene->RenderScene();
 	}
 

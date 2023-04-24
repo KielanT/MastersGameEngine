@@ -24,6 +24,9 @@ namespace Engine
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Utility_Log_Warn(string message);
 
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static ulong Entity_FindByName(string name);
+
         //************************
         //      Transform
         //************************

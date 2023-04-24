@@ -48,6 +48,9 @@ namespace Engine
 
 		std::vector<std::string> GetAllClassNames();
 
+		void SetScene(std::shared_ptr<Scene> scene);
+		std::shared_ptr<Scene> GetScene();
+
 	private:
 		bool InitMono();
 
@@ -72,6 +75,8 @@ namespace Engine
 		std::unordered_map<std::string, std::shared_ptr<ScriptClass>> m_ClassMaps;
 
 		std::unordered_map<UUID, std::shared_ptr<ScriptInstance>> m_ScriptInstances;
+
+		std::shared_ptr<Scene> m_Scene;
 	};
 
 }

@@ -110,7 +110,15 @@ namespace Engine
 		return outVector;
 	}
 
+	void Scripting::SetScene(std::shared_ptr<Scene> scene)
+	{
+		m_Scene = scene;
+	}
 
+	std::shared_ptr<Scene> Scripting::GetScene()
+	{
+		return m_Scene;
+	}
 
 	bool Scripting::InitMono()
 	{
