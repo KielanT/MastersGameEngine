@@ -14,7 +14,7 @@ namespace Engine
 	enum class ScriptFieldDataTypes
 	{
 		None = 0,
-		Float,
+		Float, Int32
 	};
 
 	struct ScriptField

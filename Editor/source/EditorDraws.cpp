@@ -506,6 +506,15 @@ namespace Engine
 				scriptClass->SetFieldValue(name, data);
 			}
 		}
+
+		if (field.FieldDataType == ScriptFieldDataTypes::Int32)
+		{
+			int data = scriptClass->GetFieldValue<int>(name);
+			if (ImGui::DragInt(name.c_str(), &data))
+			{
+				scriptClass->SetFieldValue(name, data);
+			}
+		}
 	}
 
 }

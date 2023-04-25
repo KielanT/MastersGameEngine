@@ -22,9 +22,8 @@ namespace Game
             Utility.Logger(LogType.Debug, floatfield.ToString());
         }
 
-        public int field;
-        public float floatfield = 5.0f;
+        public int intfield = 5;
+        public float floatfield = 7.0f;
         
-        public int Id { get { return field; } set { field = value; } }
     }
 }

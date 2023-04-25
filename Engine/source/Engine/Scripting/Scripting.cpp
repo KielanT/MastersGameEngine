@@ -17,6 +17,7 @@ namespace Engine
 	static std::unordered_map<std::string, ScriptFieldDataTypes> ScriptFieldDataTypeMap =
 	{
 		{"System.Single", ScriptFieldDataTypes::Float},
+		{"System.Int32", ScriptFieldDataTypes::Int32},
 	};
 
 	std::shared_ptr<Scripting> Scripting::GetInstance()
