@@ -360,7 +360,7 @@ namespace Engine
 	template<>
 	void Scene::OnComponentCreated<ScriptComponent>(Entity entity, ScriptComponent& comp)
 	{
-
+		comp.OwnerEntityId = entity.GetUUID();
 	}
 
 	template<>

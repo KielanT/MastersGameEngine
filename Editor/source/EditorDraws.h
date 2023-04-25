@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Engine.h>
+#include <Engine/Scripting/ScriptClass.h>
 
 
 
@@ -36,7 +37,7 @@ namespace Engine
 		int ComboBox(const std::string& label, const char* items[], int size, int& selected);
 		void TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView);
 
-		//void ChangePhysicsCollision();
+		void DrawField(const std::string& name, const ScriptField& field, std::shared_ptr<ScriptClass> scriptClass);
 
 	public:
 

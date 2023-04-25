@@ -11,6 +11,20 @@
 
 namespace Engine
 {
+	enum class ScriptFieldDataTypes
+	{
+		None = 0,
+		Float,
+	};
+
+	struct ScriptField
+	{
+		ScriptFieldDataTypes FieldDataType;
+		std::string ScriptName;
+
+		MonoClassField* ClassField;
+	};
+
 	class ScriptClass
 	{
 	public:
@@ -22,6 +36,36 @@ namespace Engine
 		void InitClassInstance();
 
 		std::string GetMonoClassName();
+		MonoClass* GetClass();
+
+		template<typename T>
+		T GetFieldValue(const std::string& name)
+		{
+			if (auto search = FieldMap.find(name); search != FieldMap.end())
+			{
+				
+				char s_FieldValueBuffer[16];
+				void* value = s_FieldValueBuffer;
+				mono_field_get_value(m_ClassInstance, search->second.ClassField, value);
+				
+				return *(T*)value;
+			}
+		}
+
+		template<typename T>
+		void SetFieldValue(const std::string& name, T value)
+		{
+			if (auto search = FieldMap.find(name); search != FieldMap.end())
+			{
+
+				mono_field_set_value(m_ClassInstance, search->second.ClassField, (void*)&value);
+
+			}
+		}
+
+		std::map<std::string, ScriptField> FieldMap;
+
+
 
 	private:
 		void SetClass();
@@ -36,5 +80,7 @@ namespace Engine
 
 		MonoMethod* m_OnBegin;
 		MonoMethod* m_OnUpdate;
+
+		
 	};
 }

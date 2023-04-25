@@ -14,6 +14,11 @@ namespace Engine
 {
 	std::shared_ptr<Scripting> Scripting::m_Scripting = nullptr;
 
+	static std::unordered_map<std::string, ScriptFieldDataTypes> ScriptFieldDataTypeMap =
+	{
+		{"System.Single", ScriptFieldDataTypes::Float},
+	};
+
 	std::shared_ptr<Scripting> Scripting::GetInstance()
 	{
 		if (m_Scripting == nullptr)
@@ -54,19 +59,17 @@ namespace Engine
 	void Scripting::OnBeginEntity(Entity entity)
 	{
 		const auto& IDComp = entity.GetComponent<IDComponent>();
-		const auto& ScriptComp = entity.GetComponent<ScriptComponent>();
+		auto& ScriptComp = entity.GetComponent<ScriptComponent>();
 		
-		m_ScriptInstances.clear();
-		if (CheckClassExists(ScriptComp.ClassName) && !m_ClassMaps.empty())
+
+		if (!m_ScriptInstances.empty())
 		{
-			// Create Instance
-			std::shared_ptr<ScriptInstance> Instance = std::make_shared<ScriptInstance>(m_ClassMaps.find(ScriptComp.ClassName)->second);
+			std::shared_ptr<ScriptInstance> Instance = m_ScriptInstances.find(IDComp.ID)->second;
+			if (Instance == nullptr)
+			{
+				Scripting::GetInstance()->CreateScriptInstance(ScriptComp);
+			}
 
-			// Add instance to a map using the entity handle
-
-			m_ScriptInstances.insert(std::make_pair(IDComp.ID, Instance));
-
-			// Call script on begin
 			Instance->OnBegin();
 		}
 	}
@@ -108,6 +111,46 @@ namespace Engine
 		}
 
 		return outVector;
+	}
+
+	void Scripting::CreateScriptInstance(ScriptComponent& comp)
+	{
+		if (CheckClassExists(comp.ClassName) && !m_ClassMaps.empty())
+		{
+			// Create Instance
+			std::shared_ptr<ScriptInstance> Instance = std::make_shared<ScriptInstance>(m_ClassMaps.find(comp.ClassName)->second);
+
+			// Add instance to a map using the entity handle
+			m_ScriptInstances.insert(std::make_pair(comp.OwnerEntityId, Instance));
+
+		}
+	}
+
+
+
+
+	std::shared_ptr<ScriptInstance> Scripting::GetScriptInstance(UUID id)
+	{
+		if (auto instance = m_ScriptInstances.find(id); instance != m_ScriptInstances.end())
+		{
+			return instance->second;
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+
+	std::shared_ptr<ScriptClass> Scripting::GetScriptClassByName(std::string name)
+	{
+		if (auto instance = m_ClassMaps.find(name); instance != m_ClassMaps.end())
+		{
+			return instance->second;
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
 	void Scripting::SetScene(std::shared_ptr<Scene> scene)
@@ -181,7 +224,26 @@ namespace Engine
 			{
 				m_ClassMaps.insert(std::make_pair(name, SC));
 			}
+
+			int fieldCount = mono_class_num_fields(SC->GetClass());
+			void* it = nullptr;
+			while (MonoClassField* field = mono_class_get_fields(SC->GetClass(), &it))
+			{
+				const char* fieldName = mono_field_get_name(field);
+
+				MonoType* type = mono_field_get_type(field);
+				std::string typeName = mono_type_get_name(type);
+				
+				ScriptFieldDataTypes FieldDataType = ScriptFieldDataTypes::None;
+				if (auto search = ScriptFieldDataTypeMap.find(typeName); search != ScriptFieldDataTypeMap.end())
+				{
+					FieldDataType = search->second;
+				}
+				
+				SC->FieldMap[fieldName] = { FieldDataType, fieldName, field };
+			}
 		}
+
 	}
 
 	char* Scripting::ReadBytes(const std::string& filepath, uint32_t* outSize)

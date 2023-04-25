@@ -15,6 +15,7 @@
 #include "ScriptClass.h"
 
 #include "Engine/Scene/Scene.h"
+#include "Engine/Scene/Components.h"
 
 class _MonoAssembly;
 class _MonoClass;
@@ -47,9 +48,15 @@ namespace Engine
 		MonoDomain* GetAppDomain();
 
 		std::vector<std::string> GetAllClassNames();
+		void CreateScriptInstance(ScriptComponent& comp);
+		std::shared_ptr<ScriptInstance> GetScriptInstance(UUID id);
+		
+		std::shared_ptr<ScriptClass> GetScriptClassByName(std::string name);
 
 		void SetScene(std::shared_ptr<Scene> scene);
 		std::shared_ptr<Scene> GetScene();
+
+
 
 	private:
 		bool InitMono();

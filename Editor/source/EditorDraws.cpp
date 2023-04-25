@@ -298,7 +298,16 @@ namespace Engine
 			{
 
 				std::string preview_value = ListOfClassNames[comp.selected];
+
+
+
 				comp.ClassName = ListOfClassNames[comp.selected];
+				
+				std::shared_ptr<ScriptInstance> instance = Scripting::GetInstance()->GetScriptInstance(comp.OwnerEntityId);
+				if (instance == nullptr)
+				{
+					Scripting::GetInstance()->CreateScriptInstance(comp);
+				}
 
 				if (ImGui::BeginCombo("##Script", preview_value.c_str()))
 				{
@@ -308,6 +317,8 @@ namespace Engine
 						if (ImGui::Selectable(ListOfClassNames[n].c_str(), is_selected))
 						{
 							comp.selected = n;
+							comp.ClassName = ListOfClassNames[comp.selected];
+							instance->ChangeScriptClass(Scripting::GetInstance()->GetScriptClassByName(comp.ClassName));
 						}
 
 						if (is_selected)
@@ -325,6 +336,15 @@ namespace Engine
 			}
 
 			// TODO be able to change properties and field's from selected script
+			std::shared_ptr<ScriptInstance> instance = Scripting::GetInstance()->GetScriptInstance(comp.OwnerEntityId);
+			if (instance != nullptr)
+			{
+				const auto& fields = instance->GetScriptClass()->FieldMap;
+				for (const auto& [name, field] : fields)
+				{
+					DrawField(name, field, instance->GetScriptClass());
+				}
+			}
 
 			ImGui::TreePop();
 		}
@@ -473,6 +493,18 @@ namespace Engine
 
 			}
 			ImGui::EndDragDropTarget();
+		}
+	}
+
+	void EditorDraws::DrawField(const std::string& name, const ScriptField& field, std::shared_ptr<ScriptClass> scriptClass)
+	{
+		if (field.FieldDataType == ScriptFieldDataTypes::Float)
+		{
+			float data = scriptClass->GetFieldValue<float>(name);
+			if (ImGui::DragFloat(name.c_str(), &data))
+			{
+				scriptClass->SetFieldValue(name, data);
+			}
 		}
 	}
 

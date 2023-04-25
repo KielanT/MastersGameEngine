@@ -33,4 +33,20 @@ namespace Engine
 		}
 	}
 
+	void ScriptInstance::ChangeScriptClass(std::shared_ptr<ScriptClass> newScriptClass)
+	{
+		m_ScriptClass = newScriptClass;
+		m_ScriptClass->InitClassInstance();
+	}
+
+	const std::string ScriptInstance::GetScriptClassName()
+	{
+		return m_ScriptClass->GetMonoClassName();
+	}
+
+	std::shared_ptr<ScriptClass> ScriptInstance::GetScriptClass()
+	{
+		return m_ScriptClass;
+	}
+
 }

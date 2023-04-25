@@ -152,6 +152,8 @@ namespace Engine
 		std::string ClassName = "";
 		int selected = 0;
 
+		UUID OwnerEntityId = 0;
+
 	};
 
 	struct SkyboxComponent

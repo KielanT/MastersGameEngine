@@ -12,6 +12,8 @@ namespace Engine
 	{
 		SetClass();
 		//InitClassInstance(); // Causes a crash called inside instance instead
+
+		
 	}
 
 	void ScriptClass::OnBegin()
@@ -73,12 +75,20 @@ namespace Engine
 			m_OnBegin = mono_class_get_method_from_name(m_Class, "OnBegin", 0);
 			m_OnUpdate = mono_class_get_method_from_name(m_Class, "OnUpdate", 1);
 
+			
+			
+
 		}
 	}
 
 	std::string ScriptClass::GetMonoClassName()
 	{
 		return m_ClassName;
+	}
+
+	MonoClass* ScriptClass::GetClass()
+	{
+		return m_Class;
 	}
 
 }
