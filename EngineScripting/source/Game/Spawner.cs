@@ -19,11 +19,12 @@ namespace Game
 
         public void OnUpdate(float deltaTime)
         {
-            Utility.Logger(LogType.Debug, floatfield.ToString());
+            Utility.Logger(LogType.Debug, stringfield);
         }
 
         public int intfield = 5;
+        public int intfield2 = 6;
         public float floatfield = 7.0f;
-        
+        public string stringfield = "test";
     }
 }

@@ -515,6 +515,34 @@ namespace Engine
 				scriptClass->SetFieldValue(name, data);
 			}
 		}
+
+		if (field.FieldDataType == ScriptFieldDataTypes::String)
+		{
+			/*MonoError error;
+			MonoString* dataStr = scriptClass->GetFieldValue<MonoString*>(name);
+			std::string str = mono_string_to_utf8_checked(dataStr, &error);
+			char buffer[256];
+			memset(buffer, 0, sizeof(buffer));
+			strncpy_s(buffer, str.c_str(), sizeof(buffer));
+			
+			if (ImGui::InputText(name.c_str(), buffer, sizeof(buffer)))
+			{
+				scriptClass->SetFieldValue(name, mono_string_new(mono_domain_get(), buffer));
+			}*/
+
+			//MonoError error;
+			std::string dataStr = scriptClass->GetFieldValue(name);
+			char buffer[256];
+			memset(buffer, 0, sizeof(buffer));
+			strncpy_s(buffer, dataStr.c_str(), sizeof(buffer));
+			
+			if (ImGui::InputText(name.c_str(), buffer, sizeof(buffer)))
+			{
+				dataStr = buffer;
+				scriptClass->SetFieldValue(name, dataStr);
+			}
+		
+		}
 	}
 
 }

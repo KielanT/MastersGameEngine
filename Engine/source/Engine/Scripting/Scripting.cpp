@@ -18,6 +18,7 @@ namespace Engine
 	{
 		{"System.Single", ScriptFieldDataTypes::Float},
 		{"System.Int32", ScriptFieldDataTypes::Int32},
+		{"System.String", ScriptFieldDataTypes::String},
 	};
 
 	std::shared_ptr<Scripting> Scripting::GetInstance()
