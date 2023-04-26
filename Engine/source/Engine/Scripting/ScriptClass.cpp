@@ -23,7 +23,12 @@ namespace Engine
 			MonoObject* exception = nullptr;
 			mono_runtime_invoke(m_OnBegin, m_ClassInstance, nullptr, &exception);
 
-			// TODO: handle exception
+			// TODO: handle exception and sent to a log
+			if (exception)
+			{
+				
+			}
+
 		}
 
 	}
@@ -38,9 +43,12 @@ namespace Engine
 			// mono_method_get_unmanaged_thunk is faster since it has less overhead (eg best for update functions) (not sure how to use)
 			void* param = &deltaTime;
 			mono_runtime_invoke(m_OnUpdate, m_ClassInstance, &param, &exception);
-		
 
 			// TODO: handle exception
+			if (exception)
+			{
+				MonoClass* exceptionClass = mono_object_get_class(exception);
+			}
 		}
 	}
 

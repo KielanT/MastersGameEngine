@@ -226,6 +226,19 @@ namespace Engine
 		return {};
 	}
 
+	Entity Scene::FindEntityByUUID(UUID id)
+	{
+		auto IDView = m_Registry.view<IDComponent>();
+		for (auto entityID : IDView)
+		{
+			const auto& uuid = IDView.get<IDComponent>(entityID);
+			if (uuid.ID == id)
+				return Entity{ entityID, shared_from_this() };
+		}
+
+		return {};
+	}
+
 	void Scene::LoadEntity(Entity entity, std::string& assetPath)
 	{
 		if (entity.HasComponent<MeshRendererComponent>())

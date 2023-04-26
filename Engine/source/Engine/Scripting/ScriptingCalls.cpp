@@ -2,6 +2,7 @@
 #include "ScriptingCalls.h"
 
 #include "CPPBinds/UtilityBinds.h"
+#include "CPPBinds/ComponentBinds.h"
 
 namespace Engine
 {
@@ -16,7 +17,9 @@ namespace Engine
 
 		mono_add_internal_call("Engine.InternalCalls::Entity_FindByName", Entity_FindEntityByName);
 
-
+		// Components
+		mono_add_internal_call("Engine.InternalCalls::Transform_GetPostition", Transform_GetPostition);
+		mono_add_internal_call("Engine.InternalCalls::Transform_SetPostition", Transform_SetPostition);
 	}
 
 	

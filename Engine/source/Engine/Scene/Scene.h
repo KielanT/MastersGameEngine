@@ -65,6 +65,7 @@ namespace Engine
 		void OnComponentCreated(Entity entity, T& comp);
 
 		Entity FindEntityByName(const std::string& name);
+		Entity FindEntityByUUID(UUID id);
 
 	private:
 		void LoadEntity(Entity entity, std::string& assetPath);

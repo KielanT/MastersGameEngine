@@ -32,9 +32,9 @@ namespace Engine
         //************************
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void Transform_SetPostition(Maths.Vector3 vector3);
+        internal extern static void Transform_SetPostition(ulong ID, ref Maths.Vector3 vector3);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void Transform_GetPostition(out Maths.Vector3 vector3);
+        internal extern static void Transform_GetPostition(ulong ID, out Maths.Vector3 vector3);
     }
 }

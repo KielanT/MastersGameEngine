@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Engine;
+using Engine.Maths;
 
 namespace Game
 {
@@ -14,12 +15,22 @@ namespace Game
         public void OnBegin()
         {
             Entity entity = FindEntityByName("Cube");
-            Utility.Logger(LogType.Debug, "OnBegin");
+
+            TransformComponent transformComponent = new TransformComponent();
+            transformComponent.entity = entity;
+            Utility.Logger(LogType.Debug, transformComponent.Position.X.ToString());
+
+            Vector3 vector;
+            vector.X = 0;
+            vector.Y = 0;
+            vector.Z = 0;
+            transformComponent.Position = vector;
+
         }
 
         public void OnUpdate(float deltaTime)
         {
-            Utility.Logger(LogType.Debug, stringfield);
+           // Utility.Logger(LogType.Debug, stringfield);
         }
 
         public int intfield = 5;

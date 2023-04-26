@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Engine.Maths
 {
-    public class Vector3
+    public struct Vector3 // If not a struct exception gets thrown
     {
-        
+        public float X, Y, Z;
 
         public Vector3(float x, float y, float z)
         {
@@ -18,6 +18,6 @@ namespace Engine.Maths
             Z = z;
         }
 
-        public float X, Y, Z;
+        
     }
 }
