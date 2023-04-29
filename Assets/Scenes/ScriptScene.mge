@@ -28,3 +28,4 @@ Entities:
       Sampler: 0
     ScriptComponent:
       SelectedIndex: 0
+      ClassName: Spawner

@@ -197,6 +197,7 @@ namespace Engine
 			out << YAML::Key << "ScriptComponent";
 			out << YAML::BeginMap;
 			out << YAML::Key << "SelectedIndex" << YAML::Value << comp.selected;
+			out << YAML::Key << "ClassName" << YAML::Value << comp.ClassName;
 			out << YAML::EndMap;
 		}
 

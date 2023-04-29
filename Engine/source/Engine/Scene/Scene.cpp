@@ -63,6 +63,13 @@ namespace Engine
 		{
 			Entity entity{ entityID, shared_from_this() };
 			Scripting::GetInstance()->SetScene(shared_from_this());
+			auto& comp = entity.GetComponent<ScriptComponent>();
+			
+			std::shared_ptr<ScriptInstance> instance = Scripting::GetInstance()->GetScriptInstance(comp.OwnerEntityId);
+			if (instance == nullptr)
+			{
+				Scripting::GetInstance()->CreateScriptInstance(comp);
+			}
 			Scripting::GetInstance()->OnBeginEntity(entity);
 		}
 	}
