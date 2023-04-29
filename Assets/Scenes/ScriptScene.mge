@@ -29,3 +29,15 @@ Entities:
     ScriptComponent:
       SelectedIndex: 0
       ClassName: Spawner
+      FieldName: floatfield
+      FieldDataType: 1
+      FieldData: 40
+      FieldName: intfield
+      FieldDataType: 2
+      FieldData: 16
+      FieldName: intfield2
+      FieldDataType: 2
+      FieldData: 20
+      FieldName: stringfield
+      FieldDataType: 3
+      FieldData: te

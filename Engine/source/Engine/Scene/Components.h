@@ -2,6 +2,8 @@
 
 #include "Engine/UUID.h"
 #include "Engine/Scene/GameCamera.h"
+#include "Engine/Scripting/ScriptClass.h"
+
 #include <glm/glm.hpp>
 
 
@@ -153,6 +155,9 @@ namespace Engine
 		int selected = 0;
 
 		UUID OwnerEntityId = 0;
+
+							// Field Name   // Field Data type	     // Field data
+		std::unordered_map<std::string, std::pair<ScriptFieldDataTypes, void*>> FieldMap;
 
 	};
 

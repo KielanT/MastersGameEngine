@@ -318,6 +318,7 @@ namespace Engine
 						{
 							comp.selected = n;
 							comp.ClassName = ListOfClassNames[comp.selected];
+							comp.FieldMap.clear();
 							instance->ChangeScriptClass(Scripting::GetInstance()->GetScriptClassByName(comp.ClassName));
 						}
 
@@ -342,7 +343,7 @@ namespace Engine
 				const auto& fields = instance->GetScriptClass()->FieldMap;
 				for (const auto& [name, field] : fields)
 				{
-					DrawField(name, field, instance->GetScriptClass());
+					DrawField(name, field, instance->GetScriptClass(), comp);
 				}
 			}
 
@@ -496,52 +497,58 @@ namespace Engine
 		}
 	}
 
-	void EditorDraws::DrawField(const std::string& name, const ScriptField& field, std::shared_ptr<ScriptClass> scriptClass)
+	void EditorDraws::DrawField(const std::string& name, const ScriptField& field, std::shared_ptr<ScriptClass> scriptClass, ScriptComponent& comp)
 	{
+		// Used for creating a unique imgui inputs
+		std::string FieldName = "##" + name + std::to_string(comp.OwnerEntityId);
+		void* dataPtr = nullptr;
+
+
 		if (field.FieldDataType == ScriptFieldDataTypes::Float)
 		{
 			float data = scriptClass->GetFieldValue<float>(name);
-			if (ImGui::DragFloat(name.c_str(), &data))
+			bool t = false;
+			if (ImGui::DragFloat(FieldName.c_str(), &data))
 			{
 				scriptClass->SetFieldValue(name, data);
+				dataPtr = new float(data);
 			}
+
+		
 		}
 
 		if (field.FieldDataType == ScriptFieldDataTypes::Int32)
 		{
 			int data = scriptClass->GetFieldValue<int>(name);
-			if (ImGui::DragInt(name.c_str(), &data))
+			if (ImGui::DragInt(FieldName.c_str(), &data))
 			{
 				scriptClass->SetFieldValue(name, data);
+				dataPtr = new int(data);
 			}
 		}
 
 		if (field.FieldDataType == ScriptFieldDataTypes::String)
 		{
-			/*MonoError error;
-			MonoString* dataStr = scriptClass->GetFieldValue<MonoString*>(name);
-			std::string str = mono_string_to_utf8_checked(dataStr, &error);
-			char buffer[256];
-			memset(buffer, 0, sizeof(buffer));
-			strncpy_s(buffer, str.c_str(), sizeof(buffer));
-			
-			if (ImGui::InputText(name.c_str(), buffer, sizeof(buffer)))
-			{
-				scriptClass->SetFieldValue(name, mono_string_new(mono_domain_get(), buffer));
-			}*/
-
 			//MonoError error;
 			std::string dataStr = scriptClass->GetFieldValue(name);
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strncpy_s(buffer, dataStr.c_str(), sizeof(buffer));
 			
-			if (ImGui::InputText(name.c_str(), buffer, sizeof(buffer)))
+			if (ImGui::InputText(FieldName.c_str(), buffer, sizeof(buffer)))
 			{
 				dataStr = buffer;
 				scriptClass->SetFieldValue(name, dataStr);
+				dataPtr = new std::string(dataStr);
 			}
 		
+		}
+
+		
+		if (dataPtr != nullptr)
+		{
+			std::pair<ScriptFieldDataTypes, void*> pairData = std::make_pair(field.FieldDataType, dataPtr);
+			comp.FieldMap[name] = pairData;
 		}
 	}
 

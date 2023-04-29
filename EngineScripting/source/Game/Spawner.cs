@@ -19,6 +19,7 @@ namespace Game
             TransformComponent transformComponent = new TransformComponent();
             transformComponent.entity = entity;
             Utility.Logger(LogType.Debug, transformComponent.Position.X.ToString());
+            Utility.Logger(LogType.Debug, "int " + intfield.ToString());
 
             Vector3 vector;
             vector.X = 0;

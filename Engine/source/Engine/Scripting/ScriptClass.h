@@ -21,7 +21,7 @@ namespace Engine
 	struct ScriptField
 	{
 		ScriptFieldDataTypes FieldDataType;
-		std::string ScriptName;
+		std::string FieldName;
 
 		MonoClassField* ClassField;
 	};
