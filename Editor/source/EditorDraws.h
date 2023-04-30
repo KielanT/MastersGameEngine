@@ -19,19 +19,19 @@ namespace Engine
 
 		void DrawTransformComponent(TransformComponent& comp);
 
-		void DrawMeshRendererComponent(MeshRendererComponent& comp);
+		void DrawMeshRendererComponent(MeshRendererComponent& comp, Entity& entity);
 
-		void DrawTextureComponent(TextureComponent& comp);
+		void DrawTextureComponent(TextureComponent& comp, Entity& entity);
 
-		void DrawCameraComponent(CameraComponent& comp);
+		void DrawCameraComponent(CameraComponent& comp, Entity& entity);
 
-		void DrawRigidDynamic(RigidDynamicComponent& comp);
+		void DrawRigidDynamic(RigidDynamicComponent& comp, Entity& entity);
 
 		void DrawCollisionComponent(CollisionComponents& comp, Entity& entity);
 
-		void DrawScriptComponent(ScriptComponent& comp);
+		void DrawScriptComponent(ScriptComponent& comp, Entity& entity);
 
-		void DrawSkyboxComponent(SkyboxComponent& comp);
+		void DrawSkyboxComponent(SkyboxComponent& comp, Entity& entity);
 
 
 		int ComboBox(const std::string& label, const char* items[], int size, int& selected);

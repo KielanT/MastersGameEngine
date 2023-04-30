@@ -26,22 +26,22 @@ namespace Engine
 			}
 			if (entity.HasComponent<MeshRendererComponent>())
 			{
-				DrawMeshRendererComponent(entity.GetComponent<MeshRendererComponent>());
+				DrawMeshRendererComponent(entity.GetComponent<MeshRendererComponent>(), entity);
 				ImGui::Separator();
 			}
 			if (entity.HasComponent<TextureComponent>())
 			{
-				DrawTextureComponent(entity.GetComponent<TextureComponent>());
+				DrawTextureComponent(entity.GetComponent<TextureComponent>(), entity);
 				ImGui::Separator();
 			}
 			if (entity.HasComponent<CameraComponent>())
 			{
-				DrawCameraComponent(entity.GetComponent<CameraComponent>());
+				DrawCameraComponent(entity.GetComponent<CameraComponent>(), entity);
 				ImGui::Separator();
 			}
 			if (entity.HasComponent<RigidDynamicComponent>())
 			{
-				DrawRigidDynamic(entity.GetComponent<RigidDynamicComponent>());
+				DrawRigidDynamic(entity.GetComponent<RigidDynamicComponent>(), entity);
 				ImGui::Separator();
 			}
 			if (entity.HasComponent<CollisionComponents>())
@@ -51,12 +51,12 @@ namespace Engine
 			}
 			if (entity.HasComponent<ScriptComponent>())
 			{
-				DrawScriptComponent(entity.GetComponent<ScriptComponent>());
+				DrawScriptComponent(entity.GetComponent<ScriptComponent>(), entity);
 				ImGui::Separator();
 			}
 			if (entity.HasComponent<SkyboxComponent>())
 			{
-				DrawSkyboxComponent(entity.GetComponent<SkyboxComponent>());
+				DrawSkyboxComponent(entity.GetComponent<SkyboxComponent>(), entity);
 				ImGui::Separator();
 			}
 		}
@@ -107,11 +107,18 @@ namespace Engine
 		}
 	}
 
-	void EditorDraws::DrawMeshRendererComponent(MeshRendererComponent& comp)
+	void EditorDraws::DrawMeshRendererComponent(MeshRendererComponent& comp, Entity& entity)
 	{
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 		if (ImGui::TreeNodeEx("Mesh Renderer", flags))
 		{
+			ImGui::SameLine();
+			if (ImGui::Button("X"))
+			{
+				entity.RemoveComponent<MeshRendererComponent>();
+				bIsUnsaved = true;
+			}
+
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strncpy_s(buffer, comp.Path.c_str(), sizeof(buffer));
@@ -192,11 +199,16 @@ namespace Engine
 
 	}
 
-	void EditorDraws::DrawTextureComponent(TextureComponent& comp)
+	void EditorDraws::DrawTextureComponent(TextureComponent& comp, Entity& entity)
 	{
 		if (ImGui::TreeNodeEx("Texture", m_Flags))
 		{
-
+			ImGui::SameLine();
+			if (ImGui::Button("X"))
+			{
+				entity.RemoveComponent<TextureComponent>();
+				bIsUnsaved = true;
+			}
 			TextureBoxes("Albedo", comp.Path, comp.ResourceView);
 			TextureBoxes("Roughness", comp.RoughPath, comp.RoughView);
 			TextureBoxes("Normal", comp.NormalPath, comp.NormalView);
@@ -207,11 +219,18 @@ namespace Engine
 		}
 	}
 
-	void EditorDraws::DrawCameraComponent(CameraComponent& comp)
+	void EditorDraws::DrawCameraComponent(CameraComponent& comp, Entity& entity)
 	{
 		
 		if (ImGui::TreeNodeEx("Camera Component", m_Flags)) 
 		{
+			ImGui::SameLine();
+			if (ImGui::Button("X"))
+			{
+				entity.RemoveComponent<CameraComponent>();
+				bIsUnsaved = true;
+			}
+
 			ImGui::Text("Camera Component : IN PROGRESS");
 			//IMGUI_LEFT_LABEL(ImGui::Checkbox, "Active", &comp.IsActive);
 
@@ -221,11 +240,18 @@ namespace Engine
 
 	}
 
-	void EditorDraws::DrawRigidDynamic(RigidDynamicComponent& comp)
+	void EditorDraws::DrawRigidDynamic(RigidDynamicComponent& comp, Entity& entity)
 	{
 
 		if (ImGui::TreeNodeEx("Rigid Dynamic", m_Flags))
 		{
+			ImGui::SameLine();
+			if (ImGui::Button("X"))
+			{
+				entity.RemoveComponent<RigidDynamicComponent>();
+				bIsUnsaved = true;
+			}
+
 			IMGUI_LEFT_LABEL(ImGui::Checkbox, "Gravity", &comp.Gravity);
 			ImGui::SameLine();
 
@@ -265,8 +291,17 @@ namespace Engine
 
 	void EditorDraws::DrawCollisionComponent(CollisionComponents& comp, Entity& entity)
 	{
+
 		if (ImGui::TreeNodeEx("Collision Component", m_Flags))
 		{
+
+			ImGui::SameLine();
+			if(ImGui::Button("X"))
+			{
+				entity.RemoveComponent<CollisionComponents>();
+				bIsUnsaved = true;
+			}
+
 			int ct = static_cast<int>(comp.CollisionType);
 			const char* ColTypeItems[static_cast<int>(ECollisionTypes::ECollisionTypesSize)];
 			ColTypeItems[0] = "Box Collision";
@@ -285,10 +320,17 @@ namespace Engine
 	
 	}
 
-	void EditorDraws::DrawScriptComponent(ScriptComponent& comp)
+	void EditorDraws::DrawScriptComponent(ScriptComponent& comp, Entity& entity)
 	{
 		if (ImGui::TreeNodeEx("Script Component", m_Flags)) 
 		{
+			ImGui::SameLine();
+			if (ImGui::Button("X"))
+			{
+				entity.RemoveComponent<ScriptComponent>();
+				bIsUnsaved = true;
+			}
+
 			ImGui::Text("Script Component : BEING IMPLEMENTED");
 
 			// TODO: Create a script or select from script list
@@ -351,10 +393,17 @@ namespace Engine
 		}
 	}
 
-	void EditorDraws::DrawSkyboxComponent(SkyboxComponent& comp)
+	void EditorDraws::DrawSkyboxComponent(SkyboxComponent& comp, Entity& entity)
 	{
 		if (ImGui::TreeNodeEx("Skybox", m_Flags))
 		{
+			ImGui::SameLine();
+			if (ImGui::Button("X"))
+			{
+				entity.RemoveComponent<SkyboxComponent>();
+				bIsUnsaved = true;
+			}
+
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strncpy_s(buffer, comp.MeshPath.c_str(), sizeof(buffer));
