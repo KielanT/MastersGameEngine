@@ -13,6 +13,7 @@ namespace Game
     {
         public int spawnAmount = 5;
         public string entitySpawnName = "Cube";
+  
 
         // TODO: hide private fields in editor
         private float timer = 0;
@@ -23,7 +24,7 @@ namespace Game
         public void OnBegin()
         {
             entity = FindEntityByName(entitySpawnName);
-           
+
         }
 
         public void OnUpdate(float deltaTime)
@@ -42,14 +43,10 @@ namespace Game
             if (spawnCount < spawnAmount)
             {
                 Entity entity1 = CreateNewEntity(entity, new Vector3(0, 0, 0));
-                //TransformComponent tc = new TransformComponent(entity1);
-                //tc.Scale = new Vector3(0.5f, 0.5f, 0.5f);
-
                 entity1.transformComponent.Scale = new Vector3(0.5f, 0.5f, 0.5f);
 
                 spawnCount++;
             }
-            Utility.Logger(LogType.Info, spawnCount.ToString());
         }
         
     }

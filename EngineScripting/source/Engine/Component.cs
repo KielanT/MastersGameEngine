@@ -30,6 +30,19 @@ namespace Engine
             }
         }
 
+        public Maths.Vector3 Rotation 
+        {
+            get 
+            {
+                InternalCalls.Transform_GetRotation(_entity.ID, out Maths.Vector3 rot);
+                return rot;
+            }
+            set
+            {
+                InternalCalls.Transform_SetRotation(_entity.ID, ref value);
+            }
+        }
+
         public Maths.Vector3 Scale 
         {
             get

@@ -41,9 +41,16 @@ namespace Engine
         internal extern static void Transform_GetPostition(ulong ID, out Maths.Vector3 vector3);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Transform_SetRotation(ulong ID, ref Maths.Vector3 vector3);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Transform_GetRotation(ulong ID, out Maths.Vector3 vector3);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Transform_SetScale(ulong ID, ref Maths.Vector3 vector3);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Transform_GetScale(ulong ID, out Maths.Vector3 vector3);
+
     }
 }
