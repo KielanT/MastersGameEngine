@@ -246,6 +246,20 @@ namespace Engine
 		return {};
 	}
 
+	Entity Scene::CreateEntityByCopy(UUID id)
+	{
+		Entity entity = FindEntityByUUID(id);
+		Entity newEntity = CreateEntity(entity.GetName());
+
+		UUID eID = entity.GetUUID();
+		UUID nID = newEntity.GetUUID();
+
+		CopyComponents(AllComponents{}, entity, newEntity);
+
+		return newEntity;
+	}
+
+
 	void Scene::LoadEntity(Entity entity, std::string& assetPath)
 	{
 		if (entity.HasComponent<MeshRendererComponent>())
@@ -356,6 +370,23 @@ namespace Engine
 	void Scene::OnComponentCreated(Entity entity, T& comp)
 	{
 		
+	}
+
+	template<typename... Component>
+	void Scene::CopyComponents(ComponentGroup<Component...>, Entity src, Entity other)
+	{
+		CopyComponent<Component...>(src, other);
+	}
+
+
+	template<typename ...Component>
+	void Scene::CopyComponent(Entity src, Entity other)
+	{
+		([&]()
+			{
+				if (src.HasComponent<Component>())
+					other.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+			}(), ...);
 	}
 
 	template<>

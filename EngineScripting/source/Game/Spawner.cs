@@ -27,6 +27,7 @@ namespace Game
             vector.Z = 0;
             transformComponent.Position = vector;
 
+            Entity entity1 = CreateNewEntity(entity);
         }
 
         public void OnUpdate(float deltaTime)

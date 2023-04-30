@@ -9,7 +9,7 @@ Entities:
   -  # Entity
     IDComponent:
       ID: 6341982882276192738
-      Tag: Cube
+      Tag: Spawner
     TransformComponent:
       Position: [10, 0, 0]
       Rotation: [0, 0, 0]
@@ -29,15 +29,23 @@ Entities:
     ScriptComponent:
       SelectedIndex: 0
       ClassName: Spawner
-      FieldName: floatfield
-      FieldDataType: 1
-      FieldData: 40
-      FieldName: intfield
-      FieldDataType: 2
-      FieldData: 16
-      FieldName: intfield2
-      FieldDataType: 2
-      FieldData: 20
-      FieldName: stringfield
-      FieldDataType: 3
-      FieldData: te
+  -  # Entity
+    IDComponent:
+      ID: 13127300394730289542
+      Tag: Cube
+    TransformComponent:
+      Position: [-10, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: ""
+      NormalPath: ""
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: Mesh/Basic/Cube.x
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0

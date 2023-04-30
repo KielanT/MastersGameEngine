@@ -47,3 +47,18 @@ static uint64_t Entity_FindEntityByName(MonoString* name)
 		return entity.GetUUID();
 	}
 }
+
+static uint64_t Entity_CreateEntityByCopy(uint64_t id)
+{
+	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();
+	if (scene != nullptr)
+	{
+		Engine::Entity entity = scene->CreateEntityByCopy(id);
+		if (!entity)
+			return 0;
+
+		Engine::Scripting::GetInstance()->OnBeginEntity(entity);
+
+		return entity.GetUUID();
+	}
+}

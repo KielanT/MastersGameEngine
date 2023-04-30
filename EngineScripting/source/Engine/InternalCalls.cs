@@ -27,6 +27,9 @@ namespace Engine
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static ulong Entity_FindByName(string name);
 
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static ulong Entity_CreateEntityByCopy(ulong id);
+
         //************************
         //      Transform
         //************************

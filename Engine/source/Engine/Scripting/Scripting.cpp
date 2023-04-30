@@ -61,11 +61,17 @@ namespace Engine
 	void Scripting::OnBeginEntity(Entity entity)
 	{
 		const auto& IDComp = entity.GetComponent<IDComponent>();
-		auto& ScriptComp = entity.GetComponent<ScriptComponent>();
-		
 
+		if (!entity.HasComponent<ScriptComponent>()) return;
+		
+		auto& ScriptComp = entity.GetComponent<ScriptComponent>();
 		if (!m_ScriptInstances.empty())
 		{
+			if (m_ScriptInstances.count(IDComp.ID) == 0)
+			{
+				Scripting::GetInstance()->CreateScriptInstance(ScriptComp);
+			}
+
 			std::shared_ptr<ScriptInstance> Instance = m_ScriptInstances.find(IDComp.ID)->second;
 			if (Instance == nullptr)
 			{
@@ -83,14 +89,16 @@ namespace Engine
 
 		if (!m_ScriptInstances.empty()) 
 		{
+			if (m_ScriptInstances.count(IDComp.ID) == 0) return;
+
 			std::shared_ptr<ScriptInstance> Instance = m_ScriptInstances.find(IDComp.ID)->second;
 			if (Instance != nullptr)
 			{
 				Instance->OnUpdate(deltaTime);
 			}
-		}
-	}
-
+		}	
+	}		
+			
 	_MonoAssembly* Scripting::GetAssembly()
 	{
 		return m_Assembly;

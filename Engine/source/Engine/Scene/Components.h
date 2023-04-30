@@ -169,4 +169,16 @@ namespace Engine
 		std::string TexPath = "";
 		CComPtr<ID3D11ShaderResourceView> TexMapView;
 	};
+
+
+	template<typename... Component>
+	struct ComponentGroup
+	{
+	};
+
+
+	using AllComponents = ComponentGroup<TransformComponent, TextureComponent, MeshRendererComponent, RigidDynamicComponent,
+		CollisionComponents, ScriptComponent>;
+
 }
+

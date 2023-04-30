@@ -23,6 +23,14 @@ namespace Engine
 			return comp;
 		}
 
+		template<typename T, typename... Args>
+		T& AddOrReplaceComponent(Args&&... args)
+		{
+			T& comp = m_Scene->GetEntityRegistry().emplace_or_replace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			m_Scene->OnComponentCreated<T>(*this, comp);
+			return comp;
+		}
+
 		template<typename T>
 		bool HasComponent()
 		{

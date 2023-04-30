@@ -291,6 +291,7 @@ project "Game"
         "%{IncludeDir.entt}",
         "%{IncludeDir.assimp}",
         "%{IncludeDir.PhysX}",
+        "%{IncludeDir.mono}",
     }
     libdirs
     {

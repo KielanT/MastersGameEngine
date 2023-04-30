@@ -23,5 +23,14 @@ namespace Engine
 
             return new Entity(id);
         }
+
+        public Entity CreateNewEntity(Entity entity)
+        {
+            ulong id = InternalCalls.Entity_CreateEntityByCopy(entity.ID);
+            if (id == 0)
+                return null;
+
+            return new Entity(id);
+        }
     }
 }

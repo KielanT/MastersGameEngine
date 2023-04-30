@@ -16,6 +16,8 @@ namespace Engine
 		mono_add_internal_call("Engine.InternalCalls::Utility_Log_Warn", Utility_Log_Warn);
 
 		mono_add_internal_call("Engine.InternalCalls::Entity_FindByName", Entity_FindEntityByName);
+		mono_add_internal_call("Engine.InternalCalls::Entity_CreateEntityByCopy", Entity_CreateEntityByCopy);
+
 
 		// Components
 		mono_add_internal_call("Engine.InternalCalls::Transform_GetPostition", Transform_GetPostition);

@@ -5,6 +5,7 @@
 #include "Engine/Interfaces/ICamera.h"
 #include "Engine/UUID.h"
 #include "entt/entt.hpp"
+#include "Components.h"
 #include <filesystem>
 
 namespace Engine
@@ -66,6 +67,13 @@ namespace Engine
 
 		Entity FindEntityByName(const std::string& name);
 		Entity FindEntityByUUID(UUID id);
+		Entity CreateEntityByCopy(UUID id);
+
+		template<typename... Component>
+		void CopyComponents(ComponentGroup<Component...>, Entity src, Entity other);
+
+		template<typename... Component>
+		void CopyComponent(Entity src, Entity other);
 
 	private:
 		void LoadEntity(Entity entity, std::string& assetPath);
