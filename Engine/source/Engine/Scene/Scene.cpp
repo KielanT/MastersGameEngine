@@ -57,7 +57,8 @@ namespace Engine
 		{
 			Entity entity{ entityID, shared_from_this() };
 			
-			Renderer::RendererEntity(entity);
+			if(entity.GetComponent<MeshRendererComponent>().bIsVisible)
+				Renderer::RendererEntity(entity);
 		}
 	}
 
@@ -119,14 +120,19 @@ namespace Engine
 
 	void Scene::EditorUpdatePhysicsScene(float frametime)
 	{
-		m_Registry.each([&](auto entityID)
-			{
-				Entity entity{ entityID, shared_from_this() };
-				if (entity.HasComponent<RigidDynamicComponent>() || entity.HasComponent<CollisionComponents>())
-				{
-					Physics::EditorUpdateActors(entity);
-				}
-			});
+		auto RDView = m_Registry.view<RigidDynamicComponent>();
+		for (auto entityID : RDView)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			Physics::EditorUpdateActors(entity);
+		}
+
+		auto ColView = m_Registry.view<CollisionComponents>();
+		for (auto entityID : ColView)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			Physics::EditorUpdateActors(entity);
+		}
 	}
 
 

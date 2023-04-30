@@ -139,6 +139,7 @@ namespace Engine
 			out << YAML::Key << "MeshRendererComponent";
 			out << YAML::BeginMap;
 			out << YAML::Key << "Path" << YAML::Value << comp.Path;
+			out << YAML::Key << "Visible" << YAML::Value << (bool)comp.bIsVisible;
 			out << YAML::Key << "BlendState" << YAML::Value << (int)comp.BlendState;
 			out << YAML::Key << "DepthStencil" << YAML::Value << (int)comp.DepthStencil;
 			out << YAML::Key << "Rasterizer" << YAML::Value << (int)comp.RasterizerState;

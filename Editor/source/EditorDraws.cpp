@@ -6,6 +6,9 @@
 #include <Engine/Physics/Physics.h>
 #include <Engine/Scripting/Scripting.h>
 
+#include <fstream>
+
+
 namespace Engine
 {
 	void EditorDraws::DrawComponents(Entity& entity, std::filesystem::path assetPath)
@@ -118,6 +121,8 @@ namespace Engine
 				entity.RemoveComponent<MeshRendererComponent>();
 				bIsUnsaved = true;
 			}
+
+			IMGUI_LEFT_LABEL(ImGui::Checkbox, "IsVisible", &comp.bIsVisible);
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));

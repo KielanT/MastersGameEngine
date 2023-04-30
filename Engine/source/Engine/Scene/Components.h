@@ -98,6 +98,7 @@ namespace Engine
 	{
 		std::string Path = ""; // Mesh Path
 		std::shared_ptr<Model> Model;
+		bool bIsVisible = true;
 		EBlendState BlendState = EBlendState::NoBlendingState; // BlendState
 		EDepthStencilState DepthStencil = EDepthStencilState::UseDepthBufferState; // Depeth Stencil State
 		ERasterizerState RasterizerState = ERasterizerState::CullNoneState; // Rasterize State
