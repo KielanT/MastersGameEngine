@@ -11,18 +11,18 @@ Entities:
       ID: 13127300394730289542
       Tag: Cube
     TransformComponent:
-      Position: [0, -2.14178085, 0]
+      Position: [0, -1.79999995, 0]
       Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Scale: [0.5, 0.5, 0.5]
     TextureComponent:
-      Path: ""
-      NormalPath: ""
-      RoughPath: ""
-      HeightPath: ""
+      Path: Textures/Marble/Marble04_2K_BaseColor.png
+      NormalPath: Textures/Marble/Marble04_2K_Normal.png
+      RoughPath: Textures/Marble/Marble04_2K_Roughness.png
+      HeightPath: Textures/Marble/Marble04_2K_Height.png
       MetalnessPath: ""
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
-      Visible: true
+      Visible: false
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
@@ -41,7 +41,7 @@ Entities:
       ID: 6341982882276192738
       Tag: Spawner
     TransformComponent:
-      Position: [-10, 0, 0]
+      Position: [-20, -20, 0]
       Rotation: [0, 0, 0]
       Scale: [2, 2, 2]
     TextureComponent:
@@ -60,3 +60,24 @@ Entities:
     ScriptComponent:
       SelectedIndex: 0
       ClassName: Spawner
+  -  # Entity
+    IDComponent:
+      ID: 3716386822656678503
+      Tag: Camera Entity
+    TransformComponent:
+      Position: [0, 0, 80]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      {}
+  -  # Entity
+    IDComponent:
+      ID: 2600565337993855314
+      Tag: Skybox Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [50000, 50000, 50000]
+    SkyboxComponent:
+      MeshPath: Mesh/Basic/Sphere.x
+      TexPath: Textures/grasscube1024.dds

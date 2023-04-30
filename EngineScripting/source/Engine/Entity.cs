@@ -8,19 +8,25 @@ namespace Engine
     {
         public readonly ulong ID;
 
-       public TransformComponent transformComponent;
+        // TODO: Only add components if the entity has them
+        public TransformComponent transformComponent;
+        public RendererComponent rendererComponent;
+        public PhysicsComponent physicsComponent;
 
         // TODO: set this automatically to attached entity
         protected Entity() 
         { 
             ID = 0;
             transformComponent = new TransformComponent(this);
+            rendererComponent = new RendererComponent(this);
         }
        
         public Entity(ulong id) 
         { 
             ID = id;
             transformComponent = new TransformComponent(this);
+            rendererComponent = new RendererComponent(this);
+            physicsComponent = new PhysicsComponent(this);
         }
 
         public Entity FindEntityByName(string name)

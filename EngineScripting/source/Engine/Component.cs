@@ -1,4 +1,5 @@
 ﻿
+using Engine.Maths;
 using System;
 
 
@@ -54,6 +55,40 @@ namespace Engine
             {
                 InternalCalls.Transform_SetScale(_entity.ID, ref value);
             }
+        }
+    }
+
+    public class RendererComponent : Component
+    {
+        public RendererComponent(Entity entity)
+        {
+            _entity = entity;
+        }
+
+        public bool Visible 
+        {
+            get
+            {
+                InternalCalls.Renderer_GetVisible(_entity.ID, out bool vis);
+                return vis;
+            }
+            set 
+            {
+                InternalCalls.Renderer_SetVisible(_entity.ID, ref value);
+            }
+        }
+    }
+
+    public class PhysicsComponent : Component
+    {
+        public PhysicsComponent(Entity entity)
+        {
+            _entity = entity;
+        }
+
+        public void AddForce(Vector3 force)
+        {
+            InternalCalls.Physics_AddForce(_entity.ID, force);
         }
     }
 }

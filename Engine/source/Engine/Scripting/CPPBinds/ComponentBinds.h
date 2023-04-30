@@ -71,3 +71,45 @@ static void Transform_SetScale(Engine::UUID entityID, glm::vec3* scale)
 		transform.Scale = *scale;
 	}
 }
+
+static void Renderer_SetVisible(Engine::UUID entityID, bool* visible)
+{
+	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();
+	if (scene != nullptr)
+	{
+		Engine::Entity entity = scene->FindEntityByUUID(entityID);
+		if (entity.HasComponent<Engine::MeshRendererComponent>())
+		{
+			auto& renderer = entity.GetComponent<Engine::MeshRendererComponent>();
+			renderer.bIsVisible = *visible;
+		}
+	}
+}
+
+static void Renderer_GetVisible(Engine::UUID entityID, bool* visible)
+{
+	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();
+	if (scene != nullptr)
+	{
+		Engine::Entity entity = scene->FindEntityByUUID(entityID);
+		if (entity.HasComponent<Engine::MeshRendererComponent>())
+		{
+			auto& renderer = entity.GetComponent<Engine::MeshRendererComponent>();
+			*visible = renderer.bIsVisible;
+		}
+	}
+}
+
+static void Physics_AddForce(Engine::UUID entityID, physx::PxVec3 force)
+{
+	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();
+	if (scene != nullptr)
+	{
+		Engine::Entity entity = scene->FindEntityByUUID(entityID);
+		if (entity.HasComponent<Engine::RigidDynamicComponent>())
+		{
+			auto& rdc = entity.GetComponent<Engine::RigidDynamicComponent>();
+			rdc.actor->addForce(force);
+		}
+	}
+}
