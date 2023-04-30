@@ -11,33 +11,44 @@ namespace Game
 {
     public class Spawner : Entity
     {
-        
+        public int spawnAmount = 5;
+        public string entitySpawnName = "Cube";
+
+        // TODO: hide private fields in editor
+        private float timer = 0;
+        private float delay = 2;
+        private int spawnCount = 0;
+        private Entity entity;
+
         public void OnBegin()
         {
-            Entity entity = FindEntityByName("Cube");
-
-            TransformComponent transformComponent = new TransformComponent();
-            transformComponent.entity = entity;
-            Utility.Logger(LogType.Debug, transformComponent.Position.X.ToString());
-            Utility.Logger(LogType.Debug, "int " + intfield.ToString());
-
-            Vector3 vector;
-            vector.X = 0;
-            vector.Y = 0;
-            vector.Z = 0;
-            transformComponent.Position = vector;
-
-            Entity entity1 = CreateNewEntity(entity);
+            entity = FindEntityByName(entitySpawnName);
+           
         }
 
         public void OnUpdate(float deltaTime)
         {
-           // Utility.Logger(LogType.Debug, stringfield);
+            timer += deltaTime;
+
+            if (timer > delay)
+            {
+                SpawnNewEntity();
+                timer = 0;
+            }
         }
 
-        public int intfield = 5;
-        public int intfield2 = 6;
-        public float floatfield = 7.0f;
-        public string stringfield = "test";
+        private void SpawnNewEntity()
+        {
+            if (spawnCount < spawnAmount)
+            {
+                Entity entity1 = CreateNewEntity(entity);
+                TransformComponent transformComponent = new TransformComponent();
+                transformComponent.entity = entity1;
+                transformComponent.Position = new Vector3(0, 0, 0);
+
+                spawnCount++;
+            }
+        }
+        
     }
 }

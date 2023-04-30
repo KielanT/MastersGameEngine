@@ -500,7 +500,7 @@ namespace Engine
 	void EditorDraws::DrawField(const std::string& name, const ScriptField& field, std::shared_ptr<ScriptClass> scriptClass, ScriptComponent& comp)
 	{
 		// Used for creating a unique imgui inputs
-		std::string FieldName = "##" + name + std::to_string(comp.OwnerEntityId);
+		std::string FieldName = name + "##" + std::to_string(comp.OwnerEntityId);
 		void* dataPtr = nullptr;
 
 
