@@ -70,3 +70,14 @@ Entities:
       Scale: [1, 1, 1]
     CameraComponent:
       {}
+  -  # Entity
+    IDComponent:
+      ID: 2600565337993855314
+      Tag: Skybox Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [50000, 50000, 50000]
+    SkyboxComponent:
+      MeshPath: Mesh/Basic/Sphere.x
+      TexPath: Textures/grasscube1024.dds
