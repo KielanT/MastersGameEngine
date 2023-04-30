@@ -1,6 +1,7 @@
 #include "epch.h"
 #include "Scene.h"
-#include "Entity.h"
+
+#include "Engine/Scene/Entity.h"
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
 #include "Engine/Physics/Physics.h"
@@ -10,11 +11,15 @@
 
 namespace Engine
 {
+	// TODO: Improve camera - remove global
+	Entity m_CameraEntity;
 
 	Scene::~Scene()
 	{
 		
 	}
+
+	
 
 	void Scene::InitScene()
 	{
@@ -92,6 +97,14 @@ namespace Engine
 			Entity entity{ entityID, shared_from_this() };
 			Scripting::GetInstance()->OnUpdateEntity(entity, frametime);
 		}
+
+		if (m_CameraEntity)
+		{
+			auto& t = m_CameraEntity.GetComponent<TransformComponent>();
+			auto& c = m_CameraEntity.GetComponent<CameraComponent>();
+
+			c.Camera->SetPosition(t.Position);
+		}
 		
 		
 		Physics::Update(frametime);
@@ -115,27 +128,6 @@ namespace Engine
 				}
 			});
 	}
-
-	/*void Scene::SetSkybox(std::string meshPath, std::string texPath, std::string assetPath)
-	{
-		if (!meshPath.empty())
-		{
-			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(assetPath + "/" + meshPath);
-			m_Skybox = std::make_shared<Model>(mesh);
-		}
-
-		std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
-		if (!texPath.empty())
-		{
-			CComPtr<ID3D11Resource> Resource;
-			CComPtr<ID3D11ShaderResourceView> ResourceView;
-
-			if (dx11Render->LoadTexture(assetPath + "/" + texPath, &Resource, &ResourceView))
-			{
-				SkyboxResourceView = ResourceView;
-			}
-		}
-	}*/
 
 
 	Entity Scene::CreateEntity(const std::string& tag)
@@ -217,6 +209,7 @@ namespace Engine
 		{
 			Entity entity{ entityID, shared_from_this() };
 			m_MainCamera = entity.GetComponent<CameraComponent>().Camera;
+			m_CameraEntity = entity;
 		}
 	}
 
