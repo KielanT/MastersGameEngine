@@ -1,4 +1,5 @@
 ﻿
+using Engine.Maths;
 using System;
 
 
@@ -75,6 +76,19 @@ namespace Engine
             {
                 InternalCalls.Renderer_SetVisible(_entity.ID, ref value);
             }
+        }
+    }
+
+    public class PhysicsComponent : Component
+    {
+        public PhysicsComponent(Entity entity)
+        {
+            _entity = entity;
+        }
+
+        public void AddForce(Vector3 force)
+        {
+            InternalCalls.Physics_AddForce(_entity.ID, force);
         }
     }
 }

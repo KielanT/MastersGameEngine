@@ -28,6 +28,7 @@ namespace Engine
 		mono_add_internal_call("Engine.InternalCalls::Transform_SetScale",	   Transform_SetScale);
 		mono_add_internal_call("Engine.InternalCalls::Renderer_SetVisible",	   Renderer_SetVisible);
 		mono_add_internal_call("Engine.InternalCalls::Renderer_GetVisible",    Renderer_GetVisible);
+		mono_add_internal_call("Engine.InternalCalls::Physics_AddForce",	   Physics_AddForce);
 	}
 
 	

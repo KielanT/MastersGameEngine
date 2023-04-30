@@ -83,6 +83,7 @@ namespace Engine
 				physx::PxTransform transform = SetPhysicsTransform(entity.GetComponent<TransformComponent>());
 
 				comp.actor = m_Physics->createRigidDynamic(transform);
+			
 				SetPhysicsSettings(entity.GetComponent<RigidDynamicComponent>());
 				m_Scene->addActor(*comp.actor);
 
@@ -141,6 +142,7 @@ namespace Engine
 		{
 			SetRenderedTransform(entity.GetComponent<TransformComponent>(), entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose());
 			SetPhysicsSettings(entity.GetComponent<RigidDynamicComponent>());
+			
 			
 		}
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<CollisionComponents>())

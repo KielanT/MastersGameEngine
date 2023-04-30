@@ -99,3 +99,17 @@ static void Renderer_GetVisible(Engine::UUID entityID, bool* visible)
 		}
 	}
 }
+
+static void Physics_AddForce(Engine::UUID entityID, physx::PxVec3 force)
+{
+	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();
+	if (scene != nullptr)
+	{
+		Engine::Entity entity = scene->FindEntityByUUID(entityID);
+		if (entity.HasComponent<Engine::RigidDynamicComponent>())
+		{
+			auto& rdc = entity.GetComponent<Engine::RigidDynamicComponent>();
+			rdc.actor->addForce(force);
+		}
+	}
+}

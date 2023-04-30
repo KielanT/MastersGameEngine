@@ -62,5 +62,12 @@ namespace Engine
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Renderer_GetVisible(ulong ID, out bool visible);
 
+        //************************
+        //      Physics
+        //************************
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Physics_AddForce(ulong ID, Maths.Vector3 vector3);
+
     }
 }
