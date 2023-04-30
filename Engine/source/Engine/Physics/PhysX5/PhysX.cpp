@@ -225,7 +225,6 @@ namespace Engine
 		auto position = transform.Position;
 		position.z = -position.z;
 		auto rotation = transform.Rotation;
-		//rotation.z = -rotation.z;
 		glm::quat gQuat = glm::quat(rotation);
 		physx::PxQuat pQuat;
 		pQuat.x = gQuat.x;

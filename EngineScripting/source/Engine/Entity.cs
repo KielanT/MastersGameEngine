@@ -6,15 +6,22 @@ namespace Engine
 {
     public class Entity
     {
-        // TODO: set this automatically to attached entity
-        protected Entity() { ID = 0; }
+        public readonly ulong ID;
 
+       public TransformComponent transformComponent;
+
+        // TODO: set this automatically to attached entity
+        protected Entity() 
+        { 
+            ID = 0;
+            transformComponent = new TransformComponent(this);
+        }
+       
         public Entity(ulong id) 
         { 
             ID = id;
+            transformComponent = new TransformComponent(this);
         }
-
-        public readonly ulong ID;
 
         public Entity FindEntityByName(string name)
         {
