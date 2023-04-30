@@ -88,6 +88,7 @@ namespace Engine
 				{
 					auto& renderer = entity.AddComponent<MeshRendererComponent>();
 					renderer.Path = meshRendererNode["Path"].as<std::string>();
+					renderer.bIsVisible = meshRendererNode["Visible"].as<bool>();
 					renderer.BlendState = (EBlendState)meshRendererNode["BlendState"].as<int>();
 					renderer.DepthStencil = (EDepthStencilState)meshRendererNode["DepthStencil"].as<int>();
 					renderer.RasterizerState = (ERasterizerState)meshRendererNode["Rasterizer"].as<int>();

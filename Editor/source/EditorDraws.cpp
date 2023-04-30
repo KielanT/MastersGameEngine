@@ -122,6 +122,8 @@ namespace Engine
 				bIsUnsaved = true;
 			}
 
+			IMGUI_LEFT_LABEL(ImGui::Checkbox, "IsVisible", &comp.bIsVisible);
+
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strncpy_s(buffer, comp.Path.c_str(), sizeof(buffer));

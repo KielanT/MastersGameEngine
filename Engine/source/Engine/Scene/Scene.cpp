@@ -57,7 +57,8 @@ namespace Engine
 		{
 			Entity entity{ entityID, shared_from_this() };
 			
-			Renderer::RendererEntity(entity);
+			if(entity.GetComponent<MeshRendererComponent>().bIsVisible)
+				Renderer::RendererEntity(entity);
 		}
 	}
 

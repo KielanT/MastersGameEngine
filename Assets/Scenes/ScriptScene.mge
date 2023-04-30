@@ -22,6 +22,7 @@ Entities:
       MetalnessPath: ""
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
+      Visible: true
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
@@ -51,6 +52,7 @@ Entities:
       MetalnessPath: Textures/tufted-leather-metalness.dds
     MeshRendererComponent:
       Path: Mesh/Basic/Teapot.x
+      Visible: true
       BlendState: 0
       DepthStencil: 0
       Rasterizer: 2
