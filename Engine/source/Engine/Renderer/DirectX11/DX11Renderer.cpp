@@ -190,6 +190,7 @@ namespace Engine
             }
         }
 
+
         if (entity.HasComponent<MeshRendererComponent>() && entity.HasComponent<TextureComponent>())
         {
             auto transfrom = entity.GetComponent<TransformComponent>();

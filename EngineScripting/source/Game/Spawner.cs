@@ -41,10 +41,7 @@ namespace Game
         {
             if (spawnCount < spawnAmount)
             {
-                Entity entity1 = CreateNewEntity(entity);
-                TransformComponent transformComponent = new TransformComponent();
-                transformComponent.entity = entity1;
-                transformComponent.Position = new Vector3(0, 0, 0);
+                Entity entity1 = CreateNewEntity(entity, new Vector3(0, 0, 0));
 
                 spawnCount++;
             }

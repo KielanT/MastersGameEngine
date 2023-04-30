@@ -177,7 +177,7 @@ namespace Engine
 	};
 
 
-	using AllComponents = ComponentGroup<TransformComponent, TextureComponent, MeshRendererComponent, RigidDynamicComponent,
+	using AllComponents = ComponentGroup<TextureComponent, MeshRendererComponent, RigidDynamicComponent,
 		CollisionComponents, ScriptComponent>;
 
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Engine.Maths;
+using System;
 
 
 namespace Engine
@@ -24,9 +25,9 @@ namespace Engine
             return new Entity(id);
         }
 
-        public Entity CreateNewEntity(Entity entity)
+        public Entity CreateNewEntity(Entity entity, Vector3 pos)
         {
-            ulong id = InternalCalls.Entity_CreateEntityByCopy(entity.ID);
+            ulong id = InternalCalls.Entity_CreateEntityByCopy(entity.ID, ref pos);
             if (id == 0)
                 return null;
 

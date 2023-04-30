@@ -11,8 +11,8 @@ Entities:
       ID: 13127300394730289542
       Tag: Cube
     TransformComponent:
-      Position: [-10, 0, 0]
-      Rotation: [0, 0, 0]
+      Position: [-15, 0, 0]
+      Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     TextureComponent:
       Path: ""
@@ -26,6 +26,15 @@ Entities:
       DepthStencil: 0
       Rasterizer: 2
       Sampler: 0
+    RigidDynamicComponent:
+      Gravity: true
+      Mass: 0.100000001
+      MassSpaceInertiaTensor: [1, 1, 1]
+      LinearVelocity: [0, 0, 0]
+      AngularVelocity: [0, 0, 0]
+      AngularDamping: 0
+    CollisionComponents:
+      CollisionType: 0
   -  # Entity
     IDComponent:
       ID: 6341982882276192738

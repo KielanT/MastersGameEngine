@@ -48,12 +48,12 @@ static uint64_t Entity_FindEntityByName(MonoString* name)
 	}
 }
 
-static uint64_t Entity_CreateEntityByCopy(uint64_t id)
+static uint64_t Entity_CreateEntityByCopy(uint64_t id, glm::vec3* position)
 {
 	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();
 	if (scene != nullptr)
 	{
-		Engine::Entity entity = scene->CreateEntityByCopy(id);
+		Engine::Entity entity = scene->CreateEntityByCopy(id, *position);
 		if (!entity)
 			return 0;
 

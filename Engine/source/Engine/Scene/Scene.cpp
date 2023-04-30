@@ -48,7 +48,7 @@ namespace Engine
 			Entity entity{ entityID, shared_from_this() };
 			Renderer::SetSkyboxEntity(entity);
 			Renderer::RendererEntity(entity);
-			break; // Only is one
+			break; // Only one
 		}
 
 
@@ -137,6 +137,19 @@ namespace Engine
 		ID.ID = UUID();
 		ID.Tag = tag;
 		entity.AddComponent<TransformComponent>();
+		return entity;
+	}
+
+	Entity Scene::CreateEntity(const std::string& tag, glm::vec3& pos)
+	{
+		Entity entity = { m_Registry.create(), shared_from_this() };
+		auto& ID = entity.AddComponent<IDComponent>();
+		ID.ID = UUID();
+		ID.Tag = tag;
+
+		auto& transform = entity.AddComponent<TransformComponent>();
+		transform.Position = pos;
+
 		return entity;
 	}
 
@@ -239,10 +252,10 @@ namespace Engine
 		return {};
 	}
 
-	Entity Scene::CreateEntityByCopy(UUID id)
+	Entity Scene::CreateEntityByCopy(UUID id, glm::vec3& pos)
 	{
 		Entity entity = FindEntityByUUID(id);
-		Entity newEntity = CreateEntity(entity.GetName());
+		Entity newEntity = CreateEntity(entity.GetName(), pos);
 
 		UUID eID = entity.GetUUID();
 		UUID nID = newEntity.GetUUID();

@@ -46,6 +46,7 @@ namespace Engine
 		//void SetSkybox(std::string meshPath, std::string texPath, std::string assetPath);
 		entt::registry& GetEntityRegistry() { return m_Registry; }
 		Entity CreateEntity(const std::string& tag);
+		Entity CreateEntity(const std::string& tag, glm::vec3& pos);
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& tag);
 		Entity CreateMeshEntity(const std::string& tag);
 		Entity CreateSkyboxEntity(const std::string& tag);
@@ -67,7 +68,7 @@ namespace Engine
 
 		Entity FindEntityByName(const std::string& name);
 		Entity FindEntityByUUID(UUID id);
-		Entity CreateEntityByCopy(UUID id);
+		Entity CreateEntityByCopy(UUID id, glm::vec3& pos);
 
 		template<typename... Component>
 		void CopyComponents(ComponentGroup<Component...>, Entity src, Entity other);
