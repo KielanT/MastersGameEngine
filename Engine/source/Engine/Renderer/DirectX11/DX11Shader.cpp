@@ -10,70 +10,65 @@ namespace Engine
 	{
 		std::filesystem::path currentPath = std::filesystem::current_path();
 
-		std::filesystem::path shaderPath = currentPath;
-		shaderPath.append("Shaders\\");
+		std::filesystem::path shaderPath = currentPath.parent_path();
+		shaderPath.append("Engine\\Shaders\\");
 
 
 		std::filesystem::current_path(shaderPath);
 
-		// Loads the vertex shaders
-		m_PixelLightingVertexShader = LoadVertexShader("PixelLighting_vs");
-		m_BasicTransformVertexShader = LoadVertexShader("BasicTransform_vs");
-		m_SkinningVertexShader = LoadVertexShader("Skinning_vs");
+		// Loads the vertex shader
 		m_PBRVertexShader = LoadVertexShader("PBR_vs");
+		m_SkyboxVertexShader = LoadVertexShader("Skybox_vs");
 
-		// Loads the pixel shaders
-		m_LightModelPixelShader = LoadPixelShader("LightModel_ps");
-		m_PixelLightingPixelShader = LoadPixelShader("PixelLighting_ps");
+		// Loads the pixel shader
 		m_PBRPixelShader = LoadPixelShader("PBR_ps");
+		m_SkyboxPixelShader = LoadPixelShader("Skybox_ps");
 
 		std::filesystem::current_path(currentPath); // Resets path to the main 
 
-		if (m_PixelLightingVertexShader == nullptr || m_BasicTransformVertexShader == nullptr || 
-			m_SkinningVertexShader      == nullptr || m_PBRVertexShader			   == nullptr)
+		if (m_PBRVertexShader == nullptr || m_SkyboxVertexShader == nullptr)
 		{
-			LOG_ERROR("Failed to create Vertex shaders");
+			LOG_ERROR("Failed to create Vertex shader");
 			return false;
 		}
 
-		if (m_LightModelPixelShader == nullptr || m_PixelLightingPixelShader == nullptr ||
-			m_PBRPixelShader        == nullptr)
+		if (m_PBRPixelShader == nullptr || m_SkyboxPixelShader == nullptr)
 		{
-			LOG_ERROR("Failed to create Pixel shaders");
+			LOG_ERROR("Failed to create Pixel shader");
 			return false;
 		}
 
 		return true;
 	}
 
-	CComPtr<ID3D11VertexShader> DX11Shader::GetVertexShader(EVertexShader vertexShader)
+	CComPtr<ID3D11VertexShader> DX11Shader::GetVertexShader(EShaderType type)
 	{
-		switch (vertexShader)
+		switch (type)
 		{
-		case EVertexShader::PixelLightingVertexShader:
-			return m_PixelLightingVertexShader;
+		case Engine::EShaderType::PBR:
+			return m_PBRVertexShader;
 			break;
-		case EVertexShader::BasicTransformVertexShader:
-			return m_BasicTransformVertexShader;
+		case Engine::EShaderType::Skybox:
+			return m_SkyboxVertexShader;
 			break;
-		case EVertexShader::SkinningVertexShader:
-			return m_SkinningVertexShader;
-		case EVertexShader::PBRVertexShader:
+		default:
 			return m_PBRVertexShader;
 			break;
 		}
+
 	}
 
-	CComPtr<ID3D11PixelShader> DX11Shader::GetPixelShader(EPixelShader pixelShader)
+	CComPtr<ID3D11PixelShader> DX11Shader::GetPixelShader(EShaderType type)
 	{
-		switch (pixelShader)
+		switch (type)
 		{
-		case EPixelShader::PixelLightingPixelShader:
-			return m_PixelLightingPixelShader;
+		case Engine::EShaderType::PBR:
+			return m_PBRPixelShader;
 			break;
-		case EPixelShader::LightModelPixelShader:
-			return m_LightModelPixelShader;
-		case EPixelShader::PBRPixelShader:
+		case Engine::EShaderType::Skybox:
+			return m_SkyboxPixelShader;
+			break;
+		default:
 			return m_PBRPixelShader;
 			break;
 		}

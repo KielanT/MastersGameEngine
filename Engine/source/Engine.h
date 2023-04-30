@@ -11,7 +11,10 @@
 
 #include "Engine/Interfaces/ILayer.h"
 #include "Engine/Interfaces/ITexture.h"
+#include "Engine/Interfaces/ICamera.h"
+
 #include "Engine/Scene/Scene.h"
 #include "Engine/Scene/Entity.h"
 
+#include "Engine/Data/Settings.h"
 

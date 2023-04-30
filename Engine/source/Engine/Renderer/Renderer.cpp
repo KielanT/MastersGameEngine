@@ -41,6 +41,11 @@ namespace Engine
 		m_RendererAPI->SetScene(scene);
 	}
 
+	void Renderer::OnResize(int w, int height)
+	{
+		m_RendererAPI->OnResize(w, height);
+	}
+
 	void Renderer::RenderLoop()
 	{
 		if (ImGui::GetCurrentContext() != nullptr)
@@ -49,7 +54,7 @@ namespace Engine
 			ImGui_ImplSDL2_NewFrame();
 			ImGui::NewFrame();
 		}
-;
+;		
 		m_RendererAPI->RenderLoop();
 
 		if (ImGui::GetCurrentContext() != nullptr)
@@ -74,6 +79,10 @@ namespace Engine
 		m_RendererAPI->Renderer(entity);
 	}
 
+	void Renderer::SetSkyboxEntity(Entity entity)
+	{
+		m_RendererAPI->SetSkyboxEntity(entity);
+	}
 
 	WindowProperties Renderer::GetWindowProperties()
 	{

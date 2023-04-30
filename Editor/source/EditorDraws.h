@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Engine.h>
+#include <Engine/Scripting/ScriptClass.h>
 
 
 
@@ -11,30 +12,32 @@ namespace Engine
 	class EditorDraws
 	{
 	public:
-		void DrawComponents(Entity& entity);
+		void DrawComponents(Entity& entity, std::filesystem::path assetPath);
 
 	private:
 		void DrawIDComponent(IDComponent& comp);
 
 		void DrawTransformComponent(TransformComponent& comp);
 
-		void DrawMeshRendererComponent(MeshRendererComponent& comp);
+		void DrawMeshRendererComponent(MeshRendererComponent& comp, Entity& entity);
 
-		void DrawTextureComponent(TextureComponent& comp);
+		void DrawTextureComponent(TextureComponent& comp, Entity& entity);
 
-		void DrawCameraComponent(CameraComponent& comp);
+		void DrawCameraComponent(CameraComponent& comp, Entity& entity);
 
-		void DrawRigidDynamic(RigidDynamicComponent& comp);
+		void DrawRigidDynamic(RigidDynamicComponent& comp, Entity& entity);
 
-		void DrawStaticDynamic(RigidStaticComponent& comp);
+		void DrawCollisionComponent(CollisionComponents& comp, Entity& entity);
 
-		void DrawCollisionComponent(CollisionComponents& comp);
+		void DrawScriptComponent(ScriptComponent& comp, Entity& entity);
 
-		void DrawScriptComponent(ScriptComponent& comp);
+		void DrawSkyboxComponent(SkyboxComponent& comp, Entity& entity);
 
 
-		int RendererComboBox(const std::string& label, const char* items[], int size, int& selected);
+		int ComboBox(const std::string& label, const char* items[], int size, int& selected);
 		void TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView);
+
+		void DrawField(const std::string& name, const ScriptField& field, std::shared_ptr<ScriptClass> scriptClass, ScriptComponent& comp);
 
 	public:
 
@@ -44,6 +47,8 @@ namespace Engine
 		int m_Flags; // ImGuiTreeNodeFlags
 
 		float m_InputNumWidth = 50.0f;
+
+		std::filesystem::path m_AssetPath;
 	};
 }
 

@@ -1,6 +1,7 @@
 
 #include "Engine/Scene/Scene.h"
 #include "Engine/Scene/Entity.h"
+#include "Engine/Data/Settings.h"
 
 #include <yaml-cpp/yaml.h>
 
@@ -16,12 +17,10 @@ namespace Engine
 		void SaveEntity(YAML::Emitter& out, Entity entity);
 	};
 
-	class SceneOrderWriter
+
+	class EditorSettingsWriter
 	{
 	public:
-		void Write(std::string& path, SceneOrder scene);
+		void Write(std::string& path, EditorSettings settings);
 	};
-
-
-
 }

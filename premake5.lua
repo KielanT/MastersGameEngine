@@ -23,6 +23,7 @@ workspace "MastersGameEngine"
     IncludeDir["stbImage"] = "Engine/external/stb_image"
     IncludeDir["yaml_cpp"] = "Engine/external/yaml-cpp/include"
     IncludeDir["PhysX"] = "Engine/external/physx/physx/include"
+    IncludeDir["mono"] = "Engine/external/mono/include"
 
     LibDir = {}
     LibDir["DirectXTK"] = "Engine/external/DirectXTK/%{cfg.buildcfg}"
@@ -30,6 +31,7 @@ workspace "MastersGameEngine"
     LibDir["SDL"] = "Engine/external/SDL/VisualC/x64/%{cfg.buildcfg}"
     LibDir["yaml_cpp"] = "Engine/external/yaml-cpp/lib/%{cfg.buildcfg}"
     LibDir["PhysX"] = "Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}"
+    LibDir["mono"] = "Engine/external/mono/lib/%{cfg.buildcfg}"
 
     include "Engine/external/imgui"
 
@@ -72,6 +74,7 @@ project "Engine"
         "%{IncludeDir.stbImage}",
         "%{IncludeDir.yaml_cpp}",
         "%{IncludeDir.PhysX}",
+        "%{IncludeDir.mono}",
     }
 
     libdirs
@@ -81,6 +84,7 @@ project "Engine"
         "%{LibDir.SDL}",
         "%{LibDir.yaml_cpp}",
         "%{LibDir.PhysX}",
+        "%{LibDir.mono}",
     }
 
     links
@@ -100,13 +104,29 @@ project "Engine"
         "PhysXFoundation_64.lib",
         "PhysXPvdSDK_static_64.lib",
         "PhysXExtensions_static_64.lib",
+
+        --> Mono
+       --> "eglib.lib",
+       --> "libgcmonosgen.lib",
+       --> "libmini-sgen.lib",
+       --> "libmonoruntime-sgen.lib",
+       "libmono-static-sgen.lib",
+       --> "libmonoutils.lib",
+       --> "mono-2.0-sgen.lib",
+       --> "MonoPosixHelper.lib",
+
+       --> Need for mono for static linking
+       "Ws2_32.lib",
+       "Winmm.lib",
+       "Version.lib",
+       "Bcrypt.lib"
     }
 
     files("Engine/source/Engine/Renderer/Shaders/HLSL/*.hlsl")
 	files("Engine/source/Engine/Renderer/Shaders/HLSL/*.hlsli")
 	shadermodel("5.0")
 	
-	local shader_dir = "../Editor/Shaders/"
+    local shader_dir = "../Engine/Shaders/"
 
 	filter("files:**.hlsl")
       flags("ExcludeFromBuild")
@@ -157,6 +177,8 @@ project "Editor"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+   
+
     files
 	{
 		"%{prj.name}/source/**.h",
@@ -175,6 +197,7 @@ project "Editor"
         "%{IncludeDir.entt}",
         "%{IncludeDir.assimp}",
         "%{IncludeDir.PhysX}",
+        "%{IncludeDir.mono}",
     }
     libdirs
     {
@@ -189,7 +212,7 @@ project "Editor"
         "ImGui",
         "d3d11.lib",
         "assimp-vc143-mt.lib",
-
+        
         --> PhysX 5.1
         "PhysX_64.lib",
         "PhysXCommon_64.lib",
@@ -197,6 +220,9 @@ project "Editor"
         "PhysXFoundation_64.lib",
         "PhysXPvdSDK_static_64.lib",
         "PhysXExtensions_static_64.lib",
+
+        "EngineScripting"
+
     }
 
     filter "system:windows"
@@ -215,6 +241,7 @@ project "Editor"
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysX_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXCommon_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXGpu_64.dll %{cfg.targetdir}",
+    
     }
 
     filter "configurations:Debug"
@@ -244,6 +271,8 @@ project "Game"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
     
+    
+
     files
     {
         "%{prj.name}/source/**.h",
@@ -262,6 +291,7 @@ project "Game"
         "%{IncludeDir.entt}",
         "%{IncludeDir.assimp}",
         "%{IncludeDir.PhysX}",
+        "%{IncludeDir.mono}",
     }
     libdirs
     {
@@ -284,6 +314,7 @@ project "Game"
         "PhysXFoundation_64.lib",
         "PhysXPvdSDK_static_64.lib",
         "PhysXExtensions_static_64.lib",
+
     }
     
     filter "system:windows"
@@ -301,8 +332,11 @@ project "Game"
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysX_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXCommon_64.dll %{cfg.targetdir}",
         "{COPY} ../Engine/external/physx/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}/PhysXGpu_64.dll %{cfg.targetdir}",
+        "{COPY} ../Engine/Shaders/*.cso ../Game/Shaders",
     }
     
+   
+
     filter "configurations:Debug"
         defines "E_DEBUG"
         runtime "Debug"
@@ -319,3 +353,31 @@ project "Game"
         defines "NDEBUG"
         runtime "Release"
         optimize "On"
+
+
+project "EngineScripting"
+    location "EngineScripting"
+    kind "SharedLib"
+    language "C#"
+    dotnetframework "4.7.2"
+
+    targetdir ("Editor/Resources/Scripts")
+    objdir ("Editor/Resources/Scripts/Intermediates")
+
+    files
+    {
+        "%{prj.name}/source/**.cs",
+    }
+
+    filter "configurations:Debug"
+        optimize "Off"
+        symbols "Default"
+    
+    filter "configurations:Release"
+        optimize "On"
+        symbols "Default"
+    
+    filter "configurations:Distribution"
+        optimize "FULL"
+        symbols "Off"
+

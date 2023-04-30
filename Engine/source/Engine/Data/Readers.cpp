@@ -1,5 +1,6 @@
 #include "epch.h"
 #include "Readers.h"
+#include <Engine/Physics/Physics.h>
 
 namespace YAML
 {
@@ -45,7 +46,6 @@ namespace Engine
 		if (SceneSettingsNode)
 		{
 			SceneSettings settings;
-			settings.assetFilePath = SceneSettingsNode["AssetPath"].as<std::string>();
 			settings.title = SceneSettingsNode["Title"].as<std::string>();
 			settings.index = SceneSettingsNode["Index"].as<eint32>();
 			settings.ambientColour = SceneSettingsNode["AmbientColour"].as<glm::vec3>();
@@ -58,7 +58,6 @@ namespace Engine
 		auto EntitiesNode = data["Entities"];
 		if (EntitiesNode)
 		{
-			//LOG_DEBUG(EntitiesNode);
 			for (auto entityIT : EntitiesNode)
 			{
 				auto idNode = entityIT["IDComponent"];
@@ -78,6 +77,7 @@ namespace Engine
 				{
 					auto& texture = entity.AddComponent<TextureComponent>();
 					texture.Path = textureNode["Path"].as<std::string>();
+					texture.NormalPath = textureNode["NormalPath"].as<std::string>();
 					texture.RoughPath = textureNode["RoughPath"].as<std::string>();
 					texture.HeightPath = textureNode["HeightPath"].as<std::string>();
 					texture.MetalnessPath = textureNode["MetalnessPath"].as<std::string>();
@@ -88,62 +88,93 @@ namespace Engine
 				{
 					auto& renderer = entity.AddComponent<MeshRendererComponent>();
 					renderer.Path = meshRendererNode["Path"].as<std::string>();
-					renderer.PixelShader = (EPixelShader)meshRendererNode["PixelShader"].as<int>();
-					renderer.VertexShader = (EVertexShader)meshRendererNode["VertexShader"].as<int>();
 					renderer.BlendState = (EBlendState)meshRendererNode["BlendState"].as<int>();
 					renderer.DepthStencil = (EDepthStencilState)meshRendererNode["DepthStencil"].as<int>();
 					renderer.RasterizerState = (ERasterizerState)meshRendererNode["Rasterizer"].as<int>();
 					renderer.SamplerState = (ESamplerState)meshRendererNode["Sampler"].as<int>();
 				}
+
 				auto dynamicNode = entityIT["RigidDynamicComponent"];
 				if (dynamicNode)
 				{
-					auto& dynamic = entity.AddComponent<RigidDynamicComponent>();
+					auto rigidDynamic = RigidDynamicComponent();
+					rigidDynamic.Gravity = dynamicNode["Gravity"].as<bool>();
+					rigidDynamic.Mass = dynamicNode["Mass"].as<float>();
+					rigidDynamic.MassSpaceInertiaTensor = dynamicNode["MassSpaceInertiaTensor"].as<glm::vec3>();
+					rigidDynamic.LinearVelocity = dynamicNode["LinearVelocity"].as<glm::vec3>();
+					rigidDynamic.AngularVelocity = dynamicNode["AngularVelocity"].as<glm::vec3>();
+					rigidDynamic.AngularDamping = dynamicNode["AngularDamping"].as<float>();
+
+					entity.AddComponent<RigidDynamicComponent>(rigidDynamic);
+
 					
 				}
-				auto staticNode = entityIT["RigidStaticComponent"];
-				if (staticNode)
+				auto collisonNode = entityIT["CollisionComponents"];
+				if (collisonNode)
 				{
-					auto& staticC = entity.AddComponent<RigidStaticComponent>();
+					auto col = CollisionComponents();
+					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
+					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
+					
+					entity.AddComponent<CollisionComponents>(col);
+					
 
+				}
+
+				auto skyboxNode = entityIT["SkyboxComponent"];
+				if (skyboxNode)
+				{
+					auto skybox = SkyboxComponent();
+					skybox.MeshPath = skyboxNode["MeshPath"].as<std::string>();
+					skybox.TexPath = skyboxNode["TexPath"].as<std::string>();
+					entity.AddComponent<SkyboxComponent>(skybox);
+				}
+
+				auto cameraNode = entityIT["CameraComponent"];
+				if (cameraNode)
+				{
+					auto cam = CameraComponent();
+					entity.AddComponent<CameraComponent>(cam);
+				}
+
+				auto scriptNode = entityIT["ScriptComponent"];
+				if (scriptNode)
+				{
+					auto script = ScriptComponent();
+					script.selected = scriptNode["SelectedIndex"].as<int>();
+					script.ClassName = scriptNode["ClassName"].as<std::string>();
+					entity.AddComponent<ScriptComponent>(script);
 				}
 			}
 		}
 
 	}
 
-	bool SceneOrderReader::Read(std::string& path, SceneOrder& scene)
+	bool EditorSettingsReader::Read(std::string& path, EditorSettings& settings)
 	{
 		YAML::Node data;
 		try
 		{
-			std::string loadPath = path + "\\order.txt";
+			std::string loadPath = path + "\\Settings.txt";
 			data = YAML::LoadFile(loadPath);
 		}
 		catch (YAML::Exception e)
 		{
-			LOG_ERROR("Failed to load file {0}", e.what());
+			LOG_ERROR("Failed to load file: {0}", e.what());
 			return false;
 		}
 		catch (YAML::ParserException e)
 		{
-			LOG_ERROR("Failed to load file {0}", e.what());
+			LOG_ERROR("Failed to load file: {0}", e.what());
 			return false;
 		}
 
-		if (!data["AssetPath"])
-			return false;
-
-		scene.sceneFilePath = data["AssetPath"].as<std::string>();
-
-		auto node = data["Scenes"];
-		if (node)
+		auto EditorSettings = data["EditorSettings"];
+		if (EditorSettings)
 		{
-			for (auto it : node)
-			{
-				scene.sceneOrderVar.push_back({ it["Title"].as<std::string>() , it["Index"].as<eint32>() });
-			}
+			settings.m_StartUpScene = EditorSettings["StartUpScene"].as<std::string>();
 		}
+
 		return true;
 	}
 }

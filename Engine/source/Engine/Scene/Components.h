@@ -1,8 +1,12 @@
 #pragma once
 
 #include "Engine/UUID.h"
+#include "Engine/Scene/GameCamera.h"
+#include "Engine/Scripting/ScriptClass.h"
 
 #include <glm/glm.hpp>
+
+
 
 // Remove these includes
 #include "Engine/Lab/Model.h"
@@ -10,30 +14,14 @@
 
 namespace Engine
 {
-	enum class EVertexShader
-	{
-		PixelLightingVertexShader = 0,
-		BasicTransformVertexShader,
-		SkinningVertexShader,
-		PBRVertexShader,
 
-		EVertexShaderSize
-	};
-
-	enum class EPixelShader
-	{
-		PixelLightingPixelShader = 0,
-		LightModelPixelShader,
-		PBRPixelShader,
-
-		EPixelShaderSize
-	};
 
 	enum class ESamplerState
 	{
 		Anisotropic4xSampler = 0,
 		TrilinearSampler,
 		PointSampler,
+		BilinearClamp,
 
 		ESamplerStateSize
 	};
@@ -67,6 +55,14 @@ namespace Engine
 		EDepthStencilStateSize
 	};
 
+	enum class ECollisionTypes
+	{
+		Box = 0,
+		Sphere,
+
+		ECollisionTypesSize
+	};
+
 	struct IDComponent
 	{
 		UUID ID;
@@ -80,7 +76,7 @@ namespace Engine
 		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
 	};
 
-	struct TextureComponent
+	struct TextureComponent 
 	{
 		std::string Path = "";
 		CComPtr<ID3D11ShaderResourceView> ResourceView;
@@ -102,8 +98,6 @@ namespace Engine
 	{
 		std::string Path = ""; // Mesh Path
 		std::shared_ptr<Model> Model;
-		EPixelShader PixelShader = EPixelShader::PixelLightingPixelShader; // PixelShader
-		EVertexShader VertexShader = EVertexShader::PixelLightingVertexShader; // VertexShader
 		EBlendState BlendState = EBlendState::NoBlendingState; // BlendState
 		EDepthStencilState DepthStencil = EDepthStencilState::UseDepthBufferState; // Depeth Stencil State
 		ERasterizerState RasterizerState = ERasterizerState::CullNoneState; // Rasterize State
@@ -112,30 +106,79 @@ namespace Engine
 
 	struct CameraComponent
 	{
-		// Create Camera;
-		std::string temp = ""; // Requires at least one var
+		std::shared_ptr<GameCamera> Camera;
+		bool IsActive = false;
 	};
 
 	struct RigidDynamicComponent
 	{
 		physx::PxRigidDynamic* actor;
+		
+		// Gravity on/off
+		bool Gravity = false;
+
+		//Mass;
+		float Mass = 1.0f;
+		glm::vec3 MassSpaceInertiaTensor = glm::vec3(1.0f, 1.0f, 1.0f);
+
+		//velocity
+		glm::vec3 LinearVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 AngularVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
+		float AngularDamping = 0.0f;
+	
 	};
 
-	struct RigidStaticComponent
-	{
-		physx::PxRigidStatic* actor;
-	};
 
-	// Need different colliison components
 	struct CollisionComponents
-	{
-		// Create collisions // Requires physic Library
-		std::string temp = "";
+	{ 
+		physx::PxRigidStatic* actor = nullptr; // Only gets set if the there isn't a rigid dynamic actor
+		ECollisionTypes CollisionType = ECollisionTypes::Box;
+		physx::PxShape* CollisionShape;
+
+		glm::vec3 BoxBounds = glm::vec3(5.0f, 5.0f, 5.0f);
+		float SphereRadius = 5.0f;
+
+		struct SPhysicsMaterial
+		{
+			float staticFriction = 0.5f;
+			float dynamicFriction = 0.5f;
+			float restitution = 0.6f;
+		};
+
+		SPhysicsMaterial PhysicsMaterial;
 	};
 
 	struct ScriptComponent
 	{
-		// Create Scripts // Require scripting library
-		std::string temp = "";
+		// Create Scripts 
+		std::string ClassName = "";
+		int selected = 0;
+
+		UUID OwnerEntityId = 0;
+
+							// Field Name   // Field Data type	     // Field data
+		std::unordered_map<std::string, std::pair<ScriptFieldDataTypes, void*>> FieldMap;
+
 	};
+
+	struct SkyboxComponent
+	{
+		std::string MeshPath = ""; // Mesh Path
+		std::shared_ptr<Model> Model;
+
+		std::string TexPath = "";
+		CComPtr<ID3D11ShaderResourceView> TexMapView;
+	};
+
+
+	template<typename... Component>
+	struct ComponentGroup
+	{
+	};
+
+
+	using AllComponents = ComponentGroup<TextureComponent, MeshRendererComponent, RigidDynamicComponent,
+		CollisionComponents, ScriptComponent>;
+
 }
+

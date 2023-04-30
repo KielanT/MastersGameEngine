@@ -1,5 +1,7 @@
 #include "Engine/Scene/Scene.h"
 #include "Engine/Scene/Entity.h"
+#include "Engine/Data/Settings.h"
+
 #include <yaml-cpp/yaml.h>
 
 namespace Engine
@@ -10,9 +12,10 @@ namespace Engine
 		void Read(std::string& path, std::shared_ptr<Scene> scene);
 	};
 
-	class SceneOrderReader
+	class EditorSettingsReader
 	{
 	public:
-		bool Read(std::string& path, SceneOrder& scene);
+		bool Read(std::string& path, EditorSettings& settings);
 	};
+
 }

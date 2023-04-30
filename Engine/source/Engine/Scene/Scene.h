@@ -1,8 +1,11 @@
 #pragma once
 
+
 #include "Engine/Lab/Camera.h"
+#include "Engine/Interfaces/ICamera.h"
 #include "Engine/UUID.h"
 #include "entt/entt.hpp"
+#include "Components.h"
 #include <filesystem>
 
 namespace Engine
@@ -22,17 +25,6 @@ namespace Engine
 		std::filesystem::path assetFilePath = "";
 	};
 
-	struct SceneOrderVar
-	{
-		std::string title;
-		eint32 index = 0;
-	};
-
-	struct SceneOrder
-	{
-		std::filesystem::path sceneFilePath;
-		std::vector<SceneOrderVar> sceneOrderVar;
-	};
 
 	class Scene : public std::enable_shared_from_this<Scene>
 	{
@@ -43,36 +35,59 @@ namespace Engine
 		void InitScene();
 		void UnloadScene();
 		void RenderScene();
+
+		void BeginScene();
 		void UpdateScene(float frametime);
 		void RemoveScene();
 
 		void SimulateScene(float frametime);
+		void EditorUpdatePhysicsScene(float frametime);
 
+		//void SetSkybox(std::string meshPath, std::string texPath, std::string assetPath);
 		entt::registry& GetEntityRegistry() { return m_Registry; }
 		Entity CreateEntity(const std::string& tag);
+		Entity CreateEntity(const std::string& tag, glm::vec3& pos);
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& tag);
 		Entity CreateMeshEntity(const std::string& tag);
+		Entity CreateSkyboxEntity(const std::string& tag);
+		Entity CreateCameraEntity(const std::string& tag);
 		void DeleteEntity(Entity entity);
-		void LoadEntities();
+		void LoadEntities(std::string assetPath);
+		void SetActiveCamera();
 
 		SceneSettings GetSceneSettings() { return m_SceneSettings; }
 		void SetSceneSettings(SceneSettings& settings) { m_SceneSettings = settings; }
-		std::shared_ptr<Camera> GetCamera() { return m_MainCamera; }
+		//std::shared_ptr<Camera> GetCamera() { return m_MainCamera; }
+		std::shared_ptr<ICamera> GetCamera() { return m_MainCamera; }
+		void SetCamera(std::shared_ptr<ICamera> Cam) { m_MainCamera = Cam; }
 
 		SceneSettings m_SceneSettings;
 
 		template<typename T>
 		void OnComponentCreated(Entity entity, T& comp);
 
-	private:
-		void LoadEntity(Entity entity);
+		Entity FindEntityByName(const std::string& name);
+		Entity FindEntityByUUID(UUID id);
+		Entity CreateEntityByCopy(UUID id, glm::vec3& pos);
 
-		
+		template<typename... Component>
+		void CopyComponents(ComponentGroup<Component...>, Entity src, Entity other);
+
+		template<typename... Component>
+		void CopyComponent(Entity src, Entity other);
 
 	private:
+		void LoadEntity(Entity entity, std::string& assetPath);
+
+	
+	private:
 		
-		std::shared_ptr<Camera> m_MainCamera = nullptr;
+		std::shared_ptr<ICamera> m_MainCamera = nullptr;
+
+
 		entt::registry m_Registry;
+
+		
 
 	};
 

@@ -8,6 +8,8 @@
 #include "backends/imgui_impl_SDL.h"
 #include "backends/imgui_impl_dx11.h"
 
+
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
@@ -41,85 +43,16 @@ namespace Engine
             return false;
         }
 
+        m_Props = props;
 
-        // Get a "render target view" of back-buffer - standard behaviour
-        CComPtr<ID3D11Texture2D> backBuffer;
-        hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
-        if (FAILED(hr))
-        {
-            LOG_ERROR("Error creating swap chain");
-            return false;
-        }
-        hr = m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
-        //backBuffer->Release();
-        if (FAILED(hr))
-        {
-            LOG_ERROR("Error creating render target view");
-            return false;
-        }
+        OnResize(m_Props.Width, m_Props.Height);
 
-
-        //// Create depth buffer to go along with the back buffer ////
-
-        // First create a texture to hold the depth buffer values
-        D3D11_TEXTURE2D_DESC dbDesc = {};
-        dbDesc.Width = props.Width; // Same size as viewport / back-buffer
-        dbDesc.Height = props.Height;
-        dbDesc.MipLevels = 1;
-        dbDesc.ArraySize = 1;
-        dbDesc.Format = DXGI_FORMAT_D32_FLOAT; // Each depth value is a single float
-        dbDesc.SampleDesc.Count = 1;
-        dbDesc.SampleDesc.Quality = 0;
-        dbDesc.Usage = D3D11_USAGE_DEFAULT;
-        dbDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-        dbDesc.CPUAccessFlags = 0;
-        dbDesc.MiscFlags = 0;
-        hr = m_D3DDevice->CreateTexture2D(&dbDesc, nullptr, &m_DepthStencilTexture);
-        if (FAILED(hr))
-        {
-            LOG_ERROR("Error creating depth buffer texture");
-            return false;
-        }
-
-        // Create the depth stencil view - an object to allow us to use the texture
-        // just created as a depth buffer
-        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-        dsvDesc.Format = dbDesc.Format;
-        dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-        dsvDesc.Texture2D.MipSlice = 0;
-        hr = m_D3DDevice->CreateDepthStencilView(m_DepthStencilTexture, &dsvDesc,
-            &m_DepthStencil);
-        if (FAILED(hr))
-        {
-            LOG_ERROR("Error creating depth buffer view");
-            return false;
-        }
-
-        // Create GPU-side constant buffers to receive the gPerFrameConstants and gPerModelConstants structures above
-        // These allow us to pass data from CPU to shaders such as lighting information or matrices
-        // See the comments above where these variable are declared and also the UpdateScene function
-        PerFrameConstantBuffer = CreateConstantBuffer(sizeof(PerFrameConstants));
-        PerModelConstantBuffer = CreateConstantBuffer(sizeof(PerModelConstants));
-        if (PerFrameConstantBuffer == nullptr || PerModelConstantBuffer == nullptr)
-        {
-            LOG_ERROR("Error creating constant buffers");
-            return false;
-        }
-
-        D3D11_VIEWPORT vp;
-        vp.Width = static_cast<FLOAT>(props.Width);
-        vp.Height = static_cast<FLOAT>(props.Height);
-        vp.MinDepth = 0.0f;
-        vp.MaxDepth = 1.0f;
-        vp.TopLeftX = 0;
-        vp.TopLeftY = 0;
-        m_D3DContext->RSSetViewports(1, &vp);
 
         InitiliseSceneTexture(props);
 
         InitGUI();
         
-        m_Props = props;
+      
 
         m_Shader = std::make_shared<DX11Shader>();
         if (!m_Shader->InitShaders())
@@ -135,17 +68,129 @@ namespace Engine
             return false;
         }
 
+        PerFrameConstantBuffer = CreateConstantBuffer(sizeof(PerFrameConstants));
+        PerModelConstantBuffer = CreateConstantBuffer(sizeof(PerModelConstants));
+        if (PerFrameConstantBuffer == nullptr || PerModelConstantBuffer == nullptr)
+        {
+            LOG_ERROR("Error creating constant buffers");
+            return false;
+        }
+
         return true;
 	}
 
+    void DX11Renderer::OnResize(int w, int height)
+    {
+        m_BackBufferRenderTarget.Release();  m_BackBufferRenderTarget = nullptr;
+        m_DepthStencilTexture.Release();  m_DepthStencilTexture = nullptr;
+        m_DepthStencil.Release();  m_DepthStencil = nullptr;
+
+        HRESULT hr = S_OK;
+        m_SwapChain->ResizeBuffers(1, w, height, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+        CComPtr<ID3D11Texture2D> backBuffer;
+        m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
+        
+        
+        m_D3DDevice->CreateRenderTargetView(backBuffer, NULL, &m_BackBufferRenderTarget);
+
+
+        //// Create depth buffer to go along with the back buffer ////
+
+        // First create a texture to hold the depth buffer values
+        D3D11_TEXTURE2D_DESC dbDesc = {};
+        dbDesc.Width = w; // Same size as viewport / back-buffer
+        dbDesc.Height = height;
+        dbDesc.MipLevels = 1;
+        dbDesc.ArraySize = 1;
+        dbDesc.Format = DXGI_FORMAT_D32_FLOAT; // Each depth value is a single float
+        dbDesc.SampleDesc.Count = 1;
+        dbDesc.SampleDesc.Quality = 0;
+        dbDesc.Usage = D3D11_USAGE_DEFAULT;
+        dbDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+        dbDesc.CPUAccessFlags = 0;
+        dbDesc.MiscFlags = 0;
+        hr = m_D3DDevice->CreateTexture2D(&dbDesc, nullptr, &m_DepthStencilTexture);
+        if (FAILED(hr))
+        {
+            LOG_ERROR("Error creating depth buffer texture");
+            //return false;
+        }
+
+        // Create the depth stencil view - an object to allow us to use the texture
+        // just created as a depth buffer
+        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+        dsvDesc.Format = dbDesc.Format;
+        dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+        dsvDesc.Texture2D.MipSlice = 0;
+        hr = m_D3DDevice->CreateDepthStencilView(m_DepthStencilTexture, &dsvDesc,
+            &m_DepthStencil);
+        if (FAILED(hr))
+        {
+            LOG_ERROR("Error creating depth buffer view");
+            //return false;
+        }
+
+
+
+        D3D11_VIEWPORT vp;
+        vp.Width = static_cast<FLOAT>(w);
+        vp.Height = static_cast<FLOAT>(height);
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        m_D3DContext->RSSetViewports(1, &vp);
+
+        m_Props.Width = w;
+        m_Props.Height = height;
+
+        if (m_Scene != nullptr) 
+        {
+            if (m_Scene->GetCamera() != nullptr)
+            {
+                m_Scene->GetCamera()->SetLens(0.25f * glm::pi<float>(), w / height, 1.0f, 1000.0f);
+            }
+        }
+
+    }
+
     void DX11Renderer::RenderLoop()
     {
+        
         RenderScene();
         Layer::Render();
     }
 
     void DX11Renderer::Renderer(Entity entity)
     {
+        if (entity.HasComponent<SkyboxComponent>())
+        {
+            auto transfrom = entity.GetComponent<TransformComponent>();
+            auto skybox = entity.GetComponent<SkyboxComponent>();
+
+            if (skybox.Model != nullptr)
+            {
+                skybox.Model->SetPosition(transfrom.Position);
+                skybox.Model->SetRotation(transfrom.Rotation);
+                skybox.Model->SetScale(transfrom.Scale);
+
+                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(EShaderType::Skybox), nullptr, 0);
+                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(EShaderType::Skybox), nullptr, 0);
+
+                m_D3DContext->PSSetShaderResources(0, 1, &skybox.TexMapView.p);
+
+                CComPtr<ID3D11SamplerState> sampler = m_States->GetSamplerState(ESamplerState::TrilinearSampler);
+                m_D3DContext->PSSetSamplers(0, 1, &sampler.p);
+
+                m_D3DContext->OMSetBlendState(m_States->GetBlendState(EBlendState::NoBlendingState), nullptr, 0xffffff);
+                m_D3DContext->OMSetDepthStencilState(m_States->GetDepthStencilState(EDepthStencilState::NoDepthBufferState), 0);
+                m_D3DContext->RSSetState(m_States->GetRasterizerState(ERasterizerState::CullNoneState));
+
+                entity.GetComponent<SkyboxComponent>().Model->Render();
+            }
+        }
+
+
         if (entity.HasComponent<MeshRendererComponent>() && entity.HasComponent<TextureComponent>())
         {
             auto transfrom = entity.GetComponent<TransformComponent>();
@@ -157,9 +202,9 @@ namespace Engine
                 mesh.Model->SetPosition(transfrom.Position);
                 mesh.Model->SetRotation(transfrom.Rotation);
                 mesh.Model->SetScale(transfrom.Scale);
-                
-                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(mesh.VertexShader), nullptr, 0);
-                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(mesh.PixelShader), nullptr, 0);
+
+                m_D3DContext->VSSetShader(m_Shader->GetVertexShader(EShaderType::PBR), nullptr, 0);
+                m_D3DContext->PSSetShader(m_Shader->GetPixelShader(EShaderType::PBR), nullptr, 0);
                 
                 m_D3DContext->PSSetShaderResources(0, 1, &texture.ResourceView.p);
                 m_D3DContext->PSSetShaderResources(1, 1, &texture.RoughView.p);
@@ -167,8 +212,19 @@ namespace Engine
                 m_D3DContext->PSSetShaderResources(3, 1, &texture.HeightView.p);
                 m_D3DContext->PSSetShaderResources(4, 1, &texture.MetalnessView.p);
                 
-                CComPtr<ID3D11SamplerState> sampler = m_States->GetSamplerState(mesh.SamplerState);
+                if (RadianceMap != nullptr) 
+                {
+                    m_D3DContext->PSSetShaderResources(5, 1, &RadianceMap.p);
+                    PerFrameConstants.enableIBL = true;
+                }
+                else 
+                {
+                    PerFrameConstants.enableIBL = false;
+                }
+
+                CComPtr<ID3D11SamplerState> sampler =  m_States->GetSamplerState(mesh.SamplerState);
                 m_D3DContext->PSSetSamplers(0, 1, &sampler.p);
+
                 
                 m_D3DContext->OMSetBlendState(m_States->GetBlendState(mesh.BlendState), nullptr, 0xffffff);
                 m_D3DContext->OMSetDepthStencilState(m_States->GetDepthStencilState(mesh.DepthStencil), 0);
@@ -176,6 +232,14 @@ namespace Engine
   
                 entity.GetComponent<MeshRendererComponent>().Model->Render();
             }
+        }
+    }
+
+    void DX11Renderer::SetSkyboxEntity(Entity entity)
+    {
+        if (entity.HasComponent<SkyboxComponent>()) 
+        {
+            RadianceMap = entity.GetComponent<SkyboxComponent>().TexMapView;
         }
     }
 
@@ -271,6 +335,7 @@ namespace Engine
             return false;
             LOG_ERROR("Image Data is Null");
         }
+
         // Create texture
         D3D11_TEXTURE2D_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
@@ -315,7 +380,7 @@ namespace Engine
         if (filename.size() >= 4 &&
             std::equal(dds.rbegin(), dds.rend(), filename.rbegin(), [](unsigned char a, unsigned char b) { return std::tolower(a) == std::tolower(b); }))
         {
-            return SUCCEEDED(DirectX::CreateDDSTextureFromFile(m_D3DDevice, CA2CT(filename.c_str()), texture, textureSRV));
+            return SUCCEEDED(DirectX::CreateDDSTextureFromFile(m_D3DDevice, m_D3DContext, CA2CT(filename.c_str()), texture, textureSRV));
         }
         else
         {
@@ -349,7 +414,7 @@ namespace Engine
         {
             PerFrameConstants.ambientColour = m_Scene->GetSceneSettings().ambientColour;
             PerFrameConstants.specularPower = m_Scene->GetSceneSettings().specularPower;
-            PerFrameConstants.cameraPosition = m_Scene->GetCamera()->Position();
+            PerFrameConstants.cameraPosition = m_Scene->GetCamera()->GetPosition();
             bgColour = m_Scene->GetSceneSettings().backgroundColour;
         }
 
@@ -358,13 +423,23 @@ namespace Engine
         m_D3DContext->OMSetRenderTargets(1, &m_SceneRenderTarget.p, m_DepthStencil);
         
         m_D3DContext->ClearRenderTargetView(m_BackBufferRenderTarget, &bgColour.r);
-        m_D3DContext->ClearRenderTargetView(m_SceneRenderTarget, &bgColour.r);
         m_D3DContext->ClearDepthStencilView(m_DepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+        m_D3DContext->ClearRenderTargetView(m_SceneRenderTarget, &bgColour.r);
+        
+        D3D11_VIEWPORT vp;
+        vp.Width = static_cast<FLOAT>(m_Props.Width);
+        vp.Height = static_cast<FLOAT>(m_Props.Height);
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        m_D3DContext->RSSetViewports(1, &vp);
 
         // Render the scene from the main camera
         RenderSceneFromCamera();
 
-        m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, nullptr);
+       m_D3DContext->OMSetRenderTargets(1, &m_BackBufferRenderTarget.p, m_DepthStencil);
+       m_D3DContext->ClearDepthStencilView(m_DepthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     }
 
@@ -372,9 +447,9 @@ namespace Engine
     {
         if (m_Scene != nullptr && m_Scene->GetCamera() != nullptr)
         {
-            PerFrameConstants.viewMatrix = m_Scene->GetCamera()->ViewMatrix();
-            PerFrameConstants.EngineionMatrix = m_Scene->GetCamera()->EngineionMatrix();
-            PerFrameConstants.viewEngineionMatrix = m_Scene->GetCamera()->ViewEngineionMatrix();
+            PerFrameConstants.viewMatrix = m_Scene->GetCamera()->GetViewMatrix();
+            PerFrameConstants.EngineionMatrix = m_Scene->GetCamera()->GetProjectionMatrix();
+            PerFrameConstants.viewEngineionMatrix = m_Scene->GetCamera()->GetViewProjectionMatrix();
         }
         UpdateConstantBuffer(m_D3DContext, PerFrameConstantBuffer, PerFrameConstants);
 
@@ -384,6 +459,7 @@ namespace Engine
 
         if (m_Scene != nullptr)
         {
+
             m_Scene->RenderScene();
         }
     }

@@ -82,7 +82,6 @@ namespace Engine
 	{
 		out << YAML::Key << "SceneSettings";
 		out << YAML::BeginMap;
-		out << YAML::Key << "AssetPath" << YAML::Value << scene->GetSceneSettings().assetFilePath.string();
 		out << YAML::Key << "Title" << YAML::Value << scene->GetSceneSettings().title;
 		out << YAML::Key << "Index" << YAML::Value << scene->GetSceneSettings().index;
 		out << YAML::Key << "AmbientColour" << YAML::Value << scene->GetSceneSettings().ambientColour;
@@ -126,6 +125,7 @@ namespace Engine
 			out << YAML::Key << "TextureComponent";
 			out << YAML::BeginMap;
 			out << YAML::Key << "Path" << YAML::Value << comp.Path;
+			out << YAML::Key << "NormalPath" << YAML::Value << comp.NormalPath;
 			out << YAML::Key << "RoughPath" << YAML::Value << comp.RoughPath;
 			out << YAML::Key << "HeightPath" << YAML::Value << comp.HeightPath;
 			out << YAML::Key << "MetalnessPath" << YAML::Value << comp.MetalnessPath;
@@ -139,8 +139,6 @@ namespace Engine
 			out << YAML::Key << "MeshRendererComponent";
 			out << YAML::BeginMap;
 			out << YAML::Key << "Path" << YAML::Value << comp.Path;
-			out << YAML::Key << "PixelShader" << YAML::Value << (int)comp.PixelShader;
-			out << YAML::Key << "VertexShader" << YAML::Value << (int)comp.VertexShader;
 			out << YAML::Key << "BlendState" << YAML::Value << (int)comp.BlendState;
 			out << YAML::Key << "DepthStencil" << YAML::Value << (int)comp.DepthStencil;
 			out << YAML::Key << "Rasterizer" << YAML::Value << (int)comp.RasterizerState;
@@ -154,43 +152,90 @@ namespace Engine
 			auto& comp = entity.GetComponent<RigidDynamicComponent>();
 			out << YAML::Key << "RigidDynamicComponent";
 			out << YAML::BeginMap;
+			out << YAML::Key << "Gravity" << YAML::Value << (bool)comp.Gravity;
+			out << YAML::Key << "Mass" << YAML::Value << (float)comp.Mass;
+			out << YAML::Key << "MassSpaceInertiaTensor" << YAML::Value << comp.MassSpaceInertiaTensor;
+			out << YAML::Key << "LinearVelocity" << YAML::Value << comp.LinearVelocity;
+			out << YAML::Key << "AngularVelocity" << YAML::Value << comp.AngularVelocity;
+			out << YAML::Key << "AngularDamping" << YAML::Value << (float)comp.AngularDamping;
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<CollisionComponents>())
+		{
+			auto& comp = entity.GetComponent<CollisionComponents>();
+			out << YAML::Key << "CollisionComponents";
+			out << YAML::BeginMap;
+			out << YAML::Key << "CollisionType" << YAML::Value << (int)comp.CollisionType;
+			
+			out << YAML::EndMap;
+		}
+
+		if (entity.HasComponent<SkyboxComponent>())
+		{
+			auto& comp = entity.GetComponent<SkyboxComponent>();
+			out << YAML::Key << "SkyboxComponent";
+			out << YAML::BeginMap;
+			out << YAML::Key << "MeshPath" << YAML::Value << comp.MeshPath;
+			out << YAML::Key << "TexPath" << YAML::Value << comp.TexPath;
 
 			out << YAML::EndMap;
 		}
 
-		if (entity.HasComponent<RigidStaticComponent>())
+		if(entity.HasComponent<CameraComponent>())
 		{
-			auto& comp = entity.GetComponent<RigidStaticComponent>();
-			out << YAML::Key << "RigidStaticComponent";
+			auto& comp = entity.GetComponent<CameraComponent>();
+			out << YAML::Key << "CameraComponent";
 			out << YAML::BeginMap;
 
 			out << YAML::EndMap;
 		}
+
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			auto& comp = entity.GetComponent<ScriptComponent>();
+			out << YAML::Key << "ScriptComponent";
+			out << YAML::BeginMap;
+			out << YAML::Key << "SelectedIndex" << YAML::Value << comp.selected;
+			out << YAML::Key << "ClassName" << YAML::Value << comp.ClassName;
+
+
+			for (const auto& [name, field] : comp.FieldMap)
+			{
+				out << YAML::Key << "FieldName" << YAML::Value << name;
+				out << YAML::Key << "FieldDataType" << YAML::Value << (int)field.first;
+				
+				if (field.first == ScriptFieldDataTypes::Float)
+				{
+					out << YAML::Key << "FieldData" << YAML::Value << *(float*)field.second;
+				}
+				if (field.first == ScriptFieldDataTypes::Int32)
+				{
+					out << YAML::Key << "FieldData" << YAML::Value << *(int*)field.second;
+				}
+				if (field.first == ScriptFieldDataTypes::String)
+				{
+					out << YAML::Key << "FieldData" << YAML::Value << *(std::string*)field.second;
+				}
+			}
+			
+			out << YAML::EndMap;
+		}
+
 
 		out << YAML::EndMap;
 	}
 
-	void SceneOrderWriter::Write(std::string& path, SceneOrder scene)
+	void EditorSettingsWriter::Write(std::string& path, EditorSettings settings)
 	{
 		YAML::Emitter out;
-
 		out << YAML::BeginMap;
-
-		out << YAML::Key << "AssetPath" << YAML::Value << scene.sceneFilePath.string();
-
-		out << YAML::Key << "Scenes" << YAML::BeginSeq;
-		for (auto var : scene.sceneOrderVar)
-		{
-			out << YAML::BeginMap;
-			out << YAML::Key << "Title" << YAML::Value << var.title;
-			out << YAML::Key << "Index" << YAML::Value << var.index;
-			out << YAML::EndMap;
-		}
-		out << YAML::EndSeq;
-
+		out << YAML::Key << "EditorSettings";
+		out << YAML::BeginMap;
+		out << YAML::Key << "StartUpScene" << YAML::Value << settings.m_StartUpScene;
 		out << YAML::EndMap;
 
-		std::ofstream fout(path + "/order.txt");
+		std::ofstream fout(path + "\\Settings.txt");
 		fout << out.c_str();
 	}
 }

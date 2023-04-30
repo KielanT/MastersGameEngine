@@ -18,16 +18,21 @@ namespace Engine
 		reader.Read(path, scene);
 	}
 
-	void SceneOrderSerilizer::SerializeSceneOrder(std::string& path, SceneOrder scene)
+
+
+	void SettingsSerilizer::SerializeEditorSettings(std::string& path, EditorSettings& settings)
 	{
-		SceneOrderWriter writer;
-		writer.Write(path, scene);
+		EditorSettingsWriter writer;
+		writer.Write(path, settings);
 	}
 
-	
-	void SceneOrderSerilizer::DeserializeSceneOrder(std::string& path, SceneOrder& scene)
+	void SettingsSerilizer::DeserializeEditorSettings(std::string path, EditorSettings& settings)
 	{
-		SceneOrderReader reader;
-		reader.Read(path, scene);
+		EditorSettingsReader reader;
+		if (!reader.Read(path, settings))
+		{
+			LOG_WARN("Unable to read editor settings");
+		}
+
 	}
 }

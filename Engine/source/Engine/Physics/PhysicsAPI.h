@@ -20,7 +20,9 @@ namespace Engine
 
 
 		virtual void CreatePhysicsActor(Entity& entity) = 0;
+		virtual void CreateCollision(Entity& entity) = 0;
 		virtual void UpdatePhysicsActor(Entity& entity) = 0;
+		virtual void EditorUpdateActors(Entity& entity) = 0;
 		
 		
 	};

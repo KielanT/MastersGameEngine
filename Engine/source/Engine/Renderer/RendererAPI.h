@@ -17,8 +17,11 @@ namespace Engine
 
 		virtual void SetScene(std::shared_ptr<Scene> scene) = 0;
 
+		virtual void OnResize(int w, int height) = 0;
+
 		virtual void RenderLoop() = 0;
 		virtual void Renderer(Entity entity) = 0;
+		virtual void SetSkyboxEntity(Entity entity) = 0;
 
 		virtual void Present() = 0;
 

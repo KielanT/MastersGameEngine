@@ -52,10 +52,22 @@ namespace Engine
 			m_PhysicsAPI->CreatePhysicsActor(entity);
 	}
 
+	void Physics::CreateCollision(Entity& entity)
+	{
+		if (m_PhysicsAPI)
+			m_PhysicsAPI->CreateCollision(entity);
+	}
+
 	void Physics::UpdatePhysicsActor(Entity& entity)
 	{
 		if (m_PhysicsAPI)
 			m_PhysicsAPI->UpdatePhysicsActor(entity);
+	}
+
+	void Physics::EditorUpdateActors(Entity& entity)
+	{
+		if (m_PhysicsAPI)
+			m_PhysicsAPI->EditorUpdateActors(entity);
 	}
 
 	void Physics::ResetSimulation()

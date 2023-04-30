@@ -6,110 +6,90 @@ Texture2D RoughnessMap : register(t1);
 Texture2D NormalMap : register(t2);
 Texture2D HeightMap : register(t3);
 Texture2D MetalnessMap : register(t4);
-
-// TODO: Add Optional Maps
-// Optional
-//Texture2D AOMap; 
-//Texture2D CavityMap;
+TextureCube IBLMap : register(t5);
 
 SamplerState TexSampler : register(s0);
+SamplerState BilinearSampler : register(S1);
 
-// Constants
+
 static const float GAMMA = 2.2f;
 static const float PI = 3.14159265359f;
 
-float3 SampleNormal(float3 position, float3 normal, float3 tangant, inout float2 UV, bool parallax = false)
+float3 SampleNormal(float3 position, float3 normal, float3 tangent, inout float2 uv, bool parallax = false)
 {
     const float parallaxDepth = 0.06f;
-	
-    float3 biTangent = cross(normal, tangant);
-	
-    float3x3 invTangantMatrix = float3x3(tangant, biTangent, normal);
-	
+
+	// Calculate inverse tangent matrix
+    float3 biTangent = cross(normal, tangent);
+    float3x3 invTangentMatrix = float3x3(tangent, biTangent, normal);
+
     if (parallax)
     {
-        float3 cameraDirection = normalize(gCameraPosition - position);
+
+        float3 cameraDir = normalize(gCameraPosition - position);
         float3x3 invWorldMatrix = transpose((float3x3) gWorldMatrix);
-        float3 cameraModelDir = normalize(mul(cameraDirection, invWorldMatrix));
+        float3 cameraModelDir = normalize(mul(cameraDir, invWorldMatrix));
 
-        float3x3 tangantMatrix = transpose(invTangantMatrix);
-        float2 textureOffsetDir = mul(cameraModelDir, tangantMatrix).xy;
-        
-        float texDepth = parallaxDepth * (HeightMap.Sample(TexSampler, UV).r - 0.5f);
-        UV += texDepth * textureOffsetDir;
+    // Calculate direction to offset uvs (x and y of camera direction in tangent space)
+        float3x3 tangentMatrix = transpose(invTangentMatrix);
+        float2 textureOffsetDir = mul(cameraModelDir, tangentMatrix).xy;
+
+    // Offset uvs in that direction to account for depth (using height map and some geometry)
+        float texDepth = parallaxDepth * (HeightMap.Sample(TexSampler, uv).r - 0.5f);
+        uv += texDepth * textureOffsetDir;
     }
-    
-    float3 textureNormal = 2.0f * NormalMap.Sample(TexSampler, UV).rgb - 1.0f;
-    textureNormal.y = -textureNormal.y;
-   
-    return normalize(mul(mul(textureNormal, invTangantMatrix), (float3x3) gWorldMatrix));
 
+	// Extract normal from map and shift to -1 to 1 range
+    float3 textureNormal = 2.0f * NormalMap.Sample(TexSampler, uv).rgb - 1.0f;
+    textureNormal.y = -textureNormal.y;
+
+	// Convert normal from tangent space to world space
+    return normalize(mul(mul(textureNormal, invTangentMatrix), (float3x3) gWorldMatrix));
 }
 
-float4 main(PBRInput input) : SV_Target
+
+
+float4 main(PBR_Input input) : SV_Target
 {
-    float3 modelNormal = normalize(input.ModelNormal);
-    float3 modelTangent = normalize(input.ModelTangent);
+    float3 modelNormal = normalize(input.worldNormal);
+    float3 modelTangent = normalize(input.tangent);
 
-    float3 n = SampleNormal(input.WorldPosition, modelNormal, modelTangent, input.UV, true);
+    float3 n = SampleNormal(input.worldPosition, modelNormal, modelTangent, input.uv, true);
+	
+	// View vector (normal towards camera from pixel)
+    float3 v = normalize(gCameraPosition - input.worldPosition);
 
-    float3 v = normalize(gCameraPosition - input.WorldPosition);
-
-    float3 albedo = AlbedoMap.Sample(TexSampler, input.UV).rgb;
-    albedo.rgb = pow(albedo.rgb, GAMMA); 
-    float roughness = RoughnessMap.Sample(TexSampler, input.UV).r;
-    float metalness = MetalnessMap.Sample(TexSampler, input.UV).r;
-
+    float3 albedo = AlbedoMap.Sample(TexSampler, input.uv).rgb;
+    albedo.rgb = pow(albedo.rgb, GAMMA); // Stored in sRGB gamma-corrected space, convert to linear space
+    float roughness = RoughnessMap.Sample(TexSampler, input.uv).r;
+    float metalness = MetalnessMap.Sample(TexSampler, input.uv).r;
+    //float cavity = lerp(1, CavityMap.Sample(TexSampler, input.uv).r, UseCavity);
+    //float ao = lerp(cavity, AOMap.Sample(TexSampler, input.uv).r, UseAO);
+    float nDotV = max(dot(n, v), 0.001f);
     float3 specColour = lerp(float3(0.04, 0.04, 0.04), albedo, metalness);
-    float3 diffuse = gAmbientColour;
-    float3 specular = 0;
-    float3 colour = albedo * gAmbientColour /** ao*/;
-    for (int i = 0; i < 2; ++i)
-    {
-        float3 l = float3(0, 50, 0)/*Lights[i].position*/ - input.WorldPosition;
-        float rdist = 1 / length(l);
-        l *= rdist;
-        float li = /*Lights[i].intensity*/ 50 * rdist * rdist;
-        float3 lc = float3(1.0f, 1.0f, 0.0f) /*Lights[i].colour*/;
-
-        float3 h = normalize(l + v);
 
     
-        diffuse += li * lc * max(dot(n, l), 0);
-        specular += li * lc * pow(max(dot(n, h), 0), gSpecularPower);
-
-        
-        float nv = dot(n, v);
-        if (nv < 0.0f)
-            nv = 0.001f;
-
-        float nl = dot(n, l);
-        if (nl < 0.0f)
-            nl = 0.001f;
-
-        float nh = dot(n, h);
-        if (nh < 0.0f)
-            nh = 0.001f;
-
-		
-        float3 Lambert = albedo / PI;
-        
-        float3 roughnessSquare = (roughness * roughness) * (roughness * roughness);
-        float3 nhSquare = nh * nh;
-        float3 normalDistribution = roughnessSquare / (PI * pow(nhSquare * (roughnessSquare - 1) + 1, 2));
-        
-        float k = (roughness + 1) * (roughness + 1) / 8;
-        float3 geom = nl / (nl * (1 - k) + k);
-        float3 geometry = nv / (nv * (1 - k) + k);
-        float3 finalGeom = geometry * geom;
-        
-        float3 fresnel = specColour + (1 - specColour) * pow(1 - nh, 5);
-        float3 specularBRDF = (fresnel * finalGeom * normalDistribution) / (4 * nl * nv);
-        
-        
-        float3 punctualLight = Lambert + specularBRDF;
-        colour += PI * punctualLight * li * lc * nl /** cavity*/;
+    //float3 diffuse = gAmbientColour;
+    //float3 specular = gSpecularPower;
+   
+    float3 colour;
+    if (gEnableIBL)
+    {
+        float3 reflectionVector = reflect(-v, n);
+    
+        float3 diffuseLevel = IBLMap.SampleLevel(BilinearSampler, n, 8).rgb * 2.0f;
+        float3 specularLevel = IBLMap.SampleLevel(BilinearSampler, reflectionVector, 8 * log(roughness + 1) / log(2)).rgb;
+    
+        float3 fresnel = specColour + (1 - specColour) * pow(max(1.0f - nDotV, 0.0f), 5.0f);
+        colour = /*ao * */(albedo * diffuseLevel + (1 - roughness) * fresnel * specularLevel);
     }
-
+    else
+    {
+        colour = albedo * gAmbientColour;
+    }
+  
+    
+    // TODO lighting code here
+    
     return float4(pow(colour, 1 / GAMMA), 1.0f);
 }

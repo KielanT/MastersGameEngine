@@ -16,6 +16,12 @@ namespace Engine
 		DirectX11,
 	};
 
+	enum class EShaderType
+	{
+		PBR = 0,
+		Skybox,
+	};
+
 	struct WindowProperties
 	{
 		std::string Title;
@@ -32,4 +38,5 @@ namespace Engine
 		}
 		
 	};
+
 }

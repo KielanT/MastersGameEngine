@@ -1,21 +1,21 @@
 #include "Common.hlsli"
 
-PBRInput main(BasicVertex input)
+
+PBR_Input main(BasicVertex input)
 {
-    PBRInput output;
+    PBR_Input output;
 
-  // Transform model vertex position and normal to world space
-    float4 worldPosition = mul(float4(input.position, 1.0f), gWorldMatrix);
-    output.WorldPosition = worldPosition.xyz;
-
-	// Use camera matrices to further transform the vertex from world space into view space (camera's point of view) and finally into 2D "projection" space for rendering
-    float4 viewPosition = mul(worldPosition, gViewMatrix);
-    output.ProjectionPosition = mul(viewPosition, gProjectionMatrix);
-
-  // Pass model-space normal, tangent and UVs directly to pixel shader
-    output.ModelNormal = input.normal;
-    output.ModelTangent = input.tangent;
-    output.UV = input.uv;
-
+    float4 worldPosition = mul(gWorldMatrix, float4(input.position, 1.0f));
+    output.worldPosition = worldPosition.xyz;
+ 
+    float4 viewPosition = mul(gViewMatrix, worldPosition);
+    output.projectedPosition = mul(gProjectionMatrix, viewPosition);
+ 
+    float4 modelNormal = float4(input.normal, 0);
+    output.worldNormal = mul(modelNormal, gWorldMatrix).xyz;
+    output.tangent = input.tangent;
+    output.uv = input.uv;
+  
     return output;
+
 }

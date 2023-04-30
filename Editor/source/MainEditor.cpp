@@ -4,7 +4,11 @@
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Data/Serializer.h"
+#include "Engine/Scripting/Scripting.h"
+
 #include "EditorDraws.h"
+
+
 
 namespace Engine
 {
@@ -14,8 +18,6 @@ namespace Engine
 		std::filesystem::path Resource = std::filesystem::current_path().string() + "\\Resources";
 		m_AssetPath = m_SystemPath.parent_path().string() + "\\Assets";
 		
-
-
 		m_FileIcon = Texture2D::Create(Resource.string() + "/icons/icons8-file-150.png");
 		m_FolderIcon = Texture2D::Create(Resource.string() + "/icons/icons8-folder-150.png");
 
@@ -23,15 +25,27 @@ namespace Engine
 
 		m_EditorScene = std::make_shared<Scene>();
 		m_Scene = m_EditorScene;
-		
 
 	}
 
 	bool MainEditor::Init()
 	{
+		m_EditorCamera = std::make_shared<EditorCamera>();
+		m_EditorCamera->SetPosition({ 0, 0, 50.0f });
+		m_EditorCamera->SetLens(0.25f * glm::pi<float>(), 1600.0f / 900.0f, 1.0f, 1000.0f);
+
 		m_Scene = std::make_shared<Scene>();
 		m_Scene->InitScene();
+		m_Scene->SetCamera(m_EditorCamera);
 		Renderer::SetScene(m_Scene);
+
+		SettingsSerilizer settings;
+		std::string syspath = m_SystemPath.string();
+		settings.DeserializeEditorSettings(syspath, m_EditorSettings);
+		if (!m_EditorSettings.m_StartUpScene.empty())
+		{
+			LoadScene(m_EditorSettings.m_StartUpScene);
+		}
 
 		return true;
 	}
@@ -41,23 +55,29 @@ namespace Engine
 		m_Scene->RenderScene();
 
 		DockSpace();
-
+		
 		bool showWindow = true;
 		
 		if(bShowGameWindow)
 			EntitiesWindow(&bShowGameWindow);
+		
 		if(bShowGameWindow)
 			GameWindow(&bShowGameWindow);
-
+		
 		if(bShowDetailsWindow)
 			Details(&bShowDetailsWindow);
-
+		
 		if(bShowAssetsWindow)
 			Assets(&bShowAssetsWindow);
-
+		
 		if(bShowSceneSettingsWindow)
 			SceneSettings(&bShowSceneSettingsWindow);
+		
+		if (bShowSettingsWindow)
+			Settings(&bShowSettingsWindow);
 
+		
+		//ImGui::ShowDemoWindow();
 	}
 
 	void MainEditor::Update(float frameTime)
@@ -67,6 +87,10 @@ namespace Engine
 		if (m_PlayState == EPlaystate::Playing)
 		{
 			m_Scene->SimulateScene(frameTime);
+		}
+		else
+		{
+			m_Scene->EditorUpdatePhysicsScene(frameTime);
 		}
 	}
 
@@ -123,6 +147,8 @@ namespace Engine
 						std::shared_ptr<Engine::Scene> scene = std::make_shared<Scene>();
 						m_EditorScene = scene;
 						m_Scene = m_EditorScene;
+						m_Scene->InitScene();
+						m_Scene->SetCamera(m_EditorCamera);
 						Renderer::SetScene(m_Scene);
 						bUnsaved = true;
 
@@ -168,6 +194,10 @@ namespace Engine
 
 				if (ImGui::MenuItem("Scene Settings", NULL, bShowSceneSettingsWindow))
 					bShowSceneSettingsWindow = !bShowSceneSettingsWindow;
+
+				if (ImGui::MenuItem("Settings", NULL, bShowSettingsWindow))
+					bShowSettingsWindow = !bShowSettingsWindow;
+
 				ImGui::EndMenu();
 			}
 
@@ -205,7 +235,10 @@ namespace Engine
 		{
 			if (ImGui::Button("Play"))
 			{
+				m_Scene->SetActiveCamera();
 				m_PlayState = EPlaystate::Playing;
+				Save();
+				m_Scene->BeginScene();
 			}
 		}
 		else if (m_PlayState == EPlaystate::Playing)
@@ -223,6 +256,7 @@ namespace Engine
 			{
 				m_PlayState = EPlaystate::NotPlaying;
 				LoadScene(true);
+				Scripting::GetInstance()->ResetScripting();
 			}
 		}
 
@@ -247,6 +281,11 @@ namespace Engine
 
 		if (ImGui::BeginPopup("EntityPopup"))
 		{
+			if (ImGui::MenuItem("Create Camera Entity"))
+			{
+				m_SelectedEntity = m_Scene->CreateCameraEntity("Camera Entity");
+				bUnsaved = true;
+			}
 			if (ImGui::MenuItem("Create Empty Entity"))
 			{
 				m_SelectedEntity = m_Scene->CreateEntity("Empty Entity");
@@ -255,6 +294,11 @@ namespace Engine
 			if (ImGui::MenuItem("Create Mesh Entity"))
 			{
 				m_SelectedEntity = m_Scene->CreateMeshEntity("Mesh Entity");
+				bUnsaved = true;
+			}
+			if (ImGui::MenuItem("Create Skybox Entity"))
+			{
+				m_SelectedEntity = m_Scene->CreateSkyboxEntity("Skybox Entity");
 				bUnsaved = true;
 			}
 
@@ -282,7 +326,7 @@ namespace Engine
 		if (m_Scene != nullptr && m_SelectedEntity)
 		{
 			EditorDraws drawer;
-			drawer.DrawComponents(m_SelectedEntity);
+			drawer.DrawComponents(m_SelectedEntity, m_AssetPath);
 
 			if (drawer.bIsUnsaved)
 			{
@@ -317,11 +361,6 @@ namespace Engine
 				if (ImGui::MenuItem("RigidDynamicComponent"))
 				{
 					m_SelectedEntity.AddComponent<RigidDynamicComponent>();
-					bUnsaved = true;
-				}
-				if (ImGui::MenuItem("RigidStaticComponent"))
-				{
-					m_SelectedEntity.AddComponent<RigidStaticComponent>();
 					bUnsaved = true;
 				}
 				if (ImGui::MenuItem("CollisionComponent"))
@@ -526,11 +565,22 @@ namespace Engine
 		ImGui::End();
 	}
 
-	void MainEditor::Preferences(bool* pOpen)
+	void MainEditor::Settings(bool* pOpen)
 	{
 		ImGuiWindowFlags window_flags = 0;
 
 		ImGui::Begin("Perferences", pOpen, window_flags);
+		
+		char buffer[256];
+		memset(buffer, 0, sizeof(buffer));
+		strncpy_s(buffer, m_EditorSettings.m_StartUpScene.c_str(), sizeof(buffer));
+		if (IMGUI_LEFT_LABEL(ImGui::InputText, "Start Up Scene: ", buffer, sizeof(buffer)))
+		{
+			m_EditorSettings.m_StartUpScene = std::string(buffer);
+			SettingsSerilizer settings;
+			std::string syspath = m_SystemPath.string();
+			settings.SerializeEditorSettings(syspath, m_EditorSettings);
+		}
 
 		ImGui::End();
 	}
@@ -574,7 +624,7 @@ namespace Engine
 
 		if (!reset)
 		{
-			path = FileDialog::OpenFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene\0*.mge\0");
+			path = FileDialog::OpenFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene\0*.mge\0", m_AssetPath.string() + "\\Scenes", "Open Scene");
 		}
 		else
 		{
@@ -598,8 +648,34 @@ namespace Engine
 				m_EditorScene = scene;
 				m_Scene = m_EditorScene;
 				m_Scene->InitScene();
+				m_Scene->SetCamera(m_EditorCamera);
 				Renderer::SetScene(m_Scene);
-				m_Scene->LoadEntities();
+				m_Scene->LoadEntities(m_AssetPath.string());
+			}
+		}
+	}
+
+	void MainEditor::LoadScene(std::string& sceneName)
+	{
+		std::string path = m_AssetPath.string() + "\\Scenes" + "\\" + sceneName + ".mge";
+		if (!path.empty())
+		{
+			m_SelectedEntity = {};
+			m_Scene->UnloadScene();
+
+			std::shared_ptr<Engine::Scene> scene = std::make_shared<Scene>();
+			SceneSerializer::DeserializeScene(path, scene);
+			m_SceneFilePath = path;
+			m_CurrentSceneName = scene->GetSceneSettings().title;
+
+			if (scene != nullptr)
+			{
+				m_EditorScene = scene;
+				m_Scene = m_EditorScene;
+				m_Scene->InitScene();
+				m_Scene->SetCamera(m_EditorCamera);
+				Renderer::SetScene(m_Scene);
+				m_Scene->LoadEntities(m_AssetPath.string());
 			}
 		}
 	}
@@ -621,7 +697,7 @@ namespace Engine
 	void MainEditor::SaveAs()
 	{
 		// Save As
-		std::string path = FileDialog::SaveFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene (*.mge)\0*.mge\0");
+		std::string path = FileDialog::SaveFile(Renderer::GetWindowProperties().Hwnd, "MGE Scene (*.mge)\0*.mge\0", m_AssetPath.string() + "\\Scenes", "Save Scene");
 
 		if (!path.empty())
 		{
