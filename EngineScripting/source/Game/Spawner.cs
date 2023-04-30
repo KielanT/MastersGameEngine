@@ -45,6 +45,7 @@ namespace Game
 
                 spawnCount++;
             }
+            Utility.Logger(LogType.Info, spawnCount.ToString());
         }
         
     }

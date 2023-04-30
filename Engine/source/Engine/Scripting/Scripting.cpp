@@ -173,6 +173,11 @@ namespace Engine
 		return m_Scene;
 	}
 
+	void Scripting::ResetScripting()
+	{
+		m_ScriptInstances.clear();
+	}
+
 	bool Scripting::InitMono()
 	{
 		std::filesystem::path path = std::filesystem::current_path().parent_path();

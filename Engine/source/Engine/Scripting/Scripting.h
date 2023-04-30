@@ -56,7 +56,7 @@ namespace Engine
 		void SetScene(std::shared_ptr<Scene> scene);
 		std::shared_ptr<Scene> GetScene();
 
-
+		void ResetScripting();
 
 	private:
 		bool InitMono();

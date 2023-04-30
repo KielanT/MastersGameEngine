@@ -11,7 +11,7 @@ Entities:
       ID: 13127300394730289542
       Tag: Cube
     TransformComponent:
-      Position: [-15, 0, 0]
+      Position: [0, 0, 0]
       Rotation: [0, -0, 0]
       Scale: [1, 1, 1]
     TextureComponent:
@@ -40,7 +40,7 @@ Entities:
       ID: 6341982882276192738
       Tag: Spawner
     TransformComponent:
-      Position: [10, 0, 0]
+      Position: [15, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     TextureComponent:

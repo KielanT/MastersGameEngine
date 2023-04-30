@@ -4,7 +4,7 @@
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Data/Serializer.h"
-
+#include "Engine/Scripting/Scripting.h"
 
 #include "EditorDraws.h"
 
@@ -256,7 +256,7 @@ namespace Engine
 			{
 				m_PlayState = EPlaystate::NotPlaying;
 				LoadScene(true);
-			
+				Scripting::GetInstance()->ResetScripting();
 			}
 		}
 
