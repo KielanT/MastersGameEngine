@@ -47,7 +47,7 @@ namespace Engine
 			// TODO: handle exception
 			if (exception)
 			{
-				MonoClass* exceptionClass = mono_object_get_class(exception);
+
 			}
 		}
 	}

@@ -8,17 +8,6 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
-      ID: 6341982882276192738
-      Tag: Spawner
-    TransformComponent:
-      Position: [15, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    ScriptComponent:
-      SelectedIndex: 0
-      ClassName: Spawner
-  -  # Entity
-    IDComponent:
       ID: 13127300394730289542
       Tag: Cube
     TransformComponent:
@@ -44,3 +33,14 @@ Entities:
       LinearVelocity: [0, 0, 0]
       AngularVelocity: [0, 0, 0]
       AngularDamping: 0
+  -  # Entity
+    IDComponent:
+      ID: 6341982882276192738
+      Tag: Spawner
+    TransformComponent:
+      Position: [15, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      SelectedIndex: 0
+      ClassName: Spawner

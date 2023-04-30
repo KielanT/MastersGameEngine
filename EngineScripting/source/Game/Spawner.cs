@@ -42,6 +42,10 @@ namespace Game
             if (spawnCount < spawnAmount)
             {
                 Entity entity1 = CreateNewEntity(entity, new Vector3(0, 0, 0));
+                //TransformComponent tc = new TransformComponent(entity1);
+                //tc.Scale = new Vector3(0.5f, 0.5f, 0.5f);
+
+                entity1.transformComponent.Scale = new Vector3(0.5f, 0.5f, 0.5f);
 
                 spawnCount++;
             }

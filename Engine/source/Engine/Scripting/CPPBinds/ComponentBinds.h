@@ -27,3 +27,26 @@ static void Transform_SetPostition(Engine::UUID entityID, glm::vec3* position)
 		transform.Position = *position;
 	}
 }
+
+
+static void Transform_GetScale(Engine::UUID entityID, glm::vec3* scale)
+{
+	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();
+	if (scene != nullptr)
+	{
+		Engine::Entity entity = scene->FindEntityByUUID(entityID);
+		auto& transform = entity.GetComponent<Engine::TransformComponent>();
+		*scale = transform.Scale;
+	}
+}
+
+static void Transform_SetScale(Engine::UUID entityID, glm::vec3* scale)
+{
+	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();
+	if (scene != nullptr)
+	{
+		Engine::Entity entity = scene->FindEntityByUUID(entityID);
+		auto& transform = entity.GetComponent<Engine::TransformComponent>();
+		transform.Scale = *scale;
+	}
+}

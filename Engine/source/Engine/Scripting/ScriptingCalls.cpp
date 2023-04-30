@@ -22,6 +22,8 @@ namespace Engine
 		// Components
 		mono_add_internal_call("Engine.InternalCalls::Transform_GetPostition", Transform_GetPostition);
 		mono_add_internal_call("Engine.InternalCalls::Transform_SetPostition", Transform_SetPostition);
+		mono_add_internal_call("Engine.InternalCalls::Transform_GetScale",	   Transform_GetScale);
+		mono_add_internal_call("Engine.InternalCalls::Transform_SetScale",	   Transform_SetScale);
 	}
 
 	
