@@ -44,6 +44,11 @@ namespace Engine
 		//*************
 		void CreateScript(const std::string& className);
 
+		//*************
+		// Helpers
+		//*************
+		void CreateScript(const std::string& className);
+
 	public:
 
 		bool bIsUnsaved = false;
