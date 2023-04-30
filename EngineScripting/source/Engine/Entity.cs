@@ -9,18 +9,21 @@ namespace Engine
         public readonly ulong ID;
 
        public TransformComponent transformComponent;
+       public RendererComponent rendererComponent;
 
         // TODO: set this automatically to attached entity
         protected Entity() 
         { 
             ID = 0;
             transformComponent = new TransformComponent(this);
+            rendererComponent = new RendererComponent(this);
         }
        
         public Entity(ulong id) 
         { 
             ID = id;
             transformComponent = new TransformComponent(this);
+            rendererComponent = new RendererComponent(this);
         }
 
         public Entity FindEntityByName(string name)

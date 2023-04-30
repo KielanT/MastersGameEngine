@@ -8,6 +8,30 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
+      ID: 6341982882276192738
+      Tag: Spawner
+    TransformComponent:
+      Position: [-10, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [2, 2, 2]
+    TextureComponent:
+      Path: Textures/tufted-leather-albedo.dds
+      NormalPath: Textures/tufted-leather-normal.dds
+      RoughPath: Textures/tufted-leather-roughness.dds
+      HeightPath: Textures/tufted-leather-height.dds
+      MetalnessPath: Textures/tufted-leather-metalness.dds
+    MeshRendererComponent:
+      Path: Mesh/Basic/Teapot.x
+      Visible: true
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    ScriptComponent:
+      SelectedIndex: 0
+      ClassName: Spawner
+  -  # Entity
+    IDComponent:
       ID: 13127300394730289542
       Tag: Cube
     TransformComponent:
@@ -36,27 +60,3 @@ Entities:
       AngularDamping: 0
     CollisionComponents:
       CollisionType: 0
-  -  # Entity
-    IDComponent:
-      ID: 6341982882276192738
-      Tag: Spawner
-    TransformComponent:
-      Position: [-10, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [2, 2, 2]
-    TextureComponent:
-      Path: Textures/tufted-leather-albedo.dds
-      NormalPath: Textures/tufted-leather-normal.dds
-      RoughPath: Textures/tufted-leather-roughness.dds
-      HeightPath: Textures/tufted-leather-height.dds
-      MetalnessPath: Textures/tufted-leather-metalness.dds
-    MeshRendererComponent:
-      Path: Mesh/Basic/Teapot.x
-      Visible: true
-      BlendState: 0
-      DepthStencil: 0
-      Rasterizer: 2
-      Sampler: 0
-    ScriptComponent:
-      SelectedIndex: 0
-      ClassName: Spawner

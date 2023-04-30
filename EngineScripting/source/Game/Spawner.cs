@@ -24,6 +24,9 @@ namespace Game
         public void OnBegin()
         {
             entity = FindEntityByName(entitySpawnName);
+            
+            Entity mentity = FindEntityByName("Spawner");
+            mentity.rendererComponent.Visible = false;
 
         }
 

@@ -26,6 +26,8 @@ namespace Engine
 		mono_add_internal_call("Engine.InternalCalls::Transform_SetRotation",  Transform_SetRotation);
 		mono_add_internal_call("Engine.InternalCalls::Transform_GetScale",	   Transform_GetScale);
 		mono_add_internal_call("Engine.InternalCalls::Transform_SetScale",	   Transform_SetScale);
+		mono_add_internal_call("Engine.InternalCalls::Renderer_SetVisible",	   Renderer_SetVisible);
+		mono_add_internal_call("Engine.InternalCalls::Renderer_GetVisible",    Renderer_GetVisible);
 	}
 
 	

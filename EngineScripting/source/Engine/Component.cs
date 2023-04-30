@@ -56,4 +56,25 @@ namespace Engine
             }
         }
     }
+
+    public class RendererComponent : Component
+    {
+        public RendererComponent(Entity entity)
+        {
+            _entity = entity;
+        }
+
+        public bool Visible 
+        {
+            get
+            {
+                InternalCalls.Renderer_GetVisible(_entity.ID, out bool vis);
+                return vis;
+            }
+            set 
+            {
+                InternalCalls.Renderer_SetVisible(_entity.ID, ref value);
+            }
+        }
+    }
 }

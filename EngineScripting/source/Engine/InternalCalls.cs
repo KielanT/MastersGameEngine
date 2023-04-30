@@ -52,5 +52,15 @@ namespace Engine
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Transform_GetScale(ulong ID, out Maths.Vector3 vector3);
 
+        //************************
+        //      Renderer
+        //************************
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Renderer_SetVisible(ulong ID, ref bool visible);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Renderer_GetVisible(ulong ID, out bool visible);
+
     }
 }
