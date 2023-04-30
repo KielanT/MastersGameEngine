@@ -6,6 +6,9 @@
 #include <Engine/Physics/Physics.h>
 #include <Engine/Scripting/Scripting.h>
 
+#include <fstream>
+
+
 namespace Engine
 {
 	void EditorDraws::DrawComponents(Entity& entity, std::filesystem::path assetPath)

@@ -39,6 +39,11 @@ namespace Engine
 
 		void DrawField(const std::string& name, const ScriptField& field, std::shared_ptr<ScriptClass> scriptClass, ScriptComponent& comp);
 
+		//*************
+		// Helpers
+		//*************
+		void CreateScript(const std::string& className);
+
 	public:
 
 		bool bIsUnsaved = false;

@@ -26,6 +26,7 @@ namespace Engine
 
 	class Scripting
 	{
+
 	public:
 		Scripting() = default;
 		~Scripting() = default;
@@ -43,6 +44,7 @@ namespace Engine
 
 		void OnBeginEntity(Entity entity);
 		void OnUpdateEntity(Entity entity, float deltaTime);
+
 
 		_MonoAssembly* GetAssembly();
 		MonoDomain* GetAppDomain();
@@ -69,6 +71,7 @@ namespace Engine
 		char* ReadBytes(const std::string& filepath, uint32_t* outSize);
 
 		bool CheckClassExists(const std::string& className);
+
 
 	private:
 		static std::shared_ptr<Scripting> m_Scripting;
