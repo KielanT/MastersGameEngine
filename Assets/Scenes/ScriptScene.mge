@@ -8,6 +8,51 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
+      ID: 2600565337993855314
+      Tag: Skybox Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [50000, 50000, 50000]
+    SkyboxComponent:
+      MeshPath: Mesh/Basic/Sphere.x
+      TexPath: Textures/grasscube1024.dds
+  -  # Entity
+    IDComponent:
+      ID: 3716386822656678503
+      Tag: Camera Entity
+    TransformComponent:
+      Position: [0, 0, 80]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      {}
+  -  # Entity
+    IDComponent:
+      ID: 6341982882276192738
+      Tag: Spawner
+    TransformComponent:
+      Position: [-20, -20, 0]
+      Rotation: [0, 0, 0]
+      Scale: [2, 2, 2]
+    TextureComponent:
+      Path: Textures/tufted-leather-albedo.dds
+      NormalPath: Textures/tufted-leather-normal.dds
+      RoughPath: Textures/tufted-leather-roughness.dds
+      HeightPath: Textures/tufted-leather-height.dds
+      MetalnessPath: Textures/tufted-leather-metalness.dds
+    MeshRendererComponent:
+      Path: Mesh/Basic/Teapot.x
+      Visible: true
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    ScriptComponent:
+      SelectedIndex: 0
+      ClassName: Spawner
+  -  # Entity
+    IDComponent:
       ID: 13127300394730289542
       Tag: Cube
     TransformComponent:
@@ -36,48 +81,3 @@ Entities:
       AngularDamping: 0
     CollisionComponents:
       CollisionType: 0
-  -  # Entity
-    IDComponent:
-      ID: 6341982882276192738
-      Tag: Spawner
-    TransformComponent:
-      Position: [-20, -20, 0]
-      Rotation: [0, 0, 0]
-      Scale: [2, 2, 2]
-    TextureComponent:
-      Path: Textures/tufted-leather-albedo.dds
-      NormalPath: Textures/tufted-leather-normal.dds
-      RoughPath: Textures/tufted-leather-roughness.dds
-      HeightPath: Textures/tufted-leather-height.dds
-      MetalnessPath: Textures/tufted-leather-metalness.dds
-    MeshRendererComponent:
-      Path: Mesh/Basic/Teapot.x
-      Visible: true
-      BlendState: 0
-      DepthStencil: 0
-      Rasterizer: 2
-      Sampler: 0
-    ScriptComponent:
-      SelectedIndex: 0
-      ClassName: Spawner
-  -  # Entity
-    IDComponent:
-      ID: 3716386822656678503
-      Tag: Camera Entity
-    TransformComponent:
-      Position: [0, 0, 80]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      {}
-  -  # Entity
-    IDComponent:
-      ID: 2600565337993855314
-      Tag: Skybox Entity
-    TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [50000, 50000, 50000]
-    SkyboxComponent:
-      MeshPath: Mesh/Basic/Sphere.x
-      TexPath: Textures/grasscube1024.dds
