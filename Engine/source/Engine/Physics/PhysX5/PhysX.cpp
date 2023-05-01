@@ -3,6 +3,8 @@
 
 namespace Engine
 {
+	std::shared_ptr<PhysX> PhysX::m_Instance = nullptr;
+
 	static PhysXCustomErrorCallback gCustomErrorCallback;
 	static PhysXCollisionCallbacks gCollisionCallback;
 	static physx::PxDefaultAllocator gDefaultAllocatorCallback;
@@ -14,6 +16,8 @@ namespace Engine
 
 	bool PhysX::Init()
 	{
+
+	
 		LOG_INFO("PhysX 5 Initilised");
 
 		m_Foundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gCustomErrorCallback);
@@ -30,7 +34,7 @@ namespace Engine
 			LOG_ERROR("Failed to Create PVD (Does not Break Engine)");
 
 		bool recordMemoryAllocations = false;
-		
+
 		m_Physics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_Foundation, physx::PxTolerancesScale(), recordMemoryAllocations, m_PVD);
 		if (!m_Physics)
 		{
@@ -38,15 +42,16 @@ namespace Engine
 			return false;
 		}
 
-		if(!PxInitExtensions(*m_Physics, m_PVD))
+		if (!PxInitExtensions(*m_Physics, m_PVD))
 		{
-			LOG_ERROR("PxInitExtensions failed! "); 
+			LOG_ERROR("PxInitExtensions failed! ");
 			return false;
 		}
 
 		m_Scene = CreateScene();
 
 		m_DefaultMaterial = m_Physics->createMaterial(0.5f, 0.5f, 0.6f);
+
 
 		return true;
 	}
@@ -191,12 +196,26 @@ namespace Engine
 			m_Scene->release();
 			m_Scene = nullptr;
 		}
-		m_PVD->disconnect();
+		if(m_PVD != nullptr)
+			m_PVD->disconnect();
+
+
 		m_Scene = CreateScene();
 		
 		//m_Scene->flushSimulation();
 		//m_Scene->flushUpdates();
 		// https://forums.developer.nvidia.com/t/how-to-reset-simulation-in-physx-3-3/47494
+	}
+
+	std::shared_ptr<PhysX> PhysX::GetInstance()
+	{
+		if (m_Instance == nullptr)
+		{
+			m_Instance = std::make_shared<PhysX>();
+			m_Instance->Init();
+		}
+
+		return m_Instance;
 	}
 
 	physx::PxScene* PhysX::CreateScene()

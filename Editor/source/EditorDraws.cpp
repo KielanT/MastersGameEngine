@@ -3,7 +3,7 @@
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
-#include <Engine/Physics/Physics.h>
+#include <Engine/Physics/PhysX5/PhysX.h>
 #include <Engine/Scripting/Scripting.h>
 
 #include <fstream>
@@ -318,7 +318,7 @@ namespace Engine
 			
 			if (previousSelected != static_cast<int>(comp.CollisionType))
 			{
-				Physics::CreateCollision(entity);
+				PhysX::GetInstance()->CreateCollision(entity);
 			}
 
 			if (ct == 0)
