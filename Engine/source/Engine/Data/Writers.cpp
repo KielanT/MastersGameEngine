@@ -168,6 +168,8 @@ namespace Engine
 			out << YAML::Key << "CollisionComponents";
 			out << YAML::BeginMap;
 			out << YAML::Key << "CollisionType" << YAML::Value << (int)comp.CollisionType;
+			out << YAML::Key << "BoxBounds" << YAML::Value << comp.BoxBounds;
+			out << YAML::Key << "SphereRadius" << YAML::Value << comp.SphereRadius;
 			
 			out << YAML::EndMap;
 		}

@@ -162,12 +162,20 @@ namespace Engine
 			physx::PxTransform transform = SetPhysicsTransform(entity.GetComponent<TransformComponent>());
 			entity.GetComponent<RigidDynamicComponent>().actor->setGlobalPose(transform);
 		}
+
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<CollisionComponents>())
 		{
 			if (entity.GetComponent<CollisionComponents>().actor != nullptr)
 			{
+				auto& comp = entity.GetComponent<CollisionComponents>();
 				physx::PxTransform transform = SetPhysicsTransform(entity.GetComponent<TransformComponent>());
-				entity.GetComponent<CollisionComponents>().actor->setGlobalPose(transform);
+				comp.actor->setGlobalPose(transform);
+				
+				if(comp.CollisionType == ECollisionTypes::Box)
+					comp.CollisionShape->setGeometry(physx::PxBoxGeometry(comp.BoxBounds.x, comp.BoxBounds.y, comp.BoxBounds.z));
+				else if (comp.CollisionType == ECollisionTypes::Sphere)
+					comp.CollisionShape->setGeometry(physx::PxSphereGeometry(comp.SphereRadius));
+
 			}
 		}
 	}

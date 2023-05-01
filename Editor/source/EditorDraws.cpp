@@ -307,6 +307,7 @@ namespace Engine
 				bIsUnsaved = true;
 			}
 
+
 			int ct = static_cast<int>(comp.CollisionType);
 			const char* ColTypeItems[static_cast<int>(ECollisionTypes::ECollisionTypesSize)];
 			ColTypeItems[0] = "Box Collision";
@@ -318,6 +319,23 @@ namespace Engine
 			if (previousSelected != static_cast<int>(comp.CollisionType))
 			{
 				Physics::CreateCollision(entity);
+			}
+
+			if (ct == 0)
+			{
+				ImGui::Text("Box Bounds: "); ImGui::SameLine();
+				ImGui::PushItemWidth(m_InputNumWidth);
+				ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##boundx", &comp.BoxBounds.x); ImGui::SameLine();
+				ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##boundz", &comp.BoxBounds.y); ImGui::SameLine();
+				ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##boundy", &comp.BoxBounds.z);
+				ImGui::PopItemWidth();
+			}
+			else if (ct == 1)
+			{
+				ImGui::Text("Sphere Radius: "); ImGui::SameLine();
+				ImGui::PushItemWidth(m_InputNumWidth);
+				ImGui::InputFloat("##radiusx", &comp.SphereRadius);
+				ImGui::PopItemWidth();
 			}
 
 			ImGui::TreePop();

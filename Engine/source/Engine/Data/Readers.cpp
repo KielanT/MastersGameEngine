@@ -115,7 +115,8 @@ namespace Engine
 				{
 					auto col = CollisionComponents();
 					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
-					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
+					col.BoxBounds = collisonNode["BoxBounds"].as<glm::vec3>();
+					col.SphereRadius = collisonNode["SphereRadius"].as<float>();
 					
 					entity.AddComponent<CollisionComponents>(col);
 					
