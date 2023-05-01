@@ -15,5 +15,6 @@ namespace Engine
 		static void UpdatePhysicsActor(Entity& entity);
 		static void EditorUpdateActors(Entity& entity);
 		static void ResetSimulation();
+
 	};
 }

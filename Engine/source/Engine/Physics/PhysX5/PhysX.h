@@ -2,6 +2,7 @@
 
 #include "Engine/Physics/PhysicsAPI.h"
 #include "PhysXCustomCallbacks.h"
+#include "PhysXCollisionCallbacks.h"
 #include <PxPhysicsAPI.h>
 
 namespace Engine
@@ -21,6 +22,9 @@ namespace Engine
 		virtual void UpdatePhysicsActor(Entity& entity) override;
 		virtual void EditorUpdateActors(Entity& entity) override;
 		virtual void ResetSimulation() override;
+
+		// Map Used for collisions
+		std::unordered_map<physx::PxActor*, Entity> EntityMap;
 
 	private:
 		physx::PxScene* CreateScene();
@@ -42,6 +46,9 @@ namespace Engine
 		physx::PxMaterial* m_DefaultMaterial;
 
 		physx::PxPvdTransport* m_Transport;
+
+
+		
 	};
 
 	

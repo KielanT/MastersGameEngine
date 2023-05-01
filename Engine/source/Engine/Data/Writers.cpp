@@ -202,7 +202,6 @@ namespace Engine
 			out << YAML::Key << "SelectedIndex" << YAML::Value << comp.selected;
 			out << YAML::Key << "ClassName" << YAML::Value << comp.ClassName;
 
-
 			for (const auto& [name, field] : comp.FieldMap)
 			{
 				out << YAML::Key << "FieldName" << YAML::Value << name;

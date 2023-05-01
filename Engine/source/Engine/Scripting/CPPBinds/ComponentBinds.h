@@ -23,8 +23,26 @@ static void Transform_SetPostition(Engine::UUID entityID, glm::vec3* position)
 	if (scene != nullptr)
 	{
 		Engine::Entity entity = scene->FindEntityByUUID(entityID);
-		auto& transform = entity.GetComponent<Engine::TransformComponent>();
-		transform.Position = *position;
+
+		if (entity.HasComponent<Engine::RigidDynamicComponent>())
+		{
+			auto& comp = entity.GetComponent<Engine::RigidDynamicComponent>();
+			glm::vec3 pos = *position;
+			auto physxTrans = physx::PxTransform({ pos.x , pos.y, pos.z });
+			comp.actor->setGlobalPose(physxTrans);
+		}
+		else if (entity.HasComponent<Engine::CollisionComponents>())
+		{
+			auto& comp = entity.GetComponent<Engine::CollisionComponents>();
+			glm::vec3 pos = *position;
+			auto physxTrans = physx::PxTransform({ pos.x , pos.y, pos.z });
+			comp.actor->setGlobalPose(physxTrans);
+		}
+		else
+		{
+			auto& transform = entity.GetComponent<Engine::TransformComponent>();
+			transform.Position = *position;
+		}
 	}
 }
 

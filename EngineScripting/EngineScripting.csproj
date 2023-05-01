@@ -65,6 +65,7 @@
     <Compile Include="source\Engine\InternalCalls.cs" />
     <Compile Include="source\Engine\Utility.cs" />
     <Compile Include="source\Engine\Vector3.cs" />
+    <Compile Include="source\Game\Ball.cs" />
     <Compile Include="source\Game\Paddle.cs" />
     <Compile Include="source\Game\Spawner.cs" />
     <Compile Include="source\Game\TestScript.cs" />

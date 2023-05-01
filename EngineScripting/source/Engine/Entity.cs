@@ -19,6 +19,7 @@ namespace Engine
             ID = 0;
             transformComponent = new TransformComponent(this);
             rendererComponent = new RendererComponent(this);
+            physicsComponent = new PhysicsComponent(this);
         }
        
         public Entity(ulong id) 

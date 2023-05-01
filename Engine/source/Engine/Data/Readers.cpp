@@ -145,6 +145,8 @@ namespace Engine
 					auto script = ScriptComponent();
 					script.selected = scriptNode["SelectedIndex"].as<int>();
 					script.ClassName = scriptNode["ClassName"].as<std::string>();
+
+
 					entity.AddComponent<ScriptComponent>(script);
 				}
 			}

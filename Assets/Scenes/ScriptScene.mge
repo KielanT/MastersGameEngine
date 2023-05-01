@@ -60,7 +60,7 @@ Entities:
       Rasterizer: 2
       Sampler: 0
     ScriptComponent:
-      SelectedIndex: 1
+      SelectedIndex: 2
       ClassName: Spawner
   -  # Entity
     IDComponent:

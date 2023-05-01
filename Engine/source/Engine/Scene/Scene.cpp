@@ -64,6 +64,23 @@ namespace Engine
 
 	void Scene::BeginScene()
 	{
+		
+		auto Physics = m_Registry.view<RigidDynamicComponent, CollisionComponents>();
+		for (auto entityID : Physics)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			if (entity.HasComponent<RigidDynamicComponent>())
+			{
+				LOG_ERROR("a");
+			}
+			if (entity.HasComponent<CollisionComponents>())
+			{
+				LOG_ERROR("b");
+			}
+		}
+	
+
+
 		auto scriptView = m_Registry.view<ScriptComponent>();
 		for (auto entityID : scriptView)
 		{
@@ -78,6 +95,7 @@ namespace Engine
 			}
 			Scripting::GetInstance()->OnBeginEntity(entity);
 		}
+
 	}
 
 	void Scene::UpdateScene(float frametime)
@@ -112,6 +130,13 @@ namespace Engine
 
 		auto RDView = m_Registry.view<RigidDynamicComponent>();
 		for (auto entityID : RDView)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			Physics::UpdatePhysicsActor(entity);
+		}
+
+		auto colView = m_Registry.view<CollisionComponents>();
+		for (auto entityID : colView)
 		{
 			Entity entity{ entityID, shared_from_this() };
 			Physics::UpdatePhysicsActor(entity);
