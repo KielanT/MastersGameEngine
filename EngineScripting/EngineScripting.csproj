@@ -61,10 +61,11 @@
   <ItemGroup>
     <Compile Include="source\Engine\Component.cs" />
     <Compile Include="source\Engine\Entity.cs" />
+    <Compile Include="source\Engine\Input.cs" />
     <Compile Include="source\Engine\InternalCalls.cs" />
     <Compile Include="source\Engine\Utility.cs" />
     <Compile Include="source\Engine\Vector3.cs" />
-    <Compile Include="source\Game\LeftPaddle.cs" />
+    <Compile Include="source\Game\Paddle.cs" />
     <Compile Include="source\Game\Spawner.cs" />
     <Compile Include="source\Game\TestScript.cs" />
   </ItemGroup>

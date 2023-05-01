@@ -1,14 +1,10 @@
 ﻿using Engine.Maths;
 using Engine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Game
 {
-    public class LeftPaddle : Entity
+    public class Paddle : Entity
     {
 
         public void OnBegin()
@@ -18,7 +14,7 @@ namespace Game
 
         public void OnUpdate(float deltaTime)
         {
-            Utility.Logger(LogType.Debug, ID.ToString());
+            
         }
 
 

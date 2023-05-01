@@ -69,5 +69,16 @@ namespace Engine
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static void Physics_AddForce(ulong ID, Maths.Vector3 vector3);
 
+
+        //************************
+        //      Input
+        //************************
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Input_KeyHeld(int keycode);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static bool Input_KeyHit(int keycode);
+
     }
 }
