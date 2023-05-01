@@ -16,21 +16,29 @@ namespace Engine
 		
 	}
 
-	void ScriptClass::OnBegin()
+
+	void ScriptClass::OnBegin(UUID id)
 	{
 		if (m_OnBegin != nullptr && m_ClassInstance != nullptr)
 		{
 			MonoObject* exception = nullptr;
+			
+			MonoClassField* idField = mono_class_get_field_from_name(m_Class, "ID");
+
+			if (idField != nullptr)
+			{
+				mono_field_set_value(m_ClassInstance, idField, &id);
+			}
+
 			mono_runtime_invoke(m_OnBegin, m_ClassInstance, nullptr, &exception);
 
 			// TODO: handle exception and sent to a log
 			if (exception)
 			{
-				
+
 			}
 
 		}
-
 	}
 
 	void ScriptClass::OnUpdate(float deltaTime)

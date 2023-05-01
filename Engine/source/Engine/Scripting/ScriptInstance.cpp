@@ -17,11 +17,11 @@ namespace Engine
 		}
 	}
 
-	void ScriptInstance::OnBegin()
+	void ScriptInstance::OnBegin(UUID id)
 	{
 		if (m_ScriptClass != nullptr)
 		{
-			m_ScriptClass->OnBegin();
+			m_ScriptClass->OnBegin(id);
 		}
 	}
 

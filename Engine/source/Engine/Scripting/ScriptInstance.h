@@ -1,5 +1,6 @@
 #pragma once
 #include "ScriptClass.h"
+#include "Engine/UUID.h"
 
 class _MonoClass;
 
@@ -10,7 +11,7 @@ namespace Engine
 	public:
 		ScriptInstance(std::shared_ptr<ScriptClass> ScriptClass);
 
-		void OnBegin();
+		void OnBegin(UUID id);
 		void OnUpdate(float deltaTime);
 
 		void ChangeScriptClass(std::shared_ptr<ScriptClass> newScriptClass);
