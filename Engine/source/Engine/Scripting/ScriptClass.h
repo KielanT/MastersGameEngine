@@ -34,6 +34,7 @@ namespace Engine
 
 		void OnBegin(UUID id);
 		void OnUpdate(float deltaTime);
+		void OnContact(UUID id);
 
 		void InitClassInstance();
 
@@ -112,6 +113,8 @@ namespace Engine
 
 		MonoMethod* m_OnBegin;
 		MonoMethod* m_OnUpdate;
+		
+		MonoMethod* m_OnContact;
 
 		
 	};

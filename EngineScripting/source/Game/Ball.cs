@@ -10,6 +10,7 @@ namespace Game
 
         public void OnBegin()
         {
+            Utility.Logger(LogType.Info, "start");
             physicsComponent.AddForce(new Vector3(forceAmount, 0, 0));
         }
 
@@ -18,6 +19,10 @@ namespace Game
 
         }
 
-
+        public override void OnContact(ulong id)
+        {
+            Utility.Logger(LogType.Info, "OnContact Child");
+            //physicsComponent.AddForce(new Vector3(0, forceAmount * 1, 0));
+        }
     }
 }

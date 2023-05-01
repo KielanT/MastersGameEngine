@@ -33,6 +33,14 @@ namespace Engine
 		}
 	}
 
+	void ScriptInstance::OnContact(UUID id)
+	{
+		if (m_ScriptClass != nullptr)
+		{
+			m_ScriptClass->OnContact(id);
+		}
+	}
+
 	void ScriptInstance::ChangeScriptClass(std::shared_ptr<ScriptClass> newScriptClass)
 	{
 		m_ScriptClass = newScriptClass;

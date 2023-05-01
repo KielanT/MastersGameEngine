@@ -65,6 +65,7 @@ namespace Engine
 
 		if (!entity.HasComponent<ScriptComponent>()) return;
 		
+
 		auto& ScriptComp = entity.GetComponent<ScriptComponent>();
 		if (!m_ScriptInstances.empty())
 		{
@@ -81,6 +82,8 @@ namespace Engine
 
 			Instance->OnBegin(entity.GetUUID());
 		}
+
+
 	}
 
 	void Scripting::OnUpdateEntity(Entity entity, float deltaTime)
@@ -98,7 +101,24 @@ namespace Engine
 				Instance->OnUpdate(deltaTime);
 			}
 		}	
-	}		
+	}
+
+	void Scripting::OnContactEntity(Entity entity)
+	{
+		const auto& IDComp = entity.GetComponent<IDComponent>();
+		const auto& ScriptComp = entity.GetComponent<ScriptComponent>();
+
+		if (!m_ScriptInstances.empty())
+		{
+			if (m_ScriptInstances.count(IDComp.ID) == 0) return;
+
+			std::shared_ptr<ScriptInstance> Instance = m_ScriptInstances.find(IDComp.ID)->second;
+			if (Instance != nullptr)
+			{
+				Instance->OnContact(entity.GetUUID());
+			}
+		}
+	}
 			
 	_MonoAssembly* Scripting::GetAssembly()
 	{

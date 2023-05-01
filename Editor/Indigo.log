@@ -1,11 +1,12 @@
-[20:04:03] [debug]: Renderer Initilised
-[20:04:03] [info]: PhysX 5 Initilised
-[20:04:17] [error]: a
-[20:04:17] [error]: b
-[20:04:19] [debug]: OnContact
-[20:04:22] [error]: a
-[20:04:22] [error]: b
-[20:04:24] [debug]: OnContact
-[20:04:27] [debug]: OnContact
-[20:04:27] [debug]: OnContact
-[20:04:31] [debug]: Renderer shutdown
+[21:01:41] [debug]: Renderer Initilised
+[21:01:41] [info]: PhysX 5 Initilised
+[21:01:44] [info]: start
+[21:01:46] [debug]: OnContact
+[21:01:46] [info]: OnContract Child
+[21:01:48] [debug]: OnContact
+[21:01:48] [info]: OnContract Child
+[21:01:50] [debug]: OnContact
+[21:01:50] [info]: OnContract Child
+[21:01:50] [debug]: OnContact
+[21:01:50] [info]: OnContract Child
+[21:01:50] [debug]: Renderer shutdown

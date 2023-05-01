@@ -47,5 +47,10 @@ namespace Engine
 
             return new Entity(id);
         }
+
+        public virtual void OnContact(ulong id)
+        {
+            Utility.Logger(LogType.Info, "OnContact Parent");
+        }
     }
 }

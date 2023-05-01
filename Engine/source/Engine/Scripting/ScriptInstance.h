@@ -13,6 +13,7 @@ namespace Engine
 
 		void OnBegin(UUID id);
 		void OnUpdate(float deltaTime);
+		void OnContact(UUID id);
 
 		void ChangeScriptClass(std::shared_ptr<ScriptClass> newScriptClass);
 

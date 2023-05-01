@@ -60,6 +60,25 @@ namespace Engine
 		}
 	}
 
+	void ScriptClass::OnContact(UUID id)
+	{
+		if (m_OnContact != nullptr && m_ClassInstance != nullptr)
+		{
+			MonoObject* exception = nullptr;
+
+			// mono_runtime_invoke slow but does a lot of checks
+			// mono_method_get_unmanaged_thunk is faster since it has less overhead (eg best for update functions) (not sure how to use)
+			void* param = &id;
+			mono_runtime_invoke(m_OnContact, m_ClassInstance, &param, &exception);
+
+			// TODO: handle exception
+			if (exception)
+			{
+
+			}
+		}
+	}
+
 	void ScriptClass::SetClass()
 	{
 		MonoImage* image = mono_assembly_get_image(Scripting::GetInstance()->GetAssembly());
@@ -90,6 +109,7 @@ namespace Engine
 
 			m_OnBegin = mono_class_get_method_from_name(m_Class, "OnBegin", 0);
 			m_OnUpdate = mono_class_get_method_from_name(m_Class, "OnUpdate", 1);
+			m_OnContact = mono_class_get_method_from_name(m_Class, "OnContact", 1);
 
 		}
 	}

@@ -16,7 +16,6 @@ namespace Engine
 
 	bool PhysX::Init()
 	{
-
 	
 		LOG_INFO("PhysX 5 Initilised");
 
@@ -104,17 +103,20 @@ namespace Engine
 		if (entity.HasComponent<CollisionComponents>())
 		{
 			auto& collisionComp = entity.GetComponent<CollisionComponents>();
+
+			const  physx::PxShapeFlags shapeFlags = physx::PxShapeFlag::eVISUALIZATION | physx::PxShapeFlag::eSIMULATION_SHAPE | physx::PxShapeFlag::eSCENE_QUERY_SHAPE;
+
 			// if has a static component or rigid attach the shape to it
 			if (entity.HasComponent<RigidDynamicComponent>())
 			{
 				auto& comp = entity.GetComponent<RigidDynamicComponent>();
 				if (collisionComp.CollisionType == ECollisionTypes::Box)
 				{
-					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(collisionComp.BoxBounds.x, collisionComp.BoxBounds.y, collisionComp.BoxBounds.z), *m_DefaultMaterial);
+					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(collisionComp.BoxBounds.x, collisionComp.BoxBounds.y, collisionComp.BoxBounds.z), *m_DefaultMaterial, shapeFlags);
 				}
 				if (collisionComp.CollisionType == ECollisionTypes::Sphere)
 				{
-					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxSphereGeometry(collisionComp.SphereRadius), *m_DefaultMaterial);
+					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxSphereGeometry(collisionComp.SphereRadius), *m_DefaultMaterial, shapeFlags);
 				}
 			}
 			else // if does not have a component create a new actor
@@ -128,7 +130,6 @@ namespace Engine
 					collisionComp.actor = m_Physics->createRigidStatic(physxTrans);
 					m_Scene->addActor(*collisionComp.actor);
 
-					const  physx::PxShapeFlags shapeFlags = physx::PxShapeFlag::eVISUALIZATION |  physx::PxShapeFlag::eSIMULATION_SHAPE | physx::PxShapeFlag::eSCENE_QUERY_SHAPE;
 					if (collisionComp.CollisionType == ECollisionTypes::Box)
 					{
 						collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*collisionComp.actor, physx::PxBoxGeometry(collisionComp.BoxBounds.x, collisionComp.BoxBounds.y, collisionComp.BoxBounds.z), *m_DefaultMaterial, shapeFlags);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PxSimulationEventCallback.h>
+#include "Engine/Scene/Entity.h"
 
 class PhysXCollisionCallbacks : public physx::PxSimulationEventCallback
 {
@@ -37,4 +38,3 @@ static  physx::PxFilterFlags contactReportFilterShader(physx::PxFilterObjectAttr
 		|  physx::PxPairFlag::eNOTIFY_CONTACT_POINTS;
 	return  physx::PxFilterFlag::eDEFAULT;
 }
-

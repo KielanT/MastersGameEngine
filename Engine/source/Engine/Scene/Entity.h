@@ -72,7 +72,7 @@ namespace Engine
 		operator bool() const { return m_EntityHandle != entt::null; }
 		operator entt::entity() const { return m_EntityHandle; }
 
-
+		void OnContact(Entity other);
 
 	private:
 		entt::entity m_EntityHandle{ entt::null };

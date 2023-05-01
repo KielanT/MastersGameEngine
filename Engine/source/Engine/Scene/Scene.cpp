@@ -65,18 +65,21 @@ namespace Engine
 
 	void Scene::BeginScene()
 	{
-		
+		PhysX::GetInstance()->EntityMap.clear();
 		auto Physics = m_Registry.view<RigidDynamicComponent, CollisionComponents>();
 		for (auto entityID : Physics)
 		{
 			Entity entity{ entityID, shared_from_this() };
 			if (entity.HasComponent<RigidDynamicComponent>())
 			{
-				
+				PhysX::GetInstance()->EntityMap.insert(std::make_pair(entity.GetComponent<RigidDynamicComponent>().actor, entity));
+
+				// return because an entity can have both RigidDynamicComponent and collision component
+				//return;
 			}
 			if (entity.HasComponent<CollisionComponents>())
 			{
-				
+				PhysX::GetInstance()->EntityMap.insert(std::make_pair(entity.GetComponent<CollisionComponents>().actor, entity));
 			}
 		}
 	
