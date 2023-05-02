@@ -17,11 +17,11 @@ namespace Engine
 		}
 	}
 
-	void ScriptInstance::OnBegin()
+	void ScriptInstance::OnBegin(UUID id)
 	{
 		if (m_ScriptClass != nullptr)
 		{
-			m_ScriptClass->OnBegin();
+			m_ScriptClass->OnBegin(id);
 		}
 	}
 
@@ -30,6 +30,14 @@ namespace Engine
 		if (m_ScriptClass != nullptr)
 		{
 			m_ScriptClass->OnUpdate(deltaTime);
+		}
+	}
+
+	void ScriptInstance::OnContact(UUID id)
+	{
+		if (m_ScriptClass != nullptr)
+		{
+			m_ScriptClass->OnContact(id);
 		}
 	}
 

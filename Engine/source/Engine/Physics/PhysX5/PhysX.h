@@ -1,26 +1,32 @@
 #pragma once
 
-#include "Engine/Physics/PhysicsAPI.h"
 #include "PhysXCustomCallbacks.h"
+#include "PhysXCollisionCallbacks.h"
 #include <PxPhysicsAPI.h>
+#include "Engine/Scene/Entity.h"
 
 namespace Engine
 {
 
 
-	class PhysX : public PhysicsAPI
+	class PhysX  
 	{
 	public:
 		~PhysX();
 
-		virtual bool Init() override;
-		virtual void Shutdown() override;
-		virtual void Update(float frameTime) override;
-		virtual void CreatePhysicsActor(Entity& entity) override;
-		virtual void CreateCollision(Entity& entity) override;
-		virtual void UpdatePhysicsActor(Entity& entity) override;
-		virtual void EditorUpdateActors(Entity& entity) override;
-		virtual void ResetSimulation() override;
+		bool Init();
+		void Shutdown();
+		void Update(float frameTime);
+		void CreatePhysicsActor(Entity& entity);
+		void CreateCollision(Entity& entity);
+		void UpdatePhysicsActor(Entity& entity);
+		void EditorUpdateActors(Entity& entity);
+		void ResetSimulation();
+
+		// Map Used for collisions
+		std::unordered_map<physx::PxActor*, Entity> EntityMap;
+
+		static std::shared_ptr<PhysX> GetInstance();
 
 	private:
 		physx::PxScene* CreateScene();
@@ -31,6 +37,8 @@ namespace Engine
 		void SetPhysicsSettings(RigidDynamicComponent& comp);
 
 	private:
+		static std::shared_ptr<PhysX> m_Instance;
+
 		physx::PxFoundation* m_Foundation;
 		physx::PxPvd* m_PVD;
 		physx::PxPhysics* m_Physics;
@@ -42,6 +50,9 @@ namespace Engine
 		physx::PxMaterial* m_DefaultMaterial;
 
 		physx::PxPvdTransport* m_Transport;
+
+
+		
 	};
 
 	

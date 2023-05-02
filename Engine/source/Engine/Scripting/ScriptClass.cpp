@@ -16,21 +16,29 @@ namespace Engine
 		
 	}
 
-	void ScriptClass::OnBegin()
+
+	void ScriptClass::OnBegin(UUID id)
 	{
 		if (m_OnBegin != nullptr && m_ClassInstance != nullptr)
 		{
 			MonoObject* exception = nullptr;
+			
+			MonoClassField* idField = mono_class_get_field_from_name(m_Class, "ID");
+
+			if (idField != nullptr)
+			{
+				mono_field_set_value(m_ClassInstance, idField, &id);
+			}
+
 			mono_runtime_invoke(m_OnBegin, m_ClassInstance, nullptr, &exception);
 
 			// TODO: handle exception and sent to a log
 			if (exception)
 			{
-				
+
 			}
 
 		}
-
 	}
 
 	void ScriptClass::OnUpdate(float deltaTime)
@@ -43,6 +51,25 @@ namespace Engine
 			// mono_method_get_unmanaged_thunk is faster since it has less overhead (eg best for update functions) (not sure how to use)
 			void* param = &deltaTime;
 			mono_runtime_invoke(m_OnUpdate, m_ClassInstance, &param, &exception);
+
+			// TODO: handle exception
+			if (exception)
+			{
+
+			}
+		}
+	}
+
+	void ScriptClass::OnContact(UUID id)
+	{
+		if (m_OnContact != nullptr && m_ClassInstance != nullptr)
+		{
+			MonoObject* exception = nullptr;
+
+			// mono_runtime_invoke slow but does a lot of checks
+			// mono_method_get_unmanaged_thunk is faster since it has less overhead (eg best for update functions) (not sure how to use)
+			void* param = &id;
+			mono_runtime_invoke(m_OnContact, m_ClassInstance, &param, &exception);
 
 			// TODO: handle exception
 			if (exception)
@@ -82,6 +109,7 @@ namespace Engine
 
 			m_OnBegin = mono_class_get_method_from_name(m_Class, "OnBegin", 0);
 			m_OnUpdate = mono_class_get_method_from_name(m_Class, "OnUpdate", 1);
+			m_OnContact = mono_class_get_method_from_name(m_Class, "OnContact", 1);
 
 		}
 	}

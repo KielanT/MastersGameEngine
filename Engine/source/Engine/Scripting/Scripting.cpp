@@ -65,6 +65,7 @@ namespace Engine
 
 		if (!entity.HasComponent<ScriptComponent>()) return;
 		
+
 		auto& ScriptComp = entity.GetComponent<ScriptComponent>();
 		if (!m_ScriptInstances.empty())
 		{
@@ -79,8 +80,10 @@ namespace Engine
 				Scripting::GetInstance()->CreateScriptInstance(ScriptComp);
 			}
 
-			Instance->OnBegin();
+			Instance->OnBegin(entity.GetUUID());
 		}
+
+
 	}
 
 	void Scripting::OnUpdateEntity(Entity entity, float deltaTime)
@@ -98,7 +101,24 @@ namespace Engine
 				Instance->OnUpdate(deltaTime);
 			}
 		}	
-	}		
+	}
+
+	void Scripting::OnContactEntity(Entity entity)
+	{
+		const auto& IDComp = entity.GetComponent<IDComponent>();
+		const auto& ScriptComp = entity.GetComponent<ScriptComponent>();
+
+		if (!m_ScriptInstances.empty())
+		{
+			if (m_ScriptInstances.count(IDComp.ID) == 0) return;
+
+			std::shared_ptr<ScriptInstance> Instance = m_ScriptInstances.find(IDComp.ID)->second;
+			if (Instance != nullptr)
+			{
+				Instance->OnContact(entity.GetUUID());
+			}
+		}
+	}
 			
 	_MonoAssembly* Scripting::GetAssembly()
 	{
@@ -129,11 +149,23 @@ namespace Engine
 		if (CheckClassExists(comp.ClassName) && !m_ClassMaps.empty())
 		{
 			// Create Instance
-			std::shared_ptr<ScriptInstance> Instance = std::make_shared<ScriptInstance>(m_ClassMaps.find(comp.ClassName)->second);
+			// Make a new script class from class map 
+			auto it = m_ClassMaps.find(comp.ClassName);
+			if (it != m_ClassMaps.end())
+			{
+				// Create a new copy of the script class so that the each instance does not point at the same class
+				std::shared_ptr<ScriptClass> SC = std::make_shared<ScriptClass>(*it->second);
 
-			// Add instance to a map using the entity handle
-			m_ScriptInstances.insert(std::make_pair(comp.OwnerEntityId, Instance));
+				// Creates the script instance
+				std::shared_ptr<ScriptInstance> Instance = std::make_shared<ScriptInstance>(SC);
 
+				// Add instance to a map using the entity handle
+				m_ScriptInstances.insert(std::make_pair(comp.OwnerEntityId, Instance));
+			}
+			else
+			{
+				LOG_ERROR("Class not found %s", comp.ClassName);
+			}
 		}
 	}
 
@@ -235,6 +267,7 @@ namespace Engine
 			const char* name = mono_metadata_string_heap(image, cols[MONO_TYPEDEF_NAME]);
 
 			std::shared_ptr<ScriptClass> SC = std::make_shared<ScriptClass>(nameSpace, name);
+
 
 			if ((std::string)nameSpace == "Game")
 			{

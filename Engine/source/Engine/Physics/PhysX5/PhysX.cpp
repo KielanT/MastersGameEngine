@@ -3,7 +3,10 @@
 
 namespace Engine
 {
+	std::shared_ptr<PhysX> PhysX::m_Instance = nullptr;
+
 	static PhysXCustomErrorCallback gCustomErrorCallback;
+	static PhysXCollisionCallbacks gCollisionCallback;
 	static physx::PxDefaultAllocator gDefaultAllocatorCallback;
 
 	PhysX::~PhysX()
@@ -13,6 +16,7 @@ namespace Engine
 
 	bool PhysX::Init()
 	{
+	
 		LOG_INFO("PhysX 5 Initilised");
 
 		m_Foundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gCustomErrorCallback);
@@ -29,7 +33,7 @@ namespace Engine
 			LOG_ERROR("Failed to Create PVD (Does not Break Engine)");
 
 		bool recordMemoryAllocations = false;
-		
+
 		m_Physics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_Foundation, physx::PxTolerancesScale(), recordMemoryAllocations, m_PVD);
 		if (!m_Physics)
 		{
@@ -37,15 +41,16 @@ namespace Engine
 			return false;
 		}
 
-		if(!PxInitExtensions(*m_Physics, m_PVD))
+		if (!PxInitExtensions(*m_Physics, m_PVD))
 		{
-			LOG_ERROR("PxInitExtensions failed! "); 
+			LOG_ERROR("PxInitExtensions failed! ");
 			return false;
 		}
 
 		m_Scene = CreateScene();
 
 		m_DefaultMaterial = m_Physics->createMaterial(0.5f, 0.5f, 0.6f);
+
 
 		return true;
 	}
@@ -69,6 +74,8 @@ namespace Engine
 	{
 		m_Scene->simulate(frameTime);
 		m_Scene->fetchResults(true);
+
+		
 	}
 
 	void PhysX::CreatePhysicsActor(Entity& entity)
@@ -96,17 +103,20 @@ namespace Engine
 		if (entity.HasComponent<CollisionComponents>())
 		{
 			auto& collisionComp = entity.GetComponent<CollisionComponents>();
+
+			const  physx::PxShapeFlags shapeFlags = physx::PxShapeFlag::eVISUALIZATION | physx::PxShapeFlag::eSIMULATION_SHAPE | physx::PxShapeFlag::eSCENE_QUERY_SHAPE;
+
 			// if has a static component or rigid attach the shape to it
 			if (entity.HasComponent<RigidDynamicComponent>())
 			{
 				auto& comp = entity.GetComponent<RigidDynamicComponent>();
 				if (collisionComp.CollisionType == ECollisionTypes::Box)
 				{
-					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(collisionComp.BoxBounds.x, collisionComp.BoxBounds.y, collisionComp.BoxBounds.z), *m_DefaultMaterial);
+					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxBoxGeometry(collisionComp.BoxBounds.x, collisionComp.BoxBounds.y, collisionComp.BoxBounds.z), *m_DefaultMaterial, shapeFlags);
 				}
 				if (collisionComp.CollisionType == ECollisionTypes::Sphere)
 				{
-					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxSphereGeometry(collisionComp.SphereRadius), *m_DefaultMaterial);
+					collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*comp.actor, physx::PxSphereGeometry(collisionComp.SphereRadius), *m_DefaultMaterial, shapeFlags);
 				}
 			}
 			else // if does not have a component create a new actor
@@ -122,12 +132,13 @@ namespace Engine
 
 					if (collisionComp.CollisionType == ECollisionTypes::Box)
 					{
-						collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*collisionComp.actor, physx::PxBoxGeometry(collisionComp.BoxBounds.x, collisionComp.BoxBounds.y, collisionComp.BoxBounds.z), *m_DefaultMaterial);
+						collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*collisionComp.actor, physx::PxBoxGeometry(collisionComp.BoxBounds.x, collisionComp.BoxBounds.y, collisionComp.BoxBounds.z), *m_DefaultMaterial, shapeFlags);
 					}
 					if (collisionComp.CollisionType == ECollisionTypes::Sphere)
 					{
-						collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*collisionComp.actor, physx::PxSphereGeometry(collisionComp.SphereRadius), *m_DefaultMaterial);
+						collisionComp.CollisionShape = physx::PxRigidActorExt::createExclusiveShape(*collisionComp.actor, physx::PxSphereGeometry(collisionComp.SphereRadius), *m_DefaultMaterial, shapeFlags);
 					}
+
 				}
 
 				
@@ -142,7 +153,6 @@ namespace Engine
 		{
 			SetRenderedTransform(entity.GetComponent<TransformComponent>(), entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose());
 			SetPhysicsSettings(entity.GetComponent<RigidDynamicComponent>());
-			
 			
 		}
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<CollisionComponents>())
@@ -162,12 +172,20 @@ namespace Engine
 			physx::PxTransform transform = SetPhysicsTransform(entity.GetComponent<TransformComponent>());
 			entity.GetComponent<RigidDynamicComponent>().actor->setGlobalPose(transform);
 		}
+
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<CollisionComponents>())
 		{
 			if (entity.GetComponent<CollisionComponents>().actor != nullptr)
 			{
+				auto& comp = entity.GetComponent<CollisionComponents>();
 				physx::PxTransform transform = SetPhysicsTransform(entity.GetComponent<TransformComponent>());
-				entity.GetComponent<CollisionComponents>().actor->setGlobalPose(transform);
+				comp.actor->setGlobalPose(transform);
+				
+				if(comp.CollisionType == ECollisionTypes::Box)
+					comp.CollisionShape->setGeometry(physx::PxBoxGeometry(comp.BoxBounds.x, comp.BoxBounds.y, comp.BoxBounds.z));
+				else if (comp.CollisionType == ECollisionTypes::Sphere)
+					comp.CollisionShape->setGeometry(physx::PxSphereGeometry(comp.SphereRadius));
+
 			}
 		}
 	}
@@ -179,12 +197,26 @@ namespace Engine
 			m_Scene->release();
 			m_Scene = nullptr;
 		}
-		m_PVD->disconnect();
+		if(m_PVD != nullptr)
+			m_PVD->disconnect();
+
+
 		m_Scene = CreateScene();
 		
 		//m_Scene->flushSimulation();
 		//m_Scene->flushUpdates();
 		// https://forums.developer.nvidia.com/t/how-to-reset-simulation-in-physx-3-3/47494
+	}
+
+	std::shared_ptr<PhysX> PhysX::GetInstance()
+	{
+		if (m_Instance == nullptr)
+		{
+			m_Instance = std::make_shared<PhysX>();
+			m_Instance->Init();
+		}
+
+		return m_Instance;
 	}
 
 	physx::PxScene* PhysX::CreateScene()
@@ -194,7 +226,9 @@ namespace Engine
 		sceneDesc.gravity = physx::PxVec3(0.0f, -9.81, 0.0f);
 		m_CpuDispatcher = physx::PxDefaultCpuDispatcherCreate(2);
 		sceneDesc.cpuDispatcher = m_CpuDispatcher;
-		sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
+		sceneDesc.simulationEventCallback = &gCollisionCallback;
+		//sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
+		sceneDesc.filterShader = contactReportFilterShader;
 
 		scene = m_Physics->createScene(sceneDesc);
 		scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.0f);
@@ -203,7 +237,9 @@ namespace Engine
 		if (!m_PVD->isConnected())
 		{
 			m_PVD->connect(*m_Transport, physx::PxPvdInstrumentationFlag::eALL);
+
 		}
+
 		return scene;
 	}
 
@@ -248,6 +284,7 @@ namespace Engine
 		comp.actor->setMassSpaceInertiaTensor({ comp.MassSpaceInertiaTensor.x, comp.MassSpaceInertiaTensor.y,comp.MassSpaceInertiaTensor.z });
 		//comp.actor->setLinearVelocity({ (physx::PxReal)comp.LinearVelocity.x, (physx::PxReal)comp.LinearVelocity.y, (physx::PxReal)comp.LinearVelocity.z });
 		//comp.actor->setAngularDamping(comp.AngularDamping);
+
 	}
 	
 }

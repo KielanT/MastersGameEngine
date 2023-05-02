@@ -4,7 +4,7 @@
 #include "Engine/Scene/Entity.h"
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
-#include "Engine/Physics/Physics.h"
+#include "Engine/Physics/PhysX5/PhysX.h"
 #include "Engine/Platform/SDLInput.h"
 #include "GameCamera.h"
 #include "Engine/Scripting/Scripting.h"
@@ -28,7 +28,7 @@ namespace Engine
 		m_MainCamera->SetLens(0.25f * glm::pi<float>(), 1600.0f / 900.0f, 1.0f, 1000.0f);
 		//m_MainCamera->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-		Physics::Init();
+		PhysX::GetInstance();
 
 	}
 	
@@ -37,7 +37,8 @@ namespace Engine
 	{
 		m_Registry.clear();
 		m_SceneSettings = SceneSettings();
-		Physics::ResetSimulation();
+
+		PhysX::GetInstance()->ResetSimulation();
 	}
 
 	void Scene::RenderScene()
@@ -64,6 +65,26 @@ namespace Engine
 
 	void Scene::BeginScene()
 	{
+		PhysX::GetInstance()->EntityMap.clear();
+		auto Physics = m_Registry.view<RigidDynamicComponent, CollisionComponents>();
+		for (auto entityID : Physics)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			if (entity.HasComponent<RigidDynamicComponent>())
+			{
+				PhysX::GetInstance()->EntityMap.insert(std::make_pair(entity.GetComponent<RigidDynamicComponent>().actor, entity));
+
+				// return because an entity can have both RigidDynamicComponent and collision component
+				//return;
+			}
+			if (entity.HasComponent<CollisionComponents>())
+			{
+				PhysX::GetInstance()->EntityMap.insert(std::make_pair(entity.GetComponent<CollisionComponents>().actor, entity));
+			}
+		}
+	
+
+
 		auto scriptView = m_Registry.view<ScriptComponent>();
 		for (auto entityID : scriptView)
 		{
@@ -78,6 +99,7 @@ namespace Engine
 			}
 			Scripting::GetInstance()->OnBeginEntity(entity);
 		}
+
 	}
 
 	void Scene::UpdateScene(float frametime)
@@ -108,13 +130,20 @@ namespace Engine
 		}
 		
 		
-		Physics::Update(frametime);
+		PhysX::GetInstance()->Update(frametime);
 
 		auto RDView = m_Registry.view<RigidDynamicComponent>();
 		for (auto entityID : RDView)
 		{
 			Entity entity{ entityID, shared_from_this() };
-			Physics::UpdatePhysicsActor(entity);
+			PhysX::GetInstance()->UpdatePhysicsActor(entity);
+		}
+
+		auto colView = m_Registry.view<CollisionComponents>();
+		for (auto entityID : colView)
+		{
+			Entity entity{ entityID, shared_from_this() };
+			PhysX::GetInstance()->UpdatePhysicsActor(entity);
 		}
 	}
 
@@ -124,14 +153,14 @@ namespace Engine
 		for (auto entityID : RDView)
 		{
 			Entity entity{ entityID, shared_from_this() };
-			Physics::EditorUpdateActors(entity);
+			PhysX::GetInstance()->EditorUpdateActors(entity);
 		}
 
 		auto ColView = m_Registry.view<CollisionComponents>();
 		for (auto entityID : ColView)
 		{
 			Entity entity{ entityID, shared_from_this() };
-			Physics::EditorUpdateActors(entity);
+			PhysX::GetInstance()->EditorUpdateActors(entity);
 		}
 	}
 
@@ -404,7 +433,7 @@ namespace Engine
 	template<>
 	void Scene::OnComponentCreated<RigidDynamicComponent>(Entity entity, RigidDynamicComponent& comp)
 	{
-		Physics::CreatePhysicsActor(entity);
+		PhysX::GetInstance()->CreatePhysicsActor(entity);
 	}
 
 	template<>
@@ -417,7 +446,7 @@ namespace Engine
 	template<>
 	void Scene::OnComponentCreated<CollisionComponents>(Entity entity, CollisionComponents& comp)
 	{
-		Physics::CreateCollision(entity);
+		PhysX::GetInstance()->CreateCollision(entity);
 	}
 
 	template<>

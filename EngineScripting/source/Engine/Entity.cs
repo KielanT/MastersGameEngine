@@ -19,6 +19,7 @@ namespace Engine
             ID = 0;
             transformComponent = new TransformComponent(this);
             rendererComponent = new RendererComponent(this);
+            physicsComponent = new PhysicsComponent(this);
         }
        
         public Entity(ulong id) 
@@ -45,6 +46,11 @@ namespace Engine
                 return null;
 
             return new Entity(id);
+        }
+
+        public virtual void OnContact(ulong id)
+        {
+            Utility.Logger(LogType.Info, "OnContact Parent");
         }
     }
 }

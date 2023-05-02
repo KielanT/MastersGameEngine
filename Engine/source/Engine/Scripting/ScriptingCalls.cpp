@@ -3,6 +3,7 @@
 
 #include "CPPBinds/UtilityBinds.h"
 #include "CPPBinds/ComponentBinds.h"
+#include "CPPBinds/InputBinds.h"
 
 namespace Engine
 {
@@ -29,6 +30,10 @@ namespace Engine
 		mono_add_internal_call("Engine.InternalCalls::Renderer_SetVisible",	   Renderer_SetVisible);
 		mono_add_internal_call("Engine.InternalCalls::Renderer_GetVisible",    Renderer_GetVisible);
 		mono_add_internal_call("Engine.InternalCalls::Physics_AddForce",	   Physics_AddForce);
+		
+		// Input
+		mono_add_internal_call("Engine.InternalCalls::Input_KeyHeld", Input_KeyHeld);
+		mono_add_internal_call("Engine.InternalCalls::Input_KeyHit", Input_KeyHit);
 	}
 
 	

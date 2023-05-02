@@ -209,43 +209,43 @@ namespace Engine
 
 	void GameCamera::Control(float frameTime)
 	{
-		if (SDLInput::KeyHeld(SDLK_DOWN)/*KeyHeld(Key_Down)*/)
-		{
-			Pitch(glm::radians(60.0f) * frameTime);
-			//mRotation.x += ROTATION_SPEED * frameTime; // Use of frameTime to ensure same speed on different machines
-		}
-		else if (SDLInput::KeyHeld(SDLK_UP)/*KeyHeld(Key_Up)*/)
-		{
-			Pitch(glm::radians(-60.0f) * frameTime);
-			//mRotation.x -= ROTATION_SPEED * frameTime;
-		}
-		else if (SDLInput::KeyHeld(SDLK_RIGHT)/*KeyHeld(Key_Right)*/)
-		{
-			RotateY(glm::radians(60.0f) * frameTime);
-		}
-		else if (SDLInput::KeyHeld(SDLK_LEFT)/*KeyHeld(Key_Left)*/)
-		{
-			RotateY(glm::radians(-60.0f) * frameTime);
-			//mRotation.y -= ROTATION_SPEED * frameTime;
-		}
-		
-		//**** LOCAL MOVEMENT ****
-		if (SDLInput::KeyHeld(SDLK_d)/*KeyHeld(Key_D)*/)
-		{
-			Strafe(50.0f * frameTime);
-		}
-		if (SDLInput::KeyHeld(SDLK_a)/*KeyHeld(Key_A)*/)
-		{
-			Strafe(-50.0f * frameTime);
-		}
-		if (SDLInput::KeyHeld(SDLK_w)/*KeyHeld(Key_W)*/)
-		{
-			Walk(-50.0f * frameTime);
-		}
-		if (SDLInput::KeyHeld(SDLK_s)/*KeyHeld(Key_S)*/)
-		{
-			Walk(50.0f * frameTime);
-		}
+		//if (SDLInput::KeyHeld(SDLK_DOWN)/*KeyHeld(Key_Down)*/)
+		//{
+		//	Pitch(glm::radians(60.0f) * frameTime);
+		//	//mRotation.x += ROTATION_SPEED * frameTime; // Use of frameTime to ensure same speed on different machines
+		//}
+		//else if (SDLInput::KeyHeld(SDLK_UP)/*KeyHeld(Key_Up)*/)
+		//{
+		//	Pitch(glm::radians(-60.0f) * frameTime);
+		//	//mRotation.x -= ROTATION_SPEED * frameTime;
+		//}
+		//else if (SDLInput::KeyHeld(SDLK_RIGHT)/*KeyHeld(Key_Right)*/)
+		//{
+		//	RotateY(glm::radians(60.0f) * frameTime);
+		//}
+		//else if (SDLInput::KeyHeld(SDLK_LEFT)/*KeyHeld(Key_Left)*/)
+		//{
+		//	RotateY(glm::radians(-60.0f) * frameTime);
+		//	//mRotation.y -= ROTATION_SPEED * frameTime;
+		//}
+		//
+		////**** LOCAL MOVEMENT ****
+		//if (SDLInput::KeyHeld(SDLK_d)/*KeyHeld(Key_D)*/)
+		//{
+		//	Strafe(50.0f * frameTime);
+		//}
+		//if (SDLInput::KeyHeld(SDLK_a)/*KeyHeld(Key_A)*/)
+		//{
+		//	Strafe(-50.0f * frameTime);
+		//}
+		//if (SDLInput::KeyHeld(SDLK_w)/*KeyHeld(Key_W)*/)
+		//{
+		//	Walk(-50.0f * frameTime);
+		//}
+		//if (SDLInput::KeyHeld(SDLK_s)/*KeyHeld(Key_S)*/)
+		//{
+		//	Walk(50.0f * frameTime);
+		//}
 
 		UpdateViewMatrix();
 	}

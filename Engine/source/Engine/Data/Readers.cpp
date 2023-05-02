@@ -1,6 +1,6 @@
 #include "epch.h"
 #include "Readers.h"
-#include <Engine/Physics/Physics.h>
+#include <Engine/Physics/PhysX5/PhysX.h>
 
 namespace YAML
 {
@@ -115,7 +115,8 @@ namespace Engine
 				{
 					auto col = CollisionComponents();
 					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
-					col.CollisionType = (ECollisionTypes)collisonNode["CollisionType"].as<int>();
+					col.BoxBounds = collisonNode["BoxBounds"].as<glm::vec3>();
+					col.SphereRadius = collisonNode["SphereRadius"].as<float>();
 					
 					entity.AddComponent<CollisionComponents>(col);
 					
@@ -144,6 +145,38 @@ namespace Engine
 					auto script = ScriptComponent();
 					script.selected = scriptNode["SelectedIndex"].as<int>();
 					script.ClassName = scriptNode["ClassName"].as<std::string>();
+
+					auto fieldMapNode = scriptNode["FieldMap"];
+					if (fieldMapNode)
+					{
+						for (auto Field : fieldMapNode)
+						{
+							
+							std::string name = Field.second["FieldName"].as<std::string>();
+							ScriptFieldDataTypes dataType = static_cast<ScriptFieldDataTypes>(Field.second["FieldDataType"].as<int>());
+
+							void* dataPtr = nullptr;
+							if (dataType == ScriptFieldDataTypes::Float)
+							{
+								dataPtr = new float(Field.second["FieldData"].as<float>());
+							}
+							else if (dataType == ScriptFieldDataTypes::Int32)
+							{
+								dataPtr = new int(Field.second["FieldData"].as<int>());
+							}
+							else if (dataType == ScriptFieldDataTypes::String)
+							{
+								dataPtr = new std::string(Field.second["FieldData"].as<std::string>());
+							}
+							
+							script.FieldMap[name] = std::make_pair(dataType, dataPtr);
+								
+
+							
+							
+						}
+					}
+
 					entity.AddComponent<ScriptComponent>(script);
 				}
 			}

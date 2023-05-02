@@ -3,7 +3,7 @@
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Renderer/DirectX11/DX11Renderer.h"
-#include <Engine/Physics/Physics.h>
+#include <Engine/Physics/PhysX5/PhysX.h>
 #include <Engine/Scripting/Scripting.h>
 
 #include <fstream>
@@ -307,6 +307,7 @@ namespace Engine
 				bIsUnsaved = true;
 			}
 
+
 			int ct = static_cast<int>(comp.CollisionType);
 			const char* ColTypeItems[static_cast<int>(ECollisionTypes::ECollisionTypesSize)];
 			ColTypeItems[0] = "Box Collision";
@@ -317,7 +318,24 @@ namespace Engine
 			
 			if (previousSelected != static_cast<int>(comp.CollisionType))
 			{
-				Physics::CreateCollision(entity);
+				PhysX::GetInstance()->CreateCollision(entity);
+			}
+
+			if (ct == 0)
+			{
+				ImGui::Text("Box Bounds: "); ImGui::SameLine();
+				ImGui::PushItemWidth(m_InputNumWidth);
+				ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##boundx", &comp.BoxBounds.x); ImGui::SameLine();
+				ImGui::Text("Y"); ImGui::SameLine(); ImGui::InputFloat("##boundz", &comp.BoxBounds.y); ImGui::SameLine();
+				ImGui::Text("Z"); ImGui::SameLine(); ImGui::InputFloat("##boundy", &comp.BoxBounds.z);
+				ImGui::PopItemWidth();
+			}
+			else if (ct == 1)
+			{
+				ImGui::Text("Sphere Radius: "); ImGui::SameLine();
+				ImGui::PushItemWidth(m_InputNumWidth);
+				ImGui::InputFloat("##radiusx", &comp.SphereRadius);
+				ImGui::PopItemWidth();
 			}
 
 			ImGui::TreePop();
@@ -557,11 +575,17 @@ namespace Engine
 		std::string FieldName = name + "##" + std::to_string(comp.OwnerEntityId);
 		void* dataPtr = nullptr;
 
-
+		
 		if (field.FieldDataType == ScriptFieldDataTypes::Float)
 		{
 			float data = scriptClass->GetFieldValue<float>(name);
-			bool t = false;
+			if (comp.FieldMap[name].second)
+			{
+				data = *(float*)comp.FieldMap[name].second;
+				scriptClass->SetFieldValue(name, data);
+			}
+			
+
 			if (ImGui::DragFloat(FieldName.c_str(), &data))
 			{
 				scriptClass->SetFieldValue(name, data);
@@ -574,6 +598,12 @@ namespace Engine
 		if (field.FieldDataType == ScriptFieldDataTypes::Int32)
 		{
 			int data = scriptClass->GetFieldValue<int>(name);
+			if (comp.FieldMap[name].second)
+			{
+				data = *(int*)comp.FieldMap[name].second;
+				scriptClass->SetFieldValue(name, data);
+			}
+
 			if (ImGui::DragInt(FieldName.c_str(), &data))
 			{
 				scriptClass->SetFieldValue(name, data);
@@ -583,8 +613,14 @@ namespace Engine
 
 		if (field.FieldDataType == ScriptFieldDataTypes::String)
 		{
-			//MonoError error;
 			std::string dataStr = scriptClass->GetFieldValue(name);
+			if (comp.FieldMap[name].second)
+			{
+				dataStr = *(std::string*)comp.FieldMap[name].second;
+				scriptClass->SetFieldValue(name, dataStr);
+			}
+
+
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strncpy_s(buffer, dataStr.c_str(), sizeof(buffer));

@@ -44,6 +44,7 @@ namespace Engine
 
 		void OnBeginEntity(Entity entity);
 		void OnUpdateEntity(Entity entity, float deltaTime);
+		void OnContactEntity(Entity entity);
 
 
 		_MonoAssembly* GetAssembly();

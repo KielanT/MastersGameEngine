@@ -32,7 +32,7 @@ Entities:
       ID: 1565500994374662177
       Tag: PBRMesh
     TransformComponent:
-      Position: [10, 0, 0]
+      Position: [10, -10, 0]
       Rotation: [-90, 0, 0]
       Scale: [2, 2, 2]
     TextureComponent:
@@ -53,15 +53,15 @@ Entities:
       ID: 1360875847982544762
       Tag: CubeMesh
     TransformComponent:
-      Position: [-10, 0, 0]
+      Position: [-7, 0, -10]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     TextureComponent:
-      Path: Textures/iron-rusted4-albedo.dds
-      NormalPath: Textures/iron-rusted4-normal.dds
-      RoughPath: Textures/iron-rusted4-roughness.dds
-      HeightPath: Textures/iron-rusted4-height.dds
-      MetalnessPath: Textures/iron-rusted4-metalness.dds
+      Path: Textures/bamboo-wood-semigloss-albedo.dds
+      NormalPath: Textures/bamboo-wood-semigloss-normal.dds
+      RoughPath: Textures/bamboo-wood-semigloss-roughness.dds
+      HeightPath: Textures/bamboo-wood-semigloss-height.dds
+      MetalnessPath: Textures/bamboo-wood-semigloss-metalness.dds
     MeshRendererComponent:
       Path: Mesh/Basic/Cube.x
       Visible: true
@@ -90,3 +90,24 @@ Entities:
       Scale: [1, 1, 1]
     CameraComponent:
       {}
+  -  # Entity
+    IDComponent:
+      ID: 7978160404984445150
+      Tag: Sphere
+    TransformComponent:
+      Position: [-25, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: Textures/tufted-leather-albedo.dds
+      NormalPath: Textures/tufted-leather-normal.dds
+      RoughPath: Textures/tufted-leather-roughness.dds
+      HeightPath: Textures/tufted-leather-height.dds
+      MetalnessPath: Textures/tufted-leather-metalness.dds
+    MeshRendererComponent:
+      Path: Mesh/Basic/Sphere.x
+      Visible: true
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0

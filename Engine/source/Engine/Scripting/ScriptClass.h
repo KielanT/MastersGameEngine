@@ -8,6 +8,7 @@
 #include "mono/jit/jit.h"
 #include "mono/metadata/assembly.h"
 
+#include "Engine/UUID.h"
 
 namespace Engine
 {
@@ -31,8 +32,9 @@ namespace Engine
 	public:
 		ScriptClass(const std::string& classNamespace, const std::string& className);
 
-		void OnBegin();
+		void OnBegin(UUID id);
 		void OnUpdate(float deltaTime);
+		void OnContact(UUID id);
 
 		void InitClassInstance();
 
@@ -111,6 +113,8 @@ namespace Engine
 
 		MonoMethod* m_OnBegin;
 		MonoMethod* m_OnUpdate;
+		
+		MonoMethod* m_OnContact;
 
 		
 	};

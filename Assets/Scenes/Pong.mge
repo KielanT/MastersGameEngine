@@ -1,0 +1,250 @@
+SceneSettings:
+  Title: Pong
+  Index: 0
+  AmbientColour: [0.200000003, 0.200000003, 0.300000012]
+  SpecularPower: 256
+  BackgroundColour: [0.200000003, 0.200000003, 0.300000012, 1]
+  VSYNC: true
+Entities:
+  -  # Entity
+    IDComponent:
+      ID: 1920173369880396739
+      Tag: Skybox Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [50000, 50000, 50000]
+    SkyboxComponent:
+      MeshPath: Mesh/Basic/Cube.x
+      TexPath: Textures/beach-cube.dds
+  -  # Entity
+    IDComponent:
+      ID: 12310861546955581306
+      Tag: Bottom
+    TransformComponent:
+      Position: [0, -25, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: ""
+      NormalPath: ""
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: Mesh/Basic/Cube.x
+      Visible: false
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    CollisionComponents:
+      CollisionType: 0
+      BoxBounds: [60, 5, 5]
+      SphereRadius: 5
+  -  # Entity
+    IDComponent:
+      ID: 2469209461411178094
+      Tag: Top
+    TransformComponent:
+      Position: [0, 25, -0]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: ""
+      NormalPath: ""
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: Mesh/Basic/Cube.x
+      Visible: false
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    CollisionComponents:
+      CollisionType: 0
+      BoxBounds: [60, 5, 5]
+      SphereRadius: 5
+  -  # Entity
+    IDComponent:
+      ID: 11903984131691269286
+      Tag: Ball
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0.010899392, 8.79094387e-06, 0.000177887196]
+      Scale: [0.5, 0.5, 0.5]
+    TextureComponent:
+      Path: Textures/tufted-leather-albedo.dds
+      NormalPath: Textures/tufted-leather-normal.dds
+      RoughPath: Textures/tufted-leather-roughness.dds
+      HeightPath: Textures/tufted-leather-height.dds
+      MetalnessPath: Textures/tufted-leather-metalness.dds
+    MeshRendererComponent:
+      Path: Mesh/Basic/Sphere.x
+      Visible: true
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    RigidDynamicComponent:
+      Gravity: true
+      Mass: 1
+      MassSpaceInertiaTensor: [1, 1, 1]
+      LinearVelocity: [0, 0, 0]
+      AngularVelocity: [0, 0, 0]
+      AngularDamping: 0
+    CollisionComponents:
+      CollisionType: 1
+      BoxBounds: [2.5, 2.5, 2.5]
+      SphereRadius: 2.5
+    ScriptComponent:
+      SelectedIndex: 0
+      ClassName: Ball
+      FieldMap:
+        Field:
+          FieldName: forceAmount
+          FieldDataType: 1
+          FieldData: 45
+        Field:
+          FieldName: delay
+          FieldDataType: 1
+          FieldData: 5
+        Field:
+          FieldName: timer
+          FieldDataType: 1
+          FieldData: 0
+  -  # Entity
+    IDComponent:
+      ID: 17903317618243069474
+      Tag: RightPaddle
+    TransformComponent:
+      Position: [20, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [0.5, 1, 1]
+    TextureComponent:
+      Path: Textures/iron-rusted4-albedo.dds
+      NormalPath: Textures/iron-rusted4-normal.dds
+      RoughPath: Textures/iron-rusted4-roughness.dds
+      HeightPath: Textures/iron-rusted4-height.dds
+      MetalnessPath: Textures/iron-rusted4-metalness.dds
+    MeshRendererComponent:
+      Path: Mesh/Basic/Cube.x
+      Visible: true
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    CollisionComponents:
+      CollisionType: 0
+      BoxBounds: [5, 5, 5]
+      SphereRadius: 5
+    ScriptComponent:
+      SelectedIndex: 1
+      ClassName: Paddle
+      FieldMap:
+        Field:
+          FieldName: paddleSpeed
+          FieldDataType: 1
+          FieldData: 50
+        Field:
+          FieldName: playerNum
+          FieldDataType: 2
+          FieldData: 2
+  -  # Entity
+    IDComponent:
+      ID: 1449652694892644088
+      Tag: Camera Entity
+    TransformComponent:
+      Position: [0, 0, 50]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      {}
+  -  # Entity
+    IDComponent:
+      ID: 2270741718244137710
+      Tag: LeftPaddle
+    TransformComponent:
+      Position: [-20, 0, 0]
+      Rotation: [0, -0, 0]
+      Scale: [0.5, 1, 1]
+    TextureComponent:
+      Path: Textures/bamboo-wood-semigloss-albedo.dds
+      NormalPath: Textures/bamboo-wood-semigloss-normal.dds
+      RoughPath: Textures/bamboo-wood-semigloss-roughness.dds
+      HeightPath: Textures/bamboo-wood-semigloss-height.dds
+      MetalnessPath: Textures/bamboo-wood-semigloss-metalness.dds
+    MeshRendererComponent:
+      Path: Mesh/Basic/Cube.x
+      Visible: true
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    CollisionComponents:
+      CollisionType: 0
+      BoxBounds: [5, 5, 5]
+      SphereRadius: 5
+    ScriptComponent:
+      SelectedIndex: 1
+      ClassName: Paddle
+      FieldMap:
+        Field:
+          FieldName: playerNum
+          FieldDataType: 0
+        Field:
+          FieldName: paddleSpeed
+          FieldDataType: 1
+          FieldData: 50
+  -  # Entity
+    IDComponent:
+      ID: 3054471348796685388
+      Tag: Left
+    TransformComponent:
+      Position: [-45, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: ""
+      NormalPath: ""
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: Mesh/Basic/Cube.x
+      Visible: false
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    CollisionComponents:
+      CollisionType: 0
+      BoxBounds: [5, 30, 5]
+      SphereRadius: 5
+  -  # Entity
+    IDComponent:
+      ID: 13338569993905444634
+      Tag: Right
+    TransformComponent:
+      Position: [45, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    TextureComponent:
+      Path: ""
+      NormalPath: ""
+      RoughPath: ""
+      HeightPath: ""
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: Mesh/Basic/Cube.x
+      Visible: false
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    CollisionComponents:
+      CollisionType: 0
+      BoxBounds: [5, 30, 5]
+      SphereRadius: 5

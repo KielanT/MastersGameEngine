@@ -23,8 +23,26 @@ static void Transform_SetPostition(Engine::UUID entityID, glm::vec3* position)
 	if (scene != nullptr)
 	{
 		Engine::Entity entity = scene->FindEntityByUUID(entityID);
-		auto& transform = entity.GetComponent<Engine::TransformComponent>();
-		transform.Position = *position;
+
+		if (entity.HasComponent<Engine::RigidDynamicComponent>())
+		{
+			auto& comp = entity.GetComponent<Engine::RigidDynamicComponent>();
+			glm::vec3 pos = *position;
+			auto physxTrans = physx::PxTransform({ pos.x , pos.y, pos.z });
+			comp.actor->setGlobalPose(physxTrans);
+		}
+		else if (entity.HasComponent<Engine::CollisionComponents>())
+		{
+			auto& comp = entity.GetComponent<Engine::CollisionComponents>();
+			glm::vec3 pos = *position;
+			auto physxTrans = physx::PxTransform({ pos.x , pos.y, pos.z });
+			comp.actor->setGlobalPose(physxTrans);
+		}
+		else
+		{
+			auto& transform = entity.GetComponent<Engine::TransformComponent>();
+			transform.Position = *position;
+		}
 	}
 }
 
@@ -100,7 +118,7 @@ static void Renderer_GetVisible(Engine::UUID entityID, bool* visible)
 	}
 }
 
-static void Physics_AddForce(Engine::UUID entityID, physx::PxVec3 force)
+static void Physics_AddForce(Engine::UUID entityID, physx::PxVec3 force, int mode)
 {
 	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();
 	if (scene != nullptr)
@@ -109,7 +127,9 @@ static void Physics_AddForce(Engine::UUID entityID, physx::PxVec3 force)
 		if (entity.HasComponent<Engine::RigidDynamicComponent>())
 		{
 			auto& rdc = entity.GetComponent<Engine::RigidDynamicComponent>();
-			rdc.actor->addForce(force);
+			
+			rdc.actor->addForce(force, (physx::PxForceMode::Enum)mode);
+
 		}
 	}
 }
