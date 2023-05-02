@@ -45,11 +45,3 @@ bin-int/
 
 # Premake
 !premake5.exe
-
-
-imgui.ini
-<<<<<<< HEAD
-=======
-
-
->>>>>>> Dev-SDL
