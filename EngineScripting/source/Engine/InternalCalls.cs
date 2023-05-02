@@ -67,7 +67,7 @@ namespace Engine
         //************************
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        internal extern static void Physics_AddForce(ulong ID, Maths.Vector3 vector3);
+        internal extern static void Physics_AddForce(ulong ID, Maths.Vector3 vector3, int mode);
 
 
         //************************

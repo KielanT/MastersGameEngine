@@ -268,6 +268,7 @@ namespace Engine
 
 			std::shared_ptr<ScriptClass> SC = std::make_shared<ScriptClass>(nameSpace, name);
 
+
 			if ((std::string)nameSpace == "Game")
 			{
 				m_ClassMaps.insert(std::make_pair(name, SC));

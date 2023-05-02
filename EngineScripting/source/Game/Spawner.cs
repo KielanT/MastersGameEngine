@@ -45,7 +45,7 @@ namespace Game
                 Entity entity1 = CreateNewEntity(entity, new Vector3(0, -1.8f, 0));
                 entity1.transformComponent.Scale = new Vector3(0.5f, 0.5f, 0.5f);
                 entity1.rendererComponent.Visible = true;
-                entity1.physicsComponent.AddForce(new Vector3(40, 40, 0));
+                entity1.physicsComponent.AddForce(new Vector3(40, 40, 0), ForceType.eFORCE);
                 spawnCount++;
             }
         }

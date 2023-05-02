@@ -1,7 +1,8 @@
 ﻿
 using Engine.Maths;
 using System;
-
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Engine
 {
@@ -79,6 +80,15 @@ namespace Engine
         }
     }
 
+
+    public enum ForceType
+    {
+        eFORCE,
+        eIMPULSE,
+        eVELOCITY_CHANGE,
+        eACCELERATION,
+    }
+
     public class PhysicsComponent : Component
     {
         public PhysicsComponent(Entity entity)
@@ -86,9 +96,10 @@ namespace Engine
             _entity = entity;
         }
 
-        public void AddForce(Vector3 force)
+        public void AddForce(Vector3 force, ForceType type)
         {
-            InternalCalls.Physics_AddForce(_entity.ID, force);
+            InternalCalls.Physics_AddForce(_entity.ID, force, (int)type);
         }
+
     }
 }

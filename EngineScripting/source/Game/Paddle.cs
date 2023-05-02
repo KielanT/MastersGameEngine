@@ -1,13 +1,12 @@
 ﻿using Engine.Maths;
 using Engine;
 
-
 namespace Game
 {
     public class Paddle : Entity
     {
 
-        public float paddleSpeed = 10.0f;
+        public float paddleSpeed = 25.0f;
         public int playerNum = 1;
 
         // TODO allow keycodes to be set via editor
@@ -56,6 +55,7 @@ namespace Game
             //}
 
             transformComponent.Position = position;
+
         }
 
 

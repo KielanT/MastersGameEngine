@@ -13,7 +13,7 @@ namespace Engine
     {
         if (other)
         {
-            //Scripting::GetInstance()->OnContactEntity(other);
+            Scripting::GetInstance()->OnContactEntity(other);
         }
     }
 
