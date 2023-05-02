@@ -1,2 +1,2 @@
 EditorSettings:
-  StartUpScene: Pong
+  StartUpScene: ""

@@ -575,11 +575,17 @@ namespace Engine
 		std::string FieldName = name + "##" + std::to_string(comp.OwnerEntityId);
 		void* dataPtr = nullptr;
 
-
+		
 		if (field.FieldDataType == ScriptFieldDataTypes::Float)
 		{
 			float data = scriptClass->GetFieldValue<float>(name);
-			bool t = false;
+			if (comp.FieldMap[name].second)
+			{
+				data = *(float*)comp.FieldMap[name].second;
+				scriptClass->SetFieldValue(name, data);
+			}
+			
+
 			if (ImGui::DragFloat(FieldName.c_str(), &data))
 			{
 				scriptClass->SetFieldValue(name, data);
@@ -592,6 +598,12 @@ namespace Engine
 		if (field.FieldDataType == ScriptFieldDataTypes::Int32)
 		{
 			int data = scriptClass->GetFieldValue<int>(name);
+			if (comp.FieldMap[name].second)
+			{
+				data = *(int*)comp.FieldMap[name].second;
+				scriptClass->SetFieldValue(name, data);
+			}
+
 			if (ImGui::DragInt(FieldName.c_str(), &data))
 			{
 				scriptClass->SetFieldValue(name, data);
@@ -601,8 +613,14 @@ namespace Engine
 
 		if (field.FieldDataType == ScriptFieldDataTypes::String)
 		{
-			//MonoError error;
 			std::string dataStr = scriptClass->GetFieldValue(name);
+			if (comp.FieldMap[name].second)
+			{
+				dataStr = *(std::string*)comp.FieldMap[name].second;
+				scriptClass->SetFieldValue(name, dataStr);
+			}
+
+
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
 			strncpy_s(buffer, dataStr.c_str(), sizeof(buffer));

@@ -102,6 +102,19 @@ Entities:
     ScriptComponent:
       SelectedIndex: 0
       ClassName: Ball
+      FieldMap:
+        Field:
+          FieldName: forceAmount
+          FieldDataType: 1
+          FieldData: 45
+        Field:
+          FieldName: delay
+          FieldDataType: 1
+          FieldData: 5
+        Field:
+          FieldName: timer
+          FieldDataType: 1
+          FieldData: 0
   -  # Entity
     IDComponent:
       ID: 17903317618243069474
@@ -130,9 +143,15 @@ Entities:
     ScriptComponent:
       SelectedIndex: 1
       ClassName: Paddle
-      FieldName: playerNum
-      FieldDataType: 2
-      FieldData: 18
+      FieldMap:
+        Field:
+          FieldName: paddleSpeed
+          FieldDataType: 1
+          FieldData: 50
+        Field:
+          FieldName: playerNum
+          FieldDataType: 2
+          FieldData: 2
   -  # Entity
     IDComponent:
       ID: 1449652694892644088
@@ -171,6 +190,14 @@ Entities:
     ScriptComponent:
       SelectedIndex: 1
       ClassName: Paddle
+      FieldMap:
+        Field:
+          FieldName: playerNum
+          FieldDataType: 0
+        Field:
+          FieldName: paddleSpeed
+          FieldDataType: 1
+          FieldData: 50
   -  # Entity
     IDComponent:
       ID: 3054471348796685388

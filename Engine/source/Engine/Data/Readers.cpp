@@ -146,6 +146,36 @@ namespace Engine
 					script.selected = scriptNode["SelectedIndex"].as<int>();
 					script.ClassName = scriptNode["ClassName"].as<std::string>();
 
+					auto fieldMapNode = scriptNode["FieldMap"];
+					if (fieldMapNode)
+					{
+						for (auto Field : fieldMapNode)
+						{
+							
+							std::string name = Field.second["FieldName"].as<std::string>();
+							ScriptFieldDataTypes dataType = static_cast<ScriptFieldDataTypes>(Field.second["FieldDataType"].as<int>());
+
+							void* dataPtr = nullptr;
+							if (dataType == ScriptFieldDataTypes::Float)
+							{
+								dataPtr = new float(Field.second["FieldData"].as<float>());
+							}
+							else if (dataType == ScriptFieldDataTypes::Int32)
+							{
+								dataPtr = new int(Field.second["FieldData"].as<int>());
+							}
+							else if (dataType == ScriptFieldDataTypes::String)
+							{
+								dataPtr = new std::string(Field.second["FieldData"].as<std::string>());
+							}
+							
+							script.FieldMap[name] = std::make_pair(dataType, dataPtr);
+								
+
+							
+							
+						}
+					}
 
 					entity.AddComponent<ScriptComponent>(script);
 				}

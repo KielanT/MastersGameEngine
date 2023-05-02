@@ -29,6 +29,7 @@ namespace YAML
 			return node;
 		}
 	};
+
 }
 
 namespace Engine
@@ -44,6 +45,38 @@ namespace Engine
 	{
 		out << YAML::Flow; // Keeps it on one line
 		out << YAML::BeginSeq << vector.x << vector.y << vector.z << vector.w << YAML::EndSeq;
+		return out;
+	}
+
+	YAML::Emitter& operator << (YAML::Emitter& out, std::unordered_map<std::string, std::pair<ScriptFieldDataTypes, void*>> map)
+	{ 
+
+		out << YAML::BeginMap;
+		for (const auto& [name, field] : map)
+		{
+			out << YAML::Key << "Field";
+			out << YAML::BeginMap;
+
+			out << YAML::Key << "FieldName" << YAML::Value << name;
+			out << YAML::Key << "FieldDataType" << YAML::Value << (int)field.first;
+
+			if (field.first == ScriptFieldDataTypes::Float)
+			{
+				out << YAML::Key << "FieldData" << YAML::Value << *(float*)field.second;
+			}
+			if (field.first == ScriptFieldDataTypes::Int32)
+			{
+				out << YAML::Key << "FieldData" << YAML::Value << *(int*)field.second;
+			}
+			if (field.first == ScriptFieldDataTypes::String)
+			{
+				out << YAML::Key << "FieldData" << YAML::Value << *(std::string*)field.second;
+			}
+
+
+			out << YAML::EndMap;
+		}
+		out << YAML::EndMap;
 		return out;
 	}
 
@@ -202,24 +235,9 @@ namespace Engine
 			out << YAML::Key << "SelectedIndex" << YAML::Value << comp.selected;
 			out << YAML::Key << "ClassName" << YAML::Value << comp.ClassName;
 
-			for (const auto& [name, field] : comp.FieldMap)
-			{
-				out << YAML::Key << "FieldName" << YAML::Value << name;
-				out << YAML::Key << "FieldDataType" << YAML::Value << (int)field.first;
-				
-				if (field.first == ScriptFieldDataTypes::Float)
-				{
-					out << YAML::Key << "FieldData" << YAML::Value << *(float*)field.second;
-				}
-				if (field.first == ScriptFieldDataTypes::Int32)
-				{
-					out << YAML::Key << "FieldData" << YAML::Value << *(int*)field.second;
-				}
-				if (field.first == ScriptFieldDataTypes::String)
-				{
-					out << YAML::Key << "FieldData" << YAML::Value << *(std::string*)field.second;
-				}
-			}
+			out << YAML::Key  << "FieldMap" << comp.FieldMap;
+
+			
 			
 			out << YAML::EndMap;
 		}

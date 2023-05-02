@@ -51,6 +51,24 @@ Entities:
     ScriptComponent:
       SelectedIndex: 2
       ClassName: Spawner
+      FieldMap:
+        Field:
+          FieldName: delay
+          FieldDataType: 0
+        Field:
+          FieldName: spawnAmount
+          FieldDataType: 2
+          FieldData: 5
+        Field:
+          FieldName: spawnCount
+          FieldDataType: 0
+        Field:
+          FieldName: timer
+          FieldDataType: 0
+        Field:
+          FieldName: entitySpawnName
+          FieldDataType: 3
+          FieldData: Cube
   -  # Entity
     IDComponent:
       ID: 13127300394730289542
