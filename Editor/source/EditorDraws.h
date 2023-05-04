@@ -3,6 +3,7 @@
 #include <Engine.h>
 #include <Engine/Scripting/ScriptClass.h>
 
+#include "EditorDraws.h"
 
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
@@ -12,9 +13,11 @@ namespace Engine
 	class EditorDraws
 	{
 	public:
+		// Main Draw function
 		void DrawComponents(Entity& entity, std::filesystem::path assetPath);
 
 	private:
+		// Components to draw
 		void DrawIDComponent(IDComponent& comp);
 
 		void DrawTransformComponent(TransformComponent& comp);
@@ -33,7 +36,7 @@ namespace Engine
 
 		void DrawSkyboxComponent(SkyboxComponent& comp, Entity& entity);
 
-
+		// Helper draw functions
 		int ComboBox(const std::string& label, const char* items[], int size, int& selected);
 		void TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView);
 
@@ -45,10 +48,9 @@ namespace Engine
 		bool bIsUnsaved = false;
 
 	private:
+		// Default variables
 		int m_Flags; // ImGuiTreeNodeFlags
-
 		float m_InputNumWidth = 50.0f;
-
 		std::filesystem::path m_AssetPath;
 	};
 }

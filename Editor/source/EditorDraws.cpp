@@ -13,6 +13,7 @@ namespace Engine
 {
 	void EditorDraws::DrawComponents(Entity& entity, std::filesystem::path assetPath)
 	{
+		// Draw components if the the entity has them
 		m_AssetPath = assetPath;
 		if (entity)
 		{
@@ -67,6 +68,7 @@ namespace Engine
 
 	void EditorDraws::DrawIDComponent(IDComponent& comp)
 	{
+		// Draw the ID component and allow the entity name to be changed
 		char buffer[256];
 		memset(buffer, 0, sizeof(buffer));
 		strncpy_s(buffer, comp.Tag.c_str(), sizeof(buffer));
@@ -78,7 +80,7 @@ namespace Engine
 
 	void EditorDraws::DrawTransformComponent(TransformComponent& comp)
 	{
-		
+		// Draw the transform component
 		m_Flags = ImGuiTreeNodeFlags_DefaultOpen;
 		
 		if (ImGui::TreeNodeEx("Transform", m_Flags))
@@ -112,6 +114,7 @@ namespace Engine
 
 	void EditorDraws::DrawMeshRendererComponent(MeshRendererComponent& comp, Entity& entity)
 	{
+		// Draw mesh renderer component with the changable data
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
 		if (ImGui::TreeNodeEx("Mesh Renderer", flags))
 		{
@@ -169,7 +172,8 @@ namespace Engine
 			}
 
 
-
+			// Displays the states from enums 
+			// and allow them to change
 			int bs = static_cast<int>(comp.BlendState);
 			const char* blendItems[static_cast<int>(EBlendState::EBlendStateSize)];
 			blendItems[0] = "NoBlendingState";
@@ -198,7 +202,6 @@ namespace Engine
 			samplerItems[3] = "BilinearClamp";
 			comp.SamplerState = static_cast<ESamplerState>(ComboBox("Sampler State: ", samplerItems, static_cast<int>(ESamplerState::ESamplerStateSize), ss));
 			
-
 			ImGui::TreePop();
 		}
 
@@ -206,6 +209,8 @@ namespace Engine
 
 	void EditorDraws::DrawTextureComponent(TextureComponent& comp, Entity& entity)
 	{
+		// Draw the texture component
+		// Draw each texture and allow them to change
 		if (ImGui::TreeNodeEx("Texture", m_Flags))
 		{
 			ImGui::SameLine();
@@ -226,7 +231,7 @@ namespace Engine
 
 	void EditorDraws::DrawCameraComponent(CameraComponent& comp, Entity& entity)
 	{
-		
+		// Draw the camera	
 		if (ImGui::TreeNodeEx("Camera Component", m_Flags)) 
 		{
 			ImGui::SameLine();
@@ -247,9 +252,11 @@ namespace Engine
 
 	void EditorDraws::DrawRigidDynamic(RigidDynamicComponent& comp, Entity& entity)
 	{
+		// Draw the rigid dynamic component and changable data
 
 		if (ImGui::TreeNodeEx("Rigid Dynamic", m_Flags))
 		{
+			// Allow the component to be deleted
 			ImGui::SameLine();
 			if (ImGui::Button("X"))
 			{
@@ -264,6 +271,7 @@ namespace Engine
 			ImGui::Text("Mass"); ImGui::SameLine(); ImGui::InputFloat("##mass", &comp.Mass);
 			ImGui::PopItemWidth();
 
+			// These settings for some reason do not get set
 			//ImGui::Text("Mass Space Inertia Tensor: "); ImGui::SameLine();
 			//ImGui::PushItemWidth(m_InputNumWidth);
 			//ImGui::Text("X"); ImGui::SameLine(); ImGui::InputFloat("##msitx", &comp.MassSpaceInertiaTensor.x); ImGui::SameLine();
@@ -296,7 +304,7 @@ namespace Engine
 
 	void EditorDraws::DrawCollisionComponent(CollisionComponents& comp, Entity& entity)
 	{
-
+		// Draw collision component
 		if (ImGui::TreeNodeEx("Collision Component", m_Flags))
 		{
 
@@ -308,6 +316,7 @@ namespace Engine
 			}
 
 
+			// Draw the enums
 			int ct = static_cast<int>(comp.CollisionType);
 			const char* ColTypeItems[static_cast<int>(ECollisionTypes::ECollisionTypesSize)];
 			ColTypeItems[0] = "Box Collision";
@@ -321,6 +330,7 @@ namespace Engine
 				PhysX::GetInstance()->CreateCollision(entity);
 			}
 
+			// Draw the correct collision settings
 			if (ct == 0)
 			{
 				ImGui::Text("Box Bounds: "); ImGui::SameLine();
@@ -345,6 +355,7 @@ namespace Engine
 
 	void EditorDraws::DrawScriptComponent(ScriptComponent& comp, Entity& entity)
 	{
+		// Draws the script component
 		if (ImGui::TreeNodeEx("Script Component", m_Flags)) 
 		{
 			ImGui::SameLine();
@@ -356,6 +367,7 @@ namespace Engine
 
 			ImGui::Text("Script Component : BEING IMPLEMENTED");
 
+			// Displays all the classes
 			// TODO: Create a script or select from script list
 			std::vector<std::string> ListOfClassNames = Scripting::GetInstance()->GetAllClassNames();
 
@@ -364,16 +376,17 @@ namespace Engine
 
 				std::string preview_value = ListOfClassNames[comp.selected];
 
-
-
 				comp.ClassName = ListOfClassNames[comp.selected];
 				
+				// Get the instance for the current entity
 				std::shared_ptr<ScriptInstance> instance = Scripting::GetInstance()->GetScriptInstance(comp.OwnerEntityId);
 				if (instance == nullptr)
 				{
+					// Creates the script
 					Scripting::GetInstance()->CreateScriptInstance(comp);
 				}
 
+				// Allow the scripts to be changed
 				if (ImGui::BeginCombo("##Script", preview_value.c_str()))
 				{
 					for (int n = 0; n < ListOfClassNames.size(); ++n)
@@ -400,7 +413,7 @@ namespace Engine
 				ImGui::Text("No Script Found");
 				ImGui::PopStyleColor();
 			}
-
+			// Draw the fields for the script
 			// TODO be able to change properties and field's from selected script
 			std::shared_ptr<ScriptInstance> instance = Scripting::GetInstance()->GetScriptInstance(comp.OwnerEntityId);
 			if (instance != nullptr)
@@ -418,6 +431,7 @@ namespace Engine
 
 	void EditorDraws::DrawSkyboxComponent(SkyboxComponent& comp, Entity& entity)
 	{
+		// Draw the skybox component and changeable settings
 		if (ImGui::TreeNodeEx("Skybox", m_Flags))
 		{
 			ImGui::SameLine();
@@ -485,6 +499,7 @@ namespace Engine
 
 		ImGui::Text(label.c_str()); ImGui::SameLine();
 
+		// Draw combo boxes
 		std::string l = "##" + label;
 		if (ImGui::BeginCombo(l.c_str(), combo_preview_value))
 		{
@@ -507,8 +522,8 @@ namespace Engine
 
 	void EditorDraws::TextureBoxes(std::string Label, std::string& path, CComPtr<ID3D11ShaderResourceView>& resourseView)
 	{
+		// Draw texture boxes and allow them to be loaded
 		std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
-
 		std::string label = Label;
 
 		char buffer[256];
@@ -575,7 +590,8 @@ namespace Engine
 		std::string FieldName = name + "##" + std::to_string(comp.OwnerEntityId);
 		void* dataPtr = nullptr;
 
-		
+		// Set and change fields based on the field type 
+
 		if (field.FieldDataType == ScriptFieldDataTypes::Float)
 		{
 			float data = scriptClass->GetFieldValue<float>(name);
@@ -634,7 +650,7 @@ namespace Engine
 		
 		}
 
-		
+		// Add to the components field map used for saving and loading
 		if (dataPtr != nullptr)
 		{
 			std::pair<ScriptFieldDataTypes, void*> pairData = std::make_pair(field.FieldDataType, dataPtr);

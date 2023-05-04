@@ -2,6 +2,7 @@
 #include "Readers.h"
 #include <Engine/Physics/PhysX5/PhysX.h>
 
+// All yaml to read glm vectors
 namespace YAML
 {
 	template<>
@@ -41,7 +42,10 @@ namespace Engine
 {
 	void SceneReader::Read(std::string& path, std::shared_ptr<Scene> scene)
 	{
+		// Load the file
 		YAML::Node data = YAML::LoadFile(path);
+		
+		// Load the scene setting if thy exist
 		auto SceneSettingsNode = data["SceneSettings"];
 		if (SceneSettingsNode)
 		{
@@ -55,6 +59,7 @@ namespace Engine
 			scene->SetSceneSettings(settings);
 		}
 
+		// Load all the entities with their correct component settings
 		auto EntitiesNode = data["Entities"];
 		if (EntitiesNode)
 		{
@@ -63,6 +68,7 @@ namespace Engine
 				auto idNode = entityIT["IDComponent"];
 				Entity entity = scene->CreateEntityWithUUID(idNode["ID"].as<eint64>(), idNode["Tag"].as<std::string>());
 
+				// If has a transform load the settings
 				auto transformNode = entityIT["TransformComponent"];
 				if (transformNode)
 				{
@@ -139,6 +145,7 @@ namespace Engine
 					entity.AddComponent<CameraComponent>(cam);
 				}
 
+				// Set the scripts and set the field data
 				auto scriptNode = entityIT["ScriptComponent"];
 				if (scriptNode)
 				{
@@ -171,9 +178,6 @@ namespace Engine
 							
 							script.FieldMap[name] = std::make_pair(dataType, dataPtr);
 								
-
-							
-							
 						}
 					}
 

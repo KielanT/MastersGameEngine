@@ -8,6 +8,7 @@ class Main : public Engine::Application
 public:
 	Main()
 	{
+		
 		AddLayer(std::make_shared<Engine::Game>());
 	}
 	~Main()

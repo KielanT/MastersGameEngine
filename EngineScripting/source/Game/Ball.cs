@@ -68,7 +68,7 @@ namespace Game
 
             float x = GetRandomFloat();
             float y = GetRandomFloat();
-            physicsComponent.AddForce(new Vector3(x * forceAmount, y * forceAmount, 0), ForceType.eFORCE);
+            physicsComponent.AddForce(new Vector3(x * forceAmount * 10.0f, y * forceAmount * 10.0f, 0), ForceType.eFORCE);
         }
 
     }

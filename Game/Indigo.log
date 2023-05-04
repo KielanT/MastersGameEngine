@@ -1,4 +1,3 @@
-[17:53:18] [debug]: Renderer Initilised
-[17:53:18] [info]: Physics Initialising
-[17:53:18] [info]: PhysX 5 Initilised
-[17:53:37] [debug]: Renderer shutdown
+[17:42:03] [debug]: Renderer Initilised
+[17:42:03] [error]: Failed to open the file
+[17:42:03] [error]: File does not contain a valid CIL image

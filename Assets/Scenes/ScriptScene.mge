@@ -8,25 +8,36 @@ SceneSettings:
 Entities:
   -  # Entity
     IDComponent:
-      ID: 2600565337993855314
-      Tag: Skybox Entity
+      ID: 13127300394730289542
+      Tag: Cube
     TransformComponent:
-      Position: [0, 0, 0]
+      Position: [0, -1.79999995, 0]
       Rotation: [0, 0, 0]
-      Scale: [50000, 50000, 50000]
-    SkyboxComponent:
-      MeshPath: Mesh/Basic/Sphere.x
-      TexPath: Textures/grasscube1024.dds
-  -  # Entity
-    IDComponent:
-      ID: 3716386822656678503
-      Tag: Camera Entity
-    TransformComponent:
-      Position: [0, 0, 80]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      {}
+      Scale: [0.5, 0.5, 0.5]
+    TextureComponent:
+      Path: Textures/Marble/Marble04_2K_BaseColor.png
+      NormalPath: Textures/Marble/Marble04_2K_Normal.png
+      RoughPath: Textures/Marble/Marble04_2K_Roughness.png
+      HeightPath: Textures/Marble/Marble04_2K_Height.png
+      MetalnessPath: ""
+    MeshRendererComponent:
+      Path: Mesh/Basic/Cube.x
+      Visible: false
+      BlendState: 0
+      DepthStencil: 0
+      Rasterizer: 2
+      Sampler: 0
+    RigidDynamicComponent:
+      Gravity: true
+      Mass: 0.100000001
+      MassSpaceInertiaTensor: [1, 1, 1]
+      LinearVelocity: [0, 0, 0]
+      AngularVelocity: [0, 0, 0]
+      AngularDamping: 0
+    CollisionComponents:
+      CollisionType: 0
+      BoxBounds: [5, 5, 5]
+      SphereRadius: 5
   -  # Entity
     IDComponent:
       ID: 6341982882276192738
@@ -63,41 +74,30 @@ Entities:
           FieldName: spawnCount
           FieldDataType: 0
         Field:
-          FieldName: timer
-          FieldDataType: 0
-        Field:
           FieldName: entitySpawnName
           FieldDataType: 3
           FieldData: Cube
+        Field:
+          FieldName: timer
+          FieldDataType: 0
   -  # Entity
     IDComponent:
-      ID: 13127300394730289542
-      Tag: Cube
+      ID: 3716386822656678503
+      Tag: Camera Entity
     TransformComponent:
-      Position: [0, -1.79999995, 0]
+      Position: [0, 0, 80]
       Rotation: [0, 0, 0]
-      Scale: [0.5, 0.5, 0.5]
-    TextureComponent:
-      Path: Textures/Marble/Marble04_2K_BaseColor.png
-      NormalPath: Textures/Marble/Marble04_2K_Normal.png
-      RoughPath: Textures/Marble/Marble04_2K_Roughness.png
-      HeightPath: Textures/Marble/Marble04_2K_Height.png
-      MetalnessPath: ""
-    MeshRendererComponent:
-      Path: Mesh/Basic/Cube.x
-      Visible: false
-      BlendState: 0
-      DepthStencil: 0
-      Rasterizer: 2
-      Sampler: 0
-    RigidDynamicComponent:
-      Gravity: true
-      Mass: 0.100000001
-      MassSpaceInertiaTensor: [1, 1, 1]
-      LinearVelocity: [0, 0, 0]
-      AngularVelocity: [0, 0, 0]
-      AngularDamping: 0
-    CollisionComponents:
-      CollisionType: 0
-      BoxBounds: [5, 5, 5]
-      SphereRadius: 5
+      Scale: [1, 1, 1]
+    CameraComponent:
+      {}
+  -  # Entity
+    IDComponent:
+      ID: 2600565337993855314
+      Tag: Skybox Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [50000, 50000, 50000]
+    SkyboxComponent:
+      MeshPath: Mesh/Basic/Sphere.x
+      TexPath: Textures/grasscube1024.dds

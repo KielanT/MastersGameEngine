@@ -9,6 +9,7 @@ class Main : public Engine::Application
 public:
 	Main()
 	{
+		// Adds the editor layer
 		AddLayer(std::make_shared<Engine::MainEditor>());
 	}
 	~Main()

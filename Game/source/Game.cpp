@@ -16,7 +16,7 @@ namespace Engine
 	{
 		std::filesystem::path SystemPath = std::filesystem::current_path();
 		std::filesystem::path AssetPath = SystemPath.parent_path().string() + "\\Assets";
-		std::string path = AssetPath.string() + "\\Scenes" + "\\" + "PBRScene" + ".mge";
+		std::string path = AssetPath.string() + "\\Scenes" + "\\" + "Pong" + ".mge";
 
 		SceneSerializer::DeserializeScene(path, m_Scene);
 		m_Scene->InitScene();

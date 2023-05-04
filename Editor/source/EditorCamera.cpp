@@ -6,6 +6,7 @@
 
 namespace Engine
 {
+	/* Class from frank luna */
 	glm::vec3 EditorCamera::GetPosition()
 	{
 		return m_Position;
