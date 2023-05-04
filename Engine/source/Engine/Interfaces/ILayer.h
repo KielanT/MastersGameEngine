@@ -2,6 +2,7 @@
 
 namespace Engine
 {
+	// Layer for adding the editor or game to the engine
 	class ILayer
 	{
 	public:

@@ -2,6 +2,7 @@
 
 namespace Engine
 {
+	// Default texture settings
 	class Texture
 	{
 	public:
@@ -13,6 +14,7 @@ namespace Engine
 		virtual CComPtr<ID3D11ShaderResourceView> GetTexture() const = 0;
 	};
 
+	// Creates a texture 2D 
 	class Texture2D : public Texture
 	{
 	public:

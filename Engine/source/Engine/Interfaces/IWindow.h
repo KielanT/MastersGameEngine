@@ -5,6 +5,8 @@
 
 namespace Engine
 {
+	// Window base class, allows for changing window 
+	// for different platforms
 	class IWindow
 	{
 	public:

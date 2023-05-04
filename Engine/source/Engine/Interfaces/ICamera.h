@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-
+	// Camera interface allows to switch between editor camera & game camera
 	class ICamera
 	{
 	public: 
