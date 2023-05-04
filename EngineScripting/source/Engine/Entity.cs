@@ -1,7 +1,7 @@
 ﻿using Engine.Maths;
 using System;
 
-
+// All entities must inherit this class
 namespace Engine
 {
     public class Entity
@@ -17,6 +17,8 @@ namespace Engine
         protected Entity() 
         { 
             ID = 0;
+            // Creates all components
+            // Would be better to only create them if the entity actually has them
             transformComponent = new TransformComponent(this);
             rendererComponent = new RendererComponent(this);
             physicsComponent = new PhysicsComponent(this);
@@ -30,6 +32,7 @@ namespace Engine
             physicsComponent = new PhysicsComponent(this);
         }
 
+        // Find entity by name
         public Entity FindEntityByName(string name)
         {
             ulong id = InternalCalls.Entity_FindByName(name);
@@ -39,6 +42,7 @@ namespace Engine
             return new Entity(id);
         }
 
+        // Creates a new entity by copy
         public Entity CreateNewEntity(Entity entity, Vector3 pos)
         {
             ulong id = InternalCalls.Entity_CreateEntityByCopy(entity.ID, ref pos);
@@ -48,6 +52,7 @@ namespace Engine
             return new Entity(id);
         }
 
+        // virtual function to make sure the child has the correct parameters 
         public virtual void OnContact(ulong id)
         {
             Utility.Logger(LogType.Info, "OnContact Parent");

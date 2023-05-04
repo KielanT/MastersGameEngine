@@ -6,6 +6,10 @@ using System.Runtime.CompilerServices;
 
 namespace Engine
 {
+    // Creates all the components clsses and calls the correct
+    // C++ functions
+
+    // sets the entity used for this component
     public abstract class Component
     {
         public Entity _entity { get; set; }
@@ -66,6 +70,7 @@ namespace Engine
             _entity = entity;
         }
 
+        // Change the visibility of the entity
         public bool Visible 
         {
             get
@@ -80,7 +85,7 @@ namespace Engine
         }
     }
 
-
+   
     public enum ForceType
     {
         eFORCE,
@@ -96,6 +101,7 @@ namespace Engine
             _entity = entity;
         }
 
+        // Applies force to the entity
         public void AddForce(Vector3 force, ForceType type)
         {
             InternalCalls.Physics_AddForce(_entity.ID, force, (int)type);

@@ -4,6 +4,8 @@ using Engine;
 
 namespace Game
 {
+
+    // Test script for logging to console
     public class TestScript : Entity
     {
         public void OnBegin()

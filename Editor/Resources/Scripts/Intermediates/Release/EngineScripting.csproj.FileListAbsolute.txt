@@ -1,0 +1,6 @@
+E:\Uni\Masters\CO4302\MastersGameEngine\Editor\Resources\Scripts\Intermediates\Release\EngineScripting.csproj.AssemblyReference.cache
+E:\Uni\Masters\CO4302\MastersGameEngine\Editor\Resources\Scripts\Intermediates\Release\EngineScripting.csproj.CoreCompileInputs.cache
+E:\Uni\Masters\CO4302\MastersGameEngine\Editor\Resources\Scripts\Intermediates\Release\EngineScripting.dll
+E:\Uni\Masters\CO4302\MastersGameEngine\Editor\Resources\Scripts\Intermediates\Release\EngineScripting.pdb
+E:\Uni\Masters\CO4302\MastersGameEngine\Editor\Resources\Scripts\EngineScripting.dll
+E:\Uni\Masters\CO4302\MastersGameEngine\Editor\Resources\Scripts\EngineScripting.pdb

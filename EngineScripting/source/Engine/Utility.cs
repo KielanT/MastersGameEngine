@@ -12,9 +12,11 @@ namespace Engine
         Warn = 3,
     }
 
+
+    // Allows the user to log to the console
+    // Ideally this would be in editor 
     public class Utility
     {
-
         public static void Logger(LogType type, string message)
         {
             if (type == LogType.Debug)

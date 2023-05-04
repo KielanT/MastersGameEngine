@@ -3,6 +3,8 @@ using System.Runtime.CompilerServices;
 
 namespace Engine
 {
+    // Defines all the functions needed to be created in C++
+
     public static class InternalCalls
     {
         //************************

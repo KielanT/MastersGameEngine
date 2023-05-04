@@ -23,6 +23,7 @@ namespace Game
 
         public void OnBegin()
         {
+            // Sets the entity to be spawned
             entity = FindEntityByName(entitySpawnName);
 
         }
@@ -31,6 +32,7 @@ namespace Game
         {
             timer += deltaTime;
 
+            // Spawns a entity every 2 seconds
             if (timer > delay)
             {
                 SpawnNewEntity();
@@ -40,6 +42,7 @@ namespace Game
 
         private void SpawnNewEntity()
         {
+            // Spawn entities with a position, scale, visibility and force
             if (spawnCount < spawnAmount)
             {
                 Entity entity1 = CreateNewEntity(entity, new Vector3(0, -1.8f, 0));

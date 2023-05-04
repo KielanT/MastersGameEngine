@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Engine.Maths
 {
+    // Vector3 for maths in the c# 
     public struct Vector3 // If not a struct exception gets thrown
     {
         public float X, Y, Z;
@@ -19,6 +20,7 @@ namespace Engine.Maths
         }
 
         // Helpers
+        // Normalise the vector
         public static Vector3 Normalise(Vector3 v)
         {
             Vector3 v3 = new Vector3(v.X, v.Y, v.Z);
@@ -29,17 +31,20 @@ namespace Engine.Maths
             return v3;
         }
 
+        // Tells C# how the data type should be converted to a string
         public override string ToString() 
         {
             string str = "X: " + X.ToString() + " Y: " + Y.ToString() + " Z: " + Z.ToString();
             return str;
         }
 
+        // Allows for vector multiplication
         public static Vector3 operator *(Vector3 v1, Vector3 v2)
         {
             return new Vector3(v1.X *v2.X, v1.Y * v2.Y, v1.Z * v2.Z);
         }
 
+        // Allows vector to be multiplied by a scalar
         public static Vector3 operator *(Vector3 v1, float scalar)
         {
             return new Vector3(v1.X * scalar, v1.Y * scalar, v1.Z * scalar);

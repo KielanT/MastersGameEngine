@@ -12,29 +12,31 @@ namespace Game
         // TODO allow keycodes to be set via editor
         private KeyCodes keyUp;
         private KeyCodes keyDown;
-        private KeyCodes keyLeft;
-        private KeyCodes keyRight;
+        //private KeyCodes keyLeft;
+        //private KeyCodes keyRight;
 
         public void OnBegin()
         {
+            // Sets the key binds based on player 
             if(playerNum == 1)
             {
                 keyUp = KeyCodes.Key_w;
                 keyDown = KeyCodes.Key_s;
-                keyLeft = KeyCodes.Key_a;
-                keyRight = KeyCodes.Key_d;
+                //keyLeft = KeyCodes.Key_a;
+                //keyRight = KeyCodes.Key_d;
             }
             else
             {
                 keyUp = KeyCodes.Key_UP;
                 keyDown = KeyCodes.Key_DOWN;
-                keyLeft = KeyCodes.Key_LEFT;
-                keyRight = KeyCodes.Key_RIGHT;
+                //keyLeft = KeyCodes.Key_LEFT;
+                //keyRight = KeyCodes.Key_RIGHT;
             }
         }
 
         public void OnUpdate(float deltaTime)
         {
+            // Changes position of the entity by key input
            Vector3 position = transformComponent.Position;
            if (Input.KeyHeld(keyUp))
            {
