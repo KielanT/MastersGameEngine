@@ -190,6 +190,7 @@ namespace Engine
 
 	bool EditorSettingsReader::Read(std::string& path, EditorSettings& settings)
 	{
+		// Read the editor settings
 		YAML::Node data;
 		try
 		{

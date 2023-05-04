@@ -12,15 +12,16 @@ namespace Engine
 	class SceneSerializer
 	{
 	public:
-		static void SerializeScene(std::string& path, std::shared_ptr<Scene> scene);
-		static void DeserializeScene(std::string& path, std::shared_ptr<Scene> scene);
+		
+		static void SerializeScene(std::string& path, std::shared_ptr<Scene> scene);   // Save the scene to a file
+		static void DeserializeScene(std::string& path, std::shared_ptr<Scene> scene); // Load the scene from file
 	};
 
 	class SettingsSerilizer
 	{
 	public:
-		static void SerializeEditorSettings(std::string& path, EditorSettings& settings);
-		static void DeserializeEditorSettings(std::string path, EditorSettings& settings);
+		static void SerializeEditorSettings(std::string& path, EditorSettings& settings);  
+		static void DeserializeEditorSettings(std::string path, EditorSettings& settings); 
 	};
 }
 

@@ -1,6 +1,7 @@
 #include "epch.h"
 #include "Writers.h"
 
+// Allow YAML to save to glm
 namespace YAML
 {
 	template<>
@@ -34,6 +35,8 @@ namespace YAML
 
 namespace Engine
 {
+
+	// Operator overloads to allow the saving of custom data types
 	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& vector)
 	{
 		out << YAML::Flow; // Keeps it on one line
@@ -48,6 +51,7 @@ namespace Engine
 		return out;
 	}
 
+	
 	YAML::Emitter& operator << (YAML::Emitter& out, std::unordered_map<std::string, std::pair<ScriptFieldDataTypes, void*>> map)
 	{ 
 
@@ -83,17 +87,18 @@ namespace Engine
 	void SceneWriter::Write(std::string& path, std::shared_ptr<Scene> scene)
 	{
 		YAML::Emitter out;
+		// Wirte to a map
 		out << YAML::BeginMap;
 
+		// Save scene settings
 		std::filesystem::path scenePath = path;
 		SceneSettings settings = scene->GetSceneSettings();
-		//settings.title = scenePath.filename().string();
+		
 		settings.title = scenePath.filename().replace_extension("").string();
 		scene->SetSceneSettings(settings);
-
-		//scene->GetSceneSettings().title = scenePath.filename().string();
 		SaveSceneSettings(out, scene);
 
+		// Save each entity
 		if (!scene->GetEntityRegistry().empty())
 		{
 			out << YAML::Key << "Entities" << YAML::BeginSeq;
@@ -113,6 +118,7 @@ namespace Engine
 
 	void SceneWriter::SaveSceneSettings(YAML::Emitter& out, std::shared_ptr<Scene> scene)
 	{
+		// Save scene settings in a map
 		out << YAML::Key << "SceneSettings";
 		out << YAML::BeginMap;
 		out << YAML::Key << "Title" << YAML::Value << scene->GetSceneSettings().title;
@@ -126,7 +132,7 @@ namespace Engine
 
 	void SceneWriter::SaveEntity(YAML::Emitter& out, Entity entity)
 	{
-
+		// Save each entity with their components
 		out << YAML::BeginMap;
 		out << YAML::Comment("Entity");
 		if (entity.HasComponent<IDComponent>())
