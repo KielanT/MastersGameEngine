@@ -13,6 +13,7 @@ namespace Engine
     {
         if (other)
         {
+            // Used for calling the OnContact function in C#
             Scripting::GetInstance()->OnContactEntity(other);
         }
     }

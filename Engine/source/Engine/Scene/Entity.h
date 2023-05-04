@@ -17,12 +17,13 @@ namespace Engine
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
-			// TODO: Check here if compoent alread exists
+			// Adds components
 			T& comp = m_Scene->GetEntityRegistry().emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
 			m_Scene->OnComponentCreated<T>(*this, comp);
 			return comp;
 		}
 
+		// Add or replace components
 		template<typename T, typename... Args>
 		T& AddOrReplaceComponent(Args&&... args)
 		{
@@ -31,6 +32,7 @@ namespace Engine
 			return comp;
 		}
 
+		// Check component exist
 		template<typename T>
 		bool HasComponent()
 		{
@@ -38,12 +40,14 @@ namespace Engine
 			return m_Scene->GetEntityRegistry().any_of<T>(m_EntityHandle);
 		}
 
+		// Return component
 		template<typename T>
 		T& GetComponent()
 		{
 			return m_Scene->GetEntityRegistry().get<T>(m_EntityHandle);
 		}
 
+		// Remove component
 		template<typename T>
 		void RemoveComponent()
 		{

@@ -30,6 +30,10 @@ namespace Engine
 		Scene() {};
 		~Scene();
 
+		// **********************
+		//  Main Scene functions
+		// **********************
+
 		void InitScene();
 		void UnloadScene();
 		void RenderScene();
@@ -41,7 +45,9 @@ namespace Engine
 		void SimulateScene(float frametime);
 		void EditorUpdatePhysicsScene(float frametime);
 
-		//void SetSkybox(std::string meshPath, std::string texPath, std::string assetPath);
+		// ***********************
+		//  Entity Scene functions
+		// ***********************
 		entt::registry& GetEntityRegistry() { return m_Registry; }
 		Entity CreateEntity(const std::string& tag);
 		Entity CreateEntity(const std::string& tag, glm::vec3& pos);
@@ -51,8 +57,9 @@ namespace Engine
 		Entity CreateCameraEntity(const std::string& tag);
 		void DeleteEntity(Entity entity);
 		void LoadEntities(std::string assetPath);
+		
+		
 		void SetActiveCamera();
-
 		SceneSettings GetSceneSettings() { return m_SceneSettings; }
 		void SetSceneSettings(SceneSettings& settings) { m_SceneSettings = settings; }
 		//std::shared_ptr<Camera> GetCamera() { return m_MainCamera; }
@@ -64,6 +71,10 @@ namespace Engine
 		template<typename T>
 		void OnComponentCreated(Entity entity, T& comp);
 
+		// *********************************
+		//  Entity functions useful for C# 
+		// *********************************
+		
 		Entity FindEntityByName(const std::string& name);
 		Entity FindEntityByUUID(UUID id);
 		Entity CreateEntityByCopy(UUID id, glm::vec3& pos);

@@ -23,6 +23,7 @@ namespace Engine
 
 	void Scene::InitScene()
 	{
+		// Create a main camera for the scene
 		m_MainCamera = std::make_shared<GameCamera>();
 		m_MainCamera->SetPosition({ 0, 0, 50.0f });
 		m_MainCamera->SetLens(0.25f * glm::pi<float>(), 1600.0f / 900.0f, 1.0f, 1000.0f);
@@ -35,6 +36,7 @@ namespace Engine
 
 	void Scene::UnloadScene()
 	{
+		// Unload scene
 		m_Registry.clear();
 		m_SceneSettings = SceneSettings();
 
@@ -43,6 +45,8 @@ namespace Engine
 
 	void Scene::RenderScene()
 	{
+		// Render scene in correct order
+		// Sky box must be first
 		auto skyboxView = m_Registry.view<SkyboxComponent>();
 		for (auto entityID : skyboxView) 
 		{
@@ -65,6 +69,10 @@ namespace Engine
 
 	void Scene::BeginScene()
 	{
+		// Begin scene setups neccessary code for the start
+
+
+
 		PhysX::GetInstance()->EntityMap.clear();
 		auto Physics = m_Registry.view<RigidDynamicComponent, CollisionComponents>();
 		for (auto entityID : Physics)
@@ -74,8 +82,6 @@ namespace Engine
 			{
 				PhysX::GetInstance()->EntityMap.insert(std::make_pair(entity.GetComponent<RigidDynamicComponent>().actor, entity));
 
-				// return because an entity can have both RigidDynamicComponent and collision component
-				//return;
 			}
 			if (entity.HasComponent<CollisionComponents>())
 			{
@@ -84,7 +90,7 @@ namespace Engine
 		}
 	
 
-
+		// Calls the C# begin function
 		auto scriptView = m_Registry.view<ScriptComponent>();
 		for (auto entityID : scriptView)
 		{
@@ -104,6 +110,7 @@ namespace Engine
 
 	void Scene::UpdateScene(float frametime)
 	{
+		// Moves the camera 
 		m_MainCamera->Control(frametime);
 		
 	}
@@ -114,6 +121,7 @@ namespace Engine
 
 	void Scene::SimulateScene(float frametime)
 	{
+		// Updates the physics and scripting
 		auto scriptView = m_Registry.view<ScriptComponent>();
 		for (auto entityID : scriptView)
 		{
@@ -149,6 +157,7 @@ namespace Engine
 
 	void Scene::EditorUpdatePhysicsScene(float frametime)
 	{
+		// Updates the physic actors in editor
 		auto RDView = m_Registry.view<RigidDynamicComponent>();
 		for (auto entityID : RDView)
 		{
@@ -303,6 +312,7 @@ namespace Engine
 
 	void Scene::LoadEntity(Entity entity, std::string& assetPath)
 	{
+		// Load entity and create the data
 		if (entity.HasComponent<MeshRendererComponent>())
 		{
 			auto& comp = entity.GetComponent<MeshRendererComponent>();
