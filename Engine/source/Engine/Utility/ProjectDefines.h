@@ -9,7 +9,7 @@ typedef unsigned long long eint64;
 namespace Engine
 {
 	
-
+	// Project data types that are required in multiple parts of the engine
 	enum class ERendererType
 	{
 		None = 0,

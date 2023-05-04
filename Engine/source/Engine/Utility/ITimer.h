@@ -3,6 +3,8 @@
 namespace Engine
 {
 
+	/*Simple chrono timer for delta time */
+
 	typedef std::chrono::high_resolution_clock Clock;
 	class ITimer
 	{
