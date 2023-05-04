@@ -7,6 +7,7 @@ namespace Engine
 	class Renderer
 	{
 	public:
+		// Functions to call the functions on the implemented API
 		static void Init(WindowProperties& props);
 
 		static void SetScene(std::shared_ptr<Scene> scene);

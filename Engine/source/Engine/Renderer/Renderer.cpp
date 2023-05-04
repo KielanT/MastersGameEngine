@@ -12,7 +12,7 @@ namespace Engine
 
 	void Renderer::Init(WindowProperties& props)
 	{
-
+		// Creates imgui rendering
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -38,6 +38,7 @@ namespace Engine
 
 	void Renderer::SetScene(std::shared_ptr<Scene> scene)
 	{
+
 		m_RendererAPI->SetScene(scene);
 	}
 
@@ -48,6 +49,7 @@ namespace Engine
 
 	void Renderer::RenderLoop()
 	{
+		// Main Render loop must be conrect order
 		if (ImGui::GetCurrentContext() != nullptr)
 		{
 			m_RendererAPI->GUINewFrame();

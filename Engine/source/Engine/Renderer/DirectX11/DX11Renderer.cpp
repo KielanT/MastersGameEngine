@@ -163,6 +163,8 @@ namespace Engine
 
     void DX11Renderer::Renderer(Entity entity)
     {
+        // Render in the correct order
+        // Sky box must be first
         if (entity.HasComponent<SkyboxComponent>())
         {
             auto transfrom = entity.GetComponent<TransformComponent>();
@@ -190,7 +192,7 @@ namespace Engine
             }
         }
 
-
+        // Render the mesh 
         if (entity.HasComponent<MeshRendererComponent>() && entity.HasComponent<TextureComponent>())
         {
             auto transfrom = entity.GetComponent<TransformComponent>();
@@ -237,8 +239,10 @@ namespace Engine
 
     void DX11Renderer::SetSkyboxEntity(Entity entity)
     {
+        
         if (entity.HasComponent<SkyboxComponent>()) 
         {
+            // Sets skybox
             RadianceMap = entity.GetComponent<SkyboxComponent>().TexMapView;
         }
     }

@@ -10,7 +10,7 @@ namespace Engine
 	{
 		m_Path = path;
 
-		
+		// Create a directx 11 texture
 		std::shared_ptr<DX11Renderer> dx11Render = std::static_pointer_cast<DX11Renderer>(Renderer::GetRendererAPI());
 		if (dx11Render != nullptr)
 		{

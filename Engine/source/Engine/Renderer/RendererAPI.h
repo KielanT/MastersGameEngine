@@ -10,6 +10,7 @@ namespace Engine
 		DirectX11
 	};
 
+	// Functions the renderers must implement
 	class RendererAPI
 	{
 	public:
