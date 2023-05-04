@@ -19,6 +19,7 @@ namespace Engine
 
 	SDLWindow::SDLWindow(WindowProperties& props)
 	{
+		// Initilises window on create
 		Init(props);
 	}
 	
@@ -29,7 +30,7 @@ namespace Engine
 	
 	void SDLWindow::Update()
 	{
-		//InitInput();
+		// Setups the input
 		SDLInput::InitInput();
 
 		int close = 0;
@@ -39,6 +40,7 @@ namespace Engine
 
 		m_Timer.Start();
 
+		// Runs the SDL events and input events
 		while (!close)
 		{
 
@@ -78,6 +80,7 @@ namespace Engine
 			}
 			
 			float frameTime = m_Timer.DeltaTime();
+			// Runs the renderer loop and update layer
 			Renderer::RenderLoop();
 			Layer::Update(frameTime);
 			
@@ -87,7 +90,7 @@ namespace Engine
 	
 	void SDLWindow::Shutdown()
 	{
-	
+		// Shutdown window
 		if (ImGui::GetCurrentContext() != nullptr)
 		{
 			
@@ -101,13 +104,16 @@ namespace Engine
 	
 	BOOL SDLWindow::Init(WindowProperties& props)
 	{
+		// Sets the window based on the windows properties
 		m_Props = props;
-
+		
+		// Initlises SDL
 		if (SDL_Init(SDL_INIT_EVENTS) != 0)
 		{
 			LOG_ERROR("Error Initializing SDL");
 		}
-	
+		
+		// Creates the window
 		Uint32 flags = 0;
 		flags |= SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN;
 		m_Window = SDL_CreateWindow(m_Props.Title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,

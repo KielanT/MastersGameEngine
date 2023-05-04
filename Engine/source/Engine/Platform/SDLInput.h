@@ -8,6 +8,7 @@ namespace Engine
 
 	class SDLInput
 	{
+		// Sets up all the inputs
 	public:
 		static void InitInput();
 		

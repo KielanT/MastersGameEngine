@@ -5,6 +5,7 @@ namespace Engine
 {
 	std::string FileDialog::OpenFile(HWND hwnd, const char* filter, std::string path, std::string title)
 	{
+		// opens the dialog with settings
 		OPENFILENAMEA ofn;
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		char Buffer[300];
@@ -35,6 +36,7 @@ namespace Engine
 
 	std::string FileDialog::SaveFile(HWND hwnd, const char* filter, std::string path, std::string title)
 	{
+		// Opens the save diaglog
 		OPENFILENAMEA ofn;
 		ZeroMemory(&ofn, sizeof(OPENFILENAME));
 		char Buffer[300];
