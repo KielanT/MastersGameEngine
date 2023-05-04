@@ -1,6 +1,7 @@
 #pragma once
 
 // Includes only for the main engine
+// Called by the other solutions
 
 #include "Application.h"
  

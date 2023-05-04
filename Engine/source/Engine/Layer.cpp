@@ -3,6 +3,7 @@
 
 namespace Engine
 {
+	// Used for running the editor or game
 	static std::shared_ptr<ILayer> m_Layer = nullptr;
 
 	bool Layer::Init(std::shared_ptr<ILayer> layer)

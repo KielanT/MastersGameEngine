@@ -4,7 +4,8 @@
 
 namespace temp
 {
-	 
+	 // Temporary helper functions 
+
  
 	static  glm::mat4 MatRotZ(float z)
 	{
