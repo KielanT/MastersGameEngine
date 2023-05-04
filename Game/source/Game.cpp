@@ -4,6 +4,7 @@
 #include "Engine/Renderer/Renderer.h"
 #include "Engine/Platform/SDLWinUtils.h"
 #include "Engine/Data/Serializer.h"
+#include "Engine/Scripting/Scripting.h"
 
 namespace Engine
 {
@@ -20,6 +21,7 @@ namespace Engine
 
 		SceneSerializer::DeserializeScene(path, m_Scene);
 		m_Scene->InitScene();
+		
 		Renderer::SetScene(m_Scene);
 		m_Scene->LoadEntities(AssetPath.string());
 		m_Scene->BeginScene();
