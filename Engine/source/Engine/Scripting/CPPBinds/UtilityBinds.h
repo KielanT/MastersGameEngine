@@ -5,6 +5,11 @@
 #include "mono/metadata/object.h"
 
 
+//*********************************************
+// Creates the code that get called from C# 
+// For the logger and other utility code
+//*********************************************
+
 static void Utility_Log_Debug(MonoString* message)
 {
 	MonoError error;

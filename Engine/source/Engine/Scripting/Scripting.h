@@ -21,6 +21,11 @@ class _MonoAssembly;
 class _MonoClass;
 class _MonoObject;
 
+//**********************************************************
+// Scripting is a singleton for use anywhere in the project
+//**********************************************************
+
+
 namespace Engine
 {
 
@@ -39,14 +44,19 @@ namespace Engine
 		static std::shared_ptr<Scripting> GetInstance();
 
 	public:
+		
+		// Initalise scripting
 		bool InitScripting();
 		void ShutdownScripting();
 
+		// Calls the Methods for the entities
 		void OnBeginEntity(Entity entity);
 		void OnUpdateEntity(Entity entity, float deltaTime);
 		void OnContactEntity(Entity entity);
 
-
+		//*************
+		// Getters
+		//*************
 		_MonoAssembly* GetAssembly();
 		MonoDomain* GetAppDomain();
 
@@ -56,21 +66,27 @@ namespace Engine
 		
 		std::shared_ptr<ScriptClass> GetScriptClassByName(std::string name);
 
+		// Set the scene for calling the scene where needed
 		void SetScene(std::shared_ptr<Scene> scene);
 		std::shared_ptr<Scene> GetScene();
 
+		// Reset the scripts
 		void ResetScripting();
 
 	private:
+		// Set up mono
 		bool InitMono();
 
+		// Load the DLL
 		_MonoAssembly* LoadAssembly(const std::string& assemblyPath);
 
+		// Load the classes in DLL
 		void LoadAssemblyClass();
 
 		// Helper function
 		char* ReadBytes(const std::string& filepath, uint32_t* outSize);
-
+		
+		// Checks if the class exists
 		bool CheckClassExists(const std::string& className);
 
 
@@ -82,9 +98,12 @@ namespace Engine
 		MonoDomain* m_AppDomain;
 		_MonoAssembly* m_Assembly;
 
+		// Maps for storing the classes 
+		// This is used for creating unique classes for the instances
 		// std::sting = class name	// ScriptClassData contains class data
 		std::unordered_map<std::string, std::shared_ptr<ScriptClass>> m_ClassMaps;
 
+		// Instance is the class instance for the entity
 		std::unordered_map<UUID, std::shared_ptr<ScriptInstance>> m_ScriptInstances;
 
 		std::shared_ptr<Scene> m_Scene;

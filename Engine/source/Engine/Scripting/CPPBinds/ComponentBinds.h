@@ -6,6 +6,11 @@
 #include "Engine/Scene/Components.h"
 
 
+//*********************************************
+// Creates the code that get called from C# 
+// For the components
+//*********************************************
+
 static void Transform_GetPostition(Engine::UUID entityID, glm::vec3* position)
 {
 	std::shared_ptr<Engine::Scene> scene = Engine::Scripting::GetInstance()->GetScene();

@@ -10,6 +10,9 @@ namespace Engine
 
 	void ScriptingCalls::RegisterScriptFunctions()
 	{
+		// Sets the C# functions to the C++ functions
+		 
+		
 		// Utilities
 		mono_add_internal_call("Engine.InternalCalls::Utility_Log_Debug", Utility_Log_Debug);
 		mono_add_internal_call("Engine.InternalCalls::Utility_Log_Error", Utility_Log_Error);

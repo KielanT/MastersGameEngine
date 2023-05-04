@@ -2,6 +2,10 @@
 
 #include "Engine/Platform/SDLInput.h"
 
+//*********************************************
+// Creates the code that get called from C# 
+// For the inputs
+//*********************************************
 
 static bool Input_KeyHeld(int keycode)
 {

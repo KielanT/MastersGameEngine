@@ -2,7 +2,7 @@
 // Created a class to instantiate the script at the beginning of the program
 // Rather than when creating the script instance
 // This is done for performance reasons
-
+// This class loads all the class data from the c# script
 
 
 #include "mono/jit/jit.h"

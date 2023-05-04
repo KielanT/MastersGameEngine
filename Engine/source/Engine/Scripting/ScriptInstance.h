@@ -6,6 +6,7 @@ class _MonoClass;
 
 namespace Engine
 {
+	// Scripting instance used to store the class and an instance of the class to call the correct function
 	class ScriptInstance
 	{
 	public:

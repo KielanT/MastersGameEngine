@@ -19,12 +19,13 @@ namespace Engine
 
 	void ScriptClass::OnBegin(UUID id)
 	{
+		// Calls the on begin play function from c#
 		if (m_OnBegin != nullptr && m_ClassInstance != nullptr)
 		{
 			MonoObject* exception = nullptr;
 			
+			// Sets the entity id of the entity that owns this class
 			MonoClassField* idField = mono_class_get_field_from_name(m_Class, "ID");
-
 			if (idField != nullptr)
 			{
 				mono_field_set_value(m_ClassInstance, idField, &id);
@@ -47,6 +48,7 @@ namespace Engine
 		{
 			MonoObject* exception = nullptr;
 
+			// Calls the C# on update method and passes the delta time
 			// mono_runtime_invoke slow but does a lot of checks
 			// mono_method_get_unmanaged_thunk is faster since it has less overhead (eg best for update functions) (not sure how to use)
 			void* param = &deltaTime;
@@ -65,9 +67,9 @@ namespace Engine
 		if (m_OnContact != nullptr && m_ClassInstance != nullptr)
 		{
 			MonoObject* exception = nullptr;
+				
+			// Calls the C# on contact method and passes the correct parameters
 
-			// mono_runtime_invoke slow but does a lot of checks
-			// mono_method_get_unmanaged_thunk is faster since it has less overhead (eg best for update functions) (not sure how to use)
 			void* param = &id;
 			mono_runtime_invoke(m_OnContact, m_ClassInstance, &param, &exception);
 
@@ -81,6 +83,7 @@ namespace Engine
 
 	void ScriptClass::SetClass()
 	{
+		// Sets the class 
 		MonoImage* image = mono_assembly_get_image(Scripting::GetInstance()->GetAssembly());
 		MonoClass* klass = mono_class_from_name(image, m_ClassNamespace.c_str(), m_ClassName.c_str());
 
@@ -95,6 +98,7 @@ namespace Engine
 
 	void ScriptClass::InitClassInstance()
 	{
+		// Initlises the class instance
 		if (m_Class != nullptr)
 		{
 			m_ClassInstance = mono_object_new(Scripting::GetInstance()->GetAppDomain(), m_Class);
@@ -107,6 +111,7 @@ namespace Engine
 			// Create instance (Calling parameterless constructer)
 			mono_runtime_object_init(m_ClassInstance);
 
+			// Gets the methods on the class for being called by the Script instance
 			m_OnBegin = mono_class_get_method_from_name(m_Class, "OnBegin", 0);
 			m_OnUpdate = mono_class_get_method_from_name(m_Class, "OnUpdate", 1);
 			m_OnContact = mono_class_get_method_from_name(m_Class, "OnContact", 1);

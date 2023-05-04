@@ -17,6 +17,8 @@ namespace Engine
 
 	static std::unordered_map<std::string, ScriptFieldDataTypes> ScriptFieldDataTypeMap =
 	{
+		// Map for setting up the C# data types 
+		// To C++ Data types
 		{"System.Single", ScriptFieldDataTypes::Float},
 		{"System.Int32", ScriptFieldDataTypes::Int32},
 		{"System.String", ScriptFieldDataTypes::String},
@@ -24,6 +26,7 @@ namespace Engine
 
 	std::shared_ptr<Scripting> Scripting::GetInstance()
 	{
+		// Creates and/Or returns the scripting instance
 		if (m_Scripting == nullptr)
 		{
 			m_Scripting = std::make_shared<Scripting>();
@@ -34,26 +37,28 @@ namespace Engine
 	
 	bool Scripting::InitScripting()
 	{
+		// Init Mono
 		if (!InitMono())
 		{
 			LOG_ERROR("Mono Init failed");
 			return false;
 		}
 
+		// Load the dll
 		m_Assembly = LoadAssembly("Resources/Scripts/EngineScripting.dll");
 		
+		// Register the C# functions
 		ScriptingCalls::RegisterScriptFunctions();
 
+		// Load the classes
 		LoadAssemblyClass();
 
-		
-		
 		return true;
 	}
 
 	void Scripting::ShutdownScripting()
 	{
-		// TODO shutdown properly
+		// TODO: shutdown properly
 		if (m_Domain != nullptr) delete m_Domain;
 		if (m_AppDomain != nullptr) delete m_AppDomain;
 		if (m_Assembly != nullptr) delete m_Assembly;
@@ -61,6 +66,7 @@ namespace Engine
 
 	void Scripting::OnBeginEntity(Entity entity)
 	{
+		// Gets the id component
 		const auto& IDComp = entity.GetComponent<IDComponent>();
 
 		if (!entity.HasComponent<ScriptComponent>()) return;
@@ -80,6 +86,7 @@ namespace Engine
 				Scripting::GetInstance()->CreateScriptInstance(ScriptComp);
 			}
 
+			// Calls the c# function
 			Instance->OnBegin(entity.GetUUID());
 		}
 
@@ -88,6 +95,7 @@ namespace Engine
 
 	void Scripting::OnUpdateEntity(Entity entity, float deltaTime)
 	{
+		// Calls the update c# function
 		const auto& IDComp = entity.GetComponent<IDComponent>();
 		const auto& ScriptComp = entity.GetComponent<ScriptComponent>();
 
@@ -105,6 +113,7 @@ namespace Engine
 
 	void Scripting::OnContactEntity(Entity entity)
 	{
+		// Calls the OnCOntact c# function
 		const auto& IDComp = entity.GetComponent<IDComponent>();
 		const auto& ScriptComp = entity.GetComponent<ScriptComponent>();
 
@@ -213,10 +222,12 @@ namespace Engine
 
 	bool Scripting::InitMono()
 	{
+		// Gets the mono library
 		std::filesystem::path path = std::filesystem::current_path().parent_path();
 		path.append("Engine\\external\\mono\\lib\\4.5");
 		mono_set_assemblies_path(path.string().c_str());
 
+		// Init the domains
 		MonoDomain* domain = mono_jit_init("ScriptRuntime");
 		if (domain == nullptr) return false;
 
@@ -230,6 +241,7 @@ namespace Engine
 
 	_MonoAssembly* Scripting::LoadAssembly(const std::string& assemblyPath)
 	{
+		// Load the assembly 
 		uint32_t fileSize = 0;
 		char* fileData = ReadBytes(assemblyPath, &fileSize);
 
@@ -257,7 +269,8 @@ namespace Engine
 		MonoImage* image = mono_assembly_get_image(m_Assembly);
 		const MonoTableInfo* typeDefinitionTable = mono_image_get_table_info(image, MONO_TABLE_TYPEDEF);
 		int32_t numTypes = mono_table_info_get_rows(typeDefinitionTable);
-
+		
+		// Reads all the classes
 		for (int32_t i = 0; i < numTypes; i++)
 		{
 			uint32_t cols[MONO_TYPEDEF_SIZE];
@@ -268,12 +281,13 @@ namespace Engine
 
 			std::shared_ptr<ScriptClass> SC = std::make_shared<ScriptClass>(nameSpace, name);
 
-
+			// If the nameSpace is game then inset into map
 			if ((std::string)nameSpace == "Game")
 			{
 				m_ClassMaps.insert(std::make_pair(name, SC));
 			}
 
+			// Creates the fields
 			int fieldCount = mono_class_num_fields(SC->GetClass());
 			void* it = nullptr;
 			while (MonoClassField* field = mono_class_get_fields(SC->GetClass(), &it))
