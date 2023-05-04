@@ -5,6 +5,7 @@ namespace Engine
 {
 	std::shared_ptr<PhysX> PhysX::m_Instance = nullptr;
 
+	// Callback functions
 	static PhysXCustomErrorCallback gCustomErrorCallback;
 	static PhysXCollisionCallbacks gCollisionCallback;
 	static physx::PxDefaultAllocator gDefaultAllocatorCallback;
@@ -19,6 +20,7 @@ namespace Engine
 	
 		LOG_INFO("PhysX 5 Initilised");
 
+		// Create foundation
 		m_Foundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gCustomErrorCallback);
 		if (!m_Foundation)
 		{
@@ -26,6 +28,7 @@ namespace Engine
 			return false;
 		}
 
+		// Create & connect the visual debugger 
 		m_PVD = physx::PxCreatePvd(*m_Foundation);
 		m_Transport = physx::PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
 		m_PVD->connect(*m_Transport, physx::PxPvdInstrumentationFlag::eALL);
@@ -33,7 +36,7 @@ namespace Engine
 			LOG_ERROR("Failed to Create PVD (Does not Break Engine)");
 
 		bool recordMemoryAllocations = false;
-
+		// Create the physics 
 		m_Physics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_Foundation, physx::PxTolerancesScale(), recordMemoryAllocations, m_PVD);
 		if (!m_Physics)
 		{
@@ -41,14 +44,17 @@ namespace Engine
 			return false;
 		}
 
+		// Initilises the extensions
 		if (!PxInitExtensions(*m_Physics, m_PVD))
 		{
 			LOG_ERROR("PxInitExtensions failed! ");
 			return false;
 		}
 
+		// Create scene
 		m_Scene = CreateScene();
 
+		// Create default material
 		m_DefaultMaterial = m_Physics->createMaterial(0.5f, 0.5f, 0.6f);
 
 
@@ -72,6 +78,7 @@ namespace Engine
 	}
 	void PhysX::Update(float frameTime)
 	{
+		// Update the physics
 		m_Scene->simulate(frameTime);
 		m_Scene->fetchResults(true);
 
@@ -80,6 +87,7 @@ namespace Engine
 
 	void PhysX::CreatePhysicsActor(Entity& entity)
 	{
+		// Create physics actor
 		if (entity.HasComponent<TransformComponent>())
 		{
 			auto& trans = entity.GetComponent<TransformComponent>();
@@ -100,6 +108,7 @@ namespace Engine
 
 	void PhysX::CreateCollision(Entity& entity)
 	{
+		// Create collision
 		if (entity.HasComponent<CollisionComponents>())
 		{
 			auto& collisionComp = entity.GetComponent<CollisionComponents>();
@@ -149,12 +158,14 @@ namespace Engine
 
 	void PhysX::UpdatePhysicsActor(Entity& entity)
 	{
+		// Update physics actor if have rigid component
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<RigidDynamicComponent>())
 		{
 			SetRenderedTransform(entity.GetComponent<TransformComponent>(), entity.GetComponent<RigidDynamicComponent>().actor->getGlobalPose());
 			SetPhysicsSettings(entity.GetComponent<RigidDynamicComponent>());
 			
 		}
+		// Update physics actor if have collision component
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<CollisionComponents>())
 		{
 			if (entity.GetComponent<CollisionComponents>().actor != nullptr)
@@ -167,6 +178,8 @@ namespace Engine
 
 	void PhysX::EditorUpdateActors(Entity& entity)
 	{
+		// Updates the physics in the editor
+
 		if (entity.HasComponent<TransformComponent>() && entity.HasComponent<RigidDynamicComponent>())
 		{
 			physx::PxTransform transform = SetPhysicsTransform(entity.GetComponent<TransformComponent>());
@@ -192,6 +205,7 @@ namespace Engine
 
 	void PhysX::ResetSimulation()
 	{
+		// Resets the simulation
 		if (m_Scene != nullptr)
 		{
 			m_Scene->release();
@@ -210,6 +224,8 @@ namespace Engine
 
 	std::shared_ptr<PhysX> PhysX::GetInstance()
 	{
+		// Creates an instance if does not exist
+		// returns the instance when it exists
 		if (m_Instance == nullptr)
 		{
 			m_Instance = std::make_shared<PhysX>();
@@ -221,6 +237,7 @@ namespace Engine
 
 	physx::PxScene* PhysX::CreateScene()
 	{
+		// Create the physics scene setting
 		physx::PxScene* scene = nullptr;
 		physx::PxSceneDesc sceneDesc(m_Physics->getTolerancesScale());
 		sceneDesc.gravity = physx::PxVec3(0.0f, -9.81, 0.0f);
@@ -234,6 +251,7 @@ namespace Engine
 		scene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_SHAPES, 1.0f);
 		scene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);
 
+		// Connects to the visual debugger
 		if (!m_PVD->isConnected())
 		{
 			m_PVD->connect(*m_Transport, physx::PxPvdInstrumentationFlag::eALL);

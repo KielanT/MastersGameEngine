@@ -5,14 +5,14 @@
 
 class PhysXCollisionCallbacks : public physx::PxSimulationEventCallback
 {
-
+	// Simulation call backs
 	void onConstraintBreak(physx::PxConstraintInfo* constraints, physx::PxU32 count);
 
 	void onWake(physx::PxActor** actors, physx::PxU32 count);
 
 	void onSleep(physx::PxActor** actors, physx::PxU32 count);
 
-
+	// Collision call backs
 	void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count);
 
 	void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32);

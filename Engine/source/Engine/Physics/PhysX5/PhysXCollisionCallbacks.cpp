@@ -2,9 +2,9 @@
 #include "PhysXCollisionCallbacks.h"
 #include "Engine/Physics/PhysX5/PhysX.h"
 
+// Gets the entity from the entity map
 static Engine::Entity GetEntity(physx::PxActor* actor)
 {
-	
 	if (auto instance = Engine::PhysX::GetInstance()->EntityMap.find(actor); instance != Engine::PhysX::GetInstance()->EntityMap.end())
 	{
 		return instance->second;
@@ -41,6 +41,8 @@ void PhysXCollisionCallbacks::onContact(const physx::PxContactPairHeader& pairHe
 {
 	LOG_DEBUG("OnContact");
 
+	// Used for telling the entity that a contact has happend
+	// This will also call the on contact function on the entity side 
 	for (physx::PxU32 i = 0; i < count; i++)
 	{
 		const physx::PxContactPair& pair = pairs[i];

@@ -7,13 +7,18 @@
 
 namespace Engine
 {
-
+	/**********************************************************
+	* 
+	*	PhysX singleton for using the physics object anywhere
+	* 
+	**********************************************************/
 
 	class PhysX  
 	{
 	public:
 		~PhysX();
 
+		// Main Physics functions
 		bool Init();
 		void Shutdown();
 		void Update(float frameTime);
@@ -29,26 +34,29 @@ namespace Engine
 		static std::shared_ptr<PhysX> GetInstance();
 
 	private:
+		// Create the physics scene
 		physx::PxScene* CreateScene();
 
+		// Sets the rendered transfrom to the physics transform
 		void SetRenderedTransform(TransformComponent& transform, physx::PxTransform pTransform);
+
+		// Set physics transform
 		physx::PxTransform SetPhysicsTransform(TransformComponent& transform);
 
+		// Set physics settings to the component
 		void SetPhysicsSettings(RigidDynamicComponent& comp);
 
 	private:
+		// Instance for the singleton
 		static std::shared_ptr<PhysX> m_Instance;
 
+		// PhysX variables required for the physics settings
 		physx::PxFoundation* m_Foundation;
 		physx::PxPvd* m_PVD;
 		physx::PxPhysics* m_Physics;
 		physx::PxScene* m_Scene;
-
-		
 		physx::PxDefaultCpuDispatcher* m_CpuDispatcher = NULL;
-		
 		physx::PxMaterial* m_DefaultMaterial;
-
 		physx::PxPvdTransport* m_Transport;
 
 
